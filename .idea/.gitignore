@@ -11,3 +11,6 @@
 /public/wp-content/uploads/*
 /public/kd/*
 /.tmp.driveupload/*
+/public/wp-content/plugins/bp_contracts/logs/*
+*.log
+/.tmp.driveupload/*
