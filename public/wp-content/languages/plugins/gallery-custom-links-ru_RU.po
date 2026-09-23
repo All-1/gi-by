@@ -1,0 +1,94 @@
+# Translation of Plugins - Gallery Custom Links - Stable (latest release) in Russian
+# This file is distributed under the same license as the Plugins - Gallery Custom Links - Stable (latest release) package.
+msgid ""
+msgstr ""
+"PO-Revision-Date: 2024-06-03 09:28:40+0000\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=(n % 10 == 1 && n % 100 != 11) ? 0 : ((n % 10 >= 2 && n % 10 <= 4 && (n % 100 < 12 || n % 100 > 14)) ? 1 : 2);\n"
+"X-Generator: GlotPress/4.0.1\n"
+"Language: ru\n"
+"Project-Id-Version: Plugins - Gallery Custom Links - Stable (latest release)\n"
+
+#: common/news.php:91 common/ratings.php:114
+msgid "⏰ Remind me later"
+msgstr "⏰ Напомни мне позже"
+
+#: common/admin.php:89
+msgid "<a target=\"_blank\" href=\"https://meowapps.com\">Get the <u>Pro Version</u></a>"
+msgstr "<a target=\"_blank\" href=\"https://meowapps.com\">Получить <u>версию Pro</u></a>"
+
+#: common/admin.php:89
+msgid "License Issue"
+msgstr "Проблема с лицензией"
+
+#: common/admin.php:85
+msgid "<a href=\"admin.php?page=%s_settings\">Settings</a>"
+msgstr "<a href=\"admin.php?page=%s_settings\">Настройки</a>"
+
+#: classes/rest.php:96
+msgid "OK"
+msgstr "Хорошо"
+
+#. translators: %1$s is the version of the interface; %2$s is a file path.
+#: common/admin.php:199
+msgid "Thanks for using <a href=\"https://meowapps.com\">Meow Apps</a>! This is the Meow Admin %1$s <br /><i>Loaded from %2$s </i>"
+msgstr "Спасибо за использование <a href=\"https://meowapps.com\">Meow Apps</a>! Это Meow Admin %1$s <br /><i>Загружено из: %2$s </i>"
+
+#: common/admin.php:88
+msgid "Pro Version"
+msgstr "Версия Pro"
+
+#: common/admin.php:126
+msgid "Remove the license"
+msgstr "Удалить лицензию"
+
+#: classes/admin.php:82 app/index.js:5458
+msgid "Arial Label"
+msgstr "Этикетка Arial"
+
+#: common/admin.php:146 common/admin.php:147
+msgid "Dashboard"
+msgstr "Консоль"
+
+#: classes/admin.php:76 app/index.js:5457
+msgid "Link Rel"
+msgstr "Link Rel"
+
+#: classes/admin.php:69 app/index.js:5454
+msgid "New page"
+msgstr "Новая страница"
+
+#: classes/admin.php:66 app/index.js:5453
+msgid "Same page"
+msgstr "Та же страница"
+
+#: classes/admin.php:61 app/index.js:5456
+msgid "Link Target"
+msgstr "Цель ссылки"
+
+#: classes/admin.php:55 app/index.js:5455
+msgid "Link URL"
+msgstr "URL ссылки"
+
+#. Author of the plugin
+#: gallery-custom-links.php
+msgid "Jordy Meow"
+msgstr "Jordy Meow"
+
+#. Description of the plugin
+#: gallery-custom-links.php
+msgid "Gallery Custom Links allows you to link images from galleries to a specified URL. Tested with WordPress Gallery, Gutenberg, the Meow Gallery and others."
+msgstr "Gallery Custom Links (настраиваемые ссылки на галерею) позволяет связывать изображения из галерей с указанным URL. Проверено с WordPress Gallery, Gutenberg, Meow Gallery и другими."
+
+#. Plugin URI of the plugin
+#. Author URI of the plugin
+#: gallery-custom-links.php
+msgid "https://meowapps.com"
+msgstr "https://meowapps.com"
+
+#. Plugin Name of the plugin
+#: gallery-custom-links.php
+msgid "Gallery Custom Links"
+msgstr "Gallery Custom Links"

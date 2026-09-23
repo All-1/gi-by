@@ -1,0 +1,17 @@
+{
+    "require": {
+        "cboden/ratchet": "^0.4.4",
+        "textalk/websocket": "^1.5",
+        "phpmailer/phpmailer": "^6.9",
+        "phpseclib/phpseclib": "^3.0",
+        "monolog/monolog": "^2.10",
+        "guzzlehttp/guzzle": "^7.8",
+        "react/async": "^4.3"
+    },
+    "autoload": {
+        "psr-4": {
+            "PersonalAccount\\": "wp-content/plugins/bp_contracts/src/",
+            "WPFramework\\": "wp-content/plugins/wordpress_framework/src/"
+        }
+    }
+}

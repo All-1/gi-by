@@ -1,0 +1,43 @@
+.confirmation-block {
+  position: fixed;
+  display: block;
+  top: 230px;
+  left: 40%;
+  width: 30%;
+  background: #fff;
+  text-align: center;
+  padding: 20px 10px 30px;
+  border-radius: 10px;
+  box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.3);
+  z-index: 1;
+}
+
+.confirmation-title {
+  font-size: 23px;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+.confirmation-description {
+  font-size: 16px;
+  margin-bottom: 20px;
+}
+
+.confirmation-button-confirm {
+  background: green;
+  color: #fff;
+  border: none;
+  padding: 10px 20px;
+  margin-right: 4px;
+  cursor: pointer;
+}
+
+.confirmation-button-cancel {
+  background: darkred;
+  color: #fff;
+  border: none;
+  padding: 10px 20px;
+  margin-left: 4px;
+  cursor: pointer;
+}
+

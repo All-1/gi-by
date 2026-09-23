@@ -1,0 +1,283 @@
+class NotificationWorker {
+  #permission;
+  #amount;
+  #nameOR;
+  #messageBody;
+  #nameAuthor;
+  #nameUser;
+  #typeOR;
+  #documentTitle;
+  #serialNumber;
+  #intervalId = null; // Хранение ID интервала
+  #favicon;
+
+  constructor(data, user) {
+    this.#amount = data ? data.amount : 0;
+    this.#nameOR = data ? data.nameOR : '';
+    this.#messageBody = data ? removeCharacters(data.messageBody) : '';
+    this.#nameAuthor = data ? data.nameAuthor : '';
+    this.#typeOR = data ? data.typeOR : '';
+    this.#serialNumber = data ? data.serialNumber : '';
+    let link = document.querySelector("link[rel~='icon']");
+    if (link) {
+      this.#favicon = link.href;
+    }
+    this.#permission = Notification.permission;
+    this.#documentTitle = document.title;
+    this.#nameUser = user.firstname + " " + user.lastname;
+    this.#init(this.#nameUser);
+  }
+
+  reloadNotifier(data, user) {
+    let prevAmount = this.#amount;
+    this.#amount = data ? data.amount : 0;
+    this.#nameOR = data ? data.nameOR : '';
+    this.#messageBody = data ? removeCharacters(data.messageBody) : '';
+    this.#nameAuthor = data ? data.nameAuthor : '';
+    this.#typeOR = data ? data.typeOR : '';
+    this.#serialNumber = data ? data.serialNumber : '';
+    this.#nameUser = user.firstname + '' + user.lastname;
+    if (this.#permission === 'granted' || this.#permission === 'default') {
+      this.#highlightTab(this.#nameOR);
+      if (data) {
+        if (prevAmount < this.#amount || data.typeDialog) {
+          this.showNewMessageNotification();
+        }
+      }
+    }
+  }
+
+  #init(name) {
+    if ('Notification' in window) {
+
+      if (this.#permission === 'default') {
+
+        this.#turnOnNotification(name);
+        this.#highlightTab(this.#nameOR);
+      } else if (this.#permission === 'granted') {
+        // this.#setAmount(1);
+        // this.showNewMessageNotification();
+        this.#highlightTab(this.#nameOR);
+      } else if (this.#permission === 'denied') {
+        this.#notificationDenied(name);
+        // console.warn('Уведомления отклонены пользователем');
+      }
+    } else {
+      alert('Уведомления не поддерживаются в этом браузере');
+    }
+  }
+
+  #requestPermission() {
+    return new Promise((resolve, reject) => {
+      if ('Notification' in window) {
+        Notification.requestPermission().then(permission => {
+          this.#permission = permission;
+          if (permission === 'granted') {
+            resolve(permission);
+          } else {
+            resolve(permission);
+          }
+        }).catch(err => {
+          console.error('Ошибка запроса разрешения на уведомления:', err);
+          reject(err);
+        });
+      } else {
+        console.error('Ваш браузер не поддерживает уведомления');
+        reject('Browser does not support notifications');
+      }
+    });
+  }
+
+  // Отправка уведомления
+  #send(title, body, serialNumber, typeOR) {
+    if (this.#permission === 'granted') {
+      const icon = '/wp-content/themes/wp-diary/images/icons/icon-notification.svg';
+      const options = { body, icon };
+
+      const notification = new Notification(title, options);
+
+      notification.onclick = () => {
+      };
+
+    } else {
+      console.warn('Notifications are blocked and cannot be sent.');
+    }
+  }
+
+  // showCookieNotification() {
+  //   this.send(
+  //     'Уведомление о cookies',
+  //     'Этот сайт использует cookies для улучшения вашего опыта.'
+  //   );
+  // }
+
+
+
+  #turnOnNotification(name) {
+    let boxEnableNotification = createTagHtml('div', 'enable-notification', '');
+    let innerEnableBox = createTagHtml('div', 'inner-enable-notification');
+    let textEnableNotification = createTagHtml('div', 'text-enable-notification');
+    let text = "<span class='name-enable-notification'>" + name + "</span> для полноценной работы веб-приложения подтвердите своё согласие на получение уведомлений, использование файлов cookie и обработкой персональных данных в соответствии с <a href='/'>Политикой обработки персональных данных.</a>";
+    let buttonAccept = createTagHtml('div', 'button-accept', 'Я согласен', 'enable-notifications');
+
+    massAppendChild(
+      innerEnableBox,
+      textEnableNotification, buttonAccept
+    );
+    textEnableNotification.innerHTML = text;
+    boxEnableNotification.appendChild(innerEnableBox);
+    document.body.appendChild(boxEnableNotification);
+    buttonAccept.addEventListener('click', () => {
+      this.#clickEnableNotifications(name);
+      boxEnableNotification.remove();
+    });
+  }
+
+  #notificationDenied(name) {
+    let shadeBoxDeniedNotification = createTagHtml('div', 'shade-full-screen-box');
+    let boxDeniedNotification = createTagHtml('div', 'box-denied-notification');
+    let titleDeniedNotification = createTagHtml('h4', 'title-denied', name + ' разрешите уведомления!');
+    let textDeniedNotification = createTagHtml('p', 'text-denied-notification', 'Вы заблокировали уведомления. Включите пожалуйста уведомления, это необходимо для полноценной работы в системе.');
+
+    let titleInstruction = createTagHtml('h5', 'title-instruction', 'Чтобы включить их:');
+    let listInstruction = createTagHtml('ol', 'list-instruction');
+    let firstStep = createTagHtml('li', 'step-instruction', 'Перейдите в настройки вашего браузера.');
+    let secondStep = createTagHtml('li', 'step-instruction', 'Найдите поле "Поиск настроек".');
+    let thirdStep = createTagHtml('li', 'step-instruction', 'Введите в поиск "Уведомления".');
+    let fourthStep = createTagHtml('li', 'step-instruction', 'Перейдите в раздел "Уведомления".');
+    const currentUrl = window.location.hostname;
+    let fifthhStep = createTagHtml('li', 'step-instruction', 'Разрешите уведомления для сайта: ' + currentUrl);
+    let buttonClose = createTagHtml('button', 'close-denied-notification', 'Понятно');
+
+    massAppendChild(
+      boxDeniedNotification,
+      titleDeniedNotification, textDeniedNotification, titleInstruction, listInstruction, buttonClose
+    );
+    massAppendChild(
+      listInstruction,
+      firstStep, secondStep, thirdStep, fourthStep, fifthhStep
+    )
+    document.body.appendChild(shadeBoxDeniedNotification);
+    shadeBoxDeniedNotification.appendChild(boxDeniedNotification);
+
+    buttonClose.addEventListener('click', () => {
+      shadeBoxDeniedNotification.remove();
+    });
+  }
+
+  #clickEnableNotifications(name) {
+    this.#requestPermission().then(permission => {
+      if (permission === 'granted') {
+        this.#send(name + ', привет!', 'Уведомления включены!');
+        this.#highlightTab(this.#nameOR);
+      }
+    });
+  }
+
+  showNewMessageNotification() {
+    if (this.#amount > 0) {
+      this.#send(
+        this.#nameOR,
+        `${this.#nameAuthor}: ${this.#messageBody}`,
+        this.#serialNumber,
+        this.#typeOR,
+      );
+    }
+  }
+
+  #highlightTab(title) {
+    const titleDocument = this.#documentTitle;
+    document.title = this.#documentTitle;
+    // Находим все элементы favicon
+    let links = document.querySelectorAll("link[rel~='icon']");
+    this.#changeMenuNotification(this.#amount);
+
+    // Удаляем старые favicon
+    links.forEach(element => {
+      element.remove(); // Удаляем из DOM
+    });
+
+    if (this.#amount > 0) {
+      // Очищаем предыдущий интервал, если он есть
+      if (this.#intervalId !== null) {
+        clearInterval(this.#intervalId);
+      }
+
+      let addLink = this.#amount <= 9 ? this.#amount : '9+';
+      let baseHref = `/wp-content/themes/wp-diary/images/icons/favicon-notification-${addLink}.svg`;
+      let hrefWithTimestamp = `${baseHref}?v=${new Date().getTime()}`;
+      let newLink = document.createElement('link');
+      newLink.rel = 'icon';
+      newLink.href = hrefWithTimestamp;
+      document.head.appendChild(newLink);
+
+      // Чередуем заголовок страницы
+      this.#intervalId = setInterval(() => {
+        document.title = document.title === title ? titleDocument : title;
+      }, 1000);
+
+      // Создаём новый favicon
+
+    } else {
+      this.#stopHighlight();
+    }
+  }
+
+
+  #changeMenuNotification(amount) {
+    let accountNavigation = document.querySelector(".account_navigation");
+    let link = accountNavigation.querySelector(".contracts_link");
+
+    if (amount > 0) {
+      let textLink = link.querySelector(".menu_link_text");
+      let linkNotification = link.querySelector(".menu-notification");
+      if (linkNotification) {
+        linkNotification.innerHTML = amount;
+      } else {
+        linkNotification = createTagHtml('div', 'menu-notification', amount);
+        link.appendChild(linkNotification);
+      }
+      const resizeObserverCallback = (entries) => {
+        for (let entry of entries) {
+          const { width, height } = entry.contentRect;
+          if (width > 100) {
+            // Элемент видим
+            linkNotification.classList.add('notification-menu-visible');
+          } else {
+            // Элемент скрыт
+            linkNotification.classList.remove('notification-menu-visible');
+          }
+        }
+      };
+      const resizeObserver = new ResizeObserver(resizeObserverCallback);
+      resizeObserver.observe(textLink);
+    } else {
+      let linkNotification = link.querySelector(".menu-notification");
+      if (linkNotification) {
+        linkNotification.remove();
+      }
+    }
+  }
+
+  #stopHighlight() {
+    if (this.#intervalId !== null) {
+      clearInterval(this.#intervalId);
+      this.#intervalId = null;
+      document.title = this.#documentTitle; // Восстанавливаем стандартный заголовок
+      let defaultLink = document.createElement('link');
+      defaultLink.rel = 'icon';
+      defaultLink.href = this.#favicon;
+      document.head.appendChild(defaultLink);
+    }
+  }
+
+  #setAmount(newAmount) {
+    this.#amount = newAmount;
+    this.#highlightTab(this.#nameOR);
+  }
+  reciveData(data) {
+    this.#setAmount(data.amount);
+  }
+
+}
+

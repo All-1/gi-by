@@ -1,0 +1,10 @@
+﻿.controls{width:100%;}
+.rightinputs input, .rightinputs textarea{width:100%;}
+.bottomFields textarea{width:100%; min-height:80px;}
+.fieldsHeader{font-weight:600; font-size:14px; display:block; margin-bottom:10px;}
+.okBtn{border:none; background:#47a344; text-transform:transparent; color:white; padding:10px 30px; cursor:pointer;}
+.okBtn:hover{background:#3b8439;}
+
+.gm-style-mtc > div,
+.gmnoprint > div,
+.gm-svpc{display:block !important; z-index:9999 !important;}

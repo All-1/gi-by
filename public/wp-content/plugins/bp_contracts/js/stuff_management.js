@@ -1,0 +1,129 @@
+/*
+*/
+"use strict";
+
+function handlerStaff(user) {
+  const userParam = user.getAllParam();
+  let myWorkers = userParam.myWorkers;
+  let boxStuffManagement = document.getElementById('stuff-management');
+  if (myWorkers) {
+    workWithWorkers(myWorkers, boxStuffManagement);
+  }
+}
+
+function handlerCoWorkers(user) {
+  const userParam = user.getAllParam();
+  let myCoWorkers = userParam.myCoWorkers;
+  let boxCoWorkers = document.getElementById('co-workers');
+  if (myCoWorkers) {
+    workWithWorkers(myCoWorkers, boxCoWorkers);
+  }
+}
+
+
+
+// myCoWorkers();
+// stuffManagement();
+
+function workWithWorkers(workers, mainBox) {
+  mainBox.innerHTML = '';
+  Object.values(workers).forEach(position => {
+    let roleUsers = definePositionUser(position.roleUsers);
+    let countUsers = position.length - 1;
+
+    let blockPositionWorkers = createTagHtml('div', 'block-position-workers');
+
+    let boxTitlePositionWorkers = createTagHtml('div', 'box-title-position-workers');
+    let positionWorkers = createTagHtml('h3', 'title-position-workers', roleUsers);
+    let countWorkers = createTagHtml('span', 'count-workers', countUsers);
+
+    mainBox.appendChild(blockPositionWorkers);
+    blockPositionWorkers.appendChild(boxTitlePositionWorkers);
+    massAppendChild(
+      boxTitlePositionWorkers,
+      positionWorkers, countWorkers
+    );
+
+    addPositionWorkers(position, blockPositionWorkers);
+  });
+}
+
+function addPositionWorkers(position, blockPositionWorkers) {
+
+  for (let key in position) {
+
+
+    if (key === 'roleUsers') {
+      continue;
+    }
+    let usersPosition = Object.values(position[key]);
+    usersPosition.forEach(user => {
+      let position = definePositionUser(user.role);
+      let clientStatus = statusForClient(user.statusActivity);
+
+      let blockWorker = createTagHtml('div', 'block-worker');
+      let boxInfoWorker = createTagHtml('div', 'box-info-worker');
+      let boxChangeStatusWorker = createTagHtml('div', 'box-change-status-worker');
+
+      let boxWorkerName = createTagHtml('div', 'box-name-worker');
+      let boxPositionWorker = createTagHtml('div', 'box-worker-position');
+      let boxStatusWorker = createTagHtml('div', 'box-worker-status');
+
+      let workerFirstName = createTagHtml('div', 'worker-name', user.firstname);
+      let workerLastName = createTagHtml('div', 'worker-name', user.lastname);
+      let additionalInfo; // Позже с этим разберёмся
+
+      let positionWorker = createTagHtml('div', 'worker-position', position);
+
+      let statusMarker = createTagHtml('div', 'worker-status-marker-' + user.statusActivity);
+      let statusText = createTagHtml('div', 'worker-status-text', clientStatus);
+
+      let changeStatusWorker = createTagHtml('div', 'change-status-worker', 'Изменить статус');
+
+      blockPositionWorkers.appendChild(blockWorker);
+
+      massAppendChild(
+        blockWorker,
+        boxInfoWorker, boxChangeStatusWorker
+      )
+      massAppendChild(
+        boxInfoWorker,
+        boxWorkerName, boxPositionWorker, boxStatusWorker
+      )
+      massAppendChild(
+        boxWorkerName,
+        workerFirstName, workerLastName
+      )
+      boxPositionWorker.appendChild(positionWorker);
+      massAppendChild(
+        boxStatusWorker,
+        statusMarker, statusText
+      )
+      boxChangeStatusWorker.appendChild(changeStatusWorker);
+
+      changeStatusWorker.addEventListener('click', function () {
+        clickChangeStatusWorker(user, changeStatusWorker, boxChangeStatusWorker);
+      });
+    })
+  }
+}
+function clickChangeStatusWorker(user, changeStatusWorker, boxChangeStatusWorker) {
+  changeStatusWorker.remove();
+  let selectStatus = createSelectStatusWorker(user);
+  boxChangeStatusWorker.appendChild(selectStatus);
+  document.addEventListener('click', handleDocumentClick);
+  function handleDocumentClick(event) {
+    if (event.target !== selectStatus && event.target !== changeStatusWorker) {
+      selectStatus.remove();
+      restoreChangeStatusWorker(user, boxChangeStatusWorker);
+      document.removeEventListener('click', handleDocumentClick); // Удаляем обработчик после его выполнения
+    }
+  }
+}
+function restoreChangeStatusWorker(user, boxChangeStatusWorker) {
+  let changeStatusWorkerNew = createTagHtml('div', 'change-status-worker', 'Изменить статус');
+  boxChangeStatusWorker.appendChild(changeStatusWorkerNew);
+  changeStatusWorkerNew.addEventListener('click', function () {
+    clickChangeStatusWorker(user, changeStatusWorkerNew, boxChangeStatusWorker);
+  });
+}

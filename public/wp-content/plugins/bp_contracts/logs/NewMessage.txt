@@ -1,0 +1,458 @@
+[2025-05-12 16:00:46] The line: 204 ---> in file D:\OSPanel\home\dev.gi.by\public\wp-content\plugins\bp_contracts\src\Chat.php in Object->method: PersonalAccount\Controler\InteractionInterface->regNewMessage variable newMessage->files === array(0) {
+}  but flag was 1
+[2025-05-12 16:00:46] The line: 183 ---> in file D:\OSPanel\home\dev.gi.by\public\wp-content\plugins\bp_contracts\src\Dialog\traits\WorkWithMessages.php in Object->method: PersonalAccount\Dialog\Dialog->writeNewMessage variable newMessage->files === array(0) {
+}  but flag was 1
+[2025-05-12 16:00:46] The line: 104 ---> in file D:\OSPanel\home\dev.gi.by\public\wp-content\plugins\bp_contracts\src\Dialog\traits\WorkWithMessages.php in Object->method: PersonalAccount\Dialog\Dialog->saveFilesOnServer variable else (!empty($files)) === array(0) {
+} 
+[2025-05-13 11:01:49] The line: 204 ---> in file D:\OSPanel\home\dev.gi.by\public\wp-content\plugins\bp_contracts\src\Chat.php in Object->method: PersonalAccount\Controler\InteractionInterface->regNewMessage variable newMessage->files === array(0) {
+}  but flag was 1
+[2025-05-13 11:01:49] The line: 183 ---> in file D:\OSPanel\home\dev.gi.by\public\wp-content\plugins\bp_contracts\src\Dialog\traits\WorkWithMessages.php in Object->method: PersonalAccount\Dialog\Dialog->writeNewMessage variable newMessage->files === array(0) {
+}  but flag was 1
+[2025-05-13 11:01:49] The line: 104 ---> in file D:\OSPanel\home\dev.gi.by\public\wp-content\plugins\bp_contracts\src\Dialog\traits\WorkWithMessages.php in Object->method: PersonalAccount\Dialog\Dialog->saveFilesOnServer variable else (!empty($files)) === array(0) {
+} 
+[2025-05-13 11:02:14] The line: 204 ---> in file D:\OSPanel\home\dev.gi.by\public\wp-content\plugins\bp_contracts\src\Chat.php in Object->method: PersonalAccount\Controler\InteractionInterface->regNewMessage variable newMessage->files === array(0) {
+}  but flag was 1
+[2025-05-13 11:02:14] The line: 183 ---> in file D:\OSPanel\home\dev.gi.by\public\wp-content\plugins\bp_contracts\src\Dialog\traits\WorkWithMessages.php in Object->method: PersonalAccount\Dialog\Dialog->writeNewMessage variable newMessage->files === array(0) {
+}  but flag was 1
+[2025-05-13 11:02:14] The line: 104 ---> in file D:\OSPanel\home\dev.gi.by\public\wp-content\plugins\bp_contracts\src\Dialog\traits\WorkWithMessages.php in Object->method: PersonalAccount\Dialog\Dialog->saveFilesOnServer variable else (!empty($files)) === array(0) {
+} 
+[2025-05-13 11:07:47] The line: 204 ---> in file D:\OSPanel\home\dev.gi.by\public\wp-content\plugins\bp_contracts\src\Chat.php in Object->method: PersonalAccount\Controler\InteractionInterface->regNewMessage variable newMessage->files === array(0) {
+}  but flag was 1
+[2025-05-13 11:07:47] The line: 183 ---> in file D:\OSPanel\home\dev.gi.by\public\wp-content\plugins\bp_contracts\src\Dialog\traits\WorkWithMessages.php in Object->method: PersonalAccount\Dialog\Dialog->writeNewMessage variable newMessage->files === array(0) {
+}  but flag was 1
+[2025-05-13 11:07:47] The line: 104 ---> in file D:\OSPanel\home\dev.gi.by\public\wp-content\plugins\bp_contracts\src\Dialog\traits\WorkWithMessages.php in Object->method: PersonalAccount\Dialog\Dialog->saveFilesOnServer variable else (!empty($files)) === array(0) {
+} 
+[2025-05-13 11:10:16] The line: 204 ---> in file D:\OSPanel\home\dev.gi.by\public\wp-content\plugins\bp_contracts\src\Chat.php in Object->method: PersonalAccount\Controler\InteractionInterface->regNewMessage variable newMessage->files === array(0) {
+}  but flag was 1
+[2025-05-13 11:10:16] The line: 183 ---> in file D:\OSPanel\home\dev.gi.by\public\wp-content\plugins\bp_contracts\src\Dialog\traits\WorkWithMessages.php in Object->method: PersonalAccount\Dialog\Dialog->writeNewMessage variable newMessage->files === array(0) {
+}  but flag was 1
+[2025-05-13 11:10:16] The line: 104 ---> in file D:\OSPanel\home\dev.gi.by\public\wp-content\plugins\bp_contracts\src\Dialog\traits\WorkWithMessages.php in Object->method: PersonalAccount\Dialog\Dialog->saveFilesOnServer variable else (!empty($files)) === array(0) {
+} 
+[2025-05-13 11:21:24] The line: 204 ---> in file D:\OSPanel\home\dev.gi.by\public\wp-content\plugins\bp_contracts\src\Chat.php in Object->method: PersonalAccount\Controler\InteractionInterface->regNewMessage variable newMessage->files === array(0) {
+}  but flag was 1
+[2025-05-13 11:21:24] The line: 183 ---> in file D:\OSPanel\home\dev.gi.by\public\wp-content\plugins\bp_contracts\src\Dialog\traits\WorkWithMessages.php in Object->method: PersonalAccount\Dialog\Dialog->writeNewMessage variable newMessage->files === array(0) {
+}  but flag was 1
+[2025-05-13 11:21:24] The line: 104 ---> in file D:\OSPanel\home\dev.gi.by\public\wp-content\plugins\bp_contracts\src\Dialog\traits\WorkWithMessages.php in Object->method: PersonalAccount\Dialog\Dialog->saveFilesOnServer variable else (!empty($files)) === array(0) {
+} 
+[2025-05-13 11:22:14] The line: 204 ---> in file D:\OSPanel\home\dev.gi.by\public\wp-content\plugins\bp_contracts\src\Chat.php in Object->method: PersonalAccount\Controler\InteractionInterface->regNewMessage variable newMessage->files === array(0) {
+}  but flag was 1
+[2025-05-13 11:22:14] The line: 183 ---> in file D:\OSPanel\home\dev.gi.by\public\wp-content\plugins\bp_contracts\src\Dialog\traits\WorkWithMessages.php in Object->method: PersonalAccount\Dialog\Dialog->writeNewMessage variable newMessage->files === array(0) {
+}  but flag was 1
+[2025-05-13 11:22:14] The line: 104 ---> in file D:\OSPanel\home\dev.gi.by\public\wp-content\plugins\bp_contracts\src\Dialog\traits\WorkWithMessages.php in Object->method: PersonalAccount\Dialog\Dialog->saveFilesOnServer variable else (!empty($files)) === array(0) {
+} 
+[2025-05-13 11:23:59] The line: 204 ---> in file D:\OSPanel\home\dev.gi.by\public\wp-content\plugins\bp_contracts\src\Chat.php in Object->method: PersonalAccount\Controler\InteractionInterface->regNewMessage variable newMessage->files === array(0) {
+}  but flag was 1
+[2025-05-13 11:23:59] The line: 183 ---> in file D:\OSPanel\home\dev.gi.by\public\wp-content\plugins\bp_contracts\src\Dialog\traits\WorkWithMessages.php in Object->method: PersonalAccount\Dialog\Dialog->writeNewMessage variable newMessage->files === array(0) {
+}  but flag was 1
+[2025-05-13 11:23:59] The line: 104 ---> in file D:\OSPanel\home\dev.gi.by\public\wp-content\plugins\bp_contracts\src\Dialog\traits\WorkWithMessages.php in Object->method: PersonalAccount\Dialog\Dialog->saveFilesOnServer variable else (!empty($files)) === array(0) {
+} 
+[2025-05-13 11:25:12] The line: 204 ---> in file D:\OSPanel\home\dev.gi.by\public\wp-content\plugins\bp_contracts\src\Chat.php in Object->method: PersonalAccount\Controler\InteractionInterface->regNewMessage variable newMessage->files === array(0) {
+}  but flag was 1
+[2025-05-13 11:25:12] The line: 183 ---> in file D:\OSPanel\home\dev.gi.by\public\wp-content\plugins\bp_contracts\src\Dialog\traits\WorkWithMessages.php in Object->method: PersonalAccount\Dialog\Dialog->writeNewMessage variable newMessage->files === array(0) {
+}  but flag was 1
+[2025-05-13 11:25:12] The line: 104 ---> in file D:\OSPanel\home\dev.gi.by\public\wp-content\plugins\bp_contracts\src\Dialog\traits\WorkWithMessages.php in Object->method: PersonalAccount\Dialog\Dialog->saveFilesOnServer variable else (!empty($files)) === array(0) {
+} 
+[2025-05-13 11:26:17] The line: 204 ---> in file D:\OSPanel\home\dev.gi.by\public\wp-content\plugins\bp_contracts\src\Chat.php in Object->method: PersonalAccount\Controler\InteractionInterface->regNewMessage variable newMessage->files === array(0) {
+}  but flag was 1
+[2025-05-13 11:26:17] The line: 183 ---> in file D:\OSPanel\home\dev.gi.by\public\wp-content\plugins\bp_contracts\src\Dialog\traits\WorkWithMessages.php in Object->method: PersonalAccount\Dialog\Dialog->writeNewMessage variable newMessage->files === array(0) {
+}  but flag was 1
+[2025-05-13 11:26:17] The line: 104 ---> in file D:\OSPanel\home\dev.gi.by\public\wp-content\plugins\bp_contracts\src\Dialog\traits\WorkWithMessages.php in Object->method: PersonalAccount\Dialog\Dialog->saveFilesOnServer variable else (!empty($files)) === array(0) {
+} 
+[2025-05-13 11:27:28] The line: 204 ---> in file D:\OSPanel\home\dev.gi.by\public\wp-content\plugins\bp_contracts\src\Chat.php in Object->method: PersonalAccount\Controler\InteractionInterface->regNewMessage variable newMessage->files === array(0) {
+}  but flag was 1
+[2025-05-13 11:27:28] The line: 183 ---> in file D:\OSPanel\home\dev.gi.by\public\wp-content\plugins\bp_contracts\src\Dialog\traits\WorkWithMessages.php in Object->method: PersonalAccount\Dialog\Dialog->writeNewMessage variable newMessage->files === array(0) {
+}  but flag was 1
+[2025-05-13 11:27:28] The line: 104 ---> in file D:\OSPanel\home\dev.gi.by\public\wp-content\plugins\bp_contracts\src\Dialog\traits\WorkWithMessages.php in Object->method: PersonalAccount\Dialog\Dialog->saveFilesOnServer variable else (!empty($files)) === array(0) {
+} 
+[2025-05-13 11:28:52] The line: 204 ---> in file D:\OSPanel\home\dev.gi.by\public\wp-content\plugins\bp_contracts\src\Chat.php in Object->method: PersonalAccount\Controler\InteractionInterface->regNewMessage variable newMessage->files === array(0) {
+}  but flag was 1
+[2025-05-13 11:28:52] The line: 183 ---> in file D:\OSPanel\home\dev.gi.by\public\wp-content\plugins\bp_contracts\src\Dialog\traits\WorkWithMessages.php in Object->method: PersonalAccount\Dialog\Dialog->writeNewMessage variable newMessage->files === array(0) {
+}  but flag was 1
+[2025-05-13 11:28:52] The line: 104 ---> in file D:\OSPanel\home\dev.gi.by\public\wp-content\plugins\bp_contracts\src\Dialog\traits\WorkWithMessages.php in Object->method: PersonalAccount\Dialog\Dialog->saveFilesOnServer variable else (!empty($files)) === array(0) {
+} 
+[2025-05-13 11:29:10] The line: 204 ---> in file D:\OSPanel\home\dev.gi.by\public\wp-content\plugins\bp_contracts\src\Chat.php in Object->method: PersonalAccount\Controler\InteractionInterface->regNewMessage variable newMessage->files === array(0) {
+}  but flag was 1
+[2025-05-13 11:29:10] The line: 183 ---> in file D:\OSPanel\home\dev.gi.by\public\wp-content\plugins\bp_contracts\src\Dialog\traits\WorkWithMessages.php in Object->method: PersonalAccount\Dialog\Dialog->writeNewMessage variable newMessage->files === array(0) {
+}  but flag was 1
+[2025-05-13 11:29:10] The line: 104 ---> in file D:\OSPanel\home\dev.gi.by\public\wp-content\plugins\bp_contracts\src\Dialog\traits\WorkWithMessages.php in Object->method: PersonalAccount\Dialog\Dialog->saveFilesOnServer variable else (!empty($files)) === array(0) {
+} 
+[2025-05-13 11:30:10] The line: 204 ---> in file D:\OSPanel\home\dev.gi.by\public\wp-content\plugins\bp_contracts\src\Chat.php in Object->method: PersonalAccount\Controler\InteractionInterface->regNewMessage variable newMessage->files === array(0) {
+}  but flag was 1
+[2025-05-13 11:30:10] The line: 183 ---> in file D:\OSPanel\home\dev.gi.by\public\wp-content\plugins\bp_contracts\src\Dialog\traits\WorkWithMessages.php in Object->method: PersonalAccount\Dialog\Dialog->writeNewMessage variable newMessage->files === array(0) {
+}  but flag was 1
+[2025-05-13 11:30:10] The line: 104 ---> in file D:\OSPanel\home\dev.gi.by\public\wp-content\plugins\bp_contracts\src\Dialog\traits\WorkWithMessages.php in Object->method: PersonalAccount\Dialog\Dialog->saveFilesOnServer variable else (!empty($files)) === array(0) {
+} 
+[2025-05-13 11:30:40] The line: 204 ---> in file D:\OSPanel\home\dev.gi.by\public\wp-content\plugins\bp_contracts\src\Chat.php in Object->method: PersonalAccount\Controler\InteractionInterface->regNewMessage variable newMessage->files === array(0) {
+}  but flag was 1
+[2025-05-13 11:30:40] The line: 183 ---> in file D:\OSPanel\home\dev.gi.by\public\wp-content\plugins\bp_contracts\src\Dialog\traits\WorkWithMessages.php in Object->method: PersonalAccount\Dialog\Dialog->writeNewMessage variable newMessage->files === array(0) {
+}  but flag was 1
+[2025-05-13 11:30:40] The line: 104 ---> in file D:\OSPanel\home\dev.gi.by\public\wp-content\plugins\bp_contracts\src\Dialog\traits\WorkWithMessages.php in Object->method: PersonalAccount\Dialog\Dialog->saveFilesOnServer variable else (!empty($files)) === array(0) {
+} 
+[2025-05-13 11:31:40] The line: 204 ---> in file D:\OSPanel\home\dev.gi.by\public\wp-content\plugins\bp_contracts\src\Chat.php in Object->method: PersonalAccount\Controler\InteractionInterface->regNewMessage variable newMessage->files === array(0) {
+}  but flag was 1
+[2025-05-13 11:31:40] The line: 183 ---> in file D:\OSPanel\home\dev.gi.by\public\wp-content\plugins\bp_contracts\src\Dialog\traits\WorkWithMessages.php in Object->method: PersonalAccount\Dialog\Dialog->writeNewMessage variable newMessage->files === array(0) {
+}  but flag was 1
+[2025-05-13 11:31:40] The line: 104 ---> in file D:\OSPanel\home\dev.gi.by\public\wp-content\plugins\bp_contracts\src\Dialog\traits\WorkWithMessages.php in Object->method: PersonalAccount\Dialog\Dialog->saveFilesOnServer variable else (!empty($files)) === array(0) {
+} 
+[2025-05-13 11:35:36] The line: 204 ---> in file D:\OSPanel\home\dev.gi.by\public\wp-content\plugins\bp_contracts\src\Chat.php in Object->method: PersonalAccount\Controler\InteractionInterface->regNewMessage variable newMessage->files === array(0) {
+}  but flag was 1
+[2025-05-13 11:35:36] The line: 183 ---> in file D:\OSPanel\home\dev.gi.by\public\wp-content\plugins\bp_contracts\src\Dialog\traits\WorkWithMessages.php in Object->method: PersonalAccount\Dialog\Dialog->writeNewMessage variable newMessage->files === array(0) {
+}  but flag was 1
+[2025-05-13 11:35:36] The line: 104 ---> in file D:\OSPanel\home\dev.gi.by\public\wp-content\plugins\bp_contracts\src\Dialog\traits\WorkWithMessages.php in Object->method: PersonalAccount\Dialog\Dialog->saveFilesOnServer variable else (!empty($files)) === array(0) {
+} 
+[2025-05-13 11:36:04] The line: 204 ---> in file D:\OSPanel\home\dev.gi.by\public\wp-content\plugins\bp_contracts\src\Chat.php in Object->method: PersonalAccount\Controler\InteractionInterface->regNewMessage variable newMessage->files === array(0) {
+}  but flag was 1
+[2025-05-13 11:36:04] The line: 183 ---> in file D:\OSPanel\home\dev.gi.by\public\wp-content\plugins\bp_contracts\src\Dialog\traits\WorkWithMessages.php in Object->method: PersonalAccount\Dialog\Dialog->writeNewMessage variable newMessage->files === array(0) {
+}  but flag was 1
+[2025-05-13 11:36:04] The line: 104 ---> in file D:\OSPanel\home\dev.gi.by\public\wp-content\plugins\bp_contracts\src\Dialog\traits\WorkWithMessages.php in Object->method: PersonalAccount\Dialog\Dialog->saveFilesOnServer variable else (!empty($files)) === array(0) {
+} 
+[2025-05-13 11:36:44] The line: 204 ---> in file D:\OSPanel\home\dev.gi.by\public\wp-content\plugins\bp_contracts\src\Chat.php in Object->method: PersonalAccount\Controler\InteractionInterface->regNewMessage variable newMessage->files === array(0) {
+}  but flag was 1
+[2025-05-13 11:36:44] The line: 183 ---> in file D:\OSPanel\home\dev.gi.by\public\wp-content\plugins\bp_contracts\src\Dialog\traits\WorkWithMessages.php in Object->method: PersonalAccount\Dialog\Dialog->writeNewMessage variable newMessage->files === array(0) {
+}  but flag was 1
+[2025-05-13 11:36:44] The line: 104 ---> in file D:\OSPanel\home\dev.gi.by\public\wp-content\plugins\bp_contracts\src\Dialog\traits\WorkWithMessages.php in Object->method: PersonalAccount\Dialog\Dialog->saveFilesOnServer variable else (!empty($files)) === array(0) {
+} 
+[2025-05-13 11:37:17] The line: 204 ---> in file D:\OSPanel\home\dev.gi.by\public\wp-content\plugins\bp_contracts\src\Chat.php in Object->method: PersonalAccount\Controler\InteractionInterface->regNewMessage variable newMessage->files === array(0) {
+}  but flag was 1
+[2025-05-13 11:37:17] The line: 183 ---> in file D:\OSPanel\home\dev.gi.by\public\wp-content\plugins\bp_contracts\src\Dialog\traits\WorkWithMessages.php in Object->method: PersonalAccount\Dialog\Dialog->writeNewMessage variable newMessage->files === array(0) {
+}  but flag was 1
+[2025-05-13 11:37:17] The line: 104 ---> in file D:\OSPanel\home\dev.gi.by\public\wp-content\plugins\bp_contracts\src\Dialog\traits\WorkWithMessages.php in Object->method: PersonalAccount\Dialog\Dialog->saveFilesOnServer variable else (!empty($files)) === array(0) {
+} 
+[2025-05-13 11:40:12] The line: 204 ---> in file D:\OSPanel\home\dev.gi.by\public\wp-content\plugins\bp_contracts\src\Chat.php in Object->method: PersonalAccount\Controler\InteractionInterface->regNewMessage variable newMessage->files === array(0) {
+}  but flag was 1
+[2025-05-13 11:40:12] The line: 183 ---> in file D:\OSPanel\home\dev.gi.by\public\wp-content\plugins\bp_contracts\src\Dialog\traits\WorkWithMessages.php in Object->method: PersonalAccount\Dialog\Dialog->writeNewMessage variable newMessage->files === array(0) {
+}  but flag was 1
+[2025-05-13 11:40:12] The line: 104 ---> in file D:\OSPanel\home\dev.gi.by\public\wp-content\plugins\bp_contracts\src\Dialog\traits\WorkWithMessages.php in Object->method: PersonalAccount\Dialog\Dialog->saveFilesOnServer variable else (!empty($files)) === array(0) {
+} 
+[2025-05-13 11:42:52] The line: 204 ---> in file D:\OSPanel\home\dev.gi.by\public\wp-content\plugins\bp_contracts\src\Chat.php in Object->method: PersonalAccount\Controler\InteractionInterface->regNewMessage variable newMessage->files === array(0) {
+}  but flag was 1
+[2025-05-13 11:42:52] The line: 183 ---> in file D:\OSPanel\home\dev.gi.by\public\wp-content\plugins\bp_contracts\src\Dialog\traits\WorkWithMessages.php in Object->method: PersonalAccount\Dialog\Dialog->writeNewMessage variable newMessage->files === array(0) {
+}  but flag was 1
+[2025-05-13 11:42:52] The line: 104 ---> in file D:\OSPanel\home\dev.gi.by\public\wp-content\plugins\bp_contracts\src\Dialog\traits\WorkWithMessages.php in Object->method: PersonalAccount\Dialog\Dialog->saveFilesOnServer variable else (!empty($files)) === array(0) {
+} 
+[2025-05-13 11:45:11] The line: 204 ---> in file D:\OSPanel\home\dev.gi.by\public\wp-content\plugins\bp_contracts\src\Chat.php in Object->method: PersonalAccount\Controler\InteractionInterface->regNewMessage variable newMessage->files === array(0) {
+}  but flag was 1
+[2025-05-13 11:45:11] The line: 183 ---> in file D:\OSPanel\home\dev.gi.by\public\wp-content\plugins\bp_contracts\src\Dialog\traits\WorkWithMessages.php in Object->method: PersonalAccount\Dialog\Dialog->writeNewMessage variable newMessage->files === array(0) {
+}  but flag was 1
+[2025-05-13 11:45:11] The line: 104 ---> in file D:\OSPanel\home\dev.gi.by\public\wp-content\plugins\bp_contracts\src\Dialog\traits\WorkWithMessages.php in Object->method: PersonalAccount\Dialog\Dialog->saveFilesOnServer variable else (!empty($files)) === array(0) {
+} 
+[2025-05-13 11:45:42] The line: 204 ---> in file D:\OSPanel\home\dev.gi.by\public\wp-content\plugins\bp_contracts\src\Chat.php in Object->method: PersonalAccount\Controler\InteractionInterface->regNewMessage variable newMessage->files === array(0) {
+}  but flag was 1
+[2025-05-13 11:45:42] The line: 183 ---> in file D:\OSPanel\home\dev.gi.by\public\wp-content\plugins\bp_contracts\src\Dialog\traits\WorkWithMessages.php in Object->method: PersonalAccount\Dialog\Dialog->writeNewMessage variable newMessage->files === array(0) {
+}  but flag was 1
+[2025-05-13 11:45:42] The line: 104 ---> in file D:\OSPanel\home\dev.gi.by\public\wp-content\plugins\bp_contracts\src\Dialog\traits\WorkWithMessages.php in Object->method: PersonalAccount\Dialog\Dialog->saveFilesOnServer variable else (!empty($files)) === array(0) {
+} 
+[2025-05-13 11:50:05] The line: 204 ---> in file D:\OSPanel\home\dev.gi.by\public\wp-content\plugins\bp_contracts\src\Chat.php in Object->method: PersonalAccount\Controler\InteractionInterface->regNewMessage variable newMessage->files === array(0) {
+}  but flag was 1
+[2025-05-13 11:50:05] The line: 183 ---> in file D:\OSPanel\home\dev.gi.by\public\wp-content\plugins\bp_contracts\src\Dialog\traits\WorkWithMessages.php in Object->method: PersonalAccount\Dialog\Dialog->writeNewMessage variable newMessage->files === array(0) {
+}  but flag was 1
+[2025-05-13 11:50:05] The line: 104 ---> in file D:\OSPanel\home\dev.gi.by\public\wp-content\plugins\bp_contracts\src\Dialog\traits\WorkWithMessages.php in Object->method: PersonalAccount\Dialog\Dialog->saveFilesOnServer variable else (!empty($files)) === array(0) {
+} 
+[2025-05-13 11:51:08] The line: 204 ---> in file D:\OSPanel\home\dev.gi.by\public\wp-content\plugins\bp_contracts\src\Chat.php in Object->method: PersonalAccount\Controler\InteractionInterface->regNewMessage variable newMessage->files === array(0) {
+}  but flag was 1
+[2025-05-13 11:51:08] The line: 183 ---> in file D:\OSPanel\home\dev.gi.by\public\wp-content\plugins\bp_contracts\src\Dialog\traits\WorkWithMessages.php in Object->method: PersonalAccount\Dialog\Dialog->writeNewMessage variable newMessage->files === array(0) {
+}  but flag was 1
+[2025-05-13 11:51:08] The line: 104 ---> in file D:\OSPanel\home\dev.gi.by\public\wp-content\plugins\bp_contracts\src\Dialog\traits\WorkWithMessages.php in Object->method: PersonalAccount\Dialog\Dialog->saveFilesOnServer variable else (!empty($files)) === array(0) {
+} 
+[2025-05-13 13:27:39] The line: 204 ---> in file D:\OSPanel\home\dev.gi.by\public\wp-content\plugins\bp_contracts\src\Chat.php in Object->method: PersonalAccount\Controler\InteractionInterface->regNewMessage variable newMessage->files === array(0) {
+}  but flag was 1
+[2025-05-13 13:27:39] The line: 183 ---> in file D:\OSPanel\home\dev.gi.by\public\wp-content\plugins\bp_contracts\src\Dialog\traits\WorkWithMessages.php in Object->method: PersonalAccount\Dialog\Dialog->writeNewMessage variable newMessage->files === array(0) {
+}  but flag was 1
+[2025-05-13 13:27:39] The line: 104 ---> in file D:\OSPanel\home\dev.gi.by\public\wp-content\plugins\bp_contracts\src\Dialog\traits\WorkWithMessages.php in Object->method: PersonalAccount\Dialog\Dialog->saveFilesOnServer variable else (!empty($files)) === array(0) {
+} 
+[2025-05-13 13:28:58] The line: 204 ---> in file D:\OSPanel\home\dev.gi.by\public\wp-content\plugins\bp_contracts\src\Chat.php in Object->method: PersonalAccount\Controler\InteractionInterface->regNewMessage variable newMessage->files === array(0) {
+}  but flag was 1
+[2025-05-13 13:28:58] The line: 183 ---> in file D:\OSPanel\home\dev.gi.by\public\wp-content\plugins\bp_contracts\src\Dialog\traits\WorkWithMessages.php in Object->method: PersonalAccount\Dialog\Dialog->writeNewMessage variable newMessage->files === array(0) {
+}  but flag was 1
+[2025-05-13 13:28:58] The line: 104 ---> in file D:\OSPanel\home\dev.gi.by\public\wp-content\plugins\bp_contracts\src\Dialog\traits\WorkWithMessages.php in Object->method: PersonalAccount\Dialog\Dialog->saveFilesOnServer variable else (!empty($files)) === array(0) {
+} 
+[2025-05-13 13:31:17] The line: 204 ---> in file D:\OSPanel\home\dev.gi.by\public\wp-content\plugins\bp_contracts\src\Chat.php in Object->method: PersonalAccount\Controler\InteractionInterface->regNewMessage variable newMessage->files === array(0) {
+}  but flag was 1
+[2025-05-13 13:31:17] The line: 183 ---> in file D:\OSPanel\home\dev.gi.by\public\wp-content\plugins\bp_contracts\src\Dialog\traits\WorkWithMessages.php in Object->method: PersonalAccount\Dialog\Dialog->writeNewMessage variable newMessage->files === array(0) {
+}  but flag was 1
+[2025-05-13 13:31:17] The line: 104 ---> in file D:\OSPanel\home\dev.gi.by\public\wp-content\plugins\bp_contracts\src\Dialog\traits\WorkWithMessages.php in Object->method: PersonalAccount\Dialog\Dialog->saveFilesOnServer variable else (!empty($files)) === array(0) {
+} 
+[2025-05-13 13:35:22] The line: 204 ---> in file D:\OSPanel\home\dev.gi.by\public\wp-content\plugins\bp_contracts\src\Chat.php in Object->method: PersonalAccount\Controler\InteractionInterface->regNewMessage variable newMessage->files === array(0) {
+}  but flag was 1
+[2025-05-13 13:35:22] The line: 183 ---> in file D:\OSPanel\home\dev.gi.by\public\wp-content\plugins\bp_contracts\src\Dialog\traits\WorkWithMessages.php in Object->method: PersonalAccount\Dialog\Dialog->writeNewMessage variable newMessage->files === array(0) {
+}  but flag was 1
+[2025-05-13 13:35:22] The line: 104 ---> in file D:\OSPanel\home\dev.gi.by\public\wp-content\plugins\bp_contracts\src\Dialog\traits\WorkWithMessages.php in Object->method: PersonalAccount\Dialog\Dialog->saveFilesOnServer variable else (!empty($files)) === array(0) {
+} 
+[2025-05-13 13:37:56] The line: 204 ---> in file D:\OSPanel\home\dev.gi.by\public\wp-content\plugins\bp_contracts\src\Chat.php in Object->method: PersonalAccount\Controler\InteractionInterface->regNewMessage variable newMessage->files === array(0) {
+}  but flag was 1
+[2025-05-13 13:37:56] The line: 183 ---> in file D:\OSPanel\home\dev.gi.by\public\wp-content\plugins\bp_contracts\src\Dialog\traits\WorkWithMessages.php in Object->method: PersonalAccount\Dialog\Dialog->writeNewMessage variable newMessage->files === array(0) {
+}  but flag was 1
+[2025-05-13 13:37:56] The line: 104 ---> in file D:\OSPanel\home\dev.gi.by\public\wp-content\plugins\bp_contracts\src\Dialog\traits\WorkWithMessages.php in Object->method: PersonalAccount\Dialog\Dialog->saveFilesOnServer variable else (!empty($files)) === array(0) {
+} 
+[2025-05-13 13:41:10] The line: 204 ---> in file D:\OSPanel\home\dev.gi.by\public\wp-content\plugins\bp_contracts\src\Chat.php in Object->method: PersonalAccount\Controler\InteractionInterface->regNewMessage variable newMessage->files === array(0) {
+}  but flag was 1
+[2025-05-13 13:41:10] The line: 183 ---> in file D:\OSPanel\home\dev.gi.by\public\wp-content\plugins\bp_contracts\src\Dialog\traits\WorkWithMessages.php in Object->method: PersonalAccount\Dialog\Dialog->writeNewMessage variable newMessage->files === array(0) {
+}  but flag was 1
+[2025-05-13 13:41:10] The line: 104 ---> in file D:\OSPanel\home\dev.gi.by\public\wp-content\plugins\bp_contracts\src\Dialog\traits\WorkWithMessages.php in Object->method: PersonalAccount\Dialog\Dialog->saveFilesOnServer variable else (!empty($files)) === array(0) {
+} 
+[2025-05-13 13:42:12] The line: 204 ---> in file D:\OSPanel\home\dev.gi.by\public\wp-content\plugins\bp_contracts\src\Chat.php in Object->method: PersonalAccount\Controler\InteractionInterface->regNewMessage variable newMessage->files === array(0) {
+}  but flag was 1
+[2025-05-13 13:42:12] The line: 183 ---> in file D:\OSPanel\home\dev.gi.by\public\wp-content\plugins\bp_contracts\src\Dialog\traits\WorkWithMessages.php in Object->method: PersonalAccount\Dialog\Dialog->writeNewMessage variable newMessage->files === array(0) {
+}  but flag was 1
+[2025-05-13 13:42:12] The line: 104 ---> in file D:\OSPanel\home\dev.gi.by\public\wp-content\plugins\bp_contracts\src\Dialog\traits\WorkWithMessages.php in Object->method: PersonalAccount\Dialog\Dialog->saveFilesOnServer variable else (!empty($files)) === array(0) {
+} 
+[2025-05-13 13:45:32] The line: 204 ---> in file D:\OSPanel\home\dev.gi.by\public\wp-content\plugins\bp_contracts\src\Chat.php in Object->method: PersonalAccount\Controler\InteractionInterface->regNewMessage variable newMessage->files === array(0) {
+}  but flag was 1
+[2025-05-13 13:45:32] The line: 183 ---> in file D:\OSPanel\home\dev.gi.by\public\wp-content\plugins\bp_contracts\src\Dialog\traits\WorkWithMessages.php in Object->method: PersonalAccount\Dialog\Dialog->writeNewMessage variable newMessage->files === array(0) {
+}  but flag was 1
+[2025-05-13 13:45:32] The line: 104 ---> in file D:\OSPanel\home\dev.gi.by\public\wp-content\plugins\bp_contracts\src\Dialog\traits\WorkWithMessages.php in Object->method: PersonalAccount\Dialog\Dialog->saveFilesOnServer variable else (!empty($files)) === array(0) {
+} 
+[2025-05-13 13:46:51] The line: 204 ---> in file D:\OSPanel\home\dev.gi.by\public\wp-content\plugins\bp_contracts\src\Chat.php in Object->method: PersonalAccount\Controler\InteractionInterface->regNewMessage variable newMessage->files === array(0) {
+}  but flag was 1
+[2025-05-13 13:46:51] The line: 183 ---> in file D:\OSPanel\home\dev.gi.by\public\wp-content\plugins\bp_contracts\src\Dialog\traits\WorkWithMessages.php in Object->method: PersonalAccount\Dialog\Dialog->writeNewMessage variable newMessage->files === array(0) {
+}  but flag was 1
+[2025-05-13 13:46:51] The line: 104 ---> in file D:\OSPanel\home\dev.gi.by\public\wp-content\plugins\bp_contracts\src\Dialog\traits\WorkWithMessages.php in Object->method: PersonalAccount\Dialog\Dialog->saveFilesOnServer variable else (!empty($files)) === array(0) {
+} 
+[2025-05-13 13:47:47] The line: 204 ---> in file D:\OSPanel\home\dev.gi.by\public\wp-content\plugins\bp_contracts\src\Chat.php in Object->method: PersonalAccount\Controler\InteractionInterface->regNewMessage variable newMessage->files === array(0) {
+}  but flag was 1
+[2025-05-13 13:47:47] The line: 183 ---> in file D:\OSPanel\home\dev.gi.by\public\wp-content\plugins\bp_contracts\src\Dialog\traits\WorkWithMessages.php in Object->method: PersonalAccount\Dialog\Dialog->writeNewMessage variable newMessage->files === array(0) {
+}  but flag was 1
+[2025-05-13 13:47:47] The line: 104 ---> in file D:\OSPanel\home\dev.gi.by\public\wp-content\plugins\bp_contracts\src\Dialog\traits\WorkWithMessages.php in Object->method: PersonalAccount\Dialog\Dialog->saveFilesOnServer variable else (!empty($files)) === array(0) {
+} 
+[2025-05-13 13:48:36] The line: 204 ---> in file D:\OSPanel\home\dev.gi.by\public\wp-content\plugins\bp_contracts\src\Chat.php in Object->method: PersonalAccount\Controler\InteractionInterface->regNewMessage variable newMessage->files === array(0) {
+}  but flag was 1
+[2025-05-13 13:48:36] The line: 183 ---> in file D:\OSPanel\home\dev.gi.by\public\wp-content\plugins\bp_contracts\src\Dialog\traits\WorkWithMessages.php in Object->method: PersonalAccount\Dialog\Dialog->writeNewMessage variable newMessage->files === array(0) {
+}  but flag was 1
+[2025-05-13 13:48:36] The line: 104 ---> in file D:\OSPanel\home\dev.gi.by\public\wp-content\plugins\bp_contracts\src\Dialog\traits\WorkWithMessages.php in Object->method: PersonalAccount\Dialog\Dialog->saveFilesOnServer variable else (!empty($files)) === array(0) {
+} 
+[2025-05-13 13:49:32] The line: 204 ---> in file D:\OSPanel\home\dev.gi.by\public\wp-content\plugins\bp_contracts\src\Chat.php in Object->method: PersonalAccount\Controler\InteractionInterface->regNewMessage variable newMessage->files === array(0) {
+}  but flag was 1
+[2025-05-13 13:49:32] The line: 183 ---> in file D:\OSPanel\home\dev.gi.by\public\wp-content\plugins\bp_contracts\src\Dialog\traits\WorkWithMessages.php in Object->method: PersonalAccount\Dialog\Dialog->writeNewMessage variable newMessage->files === array(0) {
+}  but flag was 1
+[2025-05-13 13:49:32] The line: 104 ---> in file D:\OSPanel\home\dev.gi.by\public\wp-content\plugins\bp_contracts\src\Dialog\traits\WorkWithMessages.php in Object->method: PersonalAccount\Dialog\Dialog->saveFilesOnServer variable else (!empty($files)) === array(0) {
+} 
+[2025-05-13 13:50:30] The line: 204 ---> in file D:\OSPanel\home\dev.gi.by\public\wp-content\plugins\bp_contracts\src\Chat.php in Object->method: PersonalAccount\Controler\InteractionInterface->regNewMessage variable newMessage->files === array(0) {
+}  but flag was 1
+[2025-05-13 13:50:30] The line: 183 ---> in file D:\OSPanel\home\dev.gi.by\public\wp-content\plugins\bp_contracts\src\Dialog\traits\WorkWithMessages.php in Object->method: PersonalAccount\Dialog\Dialog->writeNewMessage variable newMessage->files === array(0) {
+}  but flag was 1
+[2025-05-13 13:50:30] The line: 104 ---> in file D:\OSPanel\home\dev.gi.by\public\wp-content\plugins\bp_contracts\src\Dialog\traits\WorkWithMessages.php in Object->method: PersonalAccount\Dialog\Dialog->saveFilesOnServer variable else (!empty($files)) === array(0) {
+} 
+[2025-05-13 13:54:19] The line: 204 ---> in file D:\OSPanel\home\dev.gi.by\public\wp-content\plugins\bp_contracts\src\Chat.php in Object->method: PersonalAccount\Controler\InteractionInterface->regNewMessage variable newMessage->files === array(0) {
+}  but flag was 1
+[2025-05-13 13:54:19] The line: 183 ---> in file D:\OSPanel\home\dev.gi.by\public\wp-content\plugins\bp_contracts\src\Dialog\traits\WorkWithMessages.php in Object->method: PersonalAccount\Dialog\Dialog->writeNewMessage variable newMessage->files === array(0) {
+}  but flag was 1
+[2025-05-13 13:54:19] The line: 104 ---> in file D:\OSPanel\home\dev.gi.by\public\wp-content\plugins\bp_contracts\src\Dialog\traits\WorkWithMessages.php in Object->method: PersonalAccount\Dialog\Dialog->saveFilesOnServer variable else (!empty($files)) === array(0) {
+} 
+[2025-05-13 13:55:20] The line: 204 ---> in file D:\OSPanel\home\dev.gi.by\public\wp-content\plugins\bp_contracts\src\Chat.php in Object->method: PersonalAccount\Controler\InteractionInterface->regNewMessage variable newMessage->files === array(0) {
+}  but flag was 1
+[2025-05-13 13:55:20] The line: 183 ---> in file D:\OSPanel\home\dev.gi.by\public\wp-content\plugins\bp_contracts\src\Dialog\traits\WorkWithMessages.php in Object->method: PersonalAccount\Dialog\Dialog->writeNewMessage variable newMessage->files === array(0) {
+}  but flag was 1
+[2025-05-13 13:55:20] The line: 104 ---> in file D:\OSPanel\home\dev.gi.by\public\wp-content\plugins\bp_contracts\src\Dialog\traits\WorkWithMessages.php in Object->method: PersonalAccount\Dialog\Dialog->saveFilesOnServer variable else (!empty($files)) === array(0) {
+} 
+[2025-05-13 13:55:44] The line: 204 ---> in file D:\OSPanel\home\dev.gi.by\public\wp-content\plugins\bp_contracts\src\Chat.php in Object->method: PersonalAccount\Controler\InteractionInterface->regNewMessage variable newMessage->files === array(0) {
+}  but flag was 1
+[2025-05-13 13:55:44] The line: 183 ---> in file D:\OSPanel\home\dev.gi.by\public\wp-content\plugins\bp_contracts\src\Dialog\traits\WorkWithMessages.php in Object->method: PersonalAccount\Dialog\Dialog->writeNewMessage variable newMessage->files === array(0) {
+}  but flag was 1
+[2025-05-13 13:55:44] The line: 104 ---> in file D:\OSPanel\home\dev.gi.by\public\wp-content\plugins\bp_contracts\src\Dialog\traits\WorkWithMessages.php in Object->method: PersonalAccount\Dialog\Dialog->saveFilesOnServer variable else (!empty($files)) === array(0) {
+} 
+[2025-05-13 13:56:04] The line: 204 ---> in file D:\OSPanel\home\dev.gi.by\public\wp-content\plugins\bp_contracts\src\Chat.php in Object->method: PersonalAccount\Controler\InteractionInterface->regNewMessage variable newMessage->files === array(0) {
+}  but flag was 1
+[2025-05-13 13:56:04] The line: 183 ---> in file D:\OSPanel\home\dev.gi.by\public\wp-content\plugins\bp_contracts\src\Dialog\traits\WorkWithMessages.php in Object->method: PersonalAccount\Dialog\Dialog->writeNewMessage variable newMessage->files === array(0) {
+}  but flag was 1
+[2025-05-13 13:56:04] The line: 104 ---> in file D:\OSPanel\home\dev.gi.by\public\wp-content\plugins\bp_contracts\src\Dialog\traits\WorkWithMessages.php in Object->method: PersonalAccount\Dialog\Dialog->saveFilesOnServer variable else (!empty($files)) === array(0) {
+} 
+[2025-05-13 13:57:13] The line: 204 ---> in file D:\OSPanel\home\dev.gi.by\public\wp-content\plugins\bp_contracts\src\Chat.php in Object->method: PersonalAccount\Controler\InteractionInterface->regNewMessage variable newMessage->files === array(0) {
+}  but flag was 1
+[2025-05-13 13:57:13] The line: 183 ---> in file D:\OSPanel\home\dev.gi.by\public\wp-content\plugins\bp_contracts\src\Dialog\traits\WorkWithMessages.php in Object->method: PersonalAccount\Dialog\Dialog->writeNewMessage variable newMessage->files === array(0) {
+}  but flag was 1
+[2025-05-13 13:57:13] The line: 104 ---> in file D:\OSPanel\home\dev.gi.by\public\wp-content\plugins\bp_contracts\src\Dialog\traits\WorkWithMessages.php in Object->method: PersonalAccount\Dialog\Dialog->saveFilesOnServer variable else (!empty($files)) === array(0) {
+} 
+[2025-05-13 13:58:30] The line: 204 ---> in file D:\OSPanel\home\dev.gi.by\public\wp-content\plugins\bp_contracts\src\Chat.php in Object->method: PersonalAccount\Controler\InteractionInterface->regNewMessage variable newMessage->files === array(0) {
+}  but flag was 1
+[2025-05-13 13:58:30] The line: 183 ---> in file D:\OSPanel\home\dev.gi.by\public\wp-content\plugins\bp_contracts\src\Dialog\traits\WorkWithMessages.php in Object->method: PersonalAccount\Dialog\Dialog->writeNewMessage variable newMessage->files === array(0) {
+}  but flag was 1
+[2025-05-13 13:58:30] The line: 104 ---> in file D:\OSPanel\home\dev.gi.by\public\wp-content\plugins\bp_contracts\src\Dialog\traits\WorkWithMessages.php in Object->method: PersonalAccount\Dialog\Dialog->saveFilesOnServer variable else (!empty($files)) === array(0) {
+} 
+[2025-05-13 14:01:36] The line: 204 ---> in file D:\OSPanel\home\dev.gi.by\public\wp-content\plugins\bp_contracts\src\Chat.php in Object->method: PersonalAccount\Controler\InteractionInterface->regNewMessage variable newMessage->files === array(0) {
+}  but flag was 1
+[2025-05-13 14:01:36] The line: 183 ---> in file D:\OSPanel\home\dev.gi.by\public\wp-content\plugins\bp_contracts\src\Dialog\traits\WorkWithMessages.php in Object->method: PersonalAccount\Dialog\Dialog->writeNewMessage variable newMessage->files === array(0) {
+}  but flag was 1
+[2025-05-13 14:01:36] The line: 104 ---> in file D:\OSPanel\home\dev.gi.by\public\wp-content\plugins\bp_contracts\src\Dialog\traits\WorkWithMessages.php in Object->method: PersonalAccount\Dialog\Dialog->saveFilesOnServer variable else (!empty($files)) === array(0) {
+} 
+[2025-05-13 14:10:00] The line: 204 ---> in file D:\OSPanel\home\dev.gi.by\public\wp-content\plugins\bp_contracts\src\Chat.php in Object->method: PersonalAccount\Controler\InteractionInterface->regNewMessage variable newMessage->files === array(0) {
+}  but flag was 1
+[2025-05-13 14:10:00] The line: 183 ---> in file D:\OSPanel\home\dev.gi.by\public\wp-content\plugins\bp_contracts\src\Dialog\traits\WorkWithMessages.php in Object->method: PersonalAccount\Dialog\Dialog->writeNewMessage variable newMessage->files === array(0) {
+}  but flag was 1
+[2025-05-13 14:10:00] The line: 104 ---> in file D:\OSPanel\home\dev.gi.by\public\wp-content\plugins\bp_contracts\src\Dialog\traits\WorkWithMessages.php in Object->method: PersonalAccount\Dialog\Dialog->saveFilesOnServer variable else (!empty($files)) === array(0) {
+} 
+[2025-05-13 14:12:15] The line: 204 ---> in file D:\OSPanel\home\dev.gi.by\public\wp-content\plugins\bp_contracts\src\Chat.php in Object->method: PersonalAccount\Controler\InteractionInterface->regNewMessage variable newMessage->files === array(0) {
+}  but flag was 1
+[2025-05-13 14:12:15] The line: 183 ---> in file D:\OSPanel\home\dev.gi.by\public\wp-content\plugins\bp_contracts\src\Dialog\traits\WorkWithMessages.php in Object->method: PersonalAccount\Dialog\Dialog->writeNewMessage variable newMessage->files === array(0) {
+}  but flag was 1
+[2025-05-13 14:12:15] The line: 104 ---> in file D:\OSPanel\home\dev.gi.by\public\wp-content\plugins\bp_contracts\src\Dialog\traits\WorkWithMessages.php in Object->method: PersonalAccount\Dialog\Dialog->saveFilesOnServer variable else (!empty($files)) === array(0) {
+} 
+[2025-05-13 14:17:28] The line: 204 ---> in file D:\OSPanel\home\dev.gi.by\public\wp-content\plugins\bp_contracts\src\Chat.php in Object->method: PersonalAccount\Controler\InteractionInterface->regNewMessage variable newMessage->files === array(0) {
+}  but flag was 1
+[2025-05-13 14:17:28] The line: 183 ---> in file D:\OSPanel\home\dev.gi.by\public\wp-content\plugins\bp_contracts\src\Dialog\traits\WorkWithMessages.php in Object->method: PersonalAccount\Dialog\Dialog->writeNewMessage variable newMessage->files === array(0) {
+}  but flag was 1
+[2025-05-13 14:17:28] The line: 104 ---> in file D:\OSPanel\home\dev.gi.by\public\wp-content\plugins\bp_contracts\src\Dialog\traits\WorkWithMessages.php in Object->method: PersonalAccount\Dialog\Dialog->saveFilesOnServer variable else (!empty($files)) === array(0) {
+} 
+[2025-05-15 14:19:12] The line: 204 ---> in file D:\OSPanel\home\dev.gi.by\public\wp-content\plugins\bp_contracts\src\Chat.php in Object->method: PersonalAccount\Controler\InteractionInterface->regNewMessage variable newMessage->files === array(0) {
+}  but flag was 1
+[2025-05-15 14:19:12] The line: 183 ---> in file D:\OSPanel\home\dev.gi.by\public\wp-content\plugins\bp_contracts\src\Dialog\traits\WorkWithMessages.php in Object->method: PersonalAccount\Dialog\Dialog->writeNewMessage variable newMessage->files === array(0) {
+}  but flag was 1
+[2025-05-15 14:19:12] The line: 104 ---> in file D:\OSPanel\home\dev.gi.by\public\wp-content\plugins\bp_contracts\src\Dialog\traits\WorkWithMessages.php in Object->method: PersonalAccount\Dialog\Dialog->saveFilesOnServer variable else (!empty($files)) === array(0) {
+} 
+[2025-05-15 14:50:39] The line: 204 ---> in file D:\OSPanel\home\dev.gi.by\public\wp-content\plugins\bp_contracts\src\Chat.php in Object->method: PersonalAccount\Controler\InteractionInterface->regNewMessage variable newMessage->files === array(0) {
+}  but flag was 1
+[2025-05-15 14:50:39] The line: 183 ---> in file D:\OSPanel\home\dev.gi.by\public\wp-content\plugins\bp_contracts\src\Dialog\traits\WorkWithMessages.php in Object->method: PersonalAccount\Dialog\Dialog->writeNewMessage variable newMessage->files === array(0) {
+}  but flag was 1
+[2025-05-15 14:50:39] The line: 104 ---> in file D:\OSPanel\home\dev.gi.by\public\wp-content\plugins\bp_contracts\src\Dialog\traits\WorkWithMessages.php in Object->method: PersonalAccount\Dialog\Dialog->saveFilesOnServer variable else (!empty($files)) === array(0) {
+} 
+[2025-05-15 14:51:53] The line: 204 ---> in file D:\OSPanel\home\dev.gi.by\public\wp-content\plugins\bp_contracts\src\Chat.php in Object->method: PersonalAccount\Controler\InteractionInterface->regNewMessage variable newMessage->files === array(0) {
+}  but flag was 1
+[2025-05-15 14:51:53] The line: 183 ---> in file D:\OSPanel\home\dev.gi.by\public\wp-content\plugins\bp_contracts\src\Dialog\traits\WorkWithMessages.php in Object->method: PersonalAccount\Dialog\Dialog->writeNewMessage variable newMessage->files === array(0) {
+}  but flag was 1
+[2025-05-15 14:51:53] The line: 104 ---> in file D:\OSPanel\home\dev.gi.by\public\wp-content\plugins\bp_contracts\src\Dialog\traits\WorkWithMessages.php in Object->method: PersonalAccount\Dialog\Dialog->saveFilesOnServer variable else (!empty($files)) === array(0) {
+} 
+[2025-05-15 14:52:11] The line: 204 ---> in file D:\OSPanel\home\dev.gi.by\public\wp-content\plugins\bp_contracts\src\Chat.php in Object->method: PersonalAccount\Controler\InteractionInterface->regNewMessage variable newMessage->files === array(0) {
+}  but flag was 1
+[2025-05-15 14:52:11] The line: 183 ---> in file D:\OSPanel\home\dev.gi.by\public\wp-content\plugins\bp_contracts\src\Dialog\traits\WorkWithMessages.php in Object->method: PersonalAccount\Dialog\Dialog->writeNewMessage variable newMessage->files === array(0) {
+}  but flag was 1
+[2025-05-15 14:52:11] The line: 104 ---> in file D:\OSPanel\home\dev.gi.by\public\wp-content\plugins\bp_contracts\src\Dialog\traits\WorkWithMessages.php in Object->method: PersonalAccount\Dialog\Dialog->saveFilesOnServer variable else (!empty($files)) === array(0) {
+} 
+[2025-05-15 14:53:56] The line: 204 ---> in file D:\OSPanel\home\dev.gi.by\public\wp-content\plugins\bp_contracts\src\Chat.php in Object->method: PersonalAccount\Controler\InteractionInterface->regNewMessage variable newMessage->files === array(0) {
+}  but flag was 1
+[2025-05-15 14:53:56] The line: 183 ---> in file D:\OSPanel\home\dev.gi.by\public\wp-content\plugins\bp_contracts\src\Dialog\traits\WorkWithMessages.php in Object->method: PersonalAccount\Dialog\Dialog->writeNewMessage variable newMessage->files === array(0) {
+}  but flag was 1
+[2025-05-15 14:53:56] The line: 104 ---> in file D:\OSPanel\home\dev.gi.by\public\wp-content\plugins\bp_contracts\src\Dialog\traits\WorkWithMessages.php in Object->method: PersonalAccount\Dialog\Dialog->saveFilesOnServer variable else (!empty($files)) === array(0) {
+} 
+[2025-05-15 14:54:02] The line: 204 ---> in file D:\OSPanel\home\dev.gi.by\public\wp-content\plugins\bp_contracts\src\Chat.php in Object->method: PersonalAccount\Controler\InteractionInterface->regNewMessage variable newMessage->files === array(0) {
+}  but flag was 1
+[2025-05-15 14:54:02] The line: 183 ---> in file D:\OSPanel\home\dev.gi.by\public\wp-content\plugins\bp_contracts\src\Dialog\traits\WorkWithMessages.php in Object->method: PersonalAccount\Dialog\Dialog->writeNewMessage variable newMessage->files === array(0) {
+}  but flag was 1
+[2025-05-15 14:54:02] The line: 104 ---> in file D:\OSPanel\home\dev.gi.by\public\wp-content\plugins\bp_contracts\src\Dialog\traits\WorkWithMessages.php in Object->method: PersonalAccount\Dialog\Dialog->saveFilesOnServer variable else (!empty($files)) === array(0) {
+} 
+[2025-05-15 14:54:16] The line: 204 ---> in file D:\OSPanel\home\dev.gi.by\public\wp-content\plugins\bp_contracts\src\Chat.php in Object->method: PersonalAccount\Controler\InteractionInterface->regNewMessage variable newMessage->files === array(0) {
+}  but flag was 1
+[2025-05-15 14:54:16] The line: 183 ---> in file D:\OSPanel\home\dev.gi.by\public\wp-content\plugins\bp_contracts\src\Dialog\traits\WorkWithMessages.php in Object->method: PersonalAccount\Dialog\Dialog->writeNewMessage variable newMessage->files === array(0) {
+}  but flag was 1
+[2025-05-15 14:54:16] The line: 104 ---> in file D:\OSPanel\home\dev.gi.by\public\wp-content\plugins\bp_contracts\src\Dialog\traits\WorkWithMessages.php in Object->method: PersonalAccount\Dialog\Dialog->saveFilesOnServer variable else (!empty($files)) === array(0) {
+} 
+[2025-05-15 14:55:18] The line: 204 ---> in file D:\OSPanel\home\dev.gi.by\public\wp-content\plugins\bp_contracts\src\Chat.php in Object->method: PersonalAccount\Controler\InteractionInterface->regNewMessage variable newMessage->files === array(0) {
+}  but flag was 1
+[2025-05-15 14:55:18] The line: 183 ---> in file D:\OSPanel\home\dev.gi.by\public\wp-content\plugins\bp_contracts\src\Dialog\traits\WorkWithMessages.php in Object->method: PersonalAccount\Dialog\Dialog->writeNewMessage variable newMessage->files === array(0) {
+}  but flag was 1
+[2025-05-15 14:55:18] The line: 104 ---> in file D:\OSPanel\home\dev.gi.by\public\wp-content\plugins\bp_contracts\src\Dialog\traits\WorkWithMessages.php in Object->method: PersonalAccount\Dialog\Dialog->saveFilesOnServer variable else (!empty($files)) === array(0) {
+} 
+[2025-05-15 14:55:37] The line: 204 ---> in file D:\OSPanel\home\dev.gi.by\public\wp-content\plugins\bp_contracts\src\Chat.php in Object->method: PersonalAccount\Controler\InteractionInterface->regNewMessage variable newMessage->files === array(0) {
+}  but flag was 1
+[2025-05-15 14:55:37] The line: 183 ---> in file D:\OSPanel\home\dev.gi.by\public\wp-content\plugins\bp_contracts\src\Dialog\traits\WorkWithMessages.php in Object->method: PersonalAccount\Dialog\Dialog->writeNewMessage variable newMessage->files === array(0) {
+}  but flag was 1
+[2025-05-15 14:55:37] The line: 104 ---> in file D:\OSPanel\home\dev.gi.by\public\wp-content\plugins\bp_contracts\src\Dialog\traits\WorkWithMessages.php in Object->method: PersonalAccount\Dialog\Dialog->saveFilesOnServer variable else (!empty($files)) === array(0) {
+} 
+[2025-05-15 15:16:17] The line: 204 ---> in file D:\OSPanel\home\dev.gi.by\public\wp-content\plugins\bp_contracts\src\Chat.php in Object->method: PersonalAccount\Controler\InteractionInterface->regNewMessage variable newMessage->files === array(0) {
+}  but flag was 1
+[2025-05-15 15:16:17] The line: 183 ---> in file D:\OSPanel\home\dev.gi.by\public\wp-content\plugins\bp_contracts\src\Dialog\traits\WorkWithMessages.php in Object->method: PersonalAccount\Dialog\Dialog->writeNewMessage variable newMessage->files === array(0) {
+}  but flag was 1
+[2025-05-15 15:16:17] The line: 104 ---> in file D:\OSPanel\home\dev.gi.by\public\wp-content\plugins\bp_contracts\src\Dialog\traits\WorkWithMessages.php in Object->method: PersonalAccount\Dialog\Dialog->saveFilesOnServer variable else (!empty($files)) === array(0) {
+} 
+[2025-05-15 15:19:09] The line: 204 ---> in file D:\OSPanel\home\dev.gi.by\public\wp-content\plugins\bp_contracts\src\Chat.php in Object->method: PersonalAccount\Controler\InteractionInterface->regNewMessage variable newMessage->files === array(0) {
+}  but flag was 1
+[2025-05-15 15:20:26] The line: 204 ---> in file D:\OSPanel\home\dev.gi.by\public\wp-content\plugins\bp_contracts\src\Chat.php in Object->method: PersonalAccount\Controler\InteractionInterface->regNewMessage variable newMessage->files === array(0) {
+}  but flag was 1
+[2025-05-15 15:20:26] The line: 183 ---> in file D:\OSPanel\home\dev.gi.by\public\wp-content\plugins\bp_contracts\src\Dialog\traits\WorkWithMessages.php in Object->method: PersonalAccount\Dialog\Dialog->writeNewMessage variable newMessage->files === array(0) {
+}  but flag was 1
+[2025-05-15 15:20:26] The line: 104 ---> in file D:\OSPanel\home\dev.gi.by\public\wp-content\plugins\bp_contracts\src\Dialog\traits\WorkWithMessages.php in Object->method: PersonalAccount\Dialog\Dialog->saveFilesOnServer variable else (!empty($files)) === array(0) {
+} 
+[2025-05-15 15:20:51] The line: 204 ---> in file D:\OSPanel\home\dev.gi.by\public\wp-content\plugins\bp_contracts\src\Chat.php in Object->method: PersonalAccount\Controler\InteractionInterface->regNewMessage variable newMessage->files === array(0) {
+}  but flag was 1
+[2025-05-15 15:20:51] The line: 183 ---> in file D:\OSPanel\home\dev.gi.by\public\wp-content\plugins\bp_contracts\src\Dialog\traits\WorkWithMessages.php in Object->method: PersonalAccount\Dialog\Dialog->writeNewMessage variable newMessage->files === array(0) {
+}  but flag was 1
+[2025-05-15 15:20:51] The line: 104 ---> in file D:\OSPanel\home\dev.gi.by\public\wp-content\plugins\bp_contracts\src\Dialog\traits\WorkWithMessages.php in Object->method: PersonalAccount\Dialog\Dialog->saveFilesOnServer variable else (!empty($files)) === array(0) {
+} 
+[2025-05-15 15:21:18] The line: 204 ---> in file D:\OSPanel\home\dev.gi.by\public\wp-content\plugins\bp_contracts\src\Chat.php in Object->method: PersonalAccount\Controler\InteractionInterface->regNewMessage variable newMessage->files === array(0) {
+}  but flag was 1
+[2025-05-15 15:21:18] The line: 183 ---> in file D:\OSPanel\home\dev.gi.by\public\wp-content\plugins\bp_contracts\src\Dialog\traits\WorkWithMessages.php in Object->method: PersonalAccount\Dialog\Dialog->writeNewMessage variable newMessage->files === array(0) {
+}  but flag was 1
+[2025-05-15 15:21:18] The line: 104 ---> in file D:\OSPanel\home\dev.gi.by\public\wp-content\plugins\bp_contracts\src\Dialog\traits\WorkWithMessages.php in Object->method: PersonalAccount\Dialog\Dialog->saveFilesOnServer variable else (!empty($files)) === array(0) {
+} 
+[2025-05-15 15:33:18] The line: 204 ---> in file D:\OSPanel\home\dev.gi.by\public\wp-content\plugins\bp_contracts\src\Chat.php in Object->method: PersonalAccount\Controler\InteractionInterface->regNewMessage variable newMessage->files === array(0) {
+}  but flag was 1
+[2025-05-15 15:33:18] The line: 183 ---> in file D:\OSPanel\home\dev.gi.by\public\wp-content\plugins\bp_contracts\src\Dialog\traits\WorkWithMessages.php in Object->method: PersonalAccount\Dialog\Dialog->writeNewMessage variable newMessage->files === array(0) {
+}  but flag was 1
+[2025-05-15 15:33:18] The line: 104 ---> in file D:\OSPanel\home\dev.gi.by\public\wp-content\plugins\bp_contracts\src\Dialog\traits\WorkWithMessages.php in Object->method: PersonalAccount\Dialog\Dialog->saveFilesOnServer variable else (!empty($files)) === array(0) {
+} 
+[2025-05-15 15:33:31] The line: 204 ---> in file D:\OSPanel\home\dev.gi.by\public\wp-content\plugins\bp_contracts\src\Chat.php in Object->method: PersonalAccount\Controler\InteractionInterface->regNewMessage variable newMessage->files === array(0) {
+}  but flag was 1
+[2025-05-15 15:33:31] The line: 183 ---> in file D:\OSPanel\home\dev.gi.by\public\wp-content\plugins\bp_contracts\src\Dialog\traits\WorkWithMessages.php in Object->method: PersonalAccount\Dialog\Dialog->writeNewMessage variable newMessage->files === array(0) {
+}  but flag was 1
+[2025-05-15 15:33:31] The line: 104 ---> in file D:\OSPanel\home\dev.gi.by\public\wp-content\plugins\bp_contracts\src\Dialog\traits\WorkWithMessages.php in Object->method: PersonalAccount\Dialog\Dialog->saveFilesOnServer variable else (!empty($files)) === array(0) {
+} 
+[2025-05-15 15:33:40] The line: 204 ---> in file D:\OSPanel\home\dev.gi.by\public\wp-content\plugins\bp_contracts\src\Chat.php in Object->method: PersonalAccount\Controler\InteractionInterface->regNewMessage variable newMessage->files === array(0) {
+}  but flag was 1
+[2025-05-15 15:33:40] The line: 183 ---> in file D:\OSPanel\home\dev.gi.by\public\wp-content\plugins\bp_contracts\src\Dialog\traits\WorkWithMessages.php in Object->method: PersonalAccount\Dialog\Dialog->writeNewMessage variable newMessage->files === array(0) {
+}  but flag was 1
+[2025-05-15 15:33:40] The line: 104 ---> in file D:\OSPanel\home\dev.gi.by\public\wp-content\plugins\bp_contracts\src\Dialog\traits\WorkWithMessages.php in Object->method: PersonalAccount\Dialog\Dialog->saveFilesOnServer variable else (!empty($files)) === array(0) {
+} 
+[2025-05-15 15:38:49] The line: 204 ---> in file D:\OSPanel\home\dev.gi.by\public\wp-content\plugins\bp_contracts\src\Chat.php in Object->method: PersonalAccount\Controler\InteractionInterface->regNewMessage variable newMessage->files === array(0) {
+}  but flag was 1
+[2025-05-15 15:38:49] The line: 183 ---> in file D:\OSPanel\home\dev.gi.by\public\wp-content\plugins\bp_contracts\src\Dialog\traits\WorkWithMessages.php in Object->method: PersonalAccount\Dialog\Dialog->writeNewMessage variable newMessage->files === array(0) {
+}  but flag was 1
+[2025-05-15 15:38:49] The line: 104 ---> in file D:\OSPanel\home\dev.gi.by\public\wp-content\plugins\bp_contracts\src\Dialog\traits\WorkWithMessages.php in Object->method: PersonalAccount\Dialog\Dialog->saveFilesOnServer variable else (!empty($files)) === array(0) {
+} 
+[2025-05-15 15:39:03] The line: 204 ---> in file D:\OSPanel\home\dev.gi.by\public\wp-content\plugins\bp_contracts\src\Chat.php in Object->method: PersonalAccount\Controler\InteractionInterface->regNewMessage variable newMessage->files === array(0) {
+}  but flag was 1
+[2025-05-15 15:39:03] The line: 183 ---> in file D:\OSPanel\home\dev.gi.by\public\wp-content\plugins\bp_contracts\src\Dialog\traits\WorkWithMessages.php in Object->method: PersonalAccount\Dialog\Dialog->writeNewMessage variable newMessage->files === array(0) {
+}  but flag was 1
+[2025-05-15 15:39:03] The line: 104 ---> in file D:\OSPanel\home\dev.gi.by\public\wp-content\plugins\bp_contracts\src\Dialog\traits\WorkWithMessages.php in Object->method: PersonalAccount\Dialog\Dialog->saveFilesOnServer variable else (!empty($files)) === array(0) {
+} 
+[2025-05-15 15:40:02] The line: 204 ---> in file D:\OSPanel\home\dev.gi.by\public\wp-content\plugins\bp_contracts\src\Chat.php in Object->method: PersonalAccount\Controler\InteractionInterface->regNewMessage variable newMessage->files === array(0) {
+}  but flag was 1
+[2025-05-15 15:40:02] The line: 183 ---> in file D:\OSPanel\home\dev.gi.by\public\wp-content\plugins\bp_contracts\src\Dialog\traits\WorkWithMessages.php in Object->method: PersonalAccount\Dialog\Dialog->writeNewMessage variable newMessage->files === array(0) {
+}  but flag was 1
+[2025-05-15 15:40:02] The line: 104 ---> in file D:\OSPanel\home\dev.gi.by\public\wp-content\plugins\bp_contracts\src\Dialog\traits\WorkWithMessages.php in Object->method: PersonalAccount\Dialog\Dialog->saveFilesOnServer variable else (!empty($files)) === array(0) {
+} 
+[2025-05-15 15:42:15] The line: 204 ---> in file D:\OSPanel\home\dev.gi.by\public\wp-content\plugins\bp_contracts\src\Chat.php in Object->method: PersonalAccount\Controler\InteractionInterface->regNewMessage variable newMessage->files === array(0) {
+}  but flag was 1
+[2025-05-15 15:42:15] The line: 183 ---> in file D:\OSPanel\home\dev.gi.by\public\wp-content\plugins\bp_contracts\src\Dialog\traits\WorkWithMessages.php in Object->method: PersonalAccount\Dialog\Dialog->writeNewMessage variable newMessage->files === array(0) {
+}  but flag was 1
+[2025-05-15 15:42:15] The line: 104 ---> in file D:\OSPanel\home\dev.gi.by\public\wp-content\plugins\bp_contracts\src\Dialog\traits\WorkWithMessages.php in Object->method: PersonalAccount\Dialog\Dialog->saveFilesOnServer variable else (!empty($files)) === array(0) {
+} 
+[2025-05-15 15:42:59] The line: 204 ---> in file D:\OSPanel\home\dev.gi.by\public\wp-content\plugins\bp_contracts\src\Chat.php in Object->method: PersonalAccount\Controler\InteractionInterface->regNewMessage variable newMessage->files === array(0) {
+}  but flag was 1
+[2025-05-15 15:42:59] The line: 183 ---> in file D:\OSPanel\home\dev.gi.by\public\wp-content\plugins\bp_contracts\src\Dialog\traits\WorkWithMessages.php in Object->method: PersonalAccount\Dialog\Dialog->writeNewMessage variable newMessage->files === array(0) {
+}  but flag was 1
+[2025-05-15 15:42:59] The line: 104 ---> in file D:\OSPanel\home\dev.gi.by\public\wp-content\plugins\bp_contracts\src\Dialog\traits\WorkWithMessages.php in Object->method: PersonalAccount\Dialog\Dialog->saveFilesOnServer variable else (!empty($files)) === array(0) {
+} 
+[2025-05-15 15:44:04] The line: 204 ---> in file D:\OSPanel\home\dev.gi.by\public\wp-content\plugins\bp_contracts\src\Chat.php in Object->method: PersonalAccount\Controler\InteractionInterface->regNewMessage variable newMessage->files === array(0) {
+}  but flag was 1
+[2025-05-15 15:44:04] The line: 183 ---> in file D:\OSPanel\home\dev.gi.by\public\wp-content\plugins\bp_contracts\src\Dialog\traits\WorkWithMessages.php in Object->method: PersonalAccount\Dialog\Dialog->writeNewMessage variable newMessage->files === array(0) {
+}  but flag was 1
+[2025-05-15 15:44:04] The line: 104 ---> in file D:\OSPanel\home\dev.gi.by\public\wp-content\plugins\bp_contracts\src\Dialog\traits\WorkWithMessages.php in Object->method: PersonalAccount\Dialog\Dialog->saveFilesOnServer variable else (!empty($files)) === array(0) {
+} 
+[2025-05-15 15:46:59] The line: 204 ---> in file D:\OSPanel\home\dev.gi.by\public\wp-content\plugins\bp_contracts\src\Chat.php in Object->method: PersonalAccount\Controler\InteractionInterface->regNewMessage variable newMessage->files === array(0) {
+}  but flag was 1
+[2025-05-15 15:46:59] The line: 183 ---> in file D:\OSPanel\home\dev.gi.by\public\wp-content\plugins\bp_contracts\src\Dialog\traits\WorkWithMessages.php in Object->method: PersonalAccount\Dialog\Dialog->writeNewMessage variable newMessage->files === array(0) {
+}  but flag was 1
+[2025-05-15 15:46:59] The line: 104 ---> in file D:\OSPanel\home\dev.gi.by\public\wp-content\plugins\bp_contracts\src\Dialog\traits\WorkWithMessages.php in Object->method: PersonalAccount\Dialog\Dialog->saveFilesOnServer variable else (!empty($files)) === array(0) {
+} 
+[2025-05-15 15:55:31] The line: 204 ---> in file D:\OSPanel\home\dev.gi.by\public\wp-content\plugins\bp_contracts\src\Chat.php in Object->method: PersonalAccount\Controler\InteractionInterface->regNewMessage variable newMessage->files === array(0) {
+}  but flag was 1
+[2025-05-15 15:55:31] The line: 183 ---> in file D:\OSPanel\home\dev.gi.by\public\wp-content\plugins\bp_contracts\src\Dialog\traits\WorkWithMessages.php in Object->method: PersonalAccount\Dialog\Dialog->writeNewMessage variable newMessage->files === array(0) {
+}  but flag was 1
+[2025-05-15 15:55:31] The line: 104 ---> in file D:\OSPanel\home\dev.gi.by\public\wp-content\plugins\bp_contracts\src\Dialog\traits\WorkWithMessages.php in Object->method: PersonalAccount\Dialog\Dialog->saveFilesOnServer variable else (!empty($files)) === array(0) {
+} 
+[2025-05-15 15:55:43] The line: 204 ---> in file D:\OSPanel\home\dev.gi.by\public\wp-content\plugins\bp_contracts\src\Chat.php in Object->method: PersonalAccount\Controler\InteractionInterface->regNewMessage variable newMessage->files === array(0) {
+}  but flag was 1
+[2025-05-15 15:55:43] The line: 183 ---> in file D:\OSPanel\home\dev.gi.by\public\wp-content\plugins\bp_contracts\src\Dialog\traits\WorkWithMessages.php in Object->method: PersonalAccount\Dialog\Dialog->writeNewMessage variable newMessage->files === array(0) {
+}  but flag was 1
+[2025-05-15 15:55:43] The line: 104 ---> in file D:\OSPanel\home\dev.gi.by\public\wp-content\plugins\bp_contracts\src\Dialog\traits\WorkWithMessages.php in Object->method: PersonalAccount\Dialog\Dialog->saveFilesOnServer variable else (!empty($files)) === array(0) {
+} 
+[2025-05-15 15:55:53] The line: 204 ---> in file D:\OSPanel\home\dev.gi.by\public\wp-content\plugins\bp_contracts\src\Chat.php in Object->method: PersonalAccount\Controler\InteractionInterface->regNewMessage variable newMessage->files === array(0) {
+}  but flag was 1
+[2025-05-15 15:55:53] The line: 183 ---> in file D:\OSPanel\home\dev.gi.by\public\wp-content\plugins\bp_contracts\src\Dialog\traits\WorkWithMessages.php in Object->method: PersonalAccount\Dialog\Dialog->writeNewMessage variable newMessage->files === array(0) {
+}  but flag was 1
+[2025-05-15 15:55:53] The line: 104 ---> in file D:\OSPanel\home\dev.gi.by\public\wp-content\plugins\bp_contracts\src\Dialog\traits\WorkWithMessages.php in Object->method: PersonalAccount\Dialog\Dialog->saveFilesOnServer variable else (!empty($files)) === array(0) {
+} 
+[2025-05-15 15:56:00] The line: 204 ---> in file D:\OSPanel\home\dev.gi.by\public\wp-content\plugins\bp_contracts\src\Chat.php in Object->method: PersonalAccount\Controler\InteractionInterface->regNewMessage variable newMessage->files === array(0) {
+}  but flag was 1
+[2025-05-15 15:56:00] The line: 183 ---> in file D:\OSPanel\home\dev.gi.by\public\wp-content\plugins\bp_contracts\src\Dialog\traits\WorkWithMessages.php in Object->method: PersonalAccount\Dialog\Dialog->writeNewMessage variable newMessage->files === array(0) {
+}  but flag was 1
+[2025-05-15 15:56:00] The line: 104 ---> in file D:\OSPanel\home\dev.gi.by\public\wp-content\plugins\bp_contracts\src\Dialog\traits\WorkWithMessages.php in Object->method: PersonalAccount\Dialog\Dialog->saveFilesOnServer variable else (!empty($files)) === array(0) {
+} 
