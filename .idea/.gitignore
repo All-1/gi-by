@@ -14,3 +14,16 @@
 /public/wp-content/plugins/bp_contracts/logs/*
 *.log
 /.tmp.driveupload/*
+*.img
+*.jpg
+*.png
+*.gif
+*.bmp
+*.tiff
+*.ico
+*.webp
+*.svg
+*.jp2
+*.jp3
+*.jp4
+*.jp5 
