@@ -1,0 +1,146 @@
+.content_item {
+  width:100%; 
+  min-height:100px; 
+  background:#f9f9f9; 
+  border:1px solid #dcdcdc;
+  padding: 8px;
+}
+
+.content_item .image {
+  width:400px; 
+  max-width:100%; 
+  height:max-content; 
+  float:left;
+  margin-bottom: 10px;
+}
+
+.content_item .image img {
+  max-width:100%;
+}
+
+.content_item .content_item_form {
+  float:left; 
+  width:calc(100% - 450px); 
+  min-height:100px; 
+  text-align:left; 
+  padding:10px 25px; 
+  position:relative;
+}
+
+.content_item .content_item_form textarea {
+  width:100%; 
+  height:30px;
+}
+
+.content_item .buttons button.submit {
+  background:green; 
+  color:white; 
+  border:none; 
+  padding:7px 10px; 
+  cursor:pointer;
+}
+
+.content_item .buttons button.deleteCommode {
+  background:darkred; 
+  color:white; 
+  border:none; 
+  padding:7px 10px; 
+  cursor:pointer;
+  margin-left: 8px;
+}
+
+.content_item .content_item_form form label {
+  display:block;
+  margin-bottom:5px;
+  font-weight:bold;
+}
+
+.content_item .files {
+  width: 100%;
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  grid-column-gap: 10px;
+}
+
+.content_item .files .file {
+  margin-right: 10px;
+  margin-bottom: 24px;
+}
+
+.content_item .files img {
+  max-width:100%;
+}
+
+.content_item .files .file  {
+  position: relative;
+}
+
+.content_item .files .file .checkbox {
+  position: absolute;
+  left: 4px;
+  top: 8px;
+}
+
+.names_items .button_item {
+  padding: 10px 20px;
+  background: #f9f9f9;
+  border: 1px solid #dcdcdc;
+  cursor: pointer;
+  margin-right: 4px;
+}
+
+.names_items .button_item:hover {
+  background: #e9e9e9;
+}
+
+.names_items .button_item:active {
+  background: #d9d9d9;
+}
+
+.names_items .button_item:focus {
+  outline: none;
+}
+
+.names_items .button_item.active {
+  background: #9BE86D;
+  border: 1px solid #9BE86D;
+}
+
+.names_items {
+  display: flex;
+  flex-wrap: wrap;
+  margin-bottom: 4px;
+}
+
+.content_item .upload_gallery {
+  margin-bottom: 24px;
+}
+
+.content_item .image {
+  position: relative;
+}
+
+.content_item .delete_image {
+  position: absolute;
+  right: 10px;
+  top: 10px;
+  background-color: rgba(255, 255, 255, 0.3);
+  cursor: pointer;
+  z-index: 1;
+  padding: 4px;
+  display: none;
+}
+
+.content_item .image:hover .delete_image {
+  display: block;
+}
+
+.content_item .delete_image .cross {
+  
+  width: 20px;
+  height: 20px;
+  background-image: url('/wp-content/themes/wp-diary/images/icons/cross.svg');
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+}

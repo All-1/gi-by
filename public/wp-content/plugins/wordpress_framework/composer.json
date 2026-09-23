@@ -1,0 +1,12 @@
+{
+  "name": "wordpress_framework/wpframework",
+  "description": "Wordpress Framework",
+  "require": {
+      "php": ">=7.4"
+  },
+  "autoload": {
+      "psr-4": {
+          "WPFramework\\": "src/"
+      }
+  }
+} 

@@ -1,0 +1,14 @@
+{
+    "name": "bp_contracts/websocket",
+    "description": "WebSocket server for BP Contracts",
+    "require": {
+        "cboden/ratchet": "^0.4.4",
+        "react/async": "^4.3",
+        "php": ">=7.4"
+    },
+    "autoload": {
+        "psr-4": {
+            "PersonalAccount\\": "src/"
+        }
+    }
+} 

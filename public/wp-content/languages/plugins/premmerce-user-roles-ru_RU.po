@@ -1,0 +1,146 @@
+# Translation of Plugins - Premmerce User Roles - Stable (latest release) in Russian
+# This file is distributed under the same license as the Plugins - Premmerce User Roles - Stable (latest release) package.
+msgid ""
+msgstr ""
+"PO-Revision-Date: 2023-05-29 07:54:40+0000\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=(n % 10 == 1 && n % 100 != 11) ? 0 : ((n % 10 >= 2 && n % 10 <= 4 && (n % 100 < 12 || n % 100 > 14)) ? 1 : 2);\n"
+"X-Generator: GlotPress/4.0.0-alpha.7\n"
+"Language: ru\n"
+"Project-Id-Version: Plugins - Premmerce User Roles - Stable (latest release)\n"
+
+#: src/Admin/Admin.php:110 src/Admin/Admin.php:111
+msgid "User Roles"
+msgstr "Роли пользователей"
+
+#. Author URI of the plugin
+msgid "http://premmerce.com"
+msgstr "http://premmerce.com"
+
+#. Author of the plugin
+msgid "Premmerce"
+msgstr "Premmerce"
+
+#. Description of the plugin
+msgid "This plugin has been  developed for creating user roles from the WordPress admin area and assigning the arbitrary access rights to them."
+msgstr "Данный плагин позволяет создавать неограниченное количество брендов для WooCommerce, которые можно назначать товарам для лучшей организации каталога."
+
+#. Plugin URI of the plugin
+msgid "https://premmerce.com/wordpress-custom-user-roles/"
+msgstr "https://premmerce.com/wordpress-custom-user-roles/"
+
+#: views/admin/tabs/list.php:88
+msgid "Standard roles cannot be removed"
+msgstr "Стандартные роли нельзя удалить"
+
+#: views/admin/tabs/list.php:76
+msgid "View"
+msgstr "Просмотр"
+
+#: views/admin/tabs/list.php:74
+msgid "Edit"
+msgstr "Редактировать"
+
+#: views/admin/tabs/list.php:58
+msgid "Capabilities"
+msgstr "Возможности"
+
+#: views/admin/tabs/list.php:45
+msgid "Wordpress documentation about Roles and Capabilities."
+msgstr "Документация Wordpress о ролях и возможностях."
+
+#: views/admin/tabs/list.php:43
+msgid "Roles and Capabilities"
+msgstr "Роли и Возможности"
+
+#: views/admin/tabs/list.php:37
+msgid "Add Role"
+msgstr "Создать роль"
+
+#: views/admin/tabs/list.php:30
+msgid "Inherit rights from selected role"
+msgstr "Наследовать возможности от выбранной роли"
+
+#: views/admin/tabs/list.php:9
+msgid "Add new role"
+msgstr "Создание новой роли"
+
+#. Plugin Name of the plugin
+#: views/admin/main.php:5
+msgid "Premmerce User Roles"
+msgstr "Premmerce User Roles"
+
+#: views/admin/edit.php:64
+msgid "Select all / Unselect all"
+msgstr "Выбрать все / Отменить выбор всех"
+
+#: views/admin/edit.php:51 views/admin/tabs/list.php:85
+msgid "Delete"
+msgstr "Удалить"
+
+#: views/admin/edit.php:46
+msgid "Update"
+msgstr "Обновить"
+
+#: views/admin/edit.php:35
+msgid "Inherit capabilities from selected role"
+msgstr "Наследовать возможности от выбранной роли"
+
+#: views/admin/edit.php:27 views/admin/tabs/list.php:23
+msgid "Inherit role"
+msgstr "Наследовать роль"
+
+#: views/admin/edit.php:23 views/admin/tabs/list.php:19
+msgid "Role display name"
+msgstr "Отображаемое имя роли"
+
+#: views/admin/edit.php:18 views/admin/tabs/list.php:14
+#: views/admin/tabs/list.php:57
+msgid "Name"
+msgstr "Название"
+
+#: views/admin/edit.php:6
+msgid "Edit role"
+msgstr "Изменить роль"
+
+#: src/Admin/Admin.php:344
+msgid "Name already exist. Choose another Name."
+msgstr "Название уже существует. Выберите другое Название."
+
+#: src/Admin/Admin.php:339
+msgid "Name is empty. Please enter Name."
+msgstr "Не заполнено Название. Пожалуйста введите Название."
+
+#: views/admin/edit.php:8
+msgid "Back to"
+msgstr "Назад к"
+
+#: src/Admin/Admin.php:288
+msgid "Role updated."
+msgstr "Роль обновлена. "
+
+#: src/Admin/Admin.php:250 src/Admin/Admin.php:331
+msgid "Standard roles cannot be deleted or modified."
+msgstr "Стандартные роли нельзя удалить или изменить."
+
+#: src/Admin/Admin.php:245
+msgid "Role deleted. "
+msgstr "Роль удалена."
+
+#: src/Admin/Admin.php:185
+msgid "Account"
+msgstr "Аккаунт"
+
+#: src/Admin/Admin.php:183
+msgid "Contact Us"
+msgstr "Свяжитесь с нами"
+
+#: src/Admin/Admin.php:180
+msgid "Roles list"
+msgstr "Список ролей"
+
+#: src/Admin/Admin.php:164
+msgid "You attempted to edit an item that doesn’t exist. Perhaps it was deleted?"
+msgstr "Вы попытались отредактировать несуществующий элемент. Может быть, он удалён?"

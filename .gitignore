@@ -1,0 +1,29 @@
+# Default ignored files
+/shelf/
+/workspace.xml
+# Editor-based HTTP Client requests
+/httpRequests/
+# Ignored default folder with query files
+/queries/
+# Datasource local storage ignored files
+/dataSources/
+/dataSources.local.xml
+/public/wp-content/uploads/*
+/public/kd/*
+/.tmp.driveupload/*
+/public/wp-content/plugins/bp_contracts/logs/*
+*.log
+/.tmp.driveupload/*
+*.img
+*.jpg
+*.png
+*.gif
+*.bmp
+*.tiff
+*.ico
+*.webp
+*.svg
+*.jp2
+*.jp3
+*.jp4
+*.jp5 
