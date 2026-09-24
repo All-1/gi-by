@@ -1,0 +1,225 @@
+# BEGIN WordPress
+<IfModule mod_rewrite.c>
+RewriteEngine On
+RewriteBase /
+RewriteRule ^index\.php$ - [L]
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule . /index.php [L]
+
+
+
+</IfModule>
+
+# END WordPress
+
+<Files wp-config.php>
+# Запрещаем всем доступ к файлу wp-config.php
+order allow,deny
+deny from all
+</Files>
+
+<Files .htaccess>
+order allow,deny
+deny from all
+</Files>
+
+
+Redirect 301 /akcii/akcii1 https://gi.by/akcii/
+Redirect 301 /pokupatelyam/stati/bazovaya_komplektaciya https://gi.by/bazovaya-komplektaciya/
+Redirect 301 /fabrika/kontakty/fabrika https://gi.by/contacts/
+Redirect 301 /fabrika/kontakty/distribyutory https://gi.by/contacts/distribyutory/
+Redirect 301 /fabrika/o_fabrike https://gi.by/factory/
+Redirect 301 /fabrika/novosti/furnitura_blum_na_nashih_kuhnyah_-_putyovka_v_evropu! https://gi.by/furnitura-blum-na-nashih-kuhnyah-putyovka-v-evropu/
+Redirect 301 /gde_zakazat/rossiya/barnaul https://gi.by/gde-zakazat/barnaul/
+Redirect 301 /gde_zakazat/belarus/borisov https://gi.by/gde-zakazat/borisov/
+Redirect 301 /gde_zakazat/belarus/brest https://gi.by/gde-zakazat/brest/
+Redirect 301 /gde_zakazat/rossiya/bryansk https://gi.by/gde-zakazat/bryansk/
+
+Redirect 301 /gde_zakazat/ukraina/ivano-frankovsk https://gi.by/gde-zakazat/g-_ivano-frankovsk/
+Redirect 301 /gde_zakazat/belarus/zhlobin https://gi.by/gde-zakazat/ghlobin/
+Redirect 301 /gde_zakazat/belarus/gomel https://gi.by/gde-zakazat/gomely/
+Redirect 301 /gde_zakazat/belarus/grodno https://gi.by/gde-zakazat/grodno/
+Redirect 301 /gde_zakazat/ukraina/kiev https://gi.by/gde-zakazat/kiev/
+Redirect 301 /gde_zakazat/belarus/lida https://gi.by/gde-zakazat/lida/
+Redirect 301 /gde_zakazat/belarus/minsk https://gi.by/gde-zakazat/minsk/
+Redirect 301 /gde_zakazat/belarus/mogilyov https://gi.by/gde-zakazat/mogilev/
+Redirect 301 /gde_zakazat/rossiya/moskva https://gi.by/gde-zakazat/moskva/
+Redirect 301 /gde_zakazat/belarus/mozyr https://gi.by/gde-zakazat/mozyry/
+Redirect 301 /gde_zakazat/rossiya/nizhnij_novgorod https://gi.by/gde-zakazat/nighniy_novgorod/
+
+Redirect 301 /gde_zakazat/kazahstan/astana https://gi.by/gde-zakazat/nur-sultan/
+Redirect 301 /gde_zakazat/ukraina/odessa https://gi.by/gde-zakazat/odessa/
+Redirect 301 /gde_zakazat/rossiya/omsk https://gi.by/gde-zakazat/omsk/
+Redirect 301 /gde_zakazat/rossiya/penza https://gi.by/gde-zakazat/penza/
+Redirect 301 /gde_zakazat/belarus/pinsk https://gi.by/gde-zakazat/pinsk/
+Redirect 301 /gde_zakazat/rossiya/pyatigorsk https://gi.by/gde-zakazat/pyatigorsk/
+Redirect 301 /gde_zakazat/rossiya/ryazan https://gi.by/gde-zakazat/ryazany/
+Redirect 301 /gde_zakazat/rossiya/sankt-peterburg https://gi.by/gde-zakazat/sankt-peterburg/
+Redirect 301 /gde_zakazat/rossiya/smolensk https://gi.by/gde-zakazat/smolensk/
+Redirect 301 /gde_zakazat/belarus/soligorsk https://gi.by/gde-zakazat/soligorsk/
+Redirect 301 /gde_zakazat/ukraina/sumy https://gi.by/gde-zakazat/sumy/
+Redirect 301 /gde_zakazat/rossiya/surgut https://gi.by/gde-zakazat/surgut/
+Redirect 301 /gde_zakazat/belarus/svetlogorsk https://gi.by/gde-zakazat/svetlogorsk/
+
+Redirect 301 /gde_zakazat/rossiya/ufa https://gi.by/gde-zakazat/ufa/
+Redirect 301 /gde_zakazat/ukraina/uzhgorod https://gi.by/gde-zakazat/ughgorod/
+Redirect 301 /gde_zakazat/belarus/vitebsk https://gi.by/gde-zakazat/vitebsk/
+Redirect 301 /pokupatelyam/stati https://gi.by/information/
+Redirect 301 /pokupatelyam/stati/kak_ustanovit_kuhnyu https://gi.by/kak-ustanovit-kuhnyu/
+Redirect 301 /katalog/komody https://gi.by/komody/
+Redirect 301 /katalog/kuhni https://gi.by/kuhni/
+Redirect 301 /katalog/kuhni/alegri https://gi.by/kuhni/alegri/
+Redirect 301 /katalog/kuhni/arli https://gi.by/kuhni/arli/
+Redirect 301 /katalog/kuhni/astra https://gi.by/kuhni/astra/
+Redirect 301 /katalog/kuhni/damiana https://gi.by/kuhni/damiana/
+Redirect 301 /katalog/kuhni/eri https://gi.by/kuhni/eri/
+Redirect 301 /katalog/kuhni/estel https://gi.by/kuhni/estely/
+Redirect 301 /katalog/kuhni/kalipso https://gi.by/kuhni/kalipso/
+Redirect 301 /katalog/kuhni/kapri https://gi.by/kuhni/kapri/
+Redirect 301 /fabrika/o_fabrike/vidy_kuhon/klassicheskie_kuhni https://gi.by/kuhni/klassicheskie-kuhni/
+
+Redirect 301 /katalog/kuhni/kuba https://gi.by/kuhni/kuba/
+Redirect 301 /fabrika/o_fabrike/vidy_kuhon/kuhni_iz_akrila https://gi.by/kuhni/kuhni-iz-akrila/
+Redirect 301 /fabrika/o_fabrike/vidy_kuhon/kuhni_iz_massiva https://gi.by/kuhni/kuhni-iz-massiva/
+Redirect 301 /fabrika/o_fabrike/vidy_kuhon/kuhni_iz_plastika https://gi.by/kuhni/kuhni-iz-plastika/
+Redirect 301 /fabrika/o_fabrike/vidy_kuhon/kuhni_iz_shpona https://gi.by/kuhni/kuhni-iz-shpona/
+Redirect 301 /katalog/kuhni/leda https://gi.by/kuhni/leda/
+Redirect 301 /katalog/kuhni/limba https://gi.by/kuhni/limba/
+Redirect 301 /katalog/kuhni/marinara https://gi.by/kuhni/marinara/
+Redirect 301 /katalog/kuhni/missuri https://gi.by/kuhni/missuri/
+Redirect 301 /katalog/kuhni/natali https://gi.by/kuhni/natali/
+Redirect 301 /katalog/kuhni/norma https://gi.by/kuhni/norma/
+Redirect 301 /katalog/kuhni/runa https://gi.by/kuhni/runa/
+Redirect 301 /katalog/kuhni/simona https://gi.by/kuhni/simona/
+
+Redirect 301 /fabrika/o_fabrike/vidy_kuhon/kuhni_v_stile_modern https://gi.by/kuhni/sovremennie-kuhni/
+Redirect 301 /fabrika/novosti/kuhnya_ejva_- https://gi.by/kuhnya-eyva-modno-stilno/
+Redirect 301 /fabrika/novosti/luchshie_kuhni_-_s_luchshej_furnituroj! https://gi.by/luchshie-kuhni-s-luchshej-furnituroj/
+Redirect 301 /fabrika/novosti https://gi.by/news/
+Redirect 301 /fabrika/novosti/novyj_salon_v_minske https://gi.by/novyj-salon-v-minske/
+Redirect 301 /pokupatelyam/obshhaya_informaciya https://gi.by/obshhaya-informaciya/
+Redirect 301 /akcii/prodazha_obrazcov https://gi.by/prodazha-obrazcov/
+Redirect 301 /akcii/prodazha_obrazcov?city=146 https://gi.by/prodazha-obrazcov/samples-belarus/?city=Гомель
+Redirect 301 /akcii/prodazha_obrazcov?city=72 https://gi.by/prodazha-obrazcov/samples-belarus/?city=Гродно
+Redirect 301 /akcii/prodazha_obrazcov?city=71 https://gi.by/prodazha-obrazcov/samples-belarus/?city=Минск
+Redirect 301 /akcii/prodazha_obrazcov?city=154 https://gi.by/prodazha-obrazcov/samples-belarus/?city=Солигорск
+Redirect 301 /akcii/prodazha_obrazcov?city=73 https://gi.by/prodazha-obrazcov/samples-russia/?city=Москва
+Redirect 301 /akcii/prodazha_obrazcov?city=168 https://gi.by/prodazha-obrazcov/samples-russia/?city=Нижний%20Новгород
+Redirect 301 /akcii/prodazha_obrazcov?city=178 https://gi.by/prodazha-obrazcov/samples-russia/?city=Санкт-Петербург
+Redirect 301 /dileram/usloviya_sotrudnichestva https://gi.by/usloviya-sotrudnichestva/
+
+Redirect 301 /pokupatelyam/stati/zamer_pomeshheniya https://gi.by/zamer-pomeshheniya/
+Redirect 301 /akcii/prodazha_obrazcov?city=121 https://gi.by/
+Redirect 301 /akcii/prodazha_obrazcov?city=195 https://gi.by/
+Redirect 301 /akcii/prodazha_obrazcov?city=677 https://gi.by/
+Redirect 301 /akcii/skidki_na_komody https://gi.by/
+Redirect 301 /dileram/vash_kabinet https://gi.by/
+Redirect 301 /fabrika/kontakty/ostavit_otzyv https://gi.by/contacts/
+Redirect 301 /fabrika/nagrady https://gi.by/
+Redirect 301 /fabrika/novosti/den_rozhdeniya_fabriki!_nam_28_let!1 https://gi.by/news/
+
+Redirect 301 /fabrika/novosti/eshhyo_odin_shag_k_sovershenstvu https://gi.by/news/
+Redirect 301 /fabrika/novosti/itogi_kiff_2017 https://gi.by/news/
+Redirect 301 /fabrika/novosti/kuhnya_modo_-_novinka_2020_goda https://gi.by/news/
+Redirect 301 /fabrika/novosti/novaya_kuhnya_freda-_skandinavskij_stil-_neoklassika-_loft https://gi.by/novaya-kuhnya-freda-skandinavskij-stil-neoklassika-loft/
+Redirect 301 /fabrika/novosti/novogodnie_skidki_20191 https://gi.by/news/
+Redirect 301 /fabrika/novosti/novye_kuhni_kalipso_i_damiana https://gi.by/news/
+Redirect 301 /fabrika/novosti/novyj_salon_v_moskve https://gi.by/news/
+Redirect 301 /fabrika/novosti/novyj_salon_v_nizhnem_novgorode1 https://gi.by/news/
+
+Redirect 301 /fabrika/novosti/priglashenie_na_vystavku https://gi.by/news/
+Redirect 301 /fabrika/novosti/prodazha_kuhni_–_iskusstvo https://gi.by/news/
+Redirect 301 /fabrika/novosti/vistavka_v_moskve https://gi.by/news/
+Redirect 301 /fabrika/o_fabrike/vidy_kuhon https://gi.by/factory/
+Redirect 301 /fabrika/o_fabrike/vidy_kuhon/g-obraznye https://gi.by/factory/
+Redirect 301 /fabrika/o_fabrike/vidy_kuhon/kuhni_fenix https://gi.by/factory/
+Redirect 301 /fabrika/o_fabrike/vidy_kuhon/kuhni_iz_massiva/massiv_duba https://gi.by/factory/
+Redirect 301 /fabrika/o_fabrike/vidy_kuhon/kuhni_iz_massiva/massiv_yasenya https://gi.by/factory/
+Redirect 301 /fabrika/o_fabrike/vidy_kuhon/kuhni_s_ostrovom https://gi.by/factory/
+Redirect 301 /fabrika/o_fabrike/vidy_kuhon/kuhni_v_rassrochku https://gi.by/factory/
+Redirect 301 /fabrika/o_fabrike/vidy_kuhon/linejnye_kuhni1 https://gi.by/factory/
+Redirect 301 /fabrika/o_fabrike/vidy_kuhon/malenkie_kuhni https://gi.by/factory/
+Redirect 301 /fabrika/o_fabrike/vidy_kuhon/po_cvetu https://gi.by/factory/
+Redirect 301 /fabrika/o_fabrike/vidy_kuhon/po_cvetu/belye_kuhni https://gi.by/factory/
+Redirect 301 /fabrika/o_fabrike/vidy_kuhon/po_cvetu/bezhevye_kuhni https://gi.by/factory/
+
+Redirect 301 /fabrika/o_fabrike/vidy_kuhon/po_cvetu/korichnevye_kuhni https://gi.by/factory/
+Redirect 301 /fabrika/o_fabrike/vidy_kuhon/po_cvetu/krasnye_kuhni https://gi.by/factory/
+Redirect 301 /fabrika/o_fabrike/vidy_kuhon/po_cvetu/kuhni_golubogo_cveta https://gi.by/factory/
+Redirect 301 /fabrika/o_fabrike/vidy_kuhon/po_cvetu/kuhni_zelenogo_cveta https://gi.by/factory/
+Redirect 301 /fabrika/o_fabrike/vidy_kuhon/po_cvetu/sinie_kuhni https://gi.by/factory/
+Redirect 301 /fabrika/o_fabrike/vidy_kuhon/po_cvetu/svetlye_kuhni https://gi.by/factory/
+Redirect 301 /fabrika/o_fabrike/vidy_kuhon/po_cvetu/temnye_kuhni https://gi.by/factory/
+Redirect 301 /fabrika/o_fabrike/vidy_kuhon/uglovye_kuhni https://gi.by/factory/
+Redirect 301 /fabrika/o_fabrike/vidy_kuhon/uglovye_kuhni_s_barnoj_stojkoj https://gi.by/factory/
+
+Redirect 301 /gde_zakazat/kazahstan https://gi.by/
+Redirect 301 /gde_zakazat/rossiya/anapa https://gi.by/
+Redirect 301 /gde_zakazat/rossiya/habarovsk https://gi.by/
+Redirect 301 /gde_zakazat/rossiya/izhevsk https://gi.by/
+Redirect 301 /gde_zakazat/rossiya/kaluga https://gi.by/
+Redirect 301 /gde_zakazat/rossiya/kazan https://gi.by/
+Redirect 301 /gde_zakazat/rossiya/kemerovo https://gi.by/
+Redirect 301 /gde_zakazat/rossiya/klincy https://gi.by/
+Redirect 301 /gde_zakazat/rossiya/krasnoyarsk https://gi.by/
+
+Redirect 301 /gde_zakazat/rossiya/kursk https://gi.by/
+Redirect 301 /gde_zakazat/rossiya/murmansk https://gi.by/
+Redirect 301 /gde_zakazat/rossiya/novosibirsk https://gi.by/
+Redirect 301 /gde_zakazat/rossiya/novozybkov https://gi.by/
+Redirect 301 /gde_zakazat/rossiya/oryol https://gi.by/
+Redirect 301 /gde_zakazat/rossiya/petrozavodsk https://gi.by/
+Redirect 301 /gde_zakazat/rossiya/rybinsk https://gi.by/
+Redirect 301 /gde_zakazat/rossiya/samara https://gi.by/
+Redirect 301 /gde_zakazat/rossiya/tula https://gi.by/
+Redirect 301 /gde_zakazat/rossiya/tver https://gi.by/
+Redirect 301 /gde_zakazat/rossiya/tyumen https://gi.by/
+Redirect 301 /gde_zakazat/rossiya/vladimir https://gi.by/
+Redirect 301 /gde_zakazat/rossiya/vladivostok https://gi.by/
+
+Redirect 301 /gde_zakazat/rossiya/volgograd https://gi.by/
+Redirect 301 /gde_zakazat/rossiya/vologda https://gi.by/
+Redirect 301 /gde_zakazat/rossiya/voronezh https://gi.by/
+Redirect 301 /gde_zakazat/rossiya/yuzhno-sahalinsk https://gi.by/
+Redirect 301 /gde_zakazat/ukraina https://gi.by/
+Redirect 301 /gde_zakazat/ukraina/chernovcy https://gi.by/
+Redirect 301 /gde_zakazat/ukraina/chervonograd https://gi.by/
+Redirect 301 /gde_zakazat/ukraina/harkov https://gi.by/
+Redirect 301 /gde_zakazat/ukraina/herson https://gi.by/
+Redirect 301 /gde_zakazat/ukraina/Lutsk https://gi.by/
+Redirect 301 /gde_zakazat/ukraina/lvov https://gi.by/
+Redirect 301 /gde_zakazat/ukraina/mariupol https://gi.by/
+
+Redirect 301 /gde_zakazat/ukraina/nikolaev https://gi.by/
+Redirect 301 /gde_zakazat/ukraina/ternopol https://gi.by/
+Redirect 301 /katalog/komody/klassika/komody_simona https://gi.by/komody/
+Redirect 301 /katalog/komody/modern/komody_arli https://gi.by/komody/
+Redirect 301 /katalog/kuhni/alp https://gi.by/kuhni/alyp/
+Redirect 301 /katalog/kuhni/astoriya https://gi.by/kuhni/astoriya/
+Redirect 301 /katalog/kuhni/ejva https://gi.by/kuhni/eyva/
+Redirect 301 /katalog/kuhni/freda https://gi.by/kuhni/freda/
+Redirect 301 /pokupatelyam/stati/drevesina_dlya_izgotovleniya_fasada_chto_luchshe https://gi.by/information/
+
+Redirect 301 /pokupatelyam/stati/fenix_ntm https://gi.by/information/
+Redirect 301 /pokupatelyam/stati/kakuyu-kuhnyu-vybrat https://gi.by/information/
+Redirect 301 /pokupatelyam/stati/kuhni-nestandartnoj-formy https://gi.by/kuhni-nestandartnoj-formy/
+Redirect 301 /pokupatelyam/stati/linejnye_kuhni https://gi.by/information/
+Redirect 301 /pokupatelyam/stati/p-obraznaya-kuhnya https://gi.by/information/
+Redirect 301 /pokupatelyam/stati/sborka_mebeli_dlya_gostinyh-_spalen_i_prihozhih https://gi.by/sborka-mebeli-dlya-gostinyh-spalen-i-prihozhih/
+Redirect 301 /pokupatelyam/stati/uglovaya-kuhnya https://gi.by/information/
+Redirect 301 /fabrika/o_fabrike/vidy_kuhon/p-obraznye_kuhni https://gi.by/factory/
+Redirect 301 /fabrika/rabota_v_kompanii/stazhirovka https://gi.by/factory/
+Redirect 301 /fabrika/rabota_v_kompanii/korporativnaya_kultura https://gi.by/factory/
+
+Redirect 301 /gde_zakazat/ukraina/kovel https://gi.by/factory/
+Redirect 301 /fabrika/rabota_v_kompanii/korporativnaya_kultura/konkurs_novogodnej_igrushki https://gi.by/factory/
+Redirect 301 /fabrika/rabota_v_kompanii/korporativnaya_kultura/novyj_resurs3 https://gi.by/factory/
+Redirect 301 /fabrika/rabota_v_kompanii/korporativnaya_kultura/novyj_resurs4 https://gi.by/factory/
+Redirect 301 /fabrika/rabota_v_kompanii/korporativnaya_kultura/turslyot_2016 https://gi.by/factory/
+Redirect 301 /fabrika/rabota_v_kompanii/korporativnaya_kultura/premiya_hr-brend_belarus_2017 https://gi.by/factory/
+Redirect 301 /fabrika/rabota_v_kompanii/korporativnaya_kultura/komandnoe_strategicheskoe_planirovanie https://gi.by/factory/
+Redirect 301 /fabrika/rabota_v_kompanii/korporativnaya_kultura/geosideal_-_v_prizyorah_konkursa https://gi.by/factory/
+Redirect 301 /fabrika/rabota_v_kompanii/korporativnaya_kultura/konkurs_detskogo_risunka https://gi.by/factory/
+Redirect 301 /fabrika/rabota_v_kompanii/vakansii https://gi.by/contacts/
+Redirect 301 /fabrika/rabota_v_kompanii/karera https://gi.by/contacts/

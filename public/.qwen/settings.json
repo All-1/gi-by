@@ -1,0 +1,55 @@
+{
+  "php.suggest.basic": true,
+  "php.validate.enable": true,
+  "intelephense.environment.includePaths": [
+    "wp-content/plugins/bp_contracts/src"
+  ],
+  "intelephense.stubs": [
+    "apache",
+    "bcmath",
+    "Core",
+    "ctype",
+    "curl",
+    "date",
+    "dom",
+    "fileinfo",
+    "filter",
+    "ftp",
+    "gd",
+    "hash",
+    "iconv",
+    "json",
+    "libxml",
+    "mbstring",
+    "mysqli",
+    "mysql",
+    "openssl",
+    "pcre",
+    "PDO",
+    "pdo_mysql",
+    "Phar",
+    "SimpleXML",
+    "soap",
+    "sockets",
+    "sodium",
+    "SPL",
+    "standard",
+    "tokenizer",
+    "xml",
+    "xmlreader",
+    "xmlwriter",
+    "zip",
+    "zlib",
+    "wordpress"
+  ],
+  "files.associations": {
+    "*.php": "php"
+  },
+  "editor.quickSuggestions": {
+    "strings": true
+  },
+  "editor.suggestOnTriggerCharacters": true,
+  "editor.acceptSuggestionOnEnter": "on",
+  "editor.tabCompletion": "on",
+  "$version": 3
+}

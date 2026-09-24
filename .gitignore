@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # Default ignored files
 /shelf/
 /workspace.xml
@@ -27,3 +28,8 @@
 *.jp3
 *.jp4
 *.jp5 
+=======
+/public/wp-content/uploads/*
+/public/kd/*
+/.tmp.driveupload/*
+>>>>>>> 844bb0e8ae48cd2c8cca2d60047e93dd49a97cf9
