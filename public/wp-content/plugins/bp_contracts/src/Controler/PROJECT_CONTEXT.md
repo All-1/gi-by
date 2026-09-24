@@ -19,6 +19,18 @@ The `Controler` directory contains the **Business Logic Layer**, orchestrating d
 - `regNewMessage($message)`: Validates input, saves to DB (via `ControlerObjectsRelationship`), and triggers notifications.
 - `getPotencialParticipiant`: Logic for adding new users (e.g., a Factory Technologist) to a chat context.
 
+### Analytics routing
+Filter/state commands delegate to `UserControler`, which forwards to the connected user object via `getFromUserStuff()`:
+
+- `showAnalytics`, `getDealerDependentsAnalytics`
+- `setAnalyticsWhose`, `setAnalyticsDialoguesType`, `setAnalyticsPeriod`, `setAnalyticsTimeMode`
+- `setAnalyticsSlaFirstResponse`, `setAnalyticsSlaSubsequentResponse`
+- `setAnalyticsUser`, `getAnalyticsUserSearch`, `setStartDateAnalytics`, `setEndDateAnalytics`
+
+Implementation lives on `Admin` through [ManageAnalytics](../Users/traits/PROJECT_CONTEXT.md). `Chat.php` wraps responses as `AnalyticsOnPage`, `AnalyticsDealerDependentsOnPage`, `analyticsUserSearch`.
+
+Command list: [src/PROJECT_CONTEXT.md](../PROJECT_CONTEXT.md).
+
 ---
 
 ## 2. `UserControler.php` (User Manager)

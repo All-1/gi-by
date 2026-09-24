@@ -9,6 +9,7 @@
 - Implements `Ratchet\MessageComponentInterface`.
 - **Role**: Routes incoming WebSocket messages to `InteractionInterface`.
 - **Message Format**: Messages are typically string-encoded with a prefix separator `::: ` (e.g., `idUser::: 123`).
+- **Full command reference**: [src/PROJECT_CONTEXT.md](./src/PROJECT_CONTEXT.md) (all client/server titles).
 - **Key Methods**:
   - `onMessage`: Parses `title` and `body`.
   - Routes like `newContract`, `showContracts`, `searchQueryContracts` calls corresponding private methods which trigger `InteractionInterface`.
@@ -25,22 +26,49 @@
 | **Dependencies** | `vendor/autoload.php` + `wp-load.php` |
 
 ### 3. Message Protocol
-All messages use `title::: body` format:
+All messages use `title::: body` format. The plugin defines **50+** commands (contracts, orders, invoices, contractors, ERP sync, analytics). Do not treat the table below as exhaustive.
 
 | Command | Direction | Purpose |
 |:--------|:----------|:--------|
 | `idUser::: {id}` | Client→Server | Register connection |
 | `newContract::: {json}` | Client→Server | Create contract |
 | `newMessage::: {json}` | Client→Server | Send message |
+| `showContracts` / `showOrders` / `showInvoices` / `showContractors` | Client→Server | Refresh list views |
 | `ContractOnPage::: {json}` | Server→Client | Contract list update |
 | `sendDataForContract::: {json}` | Server→Client | Contract details |
+| `AnalyticsOnPage::: {json}` | Server→Client | Analytics dashboard payload |
 | `Notification::: {json}` | Server→Client | User notifications |
 | `Ping::: GetPing` | Bidirectional | Heartbeat |
+
+**Authoritative list**: [src/PROJECT_CONTEXT.md](./src/PROJECT_CONTEXT.md).
+
+### 4. WordPress Integration (`index.php`)
+Pages are **shortcodes** that render HTML shells and enqueue JS; business logic runs over WebSocket after `transferUserToJS($Id, $user_role)`.
+
+| Shortcode | PHP function | Primary JS |
+|:----------|:-------------|:-----------|
+| `contracts` | `contracts()` | `contracts.js`, `modal_window.js`, … |
+| `invoices` | `invoices()` | `invoices.js` |
+| `analytics` | `analytics()` | `analytics.js`, `chart.umd.js` |
+| `orders_dev` | `orders_dev()` | `orders.js` |
+| `contractors_management` | `contractors_management()` | `partners.js` / contractor UI |
+| `staff_management` / `co_workers` | `staff_management()` / `co_workers()` | `stuff_management.js` |
+| `my_profile` | `my_profile()` | `my_profile.js` |
+| `reg_users` | `reg_users()` | `reg_users.js` |
+| `points_manager_new` / `points_dev` | `points_manager_new()` / `points_dev()` | `points.js` / `points_dev.js` |
+
+**Auth bridge**: Shortcodes use `get_current_user_id()` and WP role (e.g. `subscriber` → `dealer` in `analytics()`). The WebSocket layer maps connections to **`gi_new_users`**, not WP users — see Auth Fragmentation below.
+
+### 5. Email HTTP endpoints
+- [sender/](./sender/PROJECT_CONTEXT.md) — legacy POST-to-`mail()` scripts (parallel to `Workers/Mailer.php`).
 
 
 ## Component Breakdown
 
-### 0. [Core (Bootstrap)](./src/Core/PROJECT_CONTEXT.md)
+### 0. [WebSocket gateway (Chat)](./src/PROJECT_CONTEXT.md)
+- **Role**: Ratchet entrypoint and WS command routing.
+
+### 0b. [Core (Bootstrap)](./src/Core/PROJECT_CONTEXT.md)
 - **Role**: Service Registry & Dependency Injection.
 - **Key Components**: `SystemConstructor` (Bootstrapper), `Container`.
 
@@ -74,7 +102,11 @@ All messages use `title::: body` format:
 
 ### 7. [Workers (Infrastructure)](./src/Workers/PROJECT_CONTEXT.md)
 - **Role**: Database Access, External API Sync, Logging, and materialized analytics calculations.
-- **Key Components**: `DBWorker` ($wpdb wrapper), `UPWorker` (ERP Sync), `Workers/Analytics` (dialogue metrics pipeline), `Workers/Collector` (reusable domain data collectors).
+- **Key Components**: `DBWorker` ($wpdb wrapper), `UPWorker` (ERP Sync).
+- **Deep Dive**: [Workers/Analytics](./src/Workers/Analytics/PROJECT_CONTEXT.md), [Workers/Collector](./src/Workers/Collector/PROJECT_CONTEXT.md).
+
+### 9. [sender (HTTP mail)](./sender/PROJECT_CONTEXT.md)
+- **Role**: Legacy POST email scripts.
 
 ### 8. [Utilities (Helpers)](./src/Utilities/PROJECT_CONTEXT.md)
 - **Role**: Shared Helper Classes & Query Builders.
@@ -101,6 +133,13 @@ All messages use `title::: body` format:
    - Returns updated users list to `Chat`.
 4. **Chat**: Broadcasts `showContract` updates to participants.
 
+### Analytics dashboard
+1. **Frontend**: User opens page with `[analytics]`; `analytics.js` calls `showAnalytics` via `sendShowWhere('analytics')`.
+2. **Chat** → **InteractionInterface** → **UserControler** → `Admin` + `ManageAnalytics::getAnalytics()`.
+3. **AnalyticsWorker** runs query classes on materialized `gi_new_metrics_*` tables (and order stats on `gi_new_orders`).
+4. **Chat** replies with `AnalyticsOnPage::: {json}` → `handlerAnalyticsOnPage` in `analytics.js`.
+5. Filter changes send `setAnalytics*` commands (state on user object); SLA and dealer drill-down documented in [Workers/Analytics](./src/Workers/Analytics/PROJECT_CONTEXT.md).
+
 ## Database Interaction
 - Uses `src/Workers/DBWorker.php` as a wrapper around global `$wpdb`.
 - Custom tables prefixed with `gi_new_` (e.g., `gi_new_users`, `gi_new_contract`, `gi_new_dialogues`).
@@ -114,16 +153,16 @@ All roles extend `UserMain` with capability traits:
 
 ```
 UserMain (Base)
-├── Dealer              → WorkWithContracts, WorkWithOrders
-├── FreeDealer          → Limited Dealer permissions
+├── Contractor          → ManageContractors (base for dealer-side hierarchy)
+│   ├── Dealer          → WorkWithContracts, WorkWithOrders
+│   └── FreeDealer      → Limited dealer + invoice access
 ├── Distributor         → DistributorTrait, ManageContractors
 ├── FactoryWorker       → ManageFactoryWorkers
-├── Contractor          → ManageContractors (23KB trait!)
-├── ContractsWorker     → Contract management
+├── ContractsWorker     → Factory role (user class); distinct from Workers\ContractsWorker
 ├── ShipmentManager     → WorkWithShipments
 ├── SalesManager        → Sales operations
 ├── Bookkeeper          → WorkWithInvoice
-└── Admin               → Full access
+└── Admin               → ManageAnalytics + full access
 ```
 
 ### User Interfaces (src/Users/interfaces/)
@@ -150,6 +189,8 @@ All tables use `gi_new_` prefix:
 | `gi_new_metrics_dialogues` | Dialogue-level analytics | Time/message metrics per dialogue |
 | `gi_new_metrics_managers` | Factory-side analytics | Response/waiting/message metrics per dialogue-manager pair |
 | `gi_new_metrics_contractors` | Contractor-side analytics | Response/waiting/message metrics per dialogue-contractor pair |
+| `gi_new_metrics_dialog_turns` | Turn-level analytics | Per message-turn timings; SLA / percentile charts |
+| `x_gi_new_messages_contract_{year}_{point}` | Message shards | Merged into `gi_new_metrics_messages` by `MessageCollector` |
 
 ## External Integration
 
@@ -185,8 +226,13 @@ All tables use `gi_new_` prefix:
 | `notification.js` | **13KB** | Notifications |
 | `partners.js` | **12KB** | Partner management |
 | `contracts.js` | **11KB** | Contract UI |
+| `analytics.js` | **~150KB+** | Analytics dashboard (Chart.js) |
+| `invoices.js` | — | Invoices grid |
+| `stuff_management.js` | — | Staff / co-workers UI |
 
-**Total Custom JS**: ~200KB+ (plus 2MB+ of libraries: pdfmake, exceljs)
+**Total Custom JS**: ~350KB+ (plus 2MB+ of libraries: pdfmake, exceljs, chart.umd.js)
+
+See [js/PROJECT_CONTEXT.md](./js/PROJECT_CONTEXT.md) for the full file map and WS handler convention.
 
 
 ## Critical Analysis & Estimates

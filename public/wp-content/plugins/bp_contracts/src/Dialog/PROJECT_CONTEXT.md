@@ -21,6 +21,9 @@ The **Dialog Subsystem** implements the internal messenger. It is not just simpl
 4.  **`DialogInvoice`**:
     - **Context**: Discussions regarding payment/documents.
     - **Participants**: Dealer + Bookkeeper.
+5.  **`DialogShipment`**:
+    - **Context**: Logistics / shipment questions tied to shipment entities.
+    - **Instantiation**: `Factory::createDependentObjects` case `DialogShipment`.
 
 ## Message Entity: `Message.php`
 - **Attributes**: `id`, `text`, `author_id`, `timestamp`, `is_read`.
@@ -28,4 +31,4 @@ The **Dialog Subsystem** implements the internal messenger. It is not just simpl
 
 ## Notification Logic
 - **Unread Counters**: The system calculates `unreadCount` *per user*.
-- **Email Fallback**: If a user is offline (`idWebsocket` is null), high-priority messages trigger an email notification via `SenderEmailNotification`.
+- **Email Fallback**: If a user is offline (`idWebsocket` is null), `NotificationWorker` may use `Workers/Mailer.php`. Legacy HTTP POST scripts live in [sender/](../../sender/PROJECT_CONTEXT.md).

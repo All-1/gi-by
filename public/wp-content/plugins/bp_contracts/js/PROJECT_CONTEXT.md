@@ -1,38 +1,63 @@
 # Component Context: bp_contracts/Frontend (JS)
 
 ## Overview
-The frontend is a **WebSocket-driven Single Page Application (SPA)** embedded within the WordPress admin dashboard. It relies on a persistent connection to the PHP `Chat` server to receive state updates in real-time.
+Each WordPress shortcode in `index.php` enqueues a **page-specific script** plus shared `communication_server.js`. There is no bundler: globals (`where`, `socket`, `lastSN`, `handler*` functions) coordinate UI and WebSocket I/O.
 
 ## 1. Core: `communication_server.js`
-**Role**: The Network Client.
-- **Connection**: Manages `new WebSocket('ws://...')`.
-- **Heartbeat**: Implements ping/pong and auto-reconnection logic.
-- **Router**: The `onmessage` handler acts as a dispatcher:
-    ```javascript
-    switch (title) {
-        case 'idUser': saveSession(body); break;
-        case 'showContracts': contracts.renderGrid(body); break;
-        case 'Notification': notification.show(body); break;
-    }
-    ```
+- **Connection**: `WebSocket` to `ws://127.0.0.1:8080` (or production `wss://…`).
+- **Bootstrap**: On open → `idUser::: ` + `setDefaultState(where)` + `reloadDataForWindow`.
+- **Heartbeat / reconnect**: `startHeartbeat`, visibility-aware `intervalReconnect`.
+- **Inbound routing**:
+  - `paramForClient` → builds `mainUser` (`user.js`).
+  - `Notification` → `NotificationWorker` (`notification.js`).
+  - All other titles → `handlerRequestFromServer(title, body)` which calls `window['handler' + toCapsCase(title)]` if defined.
 
-## 2. Contracts Grid: `contracts.js`
-**Role**: The Main Dashboard UI.
-- **Grid Rendering**: Dynamically builds the HTML table of contracts.
-- **Search/Filter**: Captures input → sends `searchQueryContracts` WS message → updates grid on response.
-- **Pagination**: Client-side handling of page state, server-side data fetching.
+Example: server sends `AnalyticsOnPage::: {...}` → `handlerAnalyticsOnPage` in `analytics.js`.
 
-## 3. Modal Manager: `modal_window.js`
-**Role**: Handles all "Popups".
-- **Dynamic Content**: Injection of HTML forms (e.g., "Create New Contract", "Add Participant").
-- **Context Awareness**: Knows which `contractID` triggered the modal.
+## 2. Shared utilities
+| File | Role |
+|:-----|:-----|
+| `utility.js` | DOM helpers, `invokeDataForWindow`, `choseWhereForWindow`, formatting |
+| `controls_for_page.js` | Pagination, filters, `sendShowWhere(where)` → `show{Page}::: ` |
+| `user.js` | `mainUser` client model |
+| `status-user.js` | User status UI |
+| `modal_window.js` | Large modal / form host |
+| `notification.js` | Toast / notification UI |
 
-## 4. Document Generation (`exceljs`, `pdfmake`)
-**Role**: Client-Side export.
-- **Architecture**: Instead of generating PDFs on the server, the raw JSON data is sent to the client, where JS libraries render the PDF. This offloads CPU from the PHP server.
+## 3. Page modules (by shortcode)
+| File | Shortcode / area |
+|:-----|:-----------------|
+| `contracts.js` | `contracts` |
+| `orders.js` | `orders_dev` |
+| `invoices.js` | `invoices` |
+| `analytics.js` | `analytics` — charts (Chart.js), SLA controls, dealer drill-down |
+| `partners.js` | Contractor / partner flows |
+| `stuff_management.js` | `staff_management`, `co_workers` |
+| `my_profile.js` | `my_profile` |
+| `reg_users.js` | `reg_users` |
+| `points.js` / `points_dev.js` | `points_manager_new` / `points_dev` |
+| `invoice_print.js` | Invoice PDF client render |
+| `integer_to_words.js` | Amount wording for documents |
 
-## Data Flow
-1.  **User Action**: Click "Create Contract".
-2.  **JS**: Sends `newContract` JSON to WS.
-3.  **PHP**: Processes, updates DB, sends `showContracts` broadcast.
-4.  **JS**: Receives `showContracts` -> Re-renders the Grid.
+### `analytics.js` (summary)
+- Global `where = 'analytics'`; on load → `showAnalytics` via `sendShowWhere`.
+- Handlers: `handlerAnalyticsOnPage`, `handlerAnalyticsDealerDependentsOnPage`, `handlerAnalyticsUserSearch`.
+- Sends `setAnalytics*` WS commands when filters / SLA / dates change.
+- Uses `chart.umd.js` for dashboards; CSS in `css/style.css` (`.analytics_*`).
+
+## 4. Libraries (vendor)
+- `pdfmake`, `exceljs` — client-side export (see contracts / orders / invoices flows).
+- `chart.umd.js` — analytics only.
+
+## 5. Orphan / dev
+- `draft_work.js` — not enqueued in `index.php` (legacy / WIP).
+- `grid-template-examples.js` — examples.
+
+## Data flow (typical)
+1. User action on page JS → `socket.send('command::: body')`.
+2. PHP `Chat` → `InteractionInterface` → user traits / workers.
+3. Server `Title::: json` → matching `handlerTitle` → DOM update.
+
+## Related
+- [WebSocket command list](../src/PROJECT_CONTEXT.md)
+- [Analytics backend](../src/Workers/Analytics/PROJECT_CONTEXT.md)

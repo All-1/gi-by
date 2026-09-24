@@ -1,28 +1,58 @@
 # Component Context: bp_contracts/Core
 
 ## Overview
-The `Core` directory acts as the **Bootstrap & Service Registry** for the application. It handles the wiring of all dependencies when the WebSocket server starts.
+Bootstrap and **dependency injection** when the WebSocket server starts (`SystemConstructor` from `public/websocket_server.php`).
 
-## Components
+## `Container.php`
+Simple service locator: `set($name, $service)`, `get($name)`.
 
-### 1. `Container.php` (Dependency Injection)
-- **Role**: A simple Service Locator / DI Container.
-- **Mechanism**:
-    - Stores singleton instances of services in an array `$services`.
-    - `set($name, $service)`: Registers a service.
-    - `get($name)`: Retrieves a service by key.
+## `SystemConstructor.php`
+1. Creates `Container`.
+2. Instantiates workers, utilities, controllers, analytics helpers.
+3. Passes container **by reference** into each constructor.
+4. Registers each instance under a string key.
 
-### 2. `SystemConstructor.php` (The Bootstrapper)
-- **Role**: The main setup class called by `server-ws.php` (or the entry point).
-- **Responsibility**:
-    1.  Instantiates the `Container`.
-    2.  Instantiates **ALL** Workers, Utilities, and Controllers.
-    3.  Injects the `Container` (by reference) into every service.
-    4.  Registers every service back into the `Container`.
-- **Key Flow**:
-    ```php
-    $this->container = new Container();
-    $DBWorker = new DBWorker($linkContainer);
-    $this->container->set('DBWorker', $DBWorker);
-    ```
-- **Dependencies**: This file has `use` statements for *almost every class in the system*, making it the central coupling point.
+### Registered services (keys)
+| Key | Class |
+|:----|:------|
+| `Chat` | `PersonalAccount\Chat` |
+| `CatcherBugs` | `Workers\CatcherBugs` |
+| `SSHRemote` | `Workers\SSHRemote` |
+| `Mailer` | `Workers\Mailer` |
+| `SimpleUtilities` | `Utilities\SimpleUtilities` |
+| `DBUtilities` | `Utilities\DBUtilities` |
+| `DBWorker` | `Workers\DBWorker` |
+| `DataUtilities` | `Utilities\DataUtilities` |
+| `UPWorker` | `Workers\UPWorker` |
+| `ORWorker` | `Workers\ORWorker` |
+| `UserUtilities` | `Utilities\UserUtilities` |
+| `Factory` | `Factory\Factory` |
+| `DialogServices` | `Utilities\DialogServices` |
+| `UserControler` | `Controler\UserControler` |
+| `ControlerObjectsRelationship` | `Controler\ControlerObjectsRelationship` |
+| `NotificationWorker` | `Workers\NotificationWorker` |
+| `InvoiceWorker` | `Workers\InvoiceWorker` |
+| `InteractionInterface` | `Controler\InteractionInterface` |
+| `MessageWorker` | `Workers\MessageWorker` |
+| `ContractsWorker` | `Workers\ContractsWorker` |
+| `OrdersWorker` | `Workers\OrdersWorker` |
+| `ManageContractorsWorker` | `Workers\ManageContractorsWorker` |
+| `MessageCollector` | `Workers\Collector\MessageCollector` |
+| `DialogMetrics` | `Workers\Analytics\DialogMetrics` |
+| `ManagerMetrics` | `Workers\Analytics\ManagerMetrics` |
+| `ContractorsMetrics` | `Workers\Analytics\ContractorsMetrics` |
+| `MessageMetrics` | `Workers\Analytics\MessageMetrics` |
+| `TurnAnalyticsQueries` | `Workers\Analytics\TurnAnalyticsQueries` |
+| `DialogAnalyticsQueries` | `Workers\Analytics\DialogAnalyticsQueries` |
+| `OrderAnalyticsQueries` | `Workers\Analytics\OrderAnalyticsQueries` |
+| `AnalyticsCollector` | `Workers\Collector\AnalyticsCollector` |
+| `UserCollector` | `Workers\Collector\UserCollector` |
+
+### Not in the container
+- **`AnalyticsWorker`**: constructed inside `Users\Admin` for `ManageAnalytics` (uses container only for query services if resolved manually in constructor).
+
+`SystemConstructor` is the main **coupling hub** (imports most of the plugin).
+
+## Related
+- [Workers](../Workers/PROJECT_CONTEXT.md)
+- [Chat / WS gateway](../PROJECT_CONTEXT.md)
