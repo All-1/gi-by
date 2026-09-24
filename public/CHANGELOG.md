@@ -1,10 +1,18 @@
 # Project Changelog
 
-This document tracks changes to the project. See **[DEVELOPMENT_RULES.md](./DEVELOPMENT_RULES.md#5-change-logging)** for the mandatory entry format.
+This document tracks changes to the project. See **[DEVELOPMENT_RULES.md](./DEVELOPMENT_RULES.md#9-change-logging)** for the mandatory entry format.
 
 ---
 
 ## Log
+
+### [2026-09-24] Development Rules v2.0 (giby-2.0 adaptation)
+**Author**: AI Assistant
+**Logic**:
+- Align site rules with giby-2.0 `DEVELOPMENT_RULES.md` (GRASP, composition, documentation hierarchy, code size, enforcement) while scoping to this WordPress-only repo (`public/`).
+- Document `bp_contracts`, WebSocket, and `PROJECT_CONTEXT` nesting; remove Laravel-only references; add pragmatic legacy exceptions (`bp_zakazi`, traits).
+**Changes**:
+- `public/DEVELOPMENT_RULES.md`: Rewritten to v2.0 structure with local paths and related-doc index.
 
 ### [2026-01-15] Implemented Strict Development Rules
 **Author**: AI Assistant
