@@ -27,7 +27,7 @@ Detailed architectural documentation is available in the `PROJECT_CONTEXT.md` fi
 - **[bp_samples](./public/wp-content/plugins/bp_samples/PROJECT_CONTEXT.md)**: Exposition samples for sale.
 
 ### Dealer & Business Logic
-- **[bp_contracts](./public/wp-content/plugins/bp_contracts/PROJECT_CONTEXT.md)**: **CORE SYSTEM**. Complex MVC-style plugin with WebSockets for Contracts/Orders.
+- **[bp_contracts](./public/wp-content/plugins/bp_contracts/PROJECT_CONTEXT.md)**: **CORE SYSTEM**. Complex MVC-style plugin with WebSockets for Contracts/Orders/Invoices, contractor management, and an analytics dashboard (`[analytics]` shortcode, `gi_new_metrics_*` tables). WS command reference: [src/PROJECT_CONTEXT](./public/wp-content/plugins/bp_contracts/src/PROJECT_CONTEXT.md).
 - **[bp_zakazi](./public/wp-content/plugins/bp_zakazi/PROJECT_CONTEXT.md)**: "My Orders" list for dealers, driven by per-user temporary tables.
 - **[bp_points_manager](./public/wp-content/plugins/bp_points_manager/PROJECT_CONTEXT.md)**: Managing Sales Points/Managers.
 - **[bp_dealer_files](./public/wp-content/plugins/bp_dealer_files/PROJECT_CONTEXT.md)**: File sharing/resources for dealers.

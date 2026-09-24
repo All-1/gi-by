@@ -20,10 +20,17 @@ This directory implements the **Domain Models** for system actors. It uses a pol
 ### Dealer Ecosystem
 *Users associated with specific "Points (Salons)"*
 
+#### `Contractor.php`
+- **Role**: Base class for dealer-side users with `ManageContractors`.
+- **Children**: `Dealer`, `FreeDealer`.
+
 #### `Dealer.php`
-- **Role**: The primary partner.
+- **Role**: The primary partner (`extends Contractor`).
 - **Visibility**: Sees ONLY contracts linked to their assigned `idPoints`.
 - **Permissions**: Can create Contracts, place Orders, invite `SalesManager`.
+
+#### `FreeDealer.php`
+- **Role**: Limited dealer; invoice access via `InvoicesInterface`.
 
 #### `Distributor.php`
 - **Role**: Regional manager for multiple Dealers.
@@ -45,6 +52,11 @@ This directory implements the **Domain Models** for system actors. It uses a pol
 #### `Admin.php`
 - **Role**: Superuser.
 - **Visibility**: Global access to all Contracts and Debugging tools.
+- **Analytics**: Uses `ManageAnalytics` trait; owns `AnalyticsWorker` instance for the `[analytics]` page.
+
+#### `ContractsWorker.php` (user role)
+- **Role**: Factory staff focused on contract operations (`extends FactoryWorker`, `ContractsInterface`).
+- **Note**: Name collision with `Workers\ContractsWorker` — infrastructure vs domain role.
 
 #### `Bookkeeper.php`
 - **Role**: Finance department.
