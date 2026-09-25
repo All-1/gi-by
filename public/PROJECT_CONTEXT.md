@@ -3,9 +3,7 @@
 ## Overview
 This is a large-scale, custom WordPress installation for "GeoS Ideal" (a kitchen/furniture manufacturer). The project heavily relies on a suite of custom plugins (prefixed with `bp_`) to manage its business logic, catalogs, and dealer interactions.
 
-> [!IMPORTANT]
-> **DEVELOPMENT RULES**
-> Strict development rules are in effect for this project. Before making changes, you **MUST** read and follow the guidelines in **[DEVELOPMENT_RULES.md](./DEVELOPMENT_RULES.md)**.
+**Related docs**: [DEVELOPMENT_RULES.md](./DEVELOPMENT_RULES.md) (project rules for `public/`) · [CHANGELOG.md](./CHANGELOG.md) · [RECOMMENDATIONS.md](./RECOMMENDATIONS.md)
 
 ## Architecture
 - **Platform**: WordPress.
@@ -32,6 +30,7 @@ Detailed architectural documentation is available in the `PROJECT_CONTEXT.md` fi
 - **[bp_points_manager](./public/wp-content/plugins/bp_points_manager/PROJECT_CONTEXT.md)**: Managing Sales Points/Managers.
 - **[bp_dealer_files](./public/wp-content/plugins/bp_dealer_files/PROJECT_CONTEXT.md)**: File sharing/resources for dealers.
 - **[bp_booking](./public/wp-content/plugins/bp_booking/PROJECT_CONTEXT.md)**: Reservation/Booking system.
+- **[bp_knowledge_tests](./public/wp-content/plugins/bp_knowledge_tests/PROJECT_CONTEXT.md)**: Dealer knowledge tests (planned V1; spec + [implementation plan](./public/wp-content/plugins/bp_knowledge_tests/spec/IMPLEMENTATION_PLAN.md)).
 
 ### Marketing & Content
 - **[bp_homepage](./public/wp-content/plugins/bp_homepage/PROJECT_CONTEXT.md)**: Custom homepage content builder.
