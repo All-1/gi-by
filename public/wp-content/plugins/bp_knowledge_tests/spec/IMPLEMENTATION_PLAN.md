@@ -7,8 +7,8 @@
 **Plugin context**: [PROJECT_CONTEXT.md](../PROJECT_CONTEXT.md)  
 **Personal account integration**: [bp_contracts/PROJECT_CONTEXT.md](../../bp_contracts/PROJECT_CONTEXT.md)
 
-**Status (repository)**: Specification + plugin `PROJECT_CONTEXT` index — no plugin bootstrap, migrations, or `TestController` in `bp_contracts` yet.  
-**Last updated**: 2026-09-25
+**Status (repository)**: Plugin bootstrap + activation (schema/seed); domain/repos/tests deferred to later Phase 1 work. No `TestController` in `bp_contracts` yet.  
+**Last updated**: 2026-10-01
 
 ---
 
@@ -518,12 +518,12 @@ Store dismiss counts and policy in `gi_new_test_config` / `gi_new_test_notificat
 
 ### Phase 1 — Plugin skeleton & persistence (1–1.5 weeks)
 
-- [ ] Plugin bootstrap, autoload, activation migrations
+- [x] Plugin bootstrap, autoload, activation migrations (`PluginBootstrap`, `SchemaDefiner`, `Seeder`)
 - [ ] Repositories for tests, questions, answers, config
 - [ ] Domain: `ScoringService`, pass/fail, config reader (focused classes per §4.3)
-- [ ] PHPUnit (or project-standard test runner) — **scoring + pass/fail** tests required before Phase 1 exit
+- [ ] Automated scoring tests (when domain lands — User Rules §8.3)
 
-**Exit:** CRUD via admin stub or WP-CLI; scoring tests green.
+**Exit:** CRUD via admin stub or WP-CLI; scoring tests green (after domain added).
 
 ### Phase 2 — Attempts, materials, achievements (1.5–2 weeks)
 

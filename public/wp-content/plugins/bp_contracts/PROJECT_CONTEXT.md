@@ -62,6 +62,21 @@ Pages are **shortcodes** that render HTML shells and enqueue JS; business logic 
 ### 5. Email HTTP endpoints
 - [sender/](./sender/PROJECT_CONTEXT.md) — legacy POST-to-`mail()` scripts (parallel to `Workers/Mailer.php`).
 
+### 6. Knowledge tests (planned — V1)
+
+Domain (scoring, DB, admin) lives in **[bp_knowledge_tests](../bp_knowledge_tests/PROJECT_CONTEXT.md)**. This plugin provides shell only:
+
+| Piece | Role |
+|-------|------|
+| `TestController` (RAM) | Unfinished attempt session; cleared at daily WS restart (~03:00) |
+| Shortcode / menu **Tests** | List + modals (`tests.js`, `modal_window.js` patterns) |
+| `Chat.php` handlers | Thin; call plugin services via Worker / `InteractionInterface` |
+| Chat author UI | Stars from plugin achievement query |
+
+**WS commands (proposed — finalize Phase 3):** see [bp_knowledge_tests spec IMPLEMENTATION_PLAN §4.5](../bp_knowledge_tests/spec/IMPLEMENTATION_PLAN.md#45-websocket-spec-23). Authoritative list will be added to [src/PROJECT_CONTEXT.md](./src/PROJECT_CONTEXT.md) when implemented.
+
+**Hard rule:** No scoring, pass/fail, validity, or achievement rules in `bp_contracts` — session + presentation only.
+
 
 ## Component Breakdown
 

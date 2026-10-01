@@ -6,6 +6,77 @@ This document tracks changes to the project. Entry format is defined in **Cursor
 
 ## Log
 
+### [2026-10-01] Knowledge tests: minimal plugin tree
+**Author**: AI Assistant
+**Logic**:
+- Keep only activation/bootstrap code until features are built; remove unused domain, repositories, and CLI scoring tests.
+**Changes**:
+- Removed `src/Domain/*`, `src/Infrastructure/Repository/*`, `tests/run_scoring_tests.php`.
+- `PROJECT_CONTEXT.md`, `spec/IMPLEMENTATION_PLAN.md`: status and Phase 1 checklist.
+
+### [2026-10-01] Knowledge tests: expose activation on PluginBootstrap
+**Author**: AI Assistant
+**Logic**:
+- Remove ComposedPlugin / PluginActivation indirection; activation sequence lives on `PluginBootstrap::activate()`.
+**Changes**:
+- `PluginBootstrap.php`, `index.php`: direct `activate($wpdb)` hook.
+- Deleted `ComposedPlugin.php`, `Infrastructure/Activation/PluginActivation.php`.
+
+### [2026-10-01] Knowledge tests: SchemaDefiner + Seeder consolidation
+**Author**: AI Assistant
+**Logic**:
+- Reduce activation over-engineering: one class for DDL/FKs, one for seed data; keep `PluginBootstrap::compose()` flow unchanged.
+**Changes**:
+- `SchemaDefiner.php`, `Seeder.php`: replace step wrappers, catalogs, and separate installers.
+- Removed `SchemaTableDefinitions`, `ConfigSeeder`, `ForeignKeyCatalog`, `ForeignKeyInstaller`, `Activation/*Step.php`.
+- `PluginActivation` calls `SchemaDefiner` / `Seeder` methods directly.
+
+### [2026-09-30] Knowledge tests: flat bootstrap + activation pipeline
+**Author**: AI Assistant
+**Logic**:
+- Avoid nesting Plugin inside factory-wired SchemaInstaller; compose services in sequence and return `ComposedPlugin`.
+**Changes**:
+- `Bootstrap/PluginBootstrap.php`, `ComposedPlugin.php`: compose steps, return plugin + activation.
+- `Infrastructure/Activation/*`, `SchemaVersionRepository.php`: replace `SchemaInstaller` / `PluginFactory`.
+- `Plugin.php`: runtime only (`boot()`); activation lives on `ComposedPlugin`.
+
+### [2026-09-30] Knowledge tests: instance-based plugin bootstrap
+**Author**: AI Assistant
+**Logic**:
+- Replace static schema/FK installers with constructor-injected services and `PluginFactory` wiring per composition rules.
+**Changes**:
+- `Plugin.php`, `PluginFactory.php`: instance `boot()` / `activate()`.
+- `SchemaInstaller`, `ForeignKeyInstaller`, `SchemaTableDefinitions`, `ForeignKeyCatalog`, `ConfigSeeder`: non-static collaborators.
+- `index.php`: wires hooks to plugin instance.
+
+### [2026-09-29] Knowledge tests schema: foreign keys (v2)
+**Author**: AI Assistant
+**Logic**:
+- Enforce referential integrity between test tables and `gi_new_users.id_user`; dbDelta does not reliably add FKs, so version 2 runs ALTER constraints on activation.
+**Changes**:
+- `ForeignKeyInstaller.php`: [NEW] constraint definitions.
+- `SchemaInstaller.php`: schema version 2; delegates FK step.
+- `migrations/001_baseline.sql`, `migrations/README.md`, `PROJECT_CONTEXT.md`, `spec/IMPLEMENTATION_PLAN.md`: FK documentation.
+
+### [2026-09-29] Knowledge tests schema: int IDs
+**Author**: AI Assistant
+**Logic**:
+- Align DDL with IMPLEMENTATION_PLAN §5 (`INT UNSIGNED`) instead of `bigint` for keys and FKs.
+**Changes**:
+- `bp_knowledge_tests/src/Infrastructure/SchemaInstaller.php`, `migrations/001_baseline.sql`: `int(10) unsigned` for integer columns.
+
+### [2026-09-29] Knowledge tests Phase 0 close + Phase 1 skeleton
+**Author**: AI Assistant
+**Logic**:
+- Close documentation/schema phase; align plan with User Rules and DEVELOPMENT_RULES v2.4; start plugin code without duplicating domain logic in bp_contracts.
+- D4 multi-select scoring documented as sum of correct options per question (spec §2.1).
+**Changes**:
+- `public/wp-content/plugins/bp_knowledge_tests/`: Plugin bootstrap, `SchemaInstaller`, repositories, `ScoringService` / `TestConfigReader`, scoring test script, migrations README.
+- `public/wp-content/plugins/bp_knowledge_tests/PROJECT_CONTEXT.md`: Runtime and schema status.
+- `public/wp-content/plugins/bp_knowledge_tests/spec/IMPLEMENTATION_PLAN.md`: Phase 0/1 progress, D4 resolved, `is_correct` in §5.0.3.
+- `public/wp-content/plugins/bp_contracts/PROJECT_CONTEXT.md`, `src/PROJECT_CONTEXT.md`: Planned Tests integration and WS stubs.
+- `public/PROJECT_CONTEXT.md`: bp_knowledge_tests link path fix.
+
 ### [2026-09-25] Site context: link to DEVELOPMENT_RULES
 **Author**: AI Assistant
 **Logic**:

@@ -30,7 +30,7 @@ Detailed architectural documentation is available in the `PROJECT_CONTEXT.md` fi
 - **[bp_points_manager](./public/wp-content/plugins/bp_points_manager/PROJECT_CONTEXT.md)**: Managing Sales Points/Managers.
 - **[bp_dealer_files](./public/wp-content/plugins/bp_dealer_files/PROJECT_CONTEXT.md)**: File sharing/resources for dealers.
 - **[bp_booking](./public/wp-content/plugins/bp_booking/PROJECT_CONTEXT.md)**: Reservation/Booking system.
-- **[bp_knowledge_tests](./public/wp-content/plugins/bp_knowledge_tests/PROJECT_CONTEXT.md)**: Dealer knowledge tests (planned V1; spec + [implementation plan](./public/wp-content/plugins/bp_knowledge_tests/spec/IMPLEMENTATION_PLAN.md)).
+- **[bp_knowledge_tests](./wp-content/plugins/bp_knowledge_tests/PROJECT_CONTEXT.md)**: Dealer knowledge tests (V1 in progress; [implementation plan](./wp-content/plugins/bp_knowledge_tests/spec/IMPLEMENTATION_PLAN.md)).
 
 ### Marketing & Content
 - **[bp_homepage](./public/wp-content/plugins/bp_homepage/PROJECT_CONTEXT.md)**: Custom homepage content builder.
