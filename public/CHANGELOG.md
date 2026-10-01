@@ -6,6 +6,13 @@ This document tracks changes to the project. Entry format is defined in **Cursor
 
 ## Log
 
+### [2026-10-01] Development Rules v2.5 (new-plugin bootstrap)
+**Author**: AI Assistant
+**Logic**:
+- Codify lessons from bp_knowledge_tests scaffolding: flat bootstrap, no premature layers, instance hooks—without duplicating User Rules YAGNI/simplicity text.
+**Changes**:
+- `public/DEVELOPMENT_RULES.md`: §2.8 new `bp_*` plugin bootstrap, §2.9 WP boundary vs static services; PR checklist note.
+
 ### [2026-10-01] Knowledge tests: minimal plugin tree
 **Author**: AI Assistant
 **Logic**:

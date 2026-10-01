@@ -1,6 +1,6 @@
 # Development Rules (GeoS Ideal WordPress `public/`)
 
-**Version**: 2.4 | **Last Updated**: 2026-09-25
+**Version**: 2.5 | **Last Updated**: 2026-10-01
 
 Global rules — security baseline, precedence, GRASP, SOLID, composition, documentation principles, CHANGELOG format, debugging workflow, code size limits, git/PR conduct — live in **Cursor Settings → Rules** only. **This file is not a copy of Settings**; it adds WordPress and this repository.
 
@@ -22,7 +22,7 @@ Global rules — security baseline, precedence, GRASP, SOLID, composition, docum
 | § | Topic (this repo) |
 |---|-------------------|
 | **§1** | Uploads, `security_hook`, high-risk endpoints |
-| **§2** | Plugins, framework, DB, legacy |
+| **§2** | Plugins, framework, DB, legacy, new-plugin bootstrap (§2.8–§2.9) |
 | **§3** | PROJECT_CONTEXT hierarchy |
 | **§4** | WP workflow, WebSocket server |
 | **§5** | WS debugging addendum |
@@ -117,6 +117,39 @@ Apply global GRASP/SOLID from User Rules using these illustrations:
 
 See [RECOMMENDATIONS.md](./RECOMMENDATIONS.md) for staged refactors.
 
+### 2.8 New `bp_*` plugin bootstrap (greenfield / early phase)
+
+User Rules cover YAGNI, minimal diffs, and when to add tests. **This repo’s default** for a new or early-phase plugin:
+
+| Topic | Rule |
+|-------|------|
+| **Entry** | `index.php`: autoload, construct bootstrap with `$wpdb`, register hooks only. |
+| **Hooks** | Use instance callables: `register_activation_hook(__FILE__, [$bootstrap, 'activate'])`, `add_action('plugins_loaded', [$plugin, 'boot'])`. |
+| **Activation** | Versioned steps in **one visible place** (e.g. `PluginBootstrap::activate()` calling `SchemaDefiner` + `Seeder` in order). |
+| **Schema** | DDL/FKs in a dedicated class (e.g. `SchemaDefiner`); seed data in `Seeder`; track version via a WP option (e.g. `*_schema_version`). Reference SQL in `migrations/` when useful. |
+| **Layers** | Add **Domain**, **Repository**, DTOs, and test runners only when the **current phase** or task needs call sites—not at “plugin activates” milestone. |
+| **Scale** | Do **not** copy `bp_contracts` `SystemConstructor` / deep DI until integration requires it. Small plugins stay simpler than the personal account. |
+| **Docs** | Plugin `PROJECT_CONTEXT.md` **status** must match what is actually in the tree (no listed folders for deleted or not-yet-built code). |
+
+**Avoid** (unless the user or an approved plan explicitly requires them):
+
+- Static **application** entry points (`Class::install()`, `Class::boot()` on services).
+- Wrapper types that only forward one call (`Composed*`, `*Step` that only delegates, extra factories).
+- Deep chains: factory → installer → step → composed result, when a short bootstrap method suffices.
+
+Large **DDL/FK catalog** classes may exceed the usual line cap; note in CHANGELOG when intentional (User Rules §11).
+
+### 2.9 WordPress boundary vs application code
+
+| Layer | Allowed |
+|-------|---------|
+| **`index.php`** | Procedural wiring, `global $wpdb`, hook registration. |
+| **Plugin `src/`** | Instance methods, constructor injection where needed; no static service facades. |
+
+`static function` on **hook closures** is not the same as static domain APIs; prefer `[$object, 'method']` when `$wpdb` or services live on the bootstrap instance.
+
+**Cross-plugin domain** (example: knowledge tests): business rules stay in the owning plugin (`bp_knowledge_tests`); `bp_contracts` remains shell + transport—see that plugin’s spec / `PROJECT_CONTEXT.md`.
+
 ---
 
 ## 3. Documentation architecture (this repository)
@@ -164,7 +197,7 @@ Record ongoing debt in [PROJECT_CONTEXT.md](./PROJECT_CONTEXT.md) (Critical Issu
 
 ### 4.1 Pull request checklist (this repo)
 
-- [ ] §1–§2 respected
+- [ ] §1–§2 respected (including §2.8–§2.9 for new plugin work)
 - [ ] New tables / WS commands / shortcodes documented in PROJECT_CONTEXT
 - [ ] `public/CHANGELOG.md` updated when significant (User Rules CHANGELOG section)
 - [ ] Global PR checklist (User Rules) satisfied
