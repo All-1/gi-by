@@ -1,0 +1,13 @@
+{
+    "name": "bp/knowledge-tests",
+    "description": "Dealer knowledge tests for GeoS Ideal personal account",
+    "type": "wordpress-plugin",
+    "require": {
+        "php": ">=7.4"
+    },
+    "autoload": {
+        "psr-4": {
+            "BpKnowledgeTests\\": "src/"
+        }
+    }
+}

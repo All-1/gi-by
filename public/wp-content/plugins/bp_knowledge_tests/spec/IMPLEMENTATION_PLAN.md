@@ -7,8 +7,8 @@
 **Plugin context**: [PROJECT_CONTEXT.md](../PROJECT_CONTEXT.md)  
 **Personal account integration**: [bp_contracts/PROJECT_CONTEXT.md](../../bp_contracts/PROJECT_CONTEXT.md)
 
-**Status (repository)**: Specification + plugin `PROJECT_CONTEXT` index — no plugin bootstrap, migrations, or `TestController` in `bp_contracts` yet.  
-**Last updated**: 2026-09-25
+**Status (repository)**: Plugin bootstrap + activation (schema/seed); domain/repos/tests deferred to later Phase 1 work. No `TestController` in `bp_contracts` yet.  
+**Last updated**: 2026-10-01
 
 ---
 
@@ -192,12 +192,9 @@ This section lists **every proposed column** in one place for migrations and cod
 | `id` | ✓ | `INT UNSIGNED PK AI` | |
 | `title` | ✓ | `VARCHAR(255)` | Display name |
 | `version` | ✓ | `INT UNSIGNED` | Increment when questions/answers change |
+| `achievement_area` | UI only (§15.2) | `VARCHAR(255) NULL` |
 | `date_creation` | ✓ | `DATETIME` | |
 | `date_modified` | ✓ | `DATETIME` | Used in outdated logic (§2.15) |
-
-| Column | Spec | Suggested SQL type | Notes |
-|--------|------|-------------------|--------|
-| `achievement_area` | UI only (§15.2) | `VARCHAR(255) NULL` | **“Achievement For”** — second part of hover text (`Guru — PostgreSQL`). Not listed in §8.1 field block; **required by admin UI** — add on test row. |
 
 ---
 
@@ -225,10 +222,6 @@ This section lists **every proposed column** in one place for migrations and cod
 | `date_added` | ✓ | `DATETIME` | |
 | `date_modified` | ✓ | `DATETIME` | |
 
-| Column | Spec | Suggested SQL type | Notes |
-|--------|------|-------------------|--------|
-| `is_correct` | Implied §8.3 | `TINYINT(1) NOT NULL DEFAULT 0` | **Required for scoring** but omitted from spec field list — must exist in implementation. |
-
 Unlimited answers per question (spec §8.3).
 
 ---
@@ -255,23 +248,20 @@ Completed attempts only — not in-progress (RAM).
 
 | Column | Spec | Suggested SQL type | Notes |
 |--------|------|-------------------|--------|
+| `id` | — | `INT UNSIGNED PK AI` | Recommended surrogate key |
 | `user_id` | ✓ | `INT UNSIGNED` | |
-| `test_id` | ✓ | `INT UNSIGNED` | |
+| `attempt_id` | ✓ | `INT UNSIGNED` | |
 | `question_id` | ✓ | `INT UNSIGNED` | |
 | `right_answers` | ✓ | `INT UNSIGNED` | Correct selections on this question |
 | `failed_answers` | ✓ | `INT UNSIGNED` | Incorrect selections on this question |
 | `date_finished` | ✓ | `DATETIME` | Align with parent attempt |
 
-| Column | Spec | Suggested SQL type | Notes |
-|--------|------|-------------------|--------|
-| `id` | — | `INT UNSIGNED PK AI` | Recommended surrogate key |
-| `attempt_id` | — | `INT UNSIGNED` | **Recommended** FK → `gi_new_test_attempts.id` (spec lists only user/test/question; link to attempt avoids ambiguity) |
 
 No per-answer row table in V1 (spec §9.3).
 
 ---
 
-### 5.0.6 `gi_new_finished_attempts_explanations` (spec §10.1)
+### 5.0.6 `gi_new_finished_attempts_explanations` (spec §10.1) - DONE
 
 Temporary until user clicks **Examined** (§10.2).
 
@@ -296,7 +286,12 @@ Global **rank level** definitions (thresholds come from config; this table store
 | `name` | ✓ | `VARCHAR(64)` | e.g. `Bronze`, `Silver`, `Gold`, `Lock` |
 | `value` | ✓ | `VARCHAR(32)` | Display/helper; thresholds also in `gi_new_test_config` |
 
-Example conceptual rows (spec): `Bronze 75%`, `Silver 85%`, `Gold 95%`, `Lock 95%` — actual thresholds are admin-configurable via config keys.
+Example conceptual rows (spec): 
+
+| `rank_name_gold` | e.g. `Guru` |
+| `rank_name_silver` | e.g. `Expert` |
+| `rank_name_bronze` | e.g. `Specialist` |
+| `rank_name_failed` | e.g. `Failed` |
 
 ---
 
@@ -306,13 +301,13 @@ Current medal per user per test (latest result drives update — §2.11).
 
 | Column | Spec | Suggested SQL type | Notes |
 |--------|------|-------------------|--------|
+| `id` | — | `INT UNSIGNED PK AI` | Recommended |
 | `user_id` | ✓ | `INT UNSIGNED` | |
 | `test_id` | ✓ | `INT UNSIGNED` | |
 | `medal_id` | ✓ | `INT UNSIGNED` | FK → `gi_new_test_achievements.id` |
 
 | Column | Spec | Suggested SQL type | Notes |
 |--------|------|-------------------|--------|
-| `id` | — | `INT UNSIGNED PK AI` | Recommended |
 | Unique key | — | `(user_id, test_id)` | One current achievement row per user per test |
 
 Hover text: `{rank name from config} — {test.achievement_area}`.
@@ -355,10 +350,6 @@ Generic key/value store — **no** `gi_new_test_constants` table.
 | `failed_test_notification_dismiss_limit` | Max dismissals |
 | `new_test_notification_mode` | e.g. `block` \| `bottom` |
 | `failed_test_notification_mode` | e.g. `block` \| `bottom` |
-| `rank_name_gold` | e.g. `Guru` |
-| `rank_name_silver` | e.g. `Expert` |
-| `rank_name_bronze` | e.g. `Specialist` |
-| `rank_name_failed` | e.g. `Failed` |
 
 Exact key strings can be finalized in Phase 1; list them in migration seed data.
 
@@ -527,12 +518,12 @@ Store dismiss counts and policy in `gi_new_test_config` / `gi_new_test_notificat
 
 ### Phase 1 — Plugin skeleton & persistence (1–1.5 weeks)
 
-- [ ] Plugin bootstrap, autoload, activation migrations
+- [x] Plugin bootstrap, autoload, activation migrations (`PluginBootstrap`, `SchemaDefiner`, `Seeder`)
 - [ ] Repositories for tests, questions, answers, config
 - [ ] Domain: `ScoringService`, pass/fail, config reader (focused classes per §4.3)
-- [ ] PHPUnit (or project-standard test runner) — **scoring + pass/fail** tests required before Phase 1 exit
+- [ ] Automated scoring tests (when domain lands — User Rules §8.3)
 
-**Exit:** CRUD via admin stub or WP-CLI; scoring tests green.
+**Exit:** CRUD via admin stub or WP-CLI; scoring tests green (after domain added).
 
 ### Phase 2 — Attempts, materials, achievements (1.5–2 weeks)
 

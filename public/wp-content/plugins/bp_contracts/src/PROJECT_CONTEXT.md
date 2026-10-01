@@ -115,6 +115,14 @@ See [Workers/Analytics](./Workers/Analytics/PROJECT_CONTEXT.md) and [Users/trait
 
 Convention: `communication_server.js` → `handlerRequestFromServer(caseTitle, data)` → `window['handler' + toCapsCase(caseTitle)]`.
 
+## Knowledge tests (planned — not implemented)
+
+Client → server (proposed names): `showTests`, `startTest`, `submitTestQuestion`, `finishTest`, `abandonTest`, `getTestMaterials`, `confirmTestMaterialsExamined`.
+
+Server → client (proposed): `TestsOnPage`, `TestQuestionOnPage`, `TestFinishedOnPage`, `TestMaterialsOnPage`.
+
+Engineering map: [bp_knowledge_tests/spec/IMPLEMENTATION_PLAN.md](../../bp_knowledge_tests/spec/IMPLEMENTATION_PLAN.md). Remove this stub section when commands are live in `Chat.php`.
+
 ## Related
 - [Core (DI bootstrap)](./Core/PROJECT_CONTEXT.md)
 - [Controllers](./Controler/PROJECT_CONTEXT.md)
