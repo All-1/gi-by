@@ -15,3 +15,5 @@
 **Manual DB:** If tables exist without FKs, set option to `1` and re-activate the plugin (runs FK step only), or run the `ALTER` block from `001_baseline.sql`. Orphan `user_id` / `test_id` values must be fixed first or MySQL will reject constraints.
 
 **User FK:** `user_id` → `gi_new_users.id_user` (personal account; not `wp_users`).
+
+**Legacy column:** If `gi_new_test_answers.is_correct` exists from an earlier experiment, it is unused by current code; drop manually if you want DDL aligned with §5.0.3.

@@ -271,6 +271,59 @@ class DBWorker
   {
     return $this->wpdb->insert_id;
   }
+
+  /**
+   * @param array{values: array<string, mixed>, formats?: list<string>|null} $package
+   */
+  public function insertAssoc(string $table, array $package): int
+  {
+    $table = $this->getPathTable($table);
+    [$values, $formats] = $this->unpackWritePackage($package);
+    $result = $this->wpdb->insert($table, $values, $formats);
+    if ($result === false) {
+      return 0;
+    }
+
+    return (int) $this->wpdb->insert_id;
+  }
+
+  /**
+   * @param array{values: array<string, mixed>, formats?: list<string>|null} $setPackage
+   * @param array{values: array<string, mixed>, formats?: list<string>|null} $wherePackage
+   */
+  public function updateAssoc(string $table, array $setPackage, array $wherePackage): bool
+  {
+    $table = $this->getPathTable($table);
+    [$data, $dataFormats] = $this->unpackWritePackage($setPackage);
+    [$where, $whereFormats] = $this->unpackWritePackage($wherePackage);
+    $updated = $this->wpdb->update($table, $data, $where, $dataFormats, $whereFormats);
+
+    return $updated !== false && $updated > 0;
+  }
+
+  /**
+   * @param array{values: array<string, mixed>, formats?: list<string>|null} $wherePackage
+   */
+  public function deleteAssoc(string $table, array $wherePackage): bool
+  {
+    $table = $this->getPathTable($table);
+    [$where, $whereFormats] = $this->unpackWritePackage($wherePackage);
+    $deleted = $this->wpdb->delete($table, $where, $whereFormats);
+
+    return $deleted !== false && $deleted > 0;
+  }
+
+  /**
+   * @param array{values: array<string, mixed>, formats?: list<string>|null} $package
+   * @return array{0: array<string, mixed>, 1: list<string>|null}
+   */
+  private function unpackWritePackage(array $package): array
+  {
+    $formats = $package['formats'] ?? null;
+
+    return [$package['values'], $formats];
+  }
+
   public function insertMultipleDB($table, $columns, $batchData)
   {
     if ($this->checkExistanceTable($table)) {

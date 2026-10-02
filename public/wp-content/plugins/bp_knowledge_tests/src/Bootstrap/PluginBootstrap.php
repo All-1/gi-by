@@ -4,10 +4,12 @@ declare(strict_types=1);
 
 namespace BpKnowledgeTests\Bootstrap;
 
+use BpKnowledgeTests\Application\CatalogServices;
 use BpKnowledgeTests\Infrastructure\SchemaDefiner;
 use BpKnowledgeTests\Infrastructure\SchemaVersionRepository;
 use BpKnowledgeTests\Infrastructure\Seeder;
 use BpKnowledgeTests\Plugin;
+use PersonalAccount\Core\Container;
 
 final class PluginBootstrap
 {
@@ -15,9 +17,21 @@ final class PluginBootstrap
     {
     }
 
-    public function compose(): Plugin
+    public function compose(Container $servicesContainer): Plugin
     {
-        return new Plugin();
+        return new Plugin(new CatalogServices($servicesContainer));
+    }
+
+    public function run(): void
+    {
+        global $servicesContainer;
+        if (!isset($servicesContainer) || !$servicesContainer instanceof Container) {
+            throw new \RuntimeException(
+                'bp_knowledge_tests requires wordpress_framework (global $servicesContainer).'
+            );
+        }
+
+        $this->compose($servicesContainer)->boot();
     }
 
     public function activate(): void
