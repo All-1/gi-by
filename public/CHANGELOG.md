@@ -6,6 +6,62 @@ This document tracks changes to the project. Entry format is defined in **Cursor
 
 ## Log
 
+### [2026-10-02] Knowledge tests: revert container service registration
+**Author**: AI Assistant
+**Logic**:
+- Removed `PluginServiceRegistration` / `ContainerRequire` / container keys; restored explicit wiring in `CatalogServices` and constructor-injected repos/catalogs.
+**Changes**:
+- Deleted registration helpers; restored `Plugin`, `PluginBootstrap::compose()`, repos, catalogs, `PROJECT_CONTEXT.md`.
+
+### [2026-10-02] Knowledge tests: entry boot without add_action
+**Author**: AI Assistant
+**Logic**:
+- Slim `index.php`: `Requires Plugins: wordpress_framework` so the container exists before this file runs; runtime via `PluginBootstrap::run()`.
+**Changes**:
+- `index.php`, `PluginBootstrap.php`, `PROJECT_CONTEXT.md`.
+
+### [2026-10-02] Knowledge tests: compose via services container
+**Author**: AI Assistant
+**Logic**:
+- Pass `PersonalAccount\Core\Container` into `compose()` / `CatalogServices` instead of resolving globals and wiring each service in bootstrap.
+**Changes**:
+- `CatalogServices.php`, `PluginBootstrap.php`, `index.php`, `PROJECT_CONTEXT.md`.
+
+### [2026-10-01] Knowledge tests: remove is_correct; clarify answer options
+**Author**: AI Assistant
+**Logic**:
+- `gi_new_test_answers` holds question **options**, not user selections; premature `is_correct` column confused the model. Correct-option storage deferred to scoring phase (IMPLEMENTATION_PLAN D6).
+**Changes**:
+- Removed `is_correct` from DDL/migration v3, repositories, `AnswerRecord`, catalog API.
+- `PROJECT_CONTEXT.md`, `IMPLEMENTATION_PLAN.md` §5.0.3, `migrations/README.md`.
+
+### [2026-10-01] Knowledge tests: catalog persistence via DBWorker
+**Author**: AI Assistant
+**Logic**:
+- One shared DB access style across the portal; avoid duplicated SELECT strings in plugin repositories.
+**Changes**:
+- `DBUtilities::packageWriteColumns` (optional helper); `DBWorker` packaged `insertAssoc` / `updateAssoc` / `deleteAssoc`.
+- `bp_knowledge_tests` repositories + `index.php` (`plugins_loaded`, site autoload); `PROJECT_CONTEXT.md`.
+
+### [2026-10-01] Knowledge tests: simplify catalog layer
+**Author**: AI Assistant
+**Logic**:
+- Replace one-class-per-operation use cases with four catalog services; keep version-bump rules on question/answer writes only.
+**Changes**:
+- `Application/Catalog/*`, `CatalogServices.php`; removed proxy use-case classes and `KnowledgeTestsContext`.
+- `Plugin.php`, `PluginBootstrap.php`, `PROJECT_CONTEXT.md`.
+
+### [2026-10-01] Knowledge tests: catalog CRUD use cases
+**Author**: AI Assistant
+**Logic**:
+- Phase 1 needs persistence APIs before admin UI; keep bootstrap flat and expose use cases through `Plugin::context()`.
+- Align live DDL with baseline SQL by adding `is_correct` on answers (schema version 3).
+**Changes**:
+- `bp_knowledge_tests/src/Application/`, `Domain/Record/`, `Infrastructure/Repository/`: tests, questions, answers, config CRUD.
+- `Plugin.php`, `PluginBootstrap.php`: wire `KnowledgeTestsContext`.
+- `SchemaDefiner.php`, `SchemaVersionRepository.php`: `is_correct` column migration (v3).
+- `bp_knowledge_tests/PROJECT_CONTEXT.md`, `migrations/README.md`: runtime and schema status.
+
 ### [2026-10-01] Development Rules v2.5 (new-plugin bootstrap)
 **Author**: AI Assistant
 **Logic**:

@@ -7,7 +7,7 @@
 **Plugin context**: [PROJECT_CONTEXT.md](../PROJECT_CONTEXT.md)  
 **Personal account integration**: [bp_contracts/PROJECT_CONTEXT.md](../../bp_contracts/PROJECT_CONTEXT.md)
 
-**Status (repository)**: Plugin bootstrap + activation (schema/seed); domain/repos/tests deferred to later Phase 1 work. No `TestController` in `bp_contracts` yet.  
+**Status (repository)**: Plugin bootstrap + activation (schema v2/seed); catalog CRUD (tests/questions/answer options/config). Scoring service + automated tests still deferred. No `TestController` in `bp_contracts` yet.  
 **Last updated**: 2026-10-01
 
 ---
@@ -174,7 +174,7 @@ This section lists **every proposed column** in one place for migrations and cod
 |-------|------|
 | `gi_new_tests` | Logical test; `version` bumps on content change |
 | `gi_new_test_questions` | Questions |
-| `gi_new_test_answers` | Answer options + correct flag |
+| `gi_new_test_answers` | **Answer options** (choice text per question; not user selections) |
 | `gi_new_test_attempts` | **Completed** attempts only |
 | `gi_new_test_attempt_questions` | Per-question stats per completed attempt |
 | `gi_new_finished_attempts_explanations` | Temporary materials rows until “Examined” |
@@ -218,11 +218,15 @@ This section lists **every proposed column** in one place for migrations and cod
 |--------|------|-------------------|--------|
 | `id` | ✓ | `INT UNSIGNED PK AI` | |
 | `question_id` | ✓ | `INT UNSIGNED` | FK → `gi_new_test_questions.id` |
-| `answer` | ✓ | `TEXT` | Answer text |
+| `answer` | ✓ | `TEXT` | Option label / body (admin content) |
 | `date_added` | ✓ | `DATETIME` | |
 | `date_modified` | ✓ | `DATETIME` | |
 
-Unlimited answers per question (spec §8.3).
+Unlimited options per question (spec §8.3).
+
+**Naming:** Table/column name `answer` is historical; treat rows as **answer options**, not attempt answers.
+
+**Correct options (spec §8.3 prose):** Scoring must know which options are correct. That is **not** modeled in catalog DDL or CRUD yet — design column(s) or rules when implementing `ScoringService` and admin “correct flag” UI (§8 admin). Do not confuse with `gi_new_test_attempts.valid_answers` / `invalid_answers` (user selection counts).
 
 ---
 
@@ -519,7 +523,8 @@ Store dismiss counts and policy in `gi_new_test_config` / `gi_new_test_notificat
 ### Phase 1 — Plugin skeleton & persistence (1–1.5 weeks)
 
 - [x] Plugin bootstrap, autoload, activation migrations (`PluginBootstrap`, `SchemaDefiner`, `Seeder`)
-- [ ] Repositories for tests, questions, answers, config
+- [x] Repositories for tests, questions, answers, config
+- [x] Application catalog CRUD (`Catalog\TestCatalog` etc. via `Plugin::catalog()`)
 - [ ] Domain: `ScoringService`, pass/fail, config reader (focused classes per §4.3)
 - [ ] Automated scoring tests (when domain lands — User Rules §8.3)
 
@@ -622,6 +627,7 @@ Store dismiss counts and policy in `gi_new_test_config` / `gi_new_test_notificat
 | D3 | Question difficulty formula | Deferred; raw data in V1 |
 | D4 | Maximum Correct Answers for multi-select per question | Confirm with spec owners |
 | D5 | Plugin root `PROJECT_CONTEXT.md` vs spec-only docs | **Resolved:** lean root index + this plan + product spec (no duplicate column lists in root) |
+| D6 | How to store “correct” answer **options** (spec §8.3) | **Open** — not `is_correct` on catalog CRUD until scoring/admin design |
 
 ---
 

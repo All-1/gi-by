@@ -82,6 +82,19 @@ class DBUtilities
       return $result;
     }
   }
+  /**
+   * @param array<string, mixed> $values
+   * @param list<string>|null $formats
+   * @return array{values: array<string, mixed>, formats: list<string>|null}
+   */
+  public function packageWriteColumns(array $values, ?array $formats = null): array
+  {
+    return [
+      'values' => $values,
+      'formats' => $formats,
+    ];
+  }
+
   public function prepareInsert(array $rows, $batchSize = 1000)
   {
     $batches = [];
