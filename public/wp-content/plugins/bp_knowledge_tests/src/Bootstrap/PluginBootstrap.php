@@ -4,7 +4,8 @@ declare(strict_types=1);
 
 namespace BpKnowledgeTests\Bootstrap;
 
-use BpKnowledgeTests\Application\CatalogServices;
+use BpKnowledgeTests\Services\CatalogServices;
+use BpKnowledgeTests\Services\DomainServices;
 use BpKnowledgeTests\Infrastructure\SchemaDefiner;
 use BpKnowledgeTests\Infrastructure\SchemaVersionRepository;
 use BpKnowledgeTests\Infrastructure\Seeder;
@@ -19,7 +20,9 @@ final class PluginBootstrap
 
     public function compose(Container $servicesContainer): Plugin
     {
-        return new Plugin(new CatalogServices($servicesContainer));
+        $catalog = new CatalogServices($servicesContainer);
+        $domain = new DomainServices($catalog);
+        return new Plugin($catalog, $domain);
     }
 
     public function run(): void

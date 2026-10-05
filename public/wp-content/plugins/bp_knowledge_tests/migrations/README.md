@@ -16,4 +16,6 @@
 
 **User FK:** `user_id` → `gi_new_users.id_user` (personal account; not `wp_users`).
 
-**Legacy column:** If `gi_new_test_answers.is_correct` exists from an earlier experiment, it is unused by current code; drop manually if you want DDL aligned with §5.0.3.
+**Legacy `is_correct` column:** Do **not** add or use `is_correct` on `gi_new_test_answers` (not in product spec §8.3). If an old dev database still has it, drop manually: `ALTER TABLE gi_new_test_answers DROP COLUMN is_correct;` — see [PROJECT_CONTEXT.md](../PROJECT_CONTEXT.md).
+
+**Scoring tests (no WP):** From plugin root, `php tests/run_scoring_tests.php` (requires `composer install` in the plugin directory, or uses built-in autoload fallback).
