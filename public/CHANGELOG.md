@@ -6,6 +6,48 @@ This document tracks changes to the project. Entry format is defined in **Cursor
 
 ## Log
 
+### [2026-10-05] Knowledge tests: ban is_correct; drop v4 migration code
+**Author**: AI Assistant
+**Logic**:
+- Document prohibition (PROJECT_CONTEXT, IMPLEMENTATION_PLAN D8); remove activation cleanup for `is_correct`; schema target back to v2.
+**Changes**:
+- `SchemaDefiner.php`, `PluginBootstrap.php`, `SchemaVersionRepository.php`, `migrations/README.md`, `PROJECT_CONTEXT.md`, `spec/IMPLEMENTATION_PLAN.md`.
+
+### [2026-10-05] Knowledge tests: src layout — Services directory
+**Author**: AI Assistant
+**Logic**:
+- Group application entry points under `src/Services/`; keep domain value objects/rules in `Domain/`, persistence in `Infrastructure/`.
+**Changes**:
+- Moved `CatalogServices`, `DomainServices`, `ScoringService`, `TestConfigReader`, `Catalog/*` from `Application/` to `Services/`.
+- Updated `Plugin`, `PluginBootstrap`, scoring tests, `PROJECT_CONTEXT.md`.
+
+### [2026-10-05] Knowledge tests: remove is_correct (align spec §8.3)
+**Author**: AI Assistant
+**Logic**:
+- Product spec §8.3 lists answer columns only; `is_correct` was an mistaken implementation add-on, not specification. Schema v4 drops the column if present; catalog/API reverted.
+**Changes**:
+- `AnswerRecord`, repositories, catalogs, `SchemaDefiner`, baseline SQL, migrations README.
+- `PROJECT_CONTEXT.md`, `IMPLEMENTATION_PLAN.md` §5.0.3, D6 open again.
+
+### [2026-10-05] Knowledge tests: V1 UI = React (plan D7)
+**Author**: AI Assistant
+**Logic**:
+- Product dealer + admin UIs are React; plugin stays domain/API-only. Phase 4–6 and bp_contracts integration docs updated; PHP Tools page remains dev smoke only.
+**Changes**:
+- `spec/IMPLEMENTATION_PLAN.md` §2, §7–9, phases 4–6, D7.
+- `PROJECT_CONTEXT.md`, `DevToolsMenu.php` disclaimer.
+
+### [2026-10-05] Knowledge tests: Phase 1 complete (scoring + is_correct)
+**Author**: AI Assistant
+**Logic**:
+- Close Phase 1: correct-option persistence (D6), pure domain scoring/pass/lock, mandatory scoring tests, dev Tools smoke page.
+- Maximum Correct Answers = count of options with `is_correct = 1` per test (D4).
+**Changes**:
+- Schema v3: `is_correct` on `gi_new_test_answers`; `AnswerRecord` / catalog API extended.
+- `Domain\ScoringService`, `TestConfigReader`, `AttemptResultClassifier`; `Application\DomainServices`; `Plugin::domain()`.
+- `tests/run_scoring_tests.php`, `Infrastructure\Admin\DevToolsMenu`.
+- `PROJECT_CONTEXT.md`, `spec/IMPLEMENTATION_PLAN.md`, `migrations/README.md`, `001_baseline.sql`.
+
 ### [2026-10-02] Knowledge tests: revert container service registration
 **Author**: AI Assistant
 **Logic**:

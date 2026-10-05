@@ -2,18 +2,18 @@
 
 declare(strict_types=1);
 
-namespace BpKnowledgeTests\Application;
+namespace BpKnowledgeTests\Services;
 
-use BpKnowledgeTests\Application\Catalog\AnswerCatalog;
-use BpKnowledgeTests\Application\Catalog\ConfigCatalog;
-use BpKnowledgeTests\Application\Catalog\QuestionCatalog;
-use BpKnowledgeTests\Application\Catalog\TestCatalog;
 use BpKnowledgeTests\Infrastructure\DatabaseClock;
 use BpKnowledgeTests\Infrastructure\Mapping\RecordMapper;
 use BpKnowledgeTests\Infrastructure\Repository\AnswerRepository;
 use BpKnowledgeTests\Infrastructure\Repository\ConfigRepository;
 use BpKnowledgeTests\Infrastructure\Repository\QuestionRepository;
 use BpKnowledgeTests\Infrastructure\Repository\TestRepository;
+use BpKnowledgeTests\Services\Catalog\AnswerCatalog;
+use BpKnowledgeTests\Services\Catalog\ConfigCatalog;
+use BpKnowledgeTests\Services\Catalog\QuestionCatalog;
+use BpKnowledgeTests\Services\Catalog\TestCatalog;
 use PersonalAccount\Core\Container;
 use PersonalAccount\Utilities\DBUtilities;
 use PersonalAccount\Workers\DBWorker;

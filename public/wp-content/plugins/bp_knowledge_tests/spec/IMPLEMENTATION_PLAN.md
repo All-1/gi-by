@@ -7,8 +7,8 @@
 **Plugin context**: [PROJECT_CONTEXT.md](../PROJECT_CONTEXT.md)  
 **Personal account integration**: [bp_contracts/PROJECT_CONTEXT.md](../../bp_contracts/PROJECT_CONTEXT.md)
 
-**Status (repository)**: Plugin bootstrap + activation (schema v2/seed); catalog CRUD (tests/questions/answer options/config). Scoring service + automated tests still deferred. No `TestController` in `bp_contracts` yet.  
-**Last updated**: 2026-10-01
+**Status (repository)**: Phase **1 complete** — schema v2, catalog CRUD, domain scoring + classifier, `tests/run_scoring_tests.php`, Tools dev page. Phase 2+ (attempts, WS, React UI) not started. No `TestController` in `bp_contracts` yet.  
+**Last updated**: 2026-10-05
 
 ---
 
@@ -42,8 +42,9 @@ Implementation must not satisfy the product spec by violating (1) or (2).
 | **Shell** | Tests menu, modals, notifications, in-progress session, WS transport, chat stars → **`bp_contracts`** |
 | **In-progress attempts** | RAM via **`TestController`** in `bp_contracts`; cleared at **03:00** server restart |
 | **Completed attempts** | MySQL tables `gi_new_test_*` (see §5) |
-| **V1 UI pattern** | Reuse personal-account **open-in-place / modal** mechanism (contracts-style) |
-| **Future** | API-shaped layers inside WP plugin for later Laravel + PostgreSQL + React + Reverb (spec §24–25) |
+| **V1 UI** | **React** for dealer Tests UI and test-factory admin (spec §15–21 behavior; implementation in React, not legacy `modal_window.js` / PHP admin screens) |
+| **V1 integration** | `bp_contracts` (or shared frontend package): mount React, nav entry, WS client; **`bp_knowledge_tests`**: domain + persistence + thin HTTP/WS-facing application API |
+| **Future platform** | API-shaped plugin layers remain compatible with Laravel + PostgreSQL + Reverb (spec §24–25) |
 
 ---
 
@@ -93,9 +94,9 @@ bp_knowledge_tests/
 ### 4.2 Layering (spec §25)
 
 ```text
-User Interface (JS + shortcodes)
+User Interface (React — personal account + admin)
         ↓
-Testing Interface (WS handlers / thin controllers)
+Testing Interface (WS handlers / REST or RPC as needed / thin controllers)
         ↓
 Application services (use cases)
         ↓
@@ -226,7 +227,9 @@ Unlimited options per question (spec §8.3).
 
 **Naming:** Table/column name `answer` is historical; treat rows as **answer options**, not attempt answers.
 
-**Correct options (spec §8.3 prose):** Scoring must know which options are correct. That is **not** modeled in catalog DDL or CRUD yet — design column(s) or rules when implementing `ScoringService` and admin “correct flag” UI (§8 admin). Do not confuse with `gi_new_test_attempts.valid_answers` / `invalid_answers` (user selection counts).
+**Correct options (spec §8.3 prose):** Scoring must know which options are correct; that is **not** an extra column on `gi_new_test_answers` (field list above matches the product spec). Design storage when implementing admin + session scoring (**D6**). Do not confuse with `gi_new_test_attempts.valid_answers` / `invalid_answers` (user selection counts).
+
+**Prohibited:** Column or API field `is_correct` on answer options — **rejected** (see [PROJECT_CONTEXT.md](../PROJECT_CONTEXT.md) and **D8**). Do not reintroduce in DDL, migrations, or catalog.
 
 ---
 
@@ -464,16 +467,18 @@ Admin CRUD wraps same repositories with capability checks.
 | `TestController` | `bp_contracts/src/Testing/TestController.php` | In-memory `AttemptSession` per user only (no domain rules) |
 | WS glue | `Chat.php` + `InteractionInterface` | Thin; call plugin services; document titles before merge |
 | Role wiring | Injected **Worker** (or existing controller path) | **Avoid** new `WorkWith*` traits in `bp_contracts` (DEVELOPMENT_RULES §2.7); capability checks in plugin admin layer |
-| Menu item **Tests** | `index.php` shortcode + nav | Red styling on failed (§3.2) |
-| Modal UI | `tests.js` + `modal_window.js` patterns | §19.2 |
-| Stars in messages | Message author rendering | Load achievements from plugin query |
-| Notifications | Extend `notification.js` / WS `Notification` | Config-driven block vs bottom bar |
+| Menu item **Tests** | React router / nav in personal account | Red styling on failed (§3.2) |
+| Tests & materials UI | **React** (open-in-place / overlay per product §19.2 UX, not new jQuery modals) | Consumes WS (+ REST if added) from plugin |
+| Stars in messages | React message list or legacy host until migrated | Achievements from plugin query |
+| Notifications | React + existing WS `Notification` where shared | Config-driven block vs bottom bar |
 
 Register `TestController` in `SystemConstructor` when introduced.
 
 ---
 
 ## 8. Admin UI (V1)
+
+**Implementation:** React admin app (test factory). WordPress may enqueue the bundle; business rules stay in `bp_knowledge_tests`. No V1 requirement for classic WP List Tables / PHP meta boxes.
 
 Menus (spec §15):
 
@@ -487,6 +492,8 @@ Menus (spec §15):
 ---
 
 ## 9. User UI (V1)
+
+**Implementation:** React in the personal account (dealer Tests area).
 
 - Single **Tests** page with pagination (§19).
 - Per row: title, status, Start / Materials, score, medal.
@@ -525,10 +532,11 @@ Store dismiss counts and policy in `gi_new_test_config` / `gi_new_test_notificat
 - [x] Plugin bootstrap, autoload, activation migrations (`PluginBootstrap`, `SchemaDefiner`, `Seeder`)
 - [x] Repositories for tests, questions, answers, config
 - [x] Application catalog CRUD (`Catalog\TestCatalog` etc. via `Plugin::catalog()`)
-- [ ] Domain: `ScoringService`, pass/fail, config reader (focused classes per §4.3)
-- [ ] Automated scoring tests (when domain lands — User Rules §8.3)
+- [x] Domain: `ScoringService`, pass/fail (`AttemptResultClassifier`), `TestConfigReader` (focused classes per §4.3)
+- [x] Automated scoring tests — `tests/run_scoring_tests.php` (User Rules §8.3)
+- [x] Temporary PHP smoke page — **Tools → Knowledge Tests (dev)** only (not product UI; remove when React admin can list catalog)
 
-**Exit:** CRUD via admin stub or WP-CLI; scoring tests green (after domain added).
+**Exit:** CRUD verifiable without React (smoke page or WP-CLI); scoring tests green. **Met** (smoke + scoring script).
 
 ### Phase 2 — Attempts, materials, achievements (1.5–2 weeks)
 
@@ -550,28 +558,29 @@ Store dismiss counts and policy in `gi_new_test_config` / `gi_new_test_notificat
 
 **Exit:** End-to-end test over WS on staging.
 
-### Phase 4 — User-facing UI (2 weeks)
+### Phase 4 — User-facing UI (React) (2 weeks)
 
-- [ ] Shortcode, `tests.js`, modal integration
-- [ ] Materials UI
-- [ ] Stars in chat
-- [ ] Failed menu styling
+- [ ] React Tests list + pagination (§19)
+- [ ] In-test flow (one question, counter, Continue) via WS payloads (§20)
+- [ ] Materials UI (§21)
+- [ ] Stars beside names in chat (§2.11)
+- [ ] Failed Tests nav styling (§3.2)
 
-**Exit:** Full dealer journey QA.
+**Exit:** Full dealer journey QA in React.
 
-### Phase 5 — Notifications UX (1 week)
+### Phase 5 — Notifications UX (React + shared WS) (1 week)
 
-- [ ] Popup / block / bottom bar from config
-- [ ] Integration with existing notification stack
+- [ ] Popup / block / bottom bar from config in React (or shared notification host)
+- [ ] Integration with existing notification stack where applicable
 
 **Exit:** Config matrix tested.
 
-### Phase 6 — Admin UI (2–2.5 weeks)
+### Phase 6 — Admin UI (React) (2–2.5 weeks)
 
-- [ ] All admin screens §15–18
+- [ ] React screens for §15–18 (catalog uses plugin application API)
 - [ ] Critical update tested
 
-**Exit:** Content team self-service.
+**Exit:** Content team self-service via React admin.
 
 ### Phase 7 — Hardening & release (1–1.5 weeks)
 
@@ -627,7 +636,9 @@ Store dismiss counts and policy in `gi_new_test_config` / `gi_new_test_notificat
 | D3 | Question difficulty formula | Deferred; raw data in V1 |
 | D4 | Maximum Correct Answers for multi-select per question | Confirm with spec owners |
 | D5 | Plugin root `PROJECT_CONTEXT.md` vs spec-only docs | **Resolved:** lean root index + this plan + product spec (no duplicate column lists in root) |
-| D6 | How to store “correct” answer **options** (spec §8.3) | **Open** — not `is_correct` on catalog CRUD until scoring/admin design |
+| D6 | How to store “correct” answer **options** (spec §8.3 prose) | **Open** — not on `gi_new_test_answers`; decide before attempt/session scoring + React admin |
+| D7 | V1 UI technology | **Resolved:** **React** for dealer Tests + test-factory admin; plugin owns API/domain only; legacy jQuery modals not extended for new flows |
+| D8 | `is_correct` on `gi_new_test_answers` | **Rejected** — not in spec §8.3; no code or automated migration; manual `DROP COLUMN` if legacy DB |
 
 ---
 

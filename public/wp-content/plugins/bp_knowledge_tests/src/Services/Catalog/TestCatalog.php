@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace BpKnowledgeTests\Application\Catalog;
+namespace BpKnowledgeTests\Services\Catalog;
 
 use BpKnowledgeTests\Domain\Record\TestRecord;
 use BpKnowledgeTests\Infrastructure\Repository\TestRepository;
