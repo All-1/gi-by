@@ -4,10 +4,18 @@ declare(strict_types=1);
 
 namespace BpKnowledgeTests\Infrastructure;
 
+use PersonalAccount\Core\Container;
+use PersonalAccount\Workers\DBWorker;
+
 final class SchemaDefiner
 {
-    public function __construct(private \wpdb $wpdb)
-    {
+    private DBWorker $db;
+
+    public function __construct(
+        private \wpdb $wpdb,
+        Container $servicesContainer,
+    ) {
+        $this->db = $servicesContainer->get('DBWorker');
     }
 
     public function createTables(): void
@@ -16,6 +24,25 @@ final class SchemaDefiner
 
         foreach ($this->createTableStatements() as $sql) {
             dbDelta($sql);
+        }
+    }
+
+    public function upgradeAnswersIsCorrectColumn(): void
+    {
+        if (!$this->db->columnExists('KnowledgeTestAnswers', 'is_correct')) {
+            $this->wpdb->query(
+                'ALTER TABLE gi_new_test_answers
+                ADD COLUMN is_correct tinyint(1) NOT NULL DEFAULT 0 AFTER answer'
+            );
+        }
+
+        if ($this->db->tableExists('KnowledgeTestCorrectAnswerOptions')) {
+            $this->wpdb->query(
+                'UPDATE gi_new_test_answers a
+                INNER JOIN gi_new_test_correct_answer_options c ON c.answer_id = a.id
+                SET a.is_correct = 1'
+            );
+            $this->dropCorrectAnswerOptionsTable();
         }
     }
 
@@ -62,6 +89,7 @@ final class SchemaDefiner
                 id int(10) unsigned NOT NULL AUTO_INCREMENT,
                 question_id int(10) unsigned NOT NULL,
                 answer text NOT NULL,
+                is_correct tinyint(1) NOT NULL DEFAULT 0,
                 date_added datetime NOT NULL,
                 date_modified datetime NOT NULL,
                 PRIMARY KEY  (id),
@@ -246,5 +274,17 @@ final class SchemaDefiner
         );
 
         return (int) $found > 0;
+    }
+
+    private function dropCorrectAnswerOptionsTable(): void
+    {
+        foreach (['fk_kt_correct_q_answer', 'fk_kt_correct_q_question'] as $constraint) {
+            if ($this->foreignKeyExists('gi_new_test_correct_answer_options', $constraint)) {
+                $this->wpdb->query(
+                    "ALTER TABLE gi_new_test_correct_answer_options DROP FOREIGN KEY `{$constraint}`"
+                );
+            }
+        }
+        $this->wpdb->query('DROP TABLE IF EXISTS gi_new_test_correct_answer_options');
     }
 }

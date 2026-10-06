@@ -22,8 +22,6 @@ final class Seeder
             'failed_test_notification_dismiss_limit' => '10',
             'new_test_notification_mode' => 'bottom',
             'failed_test_notification_mode' => 'bottom',
-        ];
-        $achievements = [
             'rank_name_gold' => 'Guru',
             'rank_name_silver' => 'Expert',
             'rank_name_bronze' => 'Specialist',
@@ -33,9 +31,62 @@ final class Seeder
         foreach ($defaults as $name => $value) {
             $this->insertIgnore($name, $value, 'gi_new_test_config');
         }
-        foreach ($achievements as $name => $value) {
-            $this->insertIgnore($name, $value, 'gi_new_test_achievements');
+
+        $this->seedMedalTiersIfMissing();
+    }
+
+    public function seedMedalTiersIfMissing(): void
+    {
+        $tiers = [
+            'Bronze' => 'bronze',
+            'Silver' => 'silver',
+            'Gold' => 'gold',
+            'Lock' => 'lock',
+        ];
+
+        foreach ($tiers as $name => $value) {
+            if ($this->achievementNameExists($name)) {
+                continue;
+            }
+            $this->insertAchievement($name, $value);
         }
+    }
+
+    public function seedRankDisplayNamesIfMissing(): void
+    {
+        $names = [
+            'rank_name_gold' => 'Guru',
+            'rank_name_silver' => 'Expert',
+            'rank_name_bronze' => 'Specialist',
+            'rank_name_failed' => 'Failed',
+        ];
+
+        foreach ($names as $name => $value) {
+            $this->insertIgnore($name, $value, 'gi_new_test_config');
+        }
+    }
+
+    private function achievementNameExists(string $name): bool
+    {
+        $count = $this->wpdb->get_var(
+            $this->wpdb->prepare(
+                'SELECT COUNT(1) FROM gi_new_test_achievements WHERE name = %s',
+                $name
+            )
+        );
+
+        return (int) $count > 0;
+    }
+
+    private function insertAchievement(string $name, string $value): void
+    {
+        $this->wpdb->query(
+            $this->wpdb->prepare(
+                'INSERT INTO gi_new_test_achievements (name, value) VALUES (%s, %s)',
+                $name,
+                $value
+            )
+        );
     }
 
     private function insertIgnore(string $name, string $value, string $table): void

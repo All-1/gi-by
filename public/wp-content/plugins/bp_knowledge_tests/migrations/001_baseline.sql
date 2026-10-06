@@ -40,6 +40,7 @@ CREATE TABLE IF NOT EXISTS gi_new_test_answers (
     id int(10) unsigned NOT NULL AUTO_INCREMENT,
     question_id int(10) unsigned NOT NULL,
     answer text NOT NULL,
+    is_correct tinyint(1) NOT NULL DEFAULT 0,
     date_added datetime NOT NULL,
     date_modified datetime NOT NULL,
     PRIMARY KEY (id),

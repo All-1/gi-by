@@ -12,7 +12,7 @@ use PersonalAccount\Workers\DBWorker;
 
 final class QuestionRepository
 {
-    private const TABLE = 'gi_new_test_questions';
+    private const TABLE = 'KnowledgeTestQuestions';
 
     public function __construct(
         private DBWorker $db,

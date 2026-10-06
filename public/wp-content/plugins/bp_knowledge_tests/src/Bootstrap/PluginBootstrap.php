@@ -14,39 +14,31 @@ use PersonalAccount\Core\Container;
 
 final class PluginBootstrap
 {
-    public function __construct(private \wpdb $wpdb)
-    {
+    public function __construct(
+        private \wpdb $wpdb, 
+        private Container $servicesContainer
+    ) {
     }
 
-    public function compose(Container $servicesContainer): Plugin
+    public function compose(): Plugin
     {
-        $catalog = new CatalogServices($servicesContainer);
+        $catalog = new CatalogServices($this->servicesContainer);
         $domain = new DomainServices($catalog);
         return new Plugin($catalog, $domain);
     }
 
     public function run(): void
     {
-        global $servicesContainer;
-        if (!isset($servicesContainer) || !$servicesContainer instanceof Container) {
-            throw new \RuntimeException(
-                'bp_knowledge_tests requires wordpress_framework (global $servicesContainer).'
-            );
-        }
-
-        $this->compose($servicesContainer)->boot();
+        $this->compose()->boot();
     }
 
     public function activate(): void
     {
         $schemaVersion = new SchemaVersionRepository();
-        $schemaDefiner = new SchemaDefiner($this->wpdb);
+        $schemaDefiner = new SchemaDefiner($this->wpdb, $this->servicesContainer);
         $seeder = new Seeder($this->wpdb);
 
         $installed = $schemaVersion->current();
-        if ($installed >= SchemaVersionRepository::TARGET_VERSION) {
-            return;
-        }
 
         if ($installed < 1) {
             $schemaDefiner->createTables();
@@ -57,6 +49,16 @@ final class PluginBootstrap
             $schemaDefiner->installForeignKeys();
         }
 
+        if ($installed < 3) {
+            $seeder->seedMedalTiersIfMissing();
+            $seeder->seedRankDisplayNamesIfMissing();
+        }
+
+        if ($installed < 4) {
+            $schemaDefiner->upgradeAnswersIsCorrectColumn();
+        }
+
         $schemaVersion->markUpToDate();
     }
+
 }

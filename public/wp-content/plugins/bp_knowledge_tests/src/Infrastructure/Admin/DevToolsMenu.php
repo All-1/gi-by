@@ -57,14 +57,16 @@ final class DevToolsMenu
         if ($tests === []) {
             echo '<p>No tests yet. Create via catalog API or future admin UI.</p>';
         } else {
-            echo '<table class="widefat"><thead><tr><th>ID</th><th>Title</th><th>Version</th><th>Questions</th></tr></thead><tbody>';
+            echo '<table class="widefat"><thead><tr><th>ID</th><th>Title</th><th>Version</th><th>Questions</th><th>Max correct options</th></tr></thead><tbody>';
             foreach ($tests as $test) {
                 $questions = $catalog->questions->listForTest($test->id);
+                $maxCorrect = $catalog->answers->maximumCorrectForTest($test->id);
                 echo '<tr>';
                 printf('<td>%d</td>', $test->id);
                 printf('<td>%s</td>', esc_html($test->title));
                 printf('<td>%d</td>', $test->version);
                 printf('<td>%d</td>', count($questions));
+                printf('<td>%d</td>', $maxCorrect);
                 echo '</tr>';
             }
             echo '</tbody></table>';

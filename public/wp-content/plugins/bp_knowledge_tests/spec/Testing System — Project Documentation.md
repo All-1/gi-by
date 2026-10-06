@@ -159,6 +159,48 @@ An incorrect selected answer is a penalty and reduces the user's score.
 
 ---
 
+## 2.1.1 Multi-select selection counting
+
+*Agreed clarification (2026-10-05). Takes precedence over informal interpretations where they conflict with §2.1.*
+
+Scoring uses **per-option (checkbox) selections** across the whole test:
+
+- **Maximum Correct Answers** = sum over all questions of how many answer options are marked correct in the catalog.
+- **`valid_answers`** = number of **correct** options the user **selected** (entire test).
+- **`invalid_answers`** = number of **incorrect** options the user **selected** (entire test).
+
+**Unselected** correct options do **not** increase `invalid_answers` (no extra penalty). They only reduce how much the user can add to `valid_answers`. Analytics may still count “missed” correct options (see §4).
+
+The **official** test percentage uses **one** calculation at the end:
+
+```text
+Net = valid_answers − invalid_answers
+Score = max(0, 100 × Net / Maximum Correct Answers)
+```
+
+Apply the minimum score (0%) **once** on the whole test. Do **not** clamp each question to 0% and then aggregate those clamped values into the final score.
+
+For each completed question, persist **`right_answers`** and **`failed_answers`** using the same selection rules at question scope (spec §9.2).
+
+Optional per-question completion % for UI or analytics may use question-level net with a local floor; that display is **not** the official test score unless explicitly changed by project decision.
+
+---
+
+## 2.1.2 Correct answer options — catalog vs in-memory session
+
+*Agreed clarification (2026-10-05).*
+
+The system must know **which catalog answer options are correct** for each question. That definition is **test content** and must be stored in the **database** when admins author tests — column **`is_correct`** on **`gi_new_test_answers`** (see [IMPLEMENTATION_PLAN.md §5.0.3](./IMPLEMENTATION_PLAN.md#503-gi_new_test_answers-spec-83)).
+
+While a user takes a test:
+
+- **In-memory session** holds current selections, shuffle order, and running totals for the unfinished attempt.
+- After the user proceeds past a question, exact checkbox selections need not be kept forever (spec §9.3); persisted history uses aggregate counts and mistake materials.
+
+In-memory state does **not** replace catalog correctness: finishing an attempt always compares selections against the persisted correct-option set for that test version.
+
+---
+
 ## 2.2 Passed
 
 A test is considered **Passed** when the user's completed result reaches at least the currently configured Bronze threshold.
@@ -1084,13 +1126,14 @@ Proposed fields:
 id
 question_id
 answer
+is_correct
 date_added
 date_modified
 ```
 
 Each question can contain an unlimited number of answers.
 
-The data model must also indicate which answers are correct because the scoring system needs to identify correct and incorrect answers.
+`is_correct` marks predefined options that count toward **Maximum Correct Answers** (agreed clarification §2.1.2; `0` = incorrect option, `1` = correct option).
 
 ---
 

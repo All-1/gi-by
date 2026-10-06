@@ -53,6 +53,7 @@ final class RecordMapper
             (int) $row->id,
             (int) $row->question_id,
             (string) $row->answer,
+            (bool) (int) ($row->is_correct ?? 0),
             (string) $row->date_added,
             (string) $row->date_modified,
         );
