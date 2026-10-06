@@ -28,6 +28,17 @@ class DBWorker
   private $tableHandle;
   private $tableTabletop;
   private $tableKitchenVisualisation;
+  private $tableKnowledgeTests;
+  private $tableKnowledgeTestQuestions;
+  private $tableKnowledgeTestAnswers;
+  private $tableKnowledgeTestAttempts;
+  private $tableKnowledgeTestAttemptQuestions;
+  private $tableKnowledgeTestFinishedExplanations;
+  private $tableKnowledgeTestAchievements;
+  private $tableKnowledgeTestUserAchievements;
+  private $tableKnowledgeTestNotifications;
+  private $tableKnowledgeTestConfig;
+  private $tableKnowledgeTestCorrectAnswerOptions;
   /** @var Container */
   private $Container;
   /** @var DBUtilities */
@@ -63,6 +74,17 @@ class DBWorker
     $this->tableHandle = 'gi_handle';
     $this->tableTabletop = 'gi_tabletop';
     $this->tableKitchenVisualisation = 'gi_kitchen_visualisation';
+    $this->tableKnowledgeTests = 'gi_new_tests';
+    $this->tableKnowledgeTestQuestions = 'gi_new_test_questions';
+    $this->tableKnowledgeTestAnswers = 'gi_new_test_answers';
+    $this->tableKnowledgeTestAttempts = 'gi_new_test_attempts';
+    $this->tableKnowledgeTestAttemptQuestions = 'gi_new_test_attempt_questions';
+    $this->tableKnowledgeTestFinishedExplanations = 'gi_new_finished_attempts_explanations';
+    $this->tableKnowledgeTestAchievements = 'gi_new_test_achievements';
+    $this->tableKnowledgeTestUserAchievements = 'gi_new_test_user_achievements';
+    $this->tableKnowledgeTestNotifications = 'gi_new_test_notifications';
+    $this->tableKnowledgeTestConfig = 'gi_new_test_config';
+    $this->tableKnowledgeTestCorrectAnswerOptions = 'gi_new_test_correct_answer_options';
   }
   public function getRawSQL($sql, $params = [])
   {
@@ -598,6 +620,22 @@ class DBWorker
     $querySQL = $this->wpdb->prepare("SHOW TABLES LIKE %s", $this->wpdb->esc_like($pathTableDB));
     $tableExists = $this->wpdb->get_var($querySQL);
     return $tableExists;
+  }
+
+  /**
+   * @param string $table DBWorker table key (e.g. Order, KnowledgeTestAnswers) or physical table name
+   */
+  public function tableExists(string $table): bool
+  {
+    return (bool) $this->checkExistanceTable($this->getPathTable($table));
+  }
+
+  /**
+   * @param string $table DBWorker table key (e.g. KnowledgeTestAnswers) or physical table name
+   */
+  public function columnExists(string $table, string $column): bool
+  {
+    return in_array($column, $this->showColumnDB($this->getPathTable($table)), true);
   }
 
   //Replace into DBUtilities

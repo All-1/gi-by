@@ -25,10 +25,10 @@ final class CatalogServices
     public readonly AnswerCatalog $answers;
     public readonly ConfigCatalog $config;
 
-    public function __construct(Container $servicesContainer)
+    public function __construct(private Container $servicesContainer)
     {
-        $db = $this->dbWorker($servicesContainer);
-        $dbUtilities = $this->dbUtilities($servicesContainer);
+        $db = $this->servicesContainer->get('DBWorker');
+        $dbUtilities = $this->servicesContainer->get('DBUtilities');
         $clock = new DatabaseClock();
         $mapper = new RecordMapper();
 
@@ -41,25 +41,5 @@ final class CatalogServices
         $this->questions = new QuestionCatalog($questionRepository, $testRepository);
         $this->answers = new AnswerCatalog($answerRepository, $questionRepository, $testRepository);
         $this->config = new ConfigCatalog($configRepository);
-    }
-
-    private function dbWorker(Container $servicesContainer): DBWorker
-    {
-        $worker = $servicesContainer->get('DBWorker');
-        if (!$worker instanceof DBWorker) {
-            throw new \RuntimeException('DBWorker is not registered in $servicesContainer.');
-        }
-
-        return $worker;
-    }
-
-    private function dbUtilities(Container $servicesContainer): DBUtilities
-    {
-        $utilities = $servicesContainer->get('DBUtilities');
-        if (!$utilities instanceof DBUtilities) {
-            throw new \RuntimeException('DBUtilities is not registered in $servicesContainer.');
-        }
-
-        return $utilities;
     }
 }

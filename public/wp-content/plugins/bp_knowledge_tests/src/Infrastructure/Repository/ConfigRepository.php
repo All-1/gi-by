@@ -9,7 +9,7 @@ use PersonalAccount\Workers\DBWorker;
 
 final class ConfigRepository
 {
-    private const TABLE = 'gi_new_test_config';
+    private const TABLE = 'KnowledgeTestConfig';
 
     public function __construct(
         private DBWorker $db,

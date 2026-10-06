@@ -7,7 +7,7 @@
 **Plugin context**: [PROJECT_CONTEXT.md](../PROJECT_CONTEXT.md)  
 **Personal account integration**: [bp_contracts/PROJECT_CONTEXT.md](../../bp_contracts/PROJECT_CONTEXT.md)
 
-**Status (repository)**: Phase **1 complete** — schema v2, catalog CRUD, domain scoring + classifier, `tests/run_scoring_tests.php`, Tools dev page. Phase 2+ (attempts, WS, React UI) not started. No `TestController` in `bp_contracts` yet.  
+**Status (repository)**: Phase **1** + schema **v4** (`is_correct` on answers, selection grader). Phase **2** (attempt persistence) next. WS / React UI not started. No `TestController` in `bp_contracts` yet.  
 **Last updated**: 2026-10-05
 
 ---
@@ -52,18 +52,26 @@ Implementation must not satisfy the product spec by violating (1) or (2).
 
 ```
 bp_knowledge_tests/
-├── PROJECT_CONTEXT.md                              ← short index (canonical links)
+├── PROJECT_CONTEXT.md
+├── index.php, composer.json
+├── migrations/          ← SQL reference (activation uses SchemaDefiner)
+├── src/                 ← Bootstrap, Domain, Infrastructure, Services
+├── tests/run_scoring_tests.php
 └── spec/
-    ├── Testing System — Project Documentation.md   ← product / business spec
-    └── IMPLEMENTATION_PLAN.md                        ← this file
+    ├── Testing System — Project Documentation.md
+    └── IMPLEMENTATION_PLAN.md
 ```
 
-**Not yet present (to be created during implementation):**
+**Implemented (Phase 1):** plugin bootstrap, schema v2 + FKs, catalog CRUD, domain scoring/classifier, dev Tools page, scoring test script.
 
-- `index.php`, `composer.json`, `src/`, migrations
-- Expanded plugin `PROJECT_CONTEXT.md` (table columns, public APIs, capabilities) as code lands
-- Entry in `public/PROJECT_CONTEXT.md` plugin list
-- `bp_contracts` `TestController`, WS commands, `tests.js`, admin menus
+**Not yet present:**
+
+- Attempt / materials / achievement use cases and repositories (Phase 2)
+- `bp_contracts` `TestController`, live WS commands (Phase 3)
+- React dealer + admin UIs (Phases 4–6)
+- Catalog persistence for **which answer options are correct** (**D6**)
+
+**Doc / integration hygiene (Phase 0):** plugin linked from [public/PROJECT_CONTEXT.md](../../../../PROJECT_CONTEXT.md); `bp_contracts` testing section exists — update WS list when Phase 3 starts.
 
 ---
 
@@ -220,6 +228,7 @@ This section lists **every proposed column** in one place for migrations and cod
 | `id` | ✓ | `INT UNSIGNED PK AI` | |
 | `question_id` | ✓ | `INT UNSIGNED` | FK → `gi_new_test_questions.id` |
 | `answer` | ✓ | `TEXT` | Option label / body (admin content) |
+| `is_correct` | ✓ (D6) | `TINYINT(1)` DEFAULT `0` | `1` = counts toward Maximum Correct Answers |
 | `date_added` | ✓ | `DATETIME` | |
 | `date_modified` | ✓ | `DATETIME` | |
 
@@ -227,9 +236,9 @@ Unlimited options per question (spec §8.3).
 
 **Naming:** Table/column name `answer` is historical; treat rows as **answer options**, not attempt answers.
 
-**Correct options (spec §8.3 prose):** Scoring must know which options are correct; that is **not** an extra column on `gi_new_test_answers` (field list above matches the product spec). Design storage when implementing admin + session scoring (**D6**). Do not confuse with `gi_new_test_attempts.valid_answers` / `invalid_answers` (user selection counts).
+**Correct options (spec §8.3 prose):** **`is_correct`** on this table (**D6 resolved**, schema v4). Do not confuse with `gi_new_test_attempts.valid_answers` / `invalid_answers` (user selection counts).
 
-**Prohibited:** Column or API field `is_correct` on answer options — **rejected** (see [PROJECT_CONTEXT.md](../PROJECT_CONTEXT.md) and **D8**). Do not reintroduce in DDL, migrations, or catalog.
+API: `catalog()->answers` — `setIsCorrect`, `setCorrectAnswerIdsForQuestion`, `listCorrectAnswerIdsForQuestion`, `maximumCorrectForTest`.
 
 ---
 
@@ -402,6 +411,32 @@ Score = max(0, 100 × Net Correct / Maximum Correct Answers)
 
 Implement in `ScoringService` (Information Expert); **automated** unit tests for edge cases (all wrong → 0%, penalties, 100% cap) — not optional for V1.
 
+#### 5.1.1 Multi-select selection counting (**D4 — resolved**)
+
+Agreed clarification: [product spec §2.1.1](./Testing%20System%20%E2%80%94%20Project%20Documentation.md#211-multi-select-selection-counting).
+
+| Event | Effect on counters |
+|-------|-------------------|
+| User **selects** a correct option | +1 `valid_answers` (test); +1 `right_answers` (that question) |
+| User **selects** an incorrect option | +1 `invalid_answers` (test); +1 `failed_answers` (that question) |
+| Correct option **not** selected | No change to `invalid_answers` (not a penalty); analytics may track “missed” separately (spec §4) |
+
+**Official test score:** sum **raw** `valid_answers` and `invalid_answers` across all questions, then apply the formula **once** (global floor at 0%, cap 100%). Do **not** clamp per-question net before summing — that would under-apply penalties.
+
+Per-question % for UI/analytics may use `max(0, right − failed) / correct_options_on_question` for display only unless product changes §2.1.
+
+#### 5.1.2 Correct options: catalog (DB) vs session (RAM) (**D6**)
+
+| Data | Storage | Purpose |
+|------|---------|---------|
+| Which option rows are **correct** for each question | **`gi_new_test_answers.is_correct`** (D6) | Authoring + every attempt uses the same key |
+| User’s **current** checkbox selections, shuffle order | **`TestController` RAM** (Phase 3) | In-progress attempt + immediate feedback |
+| Totals after user continues | **Session RAM**, then **attempt** rows on finish | `valid_answers` / `invalid_answers`; per-question `right_answers` / `failed_answers` — counts only (spec §9.2–9.3) |
+
+RAM does **not** replace D6: without persisted correct-option keys, finish/scoring cannot be reproduced.
+
+**D6:** `is_correct` on `gi_new_test_answers` (schema v4).
+
 ### 5.2 Pass / fail / stars (spec §2.2, §2.11, §5)
 
 - **Passed** ≥ Bronze threshold (configurable).
@@ -520,12 +555,12 @@ Store dismiss counts and policy in `gi_new_test_config` / `gi_new_test_notificat
 ### Phase 0 — Documentation & schema (2–3 days)
 
 - [x] `bp_knowledge_tests/PROJECT_CONTEXT.md` (plugin root index — extend with APIs/tables as code lands)
-- [ ] Link plugin from `public/PROJECT_CONTEXT.md`
-- [ ] `bp_contracts` testing section in PROJECT_CONTEXT + WS command list
-- [ ] SQL migrations draft + review **multi-select** scoring rules with stakeholders
-- [ ] [CHANGELOG.md](../../../../CHANGELOG.md) entry when implementation starts (User Rules §9 format)
+- [x] Link plugin from `public/PROJECT_CONTEXT.md`
+- [x] `bp_contracts` testing section in PROJECT_CONTEXT (WS command list → Phase 3 live titles)
+- [x] SQL migrations draft + **multi-select** scoring rules (D4 → spec §2.1.1)
+- [x] [CHANGELOG.md](../../../../CHANGELOG.md) entries for implementation / doc decisions
 
-**Exit:** ERD signed off; tables documented in plugin `PROJECT_CONTEXT` + §5 here.
+**Exit:** ERD signed off; tables documented in plugin `PROJECT_CONTEXT` + §5 here. **D6** storage choice remains before Phase 2 coding.
 
 ### Phase 1 — Plugin skeleton & persistence (1–1.5 weeks)
 
@@ -623,7 +658,8 @@ Store dismiss counts and policy in `gi_new_test_config` / `gi_new_test_notificat
 | Line-limit creep in services | Split use cases (§6); do not grow legacy monoliths |
 | `gi_new_users` vs WP user mismatch | Single resolver service |
 | Unauthenticated legacy endpoints | Do not add new mail endpoints; use `Mailer` pattern |
-| Spec ambiguity on multi-select questions | Clarify before Phase 1 exit |
+| Spec ambiguity on multi-select questions | **D4 resolved** — spec §2.1.1; see §5.1.1 |
+| Correct options only in RAM | **D6** — catalog must persist keys; see §5.1.2 |
 
 ---
 
@@ -634,11 +670,24 @@ Store dismiss counts and policy in `gi_new_test_config` / `gi_new_test_notificat
 | D1 | Exact WS command naming | Proposed §4.5 — finalize in Phase 3 |
 | D2 | Which roles see Tests / admin | TBD with product |
 | D3 | Question difficulty formula | Deferred; raw data in V1 |
-| D4 | Maximum Correct Answers for multi-select per question | Confirm with spec owners |
+| D4 | Multi-select counting (valid/invalid/missed, global vs per-question score) | **Resolved** — spec §2.1.1; engineering §5.1.1 |
 | D5 | Plugin root `PROJECT_CONTEXT.md` vs spec-only docs | **Resolved:** lean root index + this plan + product spec (no duplicate column lists in root) |
-| D6 | How to store “correct” answer **options** (spec §8.3 prose) | **Open** — not on `gi_new_test_answers`; decide before attempt/session scoring + React admin |
+| D6 | How to store “correct” answer **options** (spec §8.3 prose) | **Resolved** — `gi_new_test_answers.is_correct`; `catalog()->answers` |
 | D7 | V1 UI technology | **Resolved:** **React** for dealer Tests + test-factory admin; plugin owns API/domain only; legacy jQuery modals not extended for new flows |
-| D8 | `is_correct` on `gi_new_test_answers` | **Rejected** — not in spec §8.3; no code or automated migration; manual `DROP COLUMN` if legacy DB |
+| D8 | `is_correct` on `gi_new_test_answers` | **Superseded** — adopted 2026-10-05 (explicit project decision); replaces junction-table experiment |
+| D9 | `gi_new_test_achievements` seed model vs rank **display** names | **Resolved** — medal rows Bronze/Silver/Gold/Lock in achievements; `rank_name_*` in `gi_new_test_config` (Seeder v3) |
+| D10 | `gi_new_test_notifications` row shape | **Open** — schema has `notification_type`; confirm one row per `(user, test, type)` vs single row per `(user, test)` |
+
+### 14.1 Before Phase 2 (gate)
+
+| Priority | Item | Blocks |
+|----------|------|--------|
+| **Soon** | **D10** — notification rows | `NotificationService` |
+| **Parallel** | **D2** — capabilities / roles | Admin + dealer menu visibility |
+| **Phase 3** | **D1** — WS names | `Chat.php` + React client |
+| **Deferred** | **D3** — difficulty formula | Analytics UI only |
+
+**Not blocking Phase 2 start if documented:** `user_id` → `gi_new_users.id_user` resolver (implement in attempt services); retake = `retake_delay_days` with “1 = following day” (spec §2.6).
 
 ---
 

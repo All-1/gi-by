@@ -13,6 +13,7 @@ final class AnswerRecord
         public int $id,
         public int $questionId,
         public string $answer,
+        public bool $isCorrect,
         public string $dateAdded,
         public string $dateModified,
     ) {

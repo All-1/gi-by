@@ -10,6 +10,7 @@
 declare(strict_types=1);
 
 use BpKnowledgeTests\Bootstrap\PluginBootstrap;
+use PersonalAccount\Core\Container;
 
 if (!defined('ABSPATH')) {
     exit;
@@ -26,8 +27,9 @@ if (is_readable($autoload)) {
 }
 
 global $wpdb;
+global $servicesContainer;
 
-$bootstrap = new PluginBootstrap($wpdb);
+$bootstrap = new PluginBootstrap($wpdb, $servicesContainer);
 
 register_activation_hook(__FILE__, [$bootstrap, 'activate']);
 

@@ -6,6 +6,38 @@ This document tracks changes to the project. Entry format is defined in **Cursor
 
 ## Log
 
+### [2026-10-06] DBWorker: knowledge test table keys + getPathTable usage
+**Author**: AI Assistant
+**Logic**:
+- Register `gi_new_test_*` tables on DBWorker properties; repositories and schema checks use keys (`KnowledgeTestAnswers`, etc.) so `tableExists` / `columnExists` / `selectUni_2` resolve consistently.
+**Changes**:
+- `bp_contracts/src/Workers/DBWorker.php`, `bp_knowledge_tests` repositories, `SchemaDefiner.php`, `PROJECT_CONTEXT.md`.
+
+### [2026-10-05] Knowledge tests: D6 = is_correct on answers (schema v4)
+**Author**: AI Assistant
+**Logic**:
+- Project decision: correct options on `gi_new_test_answers.is_correct`; remove junction table; v4 activation migrates junction rows if present.
+**Changes**:
+- `AnswerRecord`, `AnswerRepository`, `AnswerCatalog`, `SchemaDefiner`, `PluginBootstrap`; docs; `migrations/004_is_correct_on_answers.sql`.
+
+### [2026-10-05] Knowledge tests: D6 correct options + selection grader (schema v3)
+**Author**: AI Assistant
+**Logic**:
+- Persist correct answer option keys in junction table (not `is_correct` on answers); catalog API + `QuestionSelectionGrader`; fix medal vs rank-name seeding (D9).
+**Changes**:
+- `SchemaDefiner`, `SchemaVersionRepository`, `PluginBootstrap`, `Seeder`, `CorrectAnswerRepository`, `CorrectAnswerCatalog`, `Domain/QuestionSelectionGrader*`, `CatalogServices`, `DomainServices`.
+- `migrations/002_correct_answer_options.sql`, `001_baseline.sql`, `tests/run_selection_grader_tests.php`, docs.
+
+### [2026-10-05] Knowledge tests: D4 scoring clarifications + Phase 0 doc sync
+**Author**: AI Assistant
+**Logic**:
+- Document agreed multi-select counting (global valid/invalid, penalties, no per-question clamp for official score) and catalog-vs-RAM correctness (D6 still open on storage shape).
+- Sync implementation plan repository state, Phase 0 checkboxes, gates before Phase 2 (D9/D10); align bp_contracts React wording.
+**Changes**:
+- `bp_knowledge_tests/spec/Testing System — Project Documentation.md`: §2.1.1, §2.1.2.
+- `bp_knowledge_tests/spec/IMPLEMENTATION_PLAN.md`: §3, §5.1.1–5.1.2, §11 Phase 0, §13–14.
+- `bp_knowledge_tests/PROJECT_CONTEXT.md`, `bp_contracts/PROJECT_CONTEXT.md`.
+
 ### [2026-10-05] Knowledge tests: ban is_correct; drop v4 migration code
 **Author**: AI Assistant
 **Logic**:
