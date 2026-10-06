@@ -13,8 +13,7 @@ final class DomainServices
     public readonly TestConfigReader $config;
     public readonly AttemptResultClassifier $classifier;
     public readonly QuestionSelectionGrader $selection;
-
-    public function __construct(CatalogServices $catalog)
+    public function __construct(private CatalogServices $catalog)
     {
         $this->scoring = new ScoringService();
         $this->config = new TestConfigReader($catalog->config);
