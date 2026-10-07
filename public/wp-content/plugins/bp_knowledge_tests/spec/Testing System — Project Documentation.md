@@ -1047,7 +1047,7 @@ gi_new_test_answers
 gi_new_test_attempts
 gi_new_test_attempt_questions
 
-gi_new_finished_attempts_explanations
+gi_new_test_finished_attempts_explanations
 
 gi_new_test_achievements
 gi_new_test_user_achievements
@@ -1226,7 +1226,7 @@ The persistent database stores the required result/statistical information rathe
 
 # 10. Finished Attempt Explanations
 
-## 10.1 `gi_new_finished_attempts_explanations`
+## 10.1 `gi_new_test_finished_attempts_explanations`
 
 This table stores the temporary explanation/reference data required for the user's learning page after a completed attempt.
 
@@ -1888,7 +1888,7 @@ gi_new_test_attempts
           │
           └── gi_new_test_attempt_questions
 
-gi_new_finished_attempts_explanations
+gi_new_test_finished_attempts_explanations
 
 gi_new_test_achievements
           │

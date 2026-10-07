@@ -79,7 +79,7 @@ class DBWorker
     $this->tableKnowledgeTestAnswers = 'gi_new_test_answers';
     $this->tableKnowledgeTestAttempts = 'gi_new_test_attempts';
     $this->tableKnowledgeTestAttemptQuestions = 'gi_new_test_attempt_questions';
-    $this->tableKnowledgeTestFinishedExplanations = 'gi_new_finished_attempts_explanations';
+    $this->tableKnowledgeTestFinishedExplanations = 'gi_new_test_finished_attempts_explanations';
     $this->tableKnowledgeTestAchievements = 'gi_new_test_achievements';
     $this->tableKnowledgeTestUserAchievements = 'gi_new_test_user_achievements';
     $this->tableKnowledgeTestNotifications = 'gi_new_test_notifications';

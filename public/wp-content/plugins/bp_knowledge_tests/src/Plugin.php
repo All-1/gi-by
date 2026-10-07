@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace BpKnowledgeTests;
 
+use BpKnowledgeTests\Services\AttemptServices;
 use BpKnowledgeTests\Services\CatalogServices;
 use BpKnowledgeTests\Services\DomainServices;
 use BpKnowledgeTests\Infrastructure\Admin\DevToolsMenu;
@@ -15,6 +16,7 @@ final class Plugin
     public function __construct(
         private CatalogServices $catalog,
         private DomainServices $domain,
+        private AttemptServices $attempts,
     ) {
     }
 
@@ -33,6 +35,11 @@ final class Plugin
     public function domain(): DomainServices
     {
         return $this->domain;
+    }
+
+    public function attempts(): AttemptServices
+    {
+        return $this->attempts;
     }
 
     public function version(): string

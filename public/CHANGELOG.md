@@ -6,6 +6,28 @@ This document tracks changes to the project. Entry format is defined in **Cursor
 
 ## Log
 
+### [2026-10-07] Knowledge tests: materials table `gi_new_test_finished_attempts_explanations`
+**Author**: AI Assistant
+**Logic**:
+- Canonical name uses `gi_new_test_*` prefix in DDL, DBWorker, and spec; no rename migration (greenfield / no legacy data).
+**Changes**:
+- `DBWorker.php`, `SchemaDefiner.php`, `001_baseline.sql`, spec docs; removed `alignFinishedExplanationsTableName` and v5/v6 migration artifacts.
+
+### [2026-10-07] Knowledge tests: materials filter from attempt-question counts only
+**Author**: AI Assistant
+**Logic**:
+- Align materials question selection with D4 / §9.2: use persisted `right_answers` / `failed_answers` only; drop catalog-based `QuestionMistakeEvaluator`.
+**Changes**:
+- `AttemptQuestionRecord::qualifiesForMaterials()`, `MaterialsService`; removed `QuestionMistakeEvaluator`; `tests/run_attempt_question_materials_tests.php`.
+
+### [2026-10-06] Knowledge tests: Phase 2 materials workflow (schema v5)
+**Author**: AI Assistant
+**Logic**:
+- Implement temporary learning materials lifecycle (spec §10): populate mistake rows after failed attempts, list pending, confirm Examined deletes rows only.
+- Fix explanations table name to `gi_new_finished_attempts_explanations` (aligned with spec, migrations, DBWorker).
+**Changes**:
+- `MaterialsService`, `AttemptServices`, attempt/explanation repositories, `QuestionMistakeEvaluator`; `Plugin::attempts()`; schema v5 migration; `tests/run_materials_mistake_tests.php`; `PROJECT_CONTEXT.md`, `IMPLEMENTATION_PLAN.md`.
+
 ### [2026-10-06] DBWorker: knowledge test table keys + getPathTable usage
 **Author**: AI Assistant
 **Logic**:

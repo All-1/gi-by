@@ -80,9 +80,9 @@ CREATE TABLE IF NOT EXISTS gi_new_test_attempt_questions (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- ---------------------------------------------------------------------------
--- gi_new_finished_attempts_explanations (temporary materials)
+-- gi_new_test_finished_attempts_explanations (temporary materials)
 -- ---------------------------------------------------------------------------
-CREATE TABLE IF NOT EXISTS gi_new_finished_attempts_explanations (
+CREATE TABLE IF NOT EXISTS gi_new_test_finished_attempts_explanations (
     id int(10) unsigned NOT NULL AUTO_INCREMENT,
     attempt_id int(10) unsigned NOT NULL,
     question_id int(10) unsigned NOT NULL,
@@ -167,7 +167,7 @@ ALTER TABLE gi_new_test_attempt_questions
     ADD CONSTRAINT fk_kt_attempt_q_user FOREIGN KEY (user_id)
     REFERENCES gi_new_users (id_user) ON DELETE RESTRICT;
 
-ALTER TABLE gi_new_finished_attempts_explanations
+ALTER TABLE gi_new_test_finished_attempts_explanations
     ADD CONSTRAINT fk_kt_explanations_attempt FOREIGN KEY (attempt_id)
     REFERENCES gi_new_test_attempts (id) ON DELETE CASCADE,
     ADD CONSTRAINT fk_kt_explanations_question FOREIGN KEY (question_id)
