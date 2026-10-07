@@ -4,7 +4,7 @@
 
 WordPress plugin for **dealer knowledge tests** in the personal account. Domain logic lives here; **`bp_contracts`** provides UI shell, WebSocket transport, and in-memory `TestController` for unfinished attempts (later phases).
 
-**Status**: Phase **1** complete; Phase **2** in progress — schema **v4**, materials workflow (`attempts()->materials`), attempt read repos. Attempt write / `CompleteAttempt` still pending. **Product UI is React** — not in this plugin. **Tools → Knowledge Tests (dev)** is smoke-only.
+**Status**: Phase **2** in progress — schema **v4**, `attempts()->complete` (`CompleteAttempt`), materials (`attempts()->materials`). Achievements / validity / notifications still pending. **Product UI is React** — not in this plugin. **Tools → Knowledge Tests (dev)** is smoke-only.
 
 ## Documentation (canonical)
 
@@ -12,6 +12,7 @@ WordPress plugin for **dealer knowledge tests** in the personal account. Domain 
 |----------|---------|
 | [spec/Testing System — Project Documentation.md](./spec/Testing%20System%20%E2%80%94%20Project%20Documentation.md) | Business requirements, rules, DB fields, UI (baseline §1 must not be silently changed) |
 | [spec/IMPLEMENTATION_PLAN.md](./spec/IMPLEMENTATION_PLAN.md) | Architecture, phases, integration, WS proposal, engineering standards (§4.3), QA checklist |
+| [spec/PHASE_2_TASKS.md](./spec/PHASE_2_TASKS.md) | Phase 2 work breakdown (waves, checklist, exit criteria) |
 
 ## Integration
 
@@ -74,9 +75,10 @@ Example: `$plugin->catalog()->answers->create($questionId, 'Option text', true)`
 
 | Service | Role |
 |---------|------|
+| `attempts()->complete` | `finish(userId, testId, questionLines)` → `AttemptRecord`; materials on fail |
 | `attempts()->materials` | `populateFromFailedAttempt`, `listForAttempt`, `listPendingForUserAndTest`, `hasPendingMaterials`, `confirmExamined` (spec §10) |
 
-`populateFromFailedAttempt` is intended to run after a failed attempt is persisted (`CompleteAttempt`, Phase 2 step 1).
+**Finish payload:** list of `['questionId' => int, 'rightAnswers' => int, 'failedAnswers' => int]` — full question set for the test. Phase 3 `TestController` builds this on `finishTest`.
 
 ## Database
 

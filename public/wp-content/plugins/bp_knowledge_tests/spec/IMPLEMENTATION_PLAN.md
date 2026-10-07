@@ -7,8 +7,9 @@
 **Plugin context**: [PROJECT_CONTEXT.md](../PROJECT_CONTEXT.md)  
 **Personal account integration**: [bp_contracts/PROJECT_CONTEXT.md](../../bp_contracts/PROJECT_CONTEXT.md)
 
-**Status (repository)**: Phase **1** + schema **v4** (`is_correct` on answers, selection grader). Phase **2** (attempt persistence) next. WS / React UI not started. No `TestController` in `bp_contracts` yet.  
-**Last updated**: 2026-10-05
+**Status (repository)**: Phase **1** complete; Phase **2** in progress (materials done; attempt write / `CompleteAttempt` next). Schema **v4**. WS / React UI not started. No `TestController` in `bp_contracts` yet.  
+**Phase 2 tasks:** [PHASE_2_TASKS.md](./PHASE_2_TASKS.md)  
+**Last updated**: 2026-10-07
 
 ---
 
@@ -575,7 +576,9 @@ Store dismiss counts and policy in `gi_new_test_config` / `gi_new_test_notificat
 
 ### Phase 2 — Attempts, materials, achievements (1.5–2 weeks)
 
-- [ ] Attempt + attempt_questions persistence
+**Task breakdown:** [PHASE_2_TASKS.md](./PHASE_2_TASKS.md) (waves A–F, checklist, open decisions).
+
+- [x] Attempt + attempt_questions persistence (`CompleteAttempt`)
 - [x] Finished explanations temp table workflow
 - [ ] Achievements + user achievements
 - [ ] Critical update + outdated + validity job on catalog load

@@ -6,6 +6,23 @@ This document tracks changes to the project. Entry format is defined in **Cursor
 
 ## Log
 
+### [2026-10-07] Knowledge tests: CompleteAttempt persistence (Phase 2 wave A)
+**Author**: AI Assistant
+**Logic**:
+- Completed attempts belong in MySQL via plugin use case; in-progress stays in bp_contracts RAM (Phase 3).
+- On fail, reuse existing materials workflow after attempt rows exist.
+**Changes**:
+- `CompleteAttempt`, `AttemptRepository`/`AttemptQuestionRepository` inserts; `AttemptServices::$complete`.
+- `PROJECT_CONTEXT.md`, `IMPLEMENTATION_PLAN.md`, `PHASE_2_TASKS.md`.
+
+### [2026-10-07] Knowledge tests: Phase 2 task breakdown doc
+**Author**: AI Assistant
+**Logic**:
+- Phase 2 scope is large; a dedicated checklist avoids duplicating waves in IMPLEMENTATION_PLAN and tracks exit criteria for scripted lifecycle.
+**Changes**:
+- `bp_knowledge_tests/spec/PHASE_2_TASKS.md`: [NEW] waves A–F, checklist, open decisions.
+- `spec/IMPLEMENTATION_PLAN.md`, `PROJECT_CONTEXT.md`: links to Phase 2 tasks.
+
 ### [2026-10-07] Knowledge tests: materials table `gi_new_test_finished_attempts_explanations`
 **Author**: AI Assistant
 **Logic**:

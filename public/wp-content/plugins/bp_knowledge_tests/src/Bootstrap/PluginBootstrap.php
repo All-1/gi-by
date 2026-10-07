@@ -25,7 +25,7 @@ final class PluginBootstrap
     {
         $catalog = new CatalogServices($this->servicesContainer);
         $domain = new DomainServices($catalog);
-        $attempts = new AttemptServices($this->servicesContainer);
+        $attempts = new AttemptServices($this->servicesContainer, $catalog, $domain);
 
         return new Plugin($catalog, $domain, $attempts);
     }
