@@ -6,6 +6,13 @@ This document tracks changes to the project. Entry format is defined in **Cursor
 
 ## Log
 
+### [2026-10-07] Knowledge tests: Phase 2 doc sync (Wave A complete)
+**Author**: AI Assistant
+**Logic**:
+- PHASE_2_TASKS breakdown and CompleteAttempt are done; plan §3 and checklists should match repo before waves B–E.
+**Changes**:
+- `PHASE_2_TASKS.md`, `IMPLEMENTATION_PLAN.md` §3/status, `PROJECT_CONTEXT.md` services line.
+
 ### [2026-10-07] Knowledge tests: CompleteAttempt persistence (Phase 2 wave A)
 **Author**: AI Assistant
 **Logic**:

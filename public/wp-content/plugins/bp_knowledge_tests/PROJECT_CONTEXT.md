@@ -36,7 +36,7 @@ This plugin does **not** ship React bundles. Expose stable application/WS contra
 |------|----------|
 | Entry | `index.php` — autoload, `PluginBootstrap::run()` (no hooks in entry) |
 | Runtime | `Plugin::boot()` — dev admin page; `catalog()` / `domain()` / `attempts()` APIs |
-| Services | `Services\CatalogServices`, `Services\DomainServices`, `Services\AttemptServices`, `Services\ScoringService`, `Services\Catalog\*`, `Services\Attempt\MaterialsService` — wired in `PluginBootstrap::compose()` |
+| Services | `CatalogServices`, `DomainServices`, `AttemptServices` (`CompleteAttempt`, `MaterialsService`), `ScoringService`, `Catalog\*` — wired in `PluginBootstrap::compose()` |
 | Domain | `Domain\TestConfig`, `Domain\AttemptResultClassifier`, `Domain\QuestionSelectionGrader`, `Domain\Record\*` |
 | Activation | `PluginBootstrap::activate()` — versioned schema |
 | DDL + FKs | `Infrastructure\SchemaDefiner` |

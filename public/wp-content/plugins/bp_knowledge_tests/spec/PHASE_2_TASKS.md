@@ -7,6 +7,8 @@
 
 **Goal (exit criterion):** Complete attempt lifecycle **without UI** — finish attempt → DB → materials on fail → achievements on pass → retake/validity/notifications queryable — verifiable via CLI or dev script (not React/WebSocket).
 
+**Progress (2026-10-07):** Task breakdown in place. **Wave A** shipped (`CompleteAttempt::finish`, attempt repos `insert`). **Next:** A4 smoke script, then waves B–E.
+
 **Estimate:** ~1.5–2 weeks one developer (matches plan §11).
 
 ---
@@ -20,14 +22,15 @@
 | Materials | `attempts()->materials` (`MaterialsService`, `FinishedExplanationRepository`) |
 | Tests | `tests/run_scoring_tests.php`, `run_selection_grader_tests.php`, `run_materials_mistake_tests.php`, `run_attempt_question_materials_tests.php` |
 | Domain for finish | `ScoringService`, `QuestionSelectionGrader`, `AttemptResultClassifier`, `TestConfig`, `catalog()->answers->maximumCorrectForTest` |
+| **Complete attempt** | `attempts()->complete` → `Services\Attempt\CompleteAttempt::finish`; `AttemptRepository` / `AttemptQuestionRepository` **insert** |
 
-**Gap (remaining):** Achievements, retake query, validity/critical update, notifications (waves B–E).
+**Gap (remaining):** A4 integration smoke; achievements, retake query, validity/critical update, notifications (waves B–E).
 
 ---
 
-## Wave A — Attempt persistence (critical path)
+## Wave A — Attempt persistence (critical path) — **done** (except A4)
 
-### A1. Finish payload (Phase 2 ↔ Phase 3 boundary)
+### A1. Finish payload (Phase 2 ↔ Phase 3 boundary) — **done**
 
 Phase 3 `TestController` RAM will produce this; Phase 2 tests pass it manually.
 
@@ -39,9 +42,9 @@ Phase 3 `TestController` RAM will produce this; Phase 2 tests pass it manually.
 
 **Validation:** Questions belong to test; counts ≥ 0; at least one question row.
 
-**Deliverable:** Small DTO or documented array contract; reference from `PROJECT_CONTEXT` when implemented.
+**Deliverable:** Array question lines + `attemptRow` keys in `CompleteAttempt::persist` — see [PROJECT_CONTEXT.md](../PROJECT_CONTEXT.md).
 
-### A2. Repository writes
+### A2. Repository writes — **done**
 
 **`AttemptRepository`**
 
@@ -61,9 +64,9 @@ Phase 3 `TestController` RAM will produce this; Phase 2 tests pass it manually.
 
 **Acceptance:** Insert + read round-trip (dev Tools or integration script).
 
-### A3. `CompleteAttempt` use case
+### A3. `CompleteAttempt` use case — **done**
 
-**Suggested location:** `Services\Attempt\CompleteAttempt`, exposed on `AttemptServices` (e.g. `attempts()->complete`).
+**Code:** `Services\Attempt\CompleteAttempt`, `AttemptServices::$complete` → `attempts()->complete->finish(...)`.
 
 **Steps:**
 
@@ -75,7 +78,7 @@ Phase 3 `TestController` RAM will produce this; Phase 2 tests pass it manually.
 6. Insert attempt + question rows (transaction if available).
 7. If **failed:** `materials->populateFromFailedAttempt($attemptId)`.
 8. If **passed:** achievement hook (Wave B).
-9. Return: `attemptId`, `score`, `status`, classification (medal, locked).
+9. Return: `AttemptRecord` (medal/lock via `domain()->classifier` when needed).
 
 **Acceptance:** Failed attempt with mistakes → materials rows; passed → no materials.
 
@@ -219,4 +222,5 @@ Log significant product choices in [CHANGELOG.md](../../../../CHANGELOG.md).
 - [ ] D2 `CriticalUpdateTest` + tests
 - [ ] E1 Notification persistence + failed-complete hook
 - [ ] E2 Retake ↔ notification block
-- [ ] F Docs + IMPLEMENTATION_PLAN §11 sync
+- [x] F Phase 2 breakdown doc + Wave A status in IMPLEMENTATION_PLAN / PROJECT_CONTEXT
+- [ ] F Remaining §11 checkboxes when B–E land
