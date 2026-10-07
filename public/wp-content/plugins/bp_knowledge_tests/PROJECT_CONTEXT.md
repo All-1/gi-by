@@ -4,7 +4,7 @@
 
 WordPress plugin for **dealer knowledge tests** in the personal account. Domain logic lives here; **`bp_contracts`** provides UI shell, WebSocket transport, and in-memory `TestController` for unfinished attempts (later phases).
 
-**Status**: Phase **1** + correct-option storage — schema **v4**, catalog CRUD, `is_correct` on answer options, selection grader, domain scoring. Phase **2** (attempt persistence) next. **Product UI is React** — not in this plugin. **Tools → Knowledge Tests (dev)** is smoke-only.
+**Status**: Phase **1** complete; Phase **2** in progress — schema **v4**, materials workflow (`attempts()->materials`), attempt read repos. Attempt write / `CompleteAttempt` still pending. **Product UI is React** — not in this plugin. **Tools → Knowledge Tests (dev)** is smoke-only.
 
 ## Documentation (canonical)
 
@@ -34,8 +34,8 @@ This plugin does **not** ship React bundles. Expose stable application/WS contra
 | Item | Location |
 |------|----------|
 | Entry | `index.php` — autoload, `PluginBootstrap::run()` (no hooks in entry) |
-| Runtime | `Plugin::boot()` — dev admin page; `catalog()` / `domain()` APIs |
-| Services | `Services\CatalogServices`, `Services\DomainServices`, `Services\ScoringService`, `Services\Catalog\*` — wired in `PluginBootstrap::compose()` |
+| Runtime | `Plugin::boot()` — dev admin page; `catalog()` / `domain()` / `attempts()` APIs |
+| Services | `Services\CatalogServices`, `Services\DomainServices`, `Services\AttemptServices`, `Services\ScoringService`, `Services\Catalog\*`, `Services\Attempt\MaterialsService` — wired in `PluginBootstrap::compose()` |
 | Domain | `Domain\TestConfig`, `Domain\AttemptResultClassifier`, `Domain\QuestionSelectionGrader`, `Domain\Record\*` |
 | Activation | `PluginBootstrap::activate()` — versioned schema |
 | DDL + FKs | `Infrastructure\SchemaDefiner` |
@@ -47,6 +47,7 @@ This plugin does **not** ship React bundles. Expose stable application/WS contra
 | Dev smoke (non-React) | WP Admin → **Tools → Knowledge Tests (dev)** — temporary until React admin lists catalog |
 | Scoring tests | `php tests/run_scoring_tests.php` (plugin root; no WordPress) |
 | Selection grader tests | `php tests/run_selection_grader_tests.php` |
+| Attempt-question materials filter tests | `php tests/run_attempt_question_materials_tests.php` |
 
 ### Catalog services (admin CRUD)
 
@@ -68,6 +69,14 @@ Example: `$plugin->catalog()->answers->create($questionId, 'Option text', true)`
 | `domain()->config` | `read()` → `TestConfig` thresholds from `gi_new_test_config` |
 | `domain()->classifier` | `classify(score, TestConfig)` → pass, medal, lock |
 | `domain()->selection` | `grade(correctAnswerIds, selectedAnswerIds)` → `QuestionSelectionCounts` (§2.1.1) |
+
+### Attempts / materials (Phase 2)
+
+| Service | Role |
+|---------|------|
+| `attempts()->materials` | `populateFromFailedAttempt`, `listForAttempt`, `listPendingForUserAndTest`, `hasPendingMaterials`, `confirmExamined` (spec §10) |
+
+`populateFromFailedAttempt` is intended to run after a failed attempt is persisted (`CompleteAttempt`, Phase 2 step 1).
 
 ## Database
 

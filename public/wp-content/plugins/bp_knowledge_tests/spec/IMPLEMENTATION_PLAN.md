@@ -186,7 +186,7 @@ This section lists **every proposed column** in one place for migrations and cod
 | `gi_new_test_answers` | **Answer options** (choice text per question; not user selections) |
 | `gi_new_test_attempts` | **Completed** attempts only |
 | `gi_new_test_attempt_questions` | Per-question stats per completed attempt |
-| `gi_new_finished_attempts_explanations` | Temporary materials rows until “Examined” |
+| `gi_new_test_finished_attempts_explanations` | Temporary materials rows until “Examined” |
 | `gi_new_test_achievements` | Global rank/level definitions (Bronze/Silver/Gold/Lock) |
 | `gi_new_test_user_achievements` | User’s current medal per test |
 | `gi_new_test_notifications` | Popup dismiss count per user/test |
@@ -277,7 +277,7 @@ No per-answer row table in V1 (spec §9.3).
 
 ---
 
-### 5.0.6 `gi_new_finished_attempts_explanations` (spec §10.1) - DONE
+### 5.0.6 `gi_new_test_finished_attempts_explanations` (spec §10.1) - DONE
 
 Temporary until user clicks **Examined** (§10.2).
 
@@ -390,7 +390,7 @@ gi_new_tests
 
 gi_new_test_attempts
     ├── gi_new_test_attempt_questions
-    └── gi_new_finished_attempts_explanations (temporary)
+    └── gi_new_test_finished_attempts_explanations 
 
 gi_new_test_achievements
     └── gi_new_test_user_achievements (user_id + test_id → medal_id)
@@ -576,7 +576,7 @@ Store dismiss counts and policy in `gi_new_test_config` / `gi_new_test_notificat
 ### Phase 2 — Attempts, materials, achievements (1.5–2 weeks)
 
 - [ ] Attempt + attempt_questions persistence
-- [ ] Finished explanations temp table workflow
+- [x] Finished explanations temp table workflow
 - [ ] Achievements + user achievements
 - [ ] Critical update + outdated + validity job on catalog load
 - [ ] Notifications persistence
