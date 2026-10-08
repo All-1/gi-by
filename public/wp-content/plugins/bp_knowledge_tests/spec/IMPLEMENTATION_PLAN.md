@@ -580,7 +580,7 @@ Store dismiss counts and policy in `gi_new_test_config` / `gi_new_test_notificat
 
 - [x] Attempt + attempt_questions persistence (`CompleteAttempt`)
 - [x] Finished explanations temp table workflow
-- [ ] Achievements + user achievements
+- [x] Achievements + user achievements (`AttemptAchievementService`, repos)
 - [ ] Critical update + outdated + validity job on catalog load
 - [ ] Notifications persistence
 - [ ] Automated tests: validity/outdated, retake eligibility, achievement update on complete

@@ -20,6 +20,7 @@ final class CompleteAttempt
         private AttemptRepository $attempts,
         private AttemptQuestionRepository $attemptQuestions,
         private MaterialsService $materials,
+        private AttemptAchievementService $achievements,
         private DatabaseClock $clock,
     ) {
     }
@@ -47,6 +48,8 @@ final class CompleteAttempt
         if ($outcome['status'] === 'failed') {
             $this->materials->populateFromFailedAttempt($attempt->id);
         }
+
+        $this->achievements->applyAfterComplete($userId, $testId, $attempt->score);
 
         return $attempt;
     }

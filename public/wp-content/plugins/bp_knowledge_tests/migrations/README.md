@@ -20,4 +20,4 @@
 
 **Correct options:** `gi_new_test_answers.is_correct` (project decision 2026-10-05; supersedes junction table).
 
-**Scoring tests (no WP):** From plugin root, `php tests/run_scoring_tests.php`, `php tests/run_selection_grader_tests.php`, and `php tests/run_attempt_question_materials_tests.php`.
+**Scoring tests (no WP):** From plugin root, `php tests/run_scoring_tests.php`, `php tests/run_selection_grader_tests.php`, `php tests/run_attempt_question_materials_tests.php`, and `php tests/run_achievement_tier_tests.php`.

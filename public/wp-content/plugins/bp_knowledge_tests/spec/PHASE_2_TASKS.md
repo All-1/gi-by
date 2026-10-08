@@ -24,7 +24,7 @@
 | Domain for finish | `ScoringService`, `QuestionSelectionGrader`, `AttemptResultClassifier`, `TestConfig`, `catalog()->answers->maximumCorrectForTest` |
 | **Complete attempt** | `attempts()->complete` → `Services\Attempt\CompleteAttempt::finish`; `AttemptRepository` / `AttemptQuestionRepository` **insert** |
 
-**Gap (remaining):** A4 integration smoke; achievements, retake query, validity/critical update, notifications (waves B–E).
+**Gap (remaining):** A4 integration smoke; retake query, validity/critical update, notifications (waves C–E).
 
 ---
 
@@ -91,9 +91,11 @@ Phase 3 `TestController` RAM will produce this; Phase 2 tests pass it manually.
 
 ---
 
-## Wave B — Achievements
+## Wave B — Achievements — **done**
 
-### B1. Repositories
+**Decision (failed latest):** remove `gi_new_test_user_achievements` row (no star); passed latest upserts tier (`lock` when score ≥ lock threshold).
+
+### B1. Repositories — **done**
 
 - `AchievementRepository` — resolve `medal_id` from `gi_new_test_achievements` (tiers seeded: Bronze, Silver, Gold, Lock — see `Seeder`).
 - `UserAchievementRepository` — `upsertForUserTest(userId, testId, medalId)` on unique `(user_id, test_id)`.
@@ -104,13 +106,13 @@ Phase 3 `TestController` RAM will produce this; Phase 2 tests pass it manually.
 - Pass → medal from thresholds; **95%+** → lock semantics via `AttemptClassification`.
 - Fail → clarify against spec §2.2 / §2.11 (delete row vs failed tier vs keep previous) — **decision + CHANGELOG** when implemented.
 
-### B2. Wire `CompleteAttempt` → achievements
+### B2. Wire `CompleteAttempt` → achievements — **done**
 
-Only on outcomes that award/update a star per product rules.
+`CompleteAttempt::finish` calls `attempts()->achievements->applyAfterComplete` after persist.
 
-### B3. `AchievementRecalculation` (spec §5.6, rule 36)
+### B3. `AchievementRecalculation` (spec §5.6, rule 36) — **done**
 
-V1 minimum: reclassify latest non-outdated attempt per user/test after config threshold change; update `user_achievements`. Callable from admin later; CLI test in Phase 2.
+`AttemptAchievementService::recalculateForUserAndTest` — latest non-`outdated` attempt; wire from admin/config save later.
 
 ---
 
@@ -214,9 +216,9 @@ Log significant product choices in [CHANGELOG.md](../../../../CHANGELOG.md).
 - [x] A2 Attempt + attempt_question writes (+ optional reads/updates)
 - [x] A3 `CompleteAttempt` (`attempts()->complete`)
 - [ ] A4 Scripted lifecycle script (WP/DB integration or dev Tools action)
-- [ ] B1 Achievement + user achievement repos
-- [ ] B2 Hook complete → achievements
-- [ ] B3 Achievement recalculation
+- [x] B1 Achievement + user achievement repos
+- [x] B2 Hook complete → achievements
+- [x] B3 Achievement recalculation (`recalculateForUserAndTest`)
 - [ ] C1 `RetakeEligibilityQuery` + tests
 - [ ] D1 `ValidityMaintenance` + tests
 - [ ] D2 `CriticalUpdateTest` + tests

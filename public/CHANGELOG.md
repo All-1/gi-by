@@ -6,6 +6,15 @@ This document tracks changes to the project. Entry format is defined in **Cursor
 
 ## Log
 
+### [2026-10-07] Knowledge tests: Wave B achievements (Phase 2)
+**Author**: AI Assistant
+**Logic**:
+- Latest completed attempt drives `gi_new_test_user_achievements` (§2.11); failed latest removes the row; 95%+ uses `lock` tier (§2.12).
+- Config threshold changes re-run via `recalculateForUserAndTest` (§5.6).
+**Changes**:
+- `AchievementRepository`, `UserAchievementRepository`, `AttemptAchievementService`; `AttemptResultClassifier::achievementTierValue`; hook in `CompleteAttempt`.
+- `AttemptRepository::findLatestByUserAndTest`; `tests/run_achievement_tier_tests.php`.
+
 ### [2026-10-07] Knowledge tests: Phase 2 doc sync (Wave A complete)
 **Author**: AI Assistant
 **Logic**:

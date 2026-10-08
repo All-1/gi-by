@@ -4,7 +4,7 @@
 
 WordPress plugin for **dealer knowledge tests** in the personal account. Domain logic lives here; **`bp_contracts`** provides UI shell, WebSocket transport, and in-memory `TestController` for unfinished attempts (later phases).
 
-**Status**: Phase **2** in progress — schema **v4**, `attempts()->complete` (`CompleteAttempt`), materials (`attempts()->materials`). Achievements / validity / notifications still pending. **Product UI is React** — not in this plugin. **Tools → Knowledge Tests (dev)** is smoke-only.
+**Status**: Phase **2** in progress — schema **v4**, `CompleteAttempt`, materials, **achievements** on finish. Validity / notifications / retake still pending. **Product UI is React** — not in this plugin. **Tools → Knowledge Tests (dev)** is smoke-only.
 
 ## Documentation (canonical)
 
@@ -49,6 +49,7 @@ This plugin does **not** ship React bundles. Expose stable application/WS contra
 | Scoring tests | `php tests/run_scoring_tests.php` (plugin root; no WordPress) |
 | Selection grader tests | `php tests/run_selection_grader_tests.php` |
 | Attempt-question materials filter tests | `php tests/run_attempt_question_materials_tests.php` |
+| Achievement tier mapping tests | `php tests/run_achievement_tier_tests.php` |
 
 ### Catalog services (admin CRUD)
 
@@ -75,7 +76,8 @@ Example: `$plugin->catalog()->answers->create($questionId, 'Option text', true)`
 
 | Service | Role |
 |---------|------|
-| `attempts()->complete` | `finish(userId, testId, questionLines)` → `AttemptRecord`; materials on fail |
+| `attempts()->complete` | `finish(userId, testId, questionLines)` → `AttemptRecord`; materials on fail; syncs user achievement |
+| `attempts()->achievements` | `applyAfterComplete`, `recalculateForUserAndTest` (spec §11; latest result §2.11) |
 | `attempts()->materials` | `populateFromFailedAttempt`, `listForAttempt`, `listPendingForUserAndTest`, `hasPendingMaterials`, `confirmExamined` (spec §10) |
 
 **Finish payload:** list of `['questionId' => int, 'rightAnswers' => int, 'failedAnswers' => int]` — full question set for the test. Phase 3 `TestController` builds this on `finishTest`.

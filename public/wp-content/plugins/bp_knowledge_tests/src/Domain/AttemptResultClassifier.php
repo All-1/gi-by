@@ -37,4 +37,19 @@ final class AttemptResultClassifier
 
         return self::MEDAL_BRONZE;
     }
+
+    /**
+     * `gi_new_test_achievements.value` for a passed attempt (spec §2.11–§2.12). Null = no star row (failed).
+     */
+    public function achievementTierValue(AttemptClassification $classification): ?string
+    {
+        if (!$classification->passed) {
+            return null;
+        }
+        if ($classification->locked) {
+            return 'lock';
+        }
+
+        return $classification->medal;
+    }
 }

@@ -30,6 +30,20 @@ final class AttemptRepository
         return is_object($row) ? $this->mapper->toAttemptRecord($row) : null;
     }
 
+    public function findLatestByUserAndTest(int $userId, int $testId): ?AttemptRecord
+    {
+        $table = $this->db->getPathTable(self::TABLE);
+        $rows = $this->db->getRawSQL(
+            "SELECT * FROM `{$table}` WHERE user_id = %d AND test_id = %d ORDER BY date_finished DESC LIMIT 1",
+            [$userId, $testId],
+        );
+        foreach ($this->mapper->rows($rows) as $row) {
+            return $this->mapper->toAttemptRecord($row);
+        }
+
+        return null;
+    }
+
     public function insert(
         int $userId,
         int $testId,
