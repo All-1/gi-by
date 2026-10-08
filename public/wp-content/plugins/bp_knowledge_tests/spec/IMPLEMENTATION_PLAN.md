@@ -7,8 +7,9 @@
 **Plugin context**: [PROJECT_CONTEXT.md](../PROJECT_CONTEXT.md)  
 **Personal account integration**: [bp_contracts/PROJECT_CONTEXT.md](../../bp_contracts/PROJECT_CONTEXT.md)
 
-**Status (repository)**: Phase **1** + schema **v4** (`is_correct` on answers, selection grader). Phase **2** (attempt persistence) next. WS / React UI not started. No `TestController` in `bp_contracts` yet.  
-**Last updated**: 2026-10-05
+**Status (repository)**: Phase **1** complete; Phase **2** in progress — materials + **`CompleteAttempt`** (wave A) done; achievements / validity / notifications pending. Schema **v4**. WS / React UI not started. No `TestController` in `bp_contracts` yet.  
+**Phase 2 tasks:** [PHASE_2_TASKS.md](./PHASE_2_TASKS.md)  
+**Last updated**: 2026-10-07
 
 ---
 
@@ -54,22 +55,22 @@ Implementation must not satisfy the product spec by violating (1) or (2).
 bp_knowledge_tests/
 ├── PROJECT_CONTEXT.md
 ├── index.php, composer.json
-├── migrations/          ← SQL reference (activation uses SchemaDefiner)
+├── migrations/
 ├── src/                 ← Bootstrap, Domain, Infrastructure, Services
-├── tests/run_scoring_tests.php
+├── tests/run_*.php      ← scoring, selection grader, materials filter (no WP)
 └── spec/
     ├── Testing System — Project Documentation.md
-    └── IMPLEMENTATION_PLAN.md
+    ├── IMPLEMENTATION_PLAN.md
+    └── PHASE_2_TASKS.md
 ```
 
-**Implemented (Phase 1):** plugin bootstrap, schema v2 + FKs, catalog CRUD, domain scoring/classifier, dev Tools page, scoring test script.
+**Implemented:** Phase **1** (catalog CRUD, domain scoring/classifier, dev Tools, schema **v4**, `is_correct` on answers). Phase **2** partial: materials (`attempts()->materials`), **`CompleteAttempt`** (`attempts()->complete->finish`), attempt row persistence.
 
 **Not yet present:**
 
-- Attempt / materials / achievement use cases and repositories (Phase 2)
+- Phase **2** remainder: achievements, retake eligibility, validity/critical update, notifications (see [PHASE_2_TASKS.md](./PHASE_2_TASKS.md))
 - `bp_contracts` `TestController`, live WS commands (Phase 3)
 - React dealer + admin UIs (Phases 4–6)
-- Catalog persistence for **which answer options are correct** (**D6**)
 
 **Doc / integration hygiene (Phase 0):** plugin linked from [public/PROJECT_CONTEXT.md](../../../../PROJECT_CONTEXT.md); `bp_contracts` testing section exists — update WS list when Phase 3 starts.
 
@@ -575,9 +576,11 @@ Store dismiss counts and policy in `gi_new_test_config` / `gi_new_test_notificat
 
 ### Phase 2 — Attempts, materials, achievements (1.5–2 weeks)
 
-- [ ] Attempt + attempt_questions persistence
+**Task breakdown:** [PHASE_2_TASKS.md](./PHASE_2_TASKS.md) (waves A–F, checklist, open decisions).
+
+- [x] Attempt + attempt_questions persistence (`CompleteAttempt`)
 - [x] Finished explanations temp table workflow
-- [ ] Achievements + user achievements
+- [x] Achievements + user achievements (`AttemptAchievementService`, repos)
 - [ ] Critical update + outdated + validity job on catalog load
 - [ ] Notifications persistence
 - [ ] Automated tests: validity/outdated, retake eligibility, achievement update on complete

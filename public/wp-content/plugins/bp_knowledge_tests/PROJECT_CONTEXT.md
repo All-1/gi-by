@@ -4,7 +4,7 @@
 
 WordPress plugin for **dealer knowledge tests** in the personal account. Domain logic lives here; **`bp_contracts`** provides UI shell, WebSocket transport, and in-memory `TestController` for unfinished attempts (later phases).
 
-**Status**: Phase **1** complete; Phase **2** in progress — schema **v4**, materials workflow (`attempts()->materials`), attempt read repos. Attempt write / `CompleteAttempt` still pending. **Product UI is React** — not in this plugin. **Tools → Knowledge Tests (dev)** is smoke-only.
+**Status**: Phase **2** in progress — schema **v4**, `CompleteAttempt`, materials, **achievements** on finish. Validity / notifications / retake still pending. **Product UI is React** — not in this plugin. **Tools → Knowledge Tests (dev)** is smoke-only.
 
 ## Documentation (canonical)
 
@@ -12,6 +12,7 @@ WordPress plugin for **dealer knowledge tests** in the personal account. Domain 
 |----------|---------|
 | [spec/Testing System — Project Documentation.md](./spec/Testing%20System%20%E2%80%94%20Project%20Documentation.md) | Business requirements, rules, DB fields, UI (baseline §1 must not be silently changed) |
 | [spec/IMPLEMENTATION_PLAN.md](./spec/IMPLEMENTATION_PLAN.md) | Architecture, phases, integration, WS proposal, engineering standards (§4.3), QA checklist |
+| [spec/PHASE_2_TASKS.md](./spec/PHASE_2_TASKS.md) | Phase 2 work breakdown (waves, checklist, exit criteria) |
 
 ## Integration
 
@@ -35,7 +36,7 @@ This plugin does **not** ship React bundles. Expose stable application/WS contra
 |------|----------|
 | Entry | `index.php` — autoload, `PluginBootstrap::run()` (no hooks in entry) |
 | Runtime | `Plugin::boot()` — dev admin page; `catalog()` / `domain()` / `attempts()` APIs |
-| Services | `Services\CatalogServices`, `Services\DomainServices`, `Services\AttemptServices`, `Services\ScoringService`, `Services\Catalog\*`, `Services\Attempt\MaterialsService` — wired in `PluginBootstrap::compose()` |
+| Services | `CatalogServices`, `DomainServices`, `AttemptServices` (`CompleteAttempt`, `MaterialsService`), `ScoringService`, `Catalog\*` — wired in `PluginBootstrap::compose()` |
 | Domain | `Domain\TestConfig`, `Domain\AttemptResultClassifier`, `Domain\QuestionSelectionGrader`, `Domain\Record\*` |
 | Activation | `PluginBootstrap::activate()` — versioned schema |
 | DDL + FKs | `Infrastructure\SchemaDefiner` |
@@ -48,6 +49,7 @@ This plugin does **not** ship React bundles. Expose stable application/WS contra
 | Scoring tests | `php tests/run_scoring_tests.php` (plugin root; no WordPress) |
 | Selection grader tests | `php tests/run_selection_grader_tests.php` |
 | Attempt-question materials filter tests | `php tests/run_attempt_question_materials_tests.php` |
+| Achievement tier mapping tests | `php tests/run_achievement_tier_tests.php` |
 
 ### Catalog services (admin CRUD)
 
@@ -74,9 +76,11 @@ Example: `$plugin->catalog()->answers->create($questionId, 'Option text', true)`
 
 | Service | Role |
 |---------|------|
+| `attempts()->complete` | `finish(userId, testId, questionLines)` → `AttemptRecord`; materials on fail; syncs user achievement |
+| `attempts()->achievements` | `applyAfterComplete`, `recalculateForUserAndTest` (spec §11; latest result §2.11) |
 | `attempts()->materials` | `populateFromFailedAttempt`, `listForAttempt`, `listPendingForUserAndTest`, `hasPendingMaterials`, `confirmExamined` (spec §10) |
 
-`populateFromFailedAttempt` is intended to run after a failed attempt is persisted (`CompleteAttempt`, Phase 2 step 1).
+**Finish payload:** list of `['questionId' => int, 'rightAnswers' => int, 'failedAnswers' => int]` — full question set for the test. Phase 3 `TestController` builds this on `finishTest`.
 
 ## Database
 
