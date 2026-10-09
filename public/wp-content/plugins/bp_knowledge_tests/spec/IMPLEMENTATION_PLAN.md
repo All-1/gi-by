@@ -7,7 +7,7 @@
 **Plugin context**: [PROJECT_CONTEXT.md](../PROJECT_CONTEXT.md)  
 **Personal account integration**: [bp_contracts/PROJECT_CONTEXT.md](../../bp_contracts/PROJECT_CONTEXT.md)
 
-**Status (repository)**: Phase **1** complete; Phase **2** in progress — materials + **`CompleteAttempt`** (wave A) done; achievements / validity / notifications pending. Schema **v4**. WS / React UI not started. No `TestController` in `bp_contracts` yet.  
+**Status (repository)**: Phase **1** complete; Phase **2** in progress — complete attempt, materials, achievements, **retake eligibility** done; validity / notifications pending. Schema **v4**. WS / React UI not started. No `TestController` in `bp_contracts` yet.  
 **Phase 2 tasks:** [PHASE_2_TASKS.md](./PHASE_2_TASKS.md)  
 **Last updated**: 2026-10-07
 
@@ -68,7 +68,7 @@ bp_knowledge_tests/
 
 **Not yet present:**
 
-- Phase **2** remainder: achievements, retake eligibility, validity/critical update, notifications (see [PHASE_2_TASKS.md](./PHASE_2_TASKS.md))
+- Phase **2** remainder: validity/critical update, notifications, optional A4 smoke (see [PHASE_2_TASKS.md](./PHASE_2_TASKS.md))
 - `bp_contracts` `TestController`, live WS commands (Phase 3)
 - React dealer + admin UIs (Phases 4–6)
 
@@ -581,6 +581,7 @@ Store dismiss counts and policy in `gi_new_test_config` / `gi_new_test_notificat
 - [x] Attempt + attempt_questions persistence (`CompleteAttempt`)
 - [x] Finished explanations temp table workflow
 - [x] Achievements + user achievements (`AttemptAchievementService`, repos)
+- [x] Retake eligibility (`RetakeEligibilityQuery`, `tests/run_retake_eligibility_tests.php`)
 - [ ] Critical update + outdated + validity job on catalog load
 - [ ] Notifications persistence
 - [ ] Automated tests: validity/outdated, retake eligibility, achievement update on complete

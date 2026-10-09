@@ -23,6 +23,16 @@ final class TestConfigReader
         );
     }
 
+    public function retakeDelayDays(): int
+    {
+        $raw = $this->config->get('retake_delay_days');
+        if ($raw === null || $raw === '') {
+            return 1;
+        }
+
+        return max(0, (int) $raw);
+    }
+
     private function threshold(string $name, float $default): float
     {
         $raw = $this->config->get($name);

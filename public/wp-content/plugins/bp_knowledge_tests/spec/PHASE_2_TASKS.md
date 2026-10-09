@@ -7,7 +7,7 @@
 
 **Goal (exit criterion):** Complete attempt lifecycle **without UI** — finish attempt → DB → materials on fail → achievements on pass → retake/validity/notifications queryable — verifiable via CLI or dev script (not React/WebSocket).
 
-**Progress (2026-10-07):** Task breakdown in place. **Wave A** shipped (`CompleteAttempt::finish`, attempt repos `insert`). **Next:** A4 smoke script, then waves B–E.
+**Progress (2026-10-08):** **Wave C** shipped (`RetakeEligibilityQuery`). **Next:** Wave D (validity), E (notifications), optional A4 smoke script.
 
 **Estimate:** ~1.5–2 weeks one developer (matches plan §11).
 
@@ -24,7 +24,7 @@
 | Domain for finish | `ScoringService`, `QuestionSelectionGrader`, `AttemptResultClassifier`, `TestConfig`, `catalog()->answers->maximumCorrectForTest` |
 | **Complete attempt** | `attempts()->complete` → `Services\Attempt\CompleteAttempt::finish`; `AttemptRepository` / `AttemptQuestionRepository` **insert** |
 
-**Gap (remaining):** A4 integration smoke; retake query, validity/critical update, notifications (waves C–E).
+**Gap (remaining):** A4 integration smoke; validity/critical update, notifications (waves D–E).
 
 ---
 
@@ -116,9 +116,9 @@ Phase 3 `TestController` RAM will produce this; Phase 2 tests pass it manually.
 
 ---
 
-## Wave C — Retake eligibility
+## Wave C — Retake eligibility — **done**
 
-### C1. `RetakeEligibilityQuery`
+### C1. `RetakeEligibilityQuery` — **done**
 
 Input: `userId`, `testId`. Output: `canStart`, `reasons[]` (codes for WS/React).
 
@@ -219,7 +219,7 @@ Log significant product choices in [CHANGELOG.md](../../../../CHANGELOG.md).
 - [x] B1 Achievement + user achievement repos
 - [x] B2 Hook complete → achievements
 - [x] B3 Achievement recalculation (`recalculateForUserAndTest`)
-- [ ] C1 `RetakeEligibilityQuery` + tests
+- [x] C1 `RetakeEligibilityQuery` + tests
 - [ ] D1 `ValidityMaintenance` + tests
 - [ ] D2 `CriticalUpdateTest` + tests
 - [ ] E1 Notification persistence + failed-complete hook

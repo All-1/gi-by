@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace BpKnowledgeTests\Infrastructure;
 
-final class DatabaseClock
+final class DatabaseClock implements ClockInterface
 {
     public function now(): string
     {
