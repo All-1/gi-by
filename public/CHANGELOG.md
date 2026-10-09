@@ -6,6 +6,15 @@ This document tracks changes to the project. Entry format is defined in **Cursor
 
 ## Log
 
+### [2026-10-09] Knowledge tests: Wave D validity and critical update (Phase 2)
+**Author**: AI Assistant
+**Logic**:
+- Latest `passed` attempt outdates after one calendar year from `date_finished` (§2.3); achievement row removed (§2.15).
+- Critical update marks all `passed` attempts for a test `outdated`, clears test achievements, bumps test `version` (§6); history kept.
+**Changes**:
+- `AttemptValidityPolicy`, `ValidityMaintenance`, `CriticalUpdateTest`; `AttemptRepository` status/bulk updates; `UserAchievementRepository::deleteAllForTest`.
+- `AttemptServices::$validity`, `$criticalUpdate`; `tests/run_validity_tests.php`; phase docs updated.
+
 ### [2026-10-08] Knowledge tests: Wave C retake eligibility (Phase 2)
 **Author**: AI Assistant
 **Logic**:

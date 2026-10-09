@@ -71,4 +71,41 @@ final class AttemptRepository
             )
         );
     }
+
+    public function updateStatus(int $attemptId, string $status): void
+    {
+        $this->db->updateAssoc(
+            self::TABLE,
+            $this->dbUtilities->packageWriteColumns(['status' => $status], ['%s']),
+            $this->dbUtilities->packageWriteColumns(['id' => $attemptId], ['%d']),
+        );
+    }
+
+    public function markPassedAsOutdatedForTest(int $testId): void
+    {
+        $table = $this->db->getPathTable(self::TABLE);
+        $this->db->getRawSQL(
+            "UPDATE `{$table}` SET status = %s WHERE test_id = %d AND status = %s",
+            ['outdated', $testId, 'passed'],
+        );
+    }
+
+    /**
+     * @return list<int>
+     */
+    public function listDistinctTestIdsForUser(int $userId): array
+    {
+        $table = $this->db->getPathTable(self::TABLE);
+        $rows = $this->db->getRawSQL(
+            "SELECT DISTINCT test_id FROM `{$table}` WHERE user_id = %d",
+            [$userId],
+        );
+
+        $ids = [];
+        foreach ($this->mapper->rows($rows) as $row) {
+            $ids[] = (int) $row->test_id;
+        }
+
+        return $ids;
+    }
 }

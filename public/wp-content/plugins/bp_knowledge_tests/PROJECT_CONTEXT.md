@@ -4,7 +4,7 @@
 
 WordPress plugin for **dealer knowledge tests** in the personal account. Domain logic lives here; **`bp_contracts`** provides UI shell, WebSocket transport, and in-memory `TestController` for unfinished attempts (later phases).
 
-**Status**: Phase **2** in progress — schema **v4**, `CompleteAttempt`, materials, **achievements** on finish, **retake eligibility**. Validity / notifications still pending. **Product UI is React** — not in this plugin. **Tools → Knowledge Tests (dev)** is smoke-only.
+**Status**: Phase **2** in progress — complete attempt, materials, achievements, retake, **validity / critical update**. Notifications still pending. **Product UI is React** — not in this plugin. **Tools → Knowledge Tests (dev)** is smoke-only.
 
 ## Documentation (canonical)
 
@@ -51,6 +51,7 @@ This plugin does **not** ship React bundles. Expose stable application/WS contra
 | Attempt-question materials filter tests | `php tests/run_attempt_question_materials_tests.php` |
 | Achievement tier mapping tests | `php tests/run_achievement_tier_tests.php` |
 | Retake eligibility tests | `php tests/run_retake_eligibility_tests.php` |
+| Validity / outdated tests | `php tests/run_validity_tests.php` |
 
 ### Catalog services (admin CRUD)
 
@@ -81,6 +82,8 @@ Example: `$plugin->catalog()->answers->create($questionId, 'Option text', true)`
 | `attempts()->achievements` | `applyAfterComplete`, `recalculateForUserAndTest` (spec §11; latest result §2.11) |
 | `attempts()->materials` | `populateFromFailedAttempt`, `listForAttempt`, `listPendingForUserAndTest`, `hasPendingMaterials`, `confirmExamined` (spec §10) |
 | `attempts()->retake` | `evaluate(userId, testId)` → `RetakeEligibility` (`canStart`, reason codes: `retake_delay`, `pending_materials`, `test_locked`; spec §2.6, §2.12) |
+| `attempts()->validity` | `refreshForUser`, `refreshForUserAndTest` — latest `passed` → `outdated` after one year; strip achievement (§2.3, §2.15) |
+| `attempts()->criticalUpdate` | `execute(testId)` — all `passed` → `outdated`, clear test achievements, bump test `version` (§6) |
 
 **Finish payload:** list of `['questionId' => int, 'rightAnswers' => int, 'failedAnswers' => int]` — full question set for the test. Phase 3 `TestController` builds this on `finishTest`.
 
