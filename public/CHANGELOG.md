@@ -6,6 +6,15 @@ This document tracks changes to the project. Entry format is defined in **Cursor
 
 ## Log
 
+### [2026-10-08] Knowledge tests: Wave C retake eligibility (Phase 2)
+**Author**: AI Assistant
+**Logic**:
+- Retake gate for Phase 3 / React: calendar-day `retake_delay_days` (§2.6), pending materials after fail, lock at configurable threshold (§2.12); outdated attempts do not apply lock.
+- In-progress RAM and notification block deferred to Phase 3 / Wave E.
+**Changes**:
+- `RetakeEligibility`, `RetakeEligibilityPolicy`, `RetakeEligibilityQuery`; `TestConfigReader::retakeDelayDays`; `ClockInterface` on `DatabaseClock`.
+- `AttemptServices::$retake`; `tests/run_retake_eligibility_tests.php`; `PROJECT_CONTEXT.md`, `PHASE_2_TASKS.md`.
+
 ### [2026-10-07] Knowledge tests: Wave B achievements (Phase 2)
 **Author**: AI Assistant
 **Logic**:

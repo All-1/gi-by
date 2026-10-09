@@ -15,6 +15,8 @@ use BpKnowledgeTests\Infrastructure\Repository\UserAchievementRepository;
 use BpKnowledgeTests\Services\Attempt\AttemptAchievementService;
 use BpKnowledgeTests\Services\Attempt\CompleteAttempt;
 use BpKnowledgeTests\Services\Attempt\MaterialsService;
+use BpKnowledgeTests\Services\Attempt\RetakeEligibilityPolicy;
+use BpKnowledgeTests\Services\Attempt\RetakeEligibilityQuery;
 use PersonalAccount\Core\Container;
 
 final class AttemptServices
@@ -22,6 +24,7 @@ final class AttemptServices
     public readonly MaterialsService $materials;
     public readonly AttemptAchievementService $achievements;
     public readonly CompleteAttempt $complete;
+    public readonly RetakeEligibilityQuery $retake;
 
     public function __construct(
         Container $servicesContainer,
@@ -61,6 +64,14 @@ final class AttemptServices
             $attemptQuestionRepository,
             $this->materials,
             $this->achievements,
+            $clock,
+        );
+
+        $this->retake = new RetakeEligibilityQuery(
+            $attemptRepository,
+            $this->materials,
+            $domain,
+            new RetakeEligibilityPolicy($domain->classifier),
             $clock,
         );
     }
