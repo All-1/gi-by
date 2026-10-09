@@ -54,6 +54,14 @@ final class UserAchievementRepository
         );
     }
 
+    public function deleteAllForTest(int $testId): void
+    {
+        $this->db->deleteAssoc(
+            self::TABLE,
+            $this->dbUtilities->packageWriteColumns(['test_id' => $testId], ['%d']),
+        );
+    }
+
     private function findRowId(int $userId, int $testId): ?int
     {
         $row = $this->db->selectUni_2(self::TABLE, [

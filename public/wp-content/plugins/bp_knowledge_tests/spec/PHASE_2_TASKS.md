@@ -7,7 +7,7 @@
 
 **Goal (exit criterion):** Complete attempt lifecycle **without UI** — finish attempt → DB → materials on fail → achievements on pass → retake/validity/notifications queryable — verifiable via CLI or dev script (not React/WebSocket).
 
-**Progress (2026-10-08):** **Wave C** shipped (`RetakeEligibilityQuery`). **Next:** Wave D (validity), E (notifications), optional A4 smoke script.
+**Progress (2026-10-09):** **Wave D** shipped. **Next:** Wave E (notifications), optional A4 smoke script.
 
 **Estimate:** ~1.5–2 weeks one developer (matches plan §11).
 
@@ -24,7 +24,7 @@
 | Domain for finish | `ScoringService`, `QuestionSelectionGrader`, `AttemptResultClassifier`, `TestConfig`, `catalog()->answers->maximumCorrectForTest` |
 | **Complete attempt** | `attempts()->complete` → `Services\Attempt\CompleteAttempt::finish`; `AttemptRepository` / `AttemptQuestionRepository` **insert** |
 
-**Gap (remaining):** A4 integration smoke; validity/critical update, notifications (waves D–E).
+**Gap (remaining):** A4 integration smoke; notifications (wave E).
 
 ---
 
@@ -134,9 +134,9 @@ Checks ([IMPLEMENTATION_PLAN §5.4](./IMPLEMENTATION_PLAN.md#54-retake--material
 
 ---
 
-## Wave D — Validity, outdated, critical update
+## Wave D — Validity, outdated, critical update — **done**
 
-### D1. `ValidityMaintenance`
+### D1. `ValidityMaintenance` — **done**
 
 Callable on catalog load / login (hook later). Phase 2: service + tests.
 
@@ -144,7 +144,7 @@ Callable on catalog load / login (hook later). Phase 2: service + tests.
 - Test `date_modified` vs attempt + §2.15 combined rules.
 - Outdated → remove `user_achievements`; **keep** attempt rows.
 
-### D2. `CriticalUpdateTest` (admin)
+### D2. `CriticalUpdateTest` (admin) — **done**
 
 - Bump test version (align with explicit **Critical Update** — spec §6).
 - Mark affected attempts outdated; strip achievements; do not delete history.
@@ -220,8 +220,8 @@ Log significant product choices in [CHANGELOG.md](../../../../CHANGELOG.md).
 - [x] B2 Hook complete → achievements
 - [x] B3 Achievement recalculation (`recalculateForUserAndTest`)
 - [x] C1 `RetakeEligibilityQuery` + tests
-- [ ] D1 `ValidityMaintenance` + tests
-- [ ] D2 `CriticalUpdateTest` + tests
+- [x] D1 `ValidityMaintenance` + tests
+- [x] D2 `CriticalUpdateTest` + tests
 - [ ] E1 Notification persistence + failed-complete hook
 - [ ] E2 Retake ↔ notification block
 - [x] F Phase 2 breakdown doc + Wave A status in IMPLEMENTATION_PLAN / PROJECT_CONTEXT
