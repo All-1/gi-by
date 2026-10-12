@@ -8,7 +8,7 @@ final class SchemaVersionRepository
 {
     private const OPTION_KEY = 'bp_knowledge_tests_schema_version';
 
-    public const TARGET_VERSION = 4;
+    public const TARGET_VERSION = 3;
 
     public function current(): int
     {

@@ -57,10 +57,6 @@ final class PluginBootstrap
             $seeder->seedRankDisplayNamesIfMissing();
         }
 
-        if ($installed < 4) {
-            $schemaDefiner->upgradeAnswersIsCorrectColumn();
-        }
-
         $schemaVersion->markUpToDate();
     }
 

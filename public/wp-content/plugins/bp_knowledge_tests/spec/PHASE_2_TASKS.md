@@ -7,7 +7,7 @@
 
 **Goal (exit criterion):** Complete attempt lifecycle **without UI** — finish attempt → DB → materials on fail → achievements on pass → retake/validity/notifications queryable — verifiable via CLI or dev script (not React/WebSocket).
 
-**Progress (2026-10-09):** **Wave D** shipped. **Next:** Wave E (notifications), optional A4 smoke script.
+**Progress (2026-10-12):** **Wave E** shipped. **Next:** Wave F close-out (optional A4 smoke, §11 checkboxes).
 
 **Estimate:** ~1.5–2 weeks one developer (matches plan §11).
 
@@ -24,7 +24,7 @@
 | Domain for finish | `ScoringService`, `QuestionSelectionGrader`, `AttemptResultClassifier`, `TestConfig`, `catalog()->answers->maximumCorrectForTest` |
 | **Complete attempt** | `attempts()->complete` → `Services\Attempt\CompleteAttempt::finish`; `AttemptRepository` / `AttemptQuestionRepository` **insert** |
 
-**Gap (remaining):** A4 integration smoke; notifications (wave E).
+**Gap (remaining):** A4 integration smoke; Wave F doc/test close-out.
 
 ---
 
@@ -153,16 +153,16 @@ Callable on catalog load / login (hook later). Phase 2: service + tests.
 
 ---
 
-## Wave E — Notifications persistence
+## Wave E — Notifications persistence — **done**
 
-### E1. `NotificationRepository` + `NotificationService`
+### E1. `NotificationRepository` (+ hooks in `CompleteAttempt`, `NotificationRetakePolicy`) — **done**
 
 - `gi_new_test_notifications` (`dismiss_count` per user/test).
 - On failed complete: create/update state per spec §3.2 and config keys in `gi_new_test_config`.
 
-### E2. Retake gate
+### E2. Retake gate — **done**
 
-Wire notification block mode into `RetakeEligibilityQuery` when spec §3.1 requires it.
+`RetakeEligibilityQuery` sets `notification_blocked` when `NotificationRetakePolicy` + config `*_mode = block` and dismiss limit reached (§3.1–§3.2).
 
 ---
 
@@ -173,7 +173,7 @@ Wire notification block mode into `RetakeEligibilityQuery` when spec §3.1 requi
 | Automated tests | Complete attempt (pass/fail), retake, outdated/critical, achievement on complete |
 | `PROJECT_CONTEXT` | Document `attempts()->complete` and related APIs |
 | [IMPLEMENTATION_PLAN.md](./IMPLEMENTATION_PLAN.md) §11 | Check boxes; refresh §3 repository state |
-| Doc hygiene | Reconcile schema version notes (v4 target vs migration `005_*` reference) if needed |
+| Doc hygiene | Reconcile schema version notes in IMPLEMENTATION_PLAN / migrations README if needed |
 
 ---
 
@@ -222,7 +222,7 @@ Log significant product choices in [CHANGELOG.md](../../../../CHANGELOG.md).
 - [x] C1 `RetakeEligibilityQuery` + tests
 - [x] D1 `ValidityMaintenance` + tests
 - [x] D2 `CriticalUpdateTest` + tests
-- [ ] E1 Notification persistence + failed-complete hook
-- [ ] E2 Retake ↔ notification block
+- [x] E1 Notification persistence + failed-complete hook
+- [x] E2 Retake ↔ notification block
 - [x] F Phase 2 breakdown doc + Wave A status in IMPLEMENTATION_PLAN / PROJECT_CONTEXT
 - [ ] F Remaining §11 checkboxes when B–E land

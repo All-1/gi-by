@@ -4,7 +4,7 @@
 
 WordPress plugin for **dealer knowledge tests** in the personal account. Domain logic lives here; **`bp_contracts`** provides UI shell, WebSocket transport, and in-memory `TestController` for unfinished attempts (later phases).
 
-**Status**: Phase **2** in progress — complete attempt, materials, achievements, retake, **validity / critical update**. Notifications still pending. **Product UI is React** — not in this plugin. **Tools → Knowledge Tests (dev)** is smoke-only.
+**Status**: Phase **2** near complete — lifecycle through **notifications** persistence and retake gate; Wave F close-out optional (A4 smoke, doc sync). **Product UI is React** — not in this plugin. **Tools → Knowledge Tests (dev)** is smoke-only.
 
 ## Documentation (canonical)
 
@@ -43,7 +43,7 @@ This plugin does **not** ship React bundles. Expose stable application/WS contra
 | Seed | `Infrastructure\Seeder` |
 | Repositories | **`DBWorker`** (reads/writes) + **`DBUtilities::packageWriteColumns`** for write payloads; rows via `RecordMapper`. Table args use **DBWorker keys** (e.g. `KnowledgeTestAnswers` → `gi_new_test_answers` via `getPathTable()` in [DBWorker.php](../bp_contracts/src/Workers/DBWorker.php)). |
 | DB dependency | **`wordpress_framework`** required (`Requires Plugins` header). `PluginBootstrap::run()` uses `global $servicesContainer` after the framework plugin file has loaded. Activation/schema uses `$wpdb` only. |
-| Schema version | `Infrastructure\SchemaVersionRepository` → option `bp_knowledge_tests_schema_version` (target **4**) |
+| Schema version | `Infrastructure\SchemaVersionRepository` → option `bp_knowledge_tests_schema_version` (target **3**) |
 | Autoload | `composer.json` → `BpKnowledgeTests\` |
 | Dev smoke (non-React) | WP Admin → **Tools → Knowledge Tests (dev)** — temporary until React admin lists catalog |
 | Scoring tests | `php tests/run_scoring_tests.php` (plugin root; no WordPress) |
@@ -52,6 +52,7 @@ This plugin does **not** ship React bundles. Expose stable application/WS contra
 | Achievement tier mapping tests | `php tests/run_achievement_tier_tests.php` |
 | Retake eligibility tests | `php tests/run_retake_eligibility_tests.php` |
 | Validity / outdated tests | `php tests/run_validity_tests.php` |
+| Notification retake block tests | `php tests/run_notification_retake_tests.php` |
 
 ### Catalog services (admin CRUD)
 
@@ -81,7 +82,8 @@ Example: `$plugin->catalog()->answers->create($questionId, 'Option text', true)`
 | `attempts()->complete` | `finish(userId, testId, questionLines)` → `AttemptRecord`; materials on fail; syncs user achievement |
 | `attempts()->achievements` | `applyAfterComplete`, `recalculateForUserAndTest` (spec §11; latest result §2.11) |
 | `attempts()->materials` | `populateFromFailedAttempt`, `listForAttempt`, `listPendingForUserAndTest`, `hasPendingMaterials`, `confirmExamined` (spec §10) |
-| `attempts()->retake` | `evaluate(userId, testId)` → `RetakeEligibility` (`canStart`, reason codes: `retake_delay`, `pending_materials`, `test_locked`; spec §2.6, §2.12) |
+| `attempts()->retake` | `evaluate(userId, testId)` → `RetakeEligibility` (`canStart`, reasons: `retake_delay`, `pending_materials`, `test_locked`, `notification_blocked`; spec §2.6, §2.12, §3) |
+| `attempts()->notifications` | `NotificationRepository` — `findByUserTestAndType`, `resetDismissCount`, `incrementDismissCount`, `deleteByUserTestAndType` (types: `NotificationRecord::TYPE_*`); failed/pass hooks in `CompleteAttempt`; retake block via `NotificationRetakePolicy` + `TestConfigReader::notificationSettings()` |
 | `attempts()->validity` | `refreshForUser`, `refreshForUserAndTest` — latest `passed` → `outdated` after one year; strip achievement (§2.3, §2.15) |
 | `attempts()->criticalUpdate` | `execute(testId)` — all `passed` → `outdated`, clear test achievements, bump test `version` (§6) |
 

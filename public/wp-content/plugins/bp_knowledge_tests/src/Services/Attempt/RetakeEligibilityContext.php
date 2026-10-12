@@ -10,6 +10,7 @@ final class RetakeEligibilityContext
         public readonly bool $hasPendingMaterials,
         public readonly int $retakeDelayDays,
         public readonly string $now,
+        public readonly bool $notificationBlocksRetake,
     ) {
     }
 }
