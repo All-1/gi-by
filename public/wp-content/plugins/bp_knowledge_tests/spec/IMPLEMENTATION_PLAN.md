@@ -7,9 +7,9 @@
 **Plugin context**: [PROJECT_CONTEXT.md](../PROJECT_CONTEXT.md)  
 **Personal account integration**: [bp_contracts/PROJECT_CONTEXT.md](../../bp_contracts/PROJECT_CONTEXT.md)
 
-**Status (repository)**: Phase **2** essentially complete (notifications + retake gate); Wave F polish optional. Schema **v3** (full DDL on first activate; baseline includes `is_correct`, `notification_type`). WS / React UI not started. No `TestController` in `bp_contracts` yet.  
+**Status (repository)**: Phase **2** **complete** (lifecycle + integration tests). Schema **v3**. **Next:** Phase **3** (`TestController` + WS). WS / React UI not started. No `TestController` in `bp_contracts` yet.  
 **Phase 2 tasks:** [PHASE_2_TASKS.md](./PHASE_2_TASKS.md)  
-**Last updated**: 2026-10-07
+**Last updated**: 2026-10-12
 
 ---
 
@@ -64,11 +64,10 @@ bp_knowledge_tests/
     └── PHASE_2_TASKS.md
 ```
 
-**Implemented:** Phase **1** (catalog CRUD, domain scoring/classifier, dev Tools, schema **v3**, `is_correct` on answers). Phase **2** partial: materials (`attempts()->materials`), **`CompleteAttempt`** (`attempts()->complete->finish`), attempt row persistence.
+**Implemented:** Phase **1** (catalog CRUD, domain scoring/classifier, dev Tools, schema **v3**, `is_correct` on answers). Phase **2** (materials, **`CompleteAttempt`**, achievements, retake, validity/critical update, notifications, `tests/run_complete_attempt_tests.php`).
 
 **Not yet present:**
 
-- Phase **2** remainder: optional A4 smoke + Wave F (see [PHASE_2_TASKS.md](./PHASE_2_TASKS.md))
 - `bp_contracts` `TestController`, live WS commands (Phase 3)
 - React dealer + admin UIs (Phases 4–6)
 
@@ -585,7 +584,7 @@ Store dismiss counts and policy in `gi_new_test_config` / `gi_new_test_notificat
 - [x] Retake eligibility (`RetakeEligibilityQuery`, `tests/run_retake_eligibility_tests.php`)
 - [x] Critical update + outdated (`ValidityMaintenance`, `CriticalUpdateTest`, `tests/run_validity_tests.php`)
 - [x] Notifications persistence (`NotificationRepository`, retake `notification_blocked`, `notification_type` in baseline DDL)
-- [ ] Automated tests: complete attempt integration, achievement on complete (retake + validity covered)
+- [x] Automated tests: complete attempt integration, achievement on complete (retake + validity covered)
 
 **Exit:** Complete attempt lifecycle without UI (scripted).
 

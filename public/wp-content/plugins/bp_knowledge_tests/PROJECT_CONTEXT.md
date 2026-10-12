@@ -4,7 +4,7 @@
 
 WordPress plugin for **dealer knowledge tests** in the personal account. Domain logic lives here; **`bp_contracts`** provides UI shell, WebSocket transport, and in-memory `TestController` for unfinished attempts (later phases).
 
-**Status**: Phase **2** near complete — lifecycle through **notifications** persistence and retake gate; Wave F close-out optional (A4 smoke, doc sync). **Product UI is React** — not in this plugin. **Tools → Knowledge Tests (dev)** is smoke-only.
+**Status**: Phase **2** **complete** — full attempt lifecycle + `tests/run_complete_attempt_tests.php` (in-memory integration, no WP). **Next:** Phase 3 (`TestController` + WS in `bp_contracts`). **Product UI is React** — not in this plugin. **Tools → Knowledge Tests (dev)** is smoke-only.
 
 ## Documentation (canonical)
 
@@ -53,6 +53,7 @@ This plugin does **not** ship React bundles. Expose stable application/WS contra
 | Retake eligibility tests | `php tests/run_retake_eligibility_tests.php` |
 | Validity / outdated tests | `php tests/run_validity_tests.php` |
 | Notification retake block tests | `php tests/run_notification_retake_tests.php` |
+| Complete attempt integration (A4) | `php tests/run_complete_attempt_tests.php` (or `run_complete_attempt_script.php`) |
 
 ### Catalog services (admin CRUD)
 
