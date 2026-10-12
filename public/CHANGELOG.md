@@ -6,6 +6,44 @@ This document tracks changes to the project. Entry format is defined in **Cursor
 
 ## Log
 
+### [2026-10-12] Knowledge tests: remove is_correct schema upgrade (v4)
+**Author**: AI Assistant
+**Logic**:
+- Greenfield installs: `is_correct` is in initial `CREATE TABLE` (`001_baseline.sql`, `SchemaDefiner`); no legacy junction migration.
+**Changes**:
+- Removed `upgradeAnswersIsCorrectColumn()` and activate step; deleted `004_is_correct_on_answers.sql`; schema target **3**.
+
+### [2026-10-12] Knowledge tests: remove notification_type schema upgrade (v5)
+**Author**: AI Assistant
+**Logic**:
+- Plugin not deployed yet; `notification_type` belongs in initial `CREATE TABLE` only, not a follow-up `ALTER`.
+**Changes**:
+- Removed `upgradeNotificationsNotificationType()` and activate step; schema target back to **4**.
+
+### [2026-10-12] Knowledge tests: drop 005_notifications_type.sql
+**Author**: AI Assistant
+**Logic**:
+- v5 upgrade lives in `SchemaDefiner::upgradeNotificationsNotificationType()` on activate; baseline already defines `notification_type` for new installs.
+**Changes**:
+- Removed `migrations/005_notifications_type.sql`; updated `migrations/README.md`, `PHASE_2_TASKS.md`.
+
+### [2026-10-12] Knowledge tests: notification_type in baseline DDL
+**Author**: AI Assistant
+**Logic**:
+- `notification_type` belongs in canonical schema for new installs; v5 upgrade remains for older DBs only.
+**Changes**:
+- `migrations/001_baseline.sql`, `SchemaDefiner` notifications `CREATE`: `notification_type`, `UNIQUE user_test_type`; `005_notifications_type.sql` comment clarified.
+
+### [2026-10-12] Knowledge tests: Wave E notifications (Phase 2)
+**Author**: AI Assistant
+**Logic**:
+- `gi_new_test_notifications` rows per `(user, test, type)` with `dismiss_count`; failed complete resets `failed_test` row (§3.2); pass clears it.
+- Retake blocked when config mode is `block` and dismiss limit reached (`notification_blocked`; §3.1–§3.2).
+- Schema v5 adds `notification_type` on existing installs.
+**Changes**:
+- `NotificationRepository`, `NotificationService`, `NotificationRetakePolicy`; hook in `CompleteAttempt`; `RetakeEligibilityContext` + reason code.
+- `TestConfigReader::notificationSettings`; `tests/run_notification_retake_tests.php`; migrations `005_*`, target schema **5**.
+
 ### [2026-10-09] Knowledge tests: Wave D validity and critical update (Phase 2)
 **Author**: AI Assistant
 **Logic**:

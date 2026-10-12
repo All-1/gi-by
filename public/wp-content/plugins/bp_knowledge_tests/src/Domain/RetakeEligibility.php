@@ -9,6 +9,7 @@ final class RetakeEligibility
     public const REASON_RETAKE_DELAY = 'retake_delay';
     public const REASON_PENDING_MATERIALS = 'pending_materials';
     public const REASON_TEST_LOCKED = 'test_locked';
+    public const REASON_NOTIFICATION_BLOCKED = 'notification_blocked';
 
     /**
      * @param list<string> $reasons

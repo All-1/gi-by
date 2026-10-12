@@ -8,6 +8,7 @@ use BpKnowledgeTests\Domain\Record\AnswerRecord;
 use BpKnowledgeTests\Domain\Record\AttemptQuestionRecord;
 use BpKnowledgeTests\Domain\Record\AttemptRecord;
 use BpKnowledgeTests\Domain\Record\FinishedExplanationRecord;
+use BpKnowledgeTests\Domain\Record\NotificationRecord;
 use BpKnowledgeTests\Domain\Record\QuestionRecord;
 use BpKnowledgeTests\Domain\Record\TestRecord;
 
@@ -99,6 +100,17 @@ final class RecordMapper
             (int) $row->user_id,
             (string) $row->explanation,
             (string) $row->reference,
+        );
+    }
+
+    public function toNotificationRecord(object $row): NotificationRecord
+    {
+        return new NotificationRecord(
+            (int) $row->id,
+            (int) $row->user_id,
+            (int) $row->test_id,
+            (string) ($row->notification_type ?? ''),
+            (int) $row->dismiss_count,
         );
     }
 }

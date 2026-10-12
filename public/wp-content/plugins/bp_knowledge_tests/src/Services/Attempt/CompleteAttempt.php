@@ -5,10 +5,12 @@ declare(strict_types=1);
 namespace BpKnowledgeTests\Services\Attempt;
 
 use BpKnowledgeTests\Domain\Record\AttemptRecord;
+use BpKnowledgeTests\Domain\Record\NotificationRecord;
 use BpKnowledgeTests\Domain\Record\QuestionRecord;
 use BpKnowledgeTests\Infrastructure\DatabaseClock;
 use BpKnowledgeTests\Infrastructure\Repository\AttemptQuestionRepository;
 use BpKnowledgeTests\Infrastructure\Repository\AttemptRepository;
+use BpKnowledgeTests\Infrastructure\Repository\NotificationRepository;
 use BpKnowledgeTests\Services\CatalogServices;
 use BpKnowledgeTests\Services\DomainServices;
 
@@ -21,6 +23,7 @@ final class CompleteAttempt
         private AttemptQuestionRepository $attemptQuestions,
         private MaterialsService $materials,
         private AttemptAchievementService $achievements,
+        private NotificationRepository $notifications,
         private DatabaseClock $clock,
     ) {
     }
@@ -47,6 +50,9 @@ final class CompleteAttempt
 
         if ($outcome['status'] === 'failed') {
             $this->materials->populateFromFailedAttempt($attempt->id);
+            $this->notifications->resetDismissCount($userId, $testId, NotificationRecord::TYPE_FAILED_TEST);
+        } else {
+            $this->notifications->deleteByUserTestAndType($userId, $testId, NotificationRecord::TYPE_FAILED_TEST);
         }
 
         $this->achievements->applyAfterComplete($userId, $testId, $attempt->score);

@@ -122,9 +122,10 @@ CREATE TABLE IF NOT EXISTS gi_new_test_notifications (
     id int(10) unsigned NOT NULL AUTO_INCREMENT,
     user_id int(10) unsigned NOT NULL,
     test_id int(10) unsigned NOT NULL,
+    notification_type varchar(128) NOT NULL DEFAULT 'failed_test',
     dismiss_count int(10) unsigned NOT NULL DEFAULT 0,
     PRIMARY KEY (id),
-    KEY user_test (user_id, test_id)
+    UNIQUE KEY user_test_type (user_id, test_id, notification_type)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- ---------------------------------------------------------------------------

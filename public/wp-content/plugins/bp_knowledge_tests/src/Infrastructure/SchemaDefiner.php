@@ -27,25 +27,6 @@ final class SchemaDefiner
         }
     }
 
-    public function upgradeAnswersIsCorrectColumn(): void
-    {
-        if (!$this->db->columnExists('KnowledgeTestAnswers', 'is_correct')) {
-            $this->wpdb->query(
-                'ALTER TABLE gi_new_test_answers
-                ADD COLUMN is_correct tinyint(1) NOT NULL DEFAULT 0 AFTER answer'
-            );
-        }
-
-        if ($this->db->tableExists('KnowledgeTestCorrectAnswerOptions')) {
-            $this->wpdb->query(
-                'UPDATE gi_new_test_answers a
-                INNER JOIN gi_new_test_correct_answer_options c ON c.answer_id = a.id
-                SET a.is_correct = 1'
-            );
-            $this->dropCorrectAnswerOptionsTable();
-        }
-    }
-
     public function installForeignKeys(): void
     {
         foreach ($this->foreignKeyConstraints() as $definition) {
@@ -147,10 +128,10 @@ final class SchemaDefiner
                 id int(10) unsigned NOT NULL AUTO_INCREMENT,
                 user_id int(10) unsigned NOT NULL,
                 test_id int(10) unsigned NOT NULL,
-                notification_type varchar(128) NOT NULL DEFAULT '',
+                notification_type varchar(128) NOT NULL DEFAULT 'failed_test',
                 dismiss_count int(10) unsigned NOT NULL DEFAULT 0,
                 PRIMARY KEY  (id),
-                KEY user_test (user_id, test_id)
+                UNIQUE KEY user_test_type (user_id, test_id, notification_type)
             ) $charset;",
             "CREATE TABLE gi_new_test_config (
                 id int(10) unsigned NOT NULL AUTO_INCREMENT,
@@ -274,17 +255,5 @@ final class SchemaDefiner
         );
 
         return (int) $found > 0;
-    }
-
-    private function dropCorrectAnswerOptionsTable(): void
-    {
-        foreach (['fk_kt_correct_q_answer', 'fk_kt_correct_q_question'] as $constraint) {
-            if ($this->foreignKeyExists('gi_new_test_correct_answer_options', $constraint)) {
-                $this->wpdb->query(
-                    "ALTER TABLE gi_new_test_correct_answer_options DROP FOREIGN KEY `{$constraint}`"
-                );
-            }
-        }
-        $this->wpdb->query('DROP TABLE IF EXISTS gi_new_test_correct_answer_options');
     }
 }

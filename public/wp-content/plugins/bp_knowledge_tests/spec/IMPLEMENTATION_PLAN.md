@@ -7,7 +7,7 @@
 **Plugin context**: [PROJECT_CONTEXT.md](../PROJECT_CONTEXT.md)  
 **Personal account integration**: [bp_contracts/PROJECT_CONTEXT.md](../../bp_contracts/PROJECT_CONTEXT.md)
 
-**Status (repository)**: Phase **2** in progress — complete attempt through **validity / critical update**; notifications pending. Schema **v4**. WS / React UI not started. No `TestController` in `bp_contracts` yet.  
+**Status (repository)**: Phase **2** essentially complete (notifications + retake gate); Wave F polish optional. Schema **v3** (full DDL on first activate; baseline includes `is_correct`, `notification_type`). WS / React UI not started. No `TestController` in `bp_contracts` yet.  
 **Phase 2 tasks:** [PHASE_2_TASKS.md](./PHASE_2_TASKS.md)  
 **Last updated**: 2026-10-07
 
@@ -64,11 +64,11 @@ bp_knowledge_tests/
     └── PHASE_2_TASKS.md
 ```
 
-**Implemented:** Phase **1** (catalog CRUD, domain scoring/classifier, dev Tools, schema **v4**, `is_correct` on answers). Phase **2** partial: materials (`attempts()->materials`), **`CompleteAttempt`** (`attempts()->complete->finish`), attempt row persistence.
+**Implemented:** Phase **1** (catalog CRUD, domain scoring/classifier, dev Tools, schema **v3**, `is_correct` on answers). Phase **2** partial: materials (`attempts()->materials`), **`CompleteAttempt`** (`attempts()->complete->finish`), attempt row persistence.
 
 **Not yet present:**
 
-- Phase **2** remainder: notifications, optional A4 smoke (see [PHASE_2_TASKS.md](./PHASE_2_TASKS.md))
+- Phase **2** remainder: optional A4 smoke + Wave F (see [PHASE_2_TASKS.md](./PHASE_2_TASKS.md))
 - `bp_contracts` `TestController`, live WS commands (Phase 3)
 - React dealer + admin UIs (Phases 4–6)
 
@@ -237,7 +237,7 @@ Unlimited options per question (spec §8.3).
 
 **Naming:** Table/column name `answer` is historical; treat rows as **answer options**, not attempt answers.
 
-**Correct options (spec §8.3 prose):** **`is_correct`** on this table (**D6 resolved**, schema v4). Do not confuse with `gi_new_test_attempts.valid_answers` / `invalid_answers` (user selection counts).
+**Correct options (spec §8.3 prose):** **`is_correct`** on this table (**D6 resolved**, baseline DDL). Do not confuse with `gi_new_test_attempts.valid_answers` / `invalid_answers` (user selection counts).
 
 API: `catalog()->answers` — `setIsCorrect`, `setCorrectAnswerIdsForQuestion`, `listCorrectAnswerIdsForQuestion`, `maximumCorrectForTest`.
 
@@ -338,9 +338,10 @@ Hover text: `{rank name from config} — {test.achievement_area}`.
 | `id` | ✓ | `INT UNSIGNED PK AI` | |
 | `user_id` | ✓ | `INT UNSIGNED` | |
 | `test_id` | ✓ | `INT UNSIGNED` | |
+| `notification_type` | — | `VARCHAR(128)` | `new_test` \| `failed_test`; unique with `(user_id, test_id)` |
 | `dismiss_count` | ✓ | `INT UNSIGNED DEFAULT 0` | Compared to limits in config |
 
-Consider `notification_type` (`new_test` \| `failed_test`) if one row per user/test is insufficient — **not in spec**; add only if product confirms.
+One row per `(user_id, test_id, notification_type)` (Wave E).
 
 ---
 
@@ -436,7 +437,7 @@ Per-question % for UI/analytics may use `max(0, right − failed) / correct_opti
 
 RAM does **not** replace D6: without persisted correct-option keys, finish/scoring cannot be reproduced.
 
-**D6:** `is_correct` on `gi_new_test_answers` (schema v4).
+**D6:** `is_correct` on `gi_new_test_answers` (baseline DDL).
 
 ### 5.2 Pass / fail / stars (spec §2.2, §2.11, §5)
 
@@ -488,7 +489,7 @@ Suggested use cases (classes/names indicative):
 | `RetakeEligibilityQuery` | Retake + materials + lock |
 | `CriticalUpdateTest` | Version bump; mark outdated; strip achievements |
 | `ValidityMaintenance` | On login/catalog load: outdated transitions |
-| `NotificationService` | New test / failed test / dismiss counts / block mode |
+| `NotificationRepository` + `NotificationRetakePolicy` | Dismiss rows; block mode on retake |
 | `AchievementRecalculation` | After config change (§5.6) |
 | `AnalyticsQuery` | Test-level and question-level (§18) |
 
@@ -583,7 +584,7 @@ Store dismiss counts and policy in `gi_new_test_config` / `gi_new_test_notificat
 - [x] Achievements + user achievements (`AttemptAchievementService`, repos)
 - [x] Retake eligibility (`RetakeEligibilityQuery`, `tests/run_retake_eligibility_tests.php`)
 - [x] Critical update + outdated (`ValidityMaintenance`, `CriticalUpdateTest`, `tests/run_validity_tests.php`)
-- [ ] Notifications persistence
+- [x] Notifications persistence (`NotificationRepository`, retake `notification_blocked`, `notification_type` in baseline DDL)
 - [ ] Automated tests: complete attempt integration, achievement on complete (retake + validity covered)
 
 **Exit:** Complete attempt lifecycle without UI (scripted).

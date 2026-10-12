@@ -47,6 +47,9 @@ final class RetakeEligibilityPolicy
         if ($attempt->isFailed() && $context->hasPendingMaterials) {
             $reasons[] = RetakeEligibility::REASON_PENDING_MATERIALS;
         }
+        if ($context->notificationBlocksRetake) {
+            $reasons[] = RetakeEligibility::REASON_NOTIFICATION_BLOCKED;
+        }
 
         return $reasons;
     }

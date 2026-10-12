@@ -44,10 +44,16 @@ $assert = static function (bool $condition, string $message) use (&$failures): v
 $policy = new RetakeEligibilityPolicy(new AttemptResultClassifier());
 $config = new TestConfig(70.0, 80.0, 90.0, 95.0);
 
-$context = static fn (bool $pending, int $delayDays, string $now): RetakeEligibilityContext => new RetakeEligibilityContext(
+$context = static fn (
+    bool $pending,
+    int $delayDays,
+    string $now,
+    bool $notificationBlocked = false,
+): RetakeEligibilityContext => new RetakeEligibilityContext(
     $pending,
     $delayDays,
     $now,
+    $notificationBlocked,
 );
 
 $none = $policy->evaluate(null, $context(false, 1, '2026-10-08 12:00:00'), $config);
@@ -106,6 +112,16 @@ $outdatedLock = $policy->evaluate(
 $assert(
     !in_array(RetakeEligibility::REASON_TEST_LOCKED, $outdatedLock->reasons, true),
     'outdated attempt does not apply lock block',
+);
+
+$notificationBlock = $policy->evaluate(
+    $attempt(80.0, 'passed', '2026-10-01 12:00:00'),
+    $context(false, 1, '2026-10-10 12:00:00', true),
+    $config,
+);
+$assert(
+    in_array(RetakeEligibility::REASON_NOTIFICATION_BLOCKED, $notificationBlock->reasons, true),
+    'notification block reason is included',
 );
 
 if ($failures > 0) {
