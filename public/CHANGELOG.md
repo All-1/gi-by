@@ -6,6 +6,14 @@ This document tracks changes to the project. Entry format is defined in **Cursor
 
 ## Log
 
+### [2026-10-12] Knowledge tests: Phase 2 exit (complete attempt integration)
+**Author**: AI Assistant
+**Logic**:
+- Close Wave F / A4: scripted `CompleteAttempt` lifecycle verifiable without WordPress; Phase 3 can start.
+**Changes**:
+- `bp_knowledge_tests/tests/run_complete_attempt_tests.php`, `run_complete_attempt_script.php`, `tests/support/MemoryDBWorker.php`, `CompleteAttemptTestFixture.php`
+- `spec/PHASE_2_TASKS.md`, `spec/IMPLEMENTATION_PLAN.md`, `PROJECT_CONTEXT.md`, `migrations/README.md`: Phase 2 complete
+
 ### [2026-10-12] Knowledge tests: remove is_correct schema upgrade (v4)
 **Author**: AI Assistant
 **Logic**:

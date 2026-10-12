@@ -7,7 +7,7 @@
 
 **Goal (exit criterion):** Complete attempt lifecycle **without UI** — finish attempt → DB → materials on fail → achievements on pass → retake/validity/notifications queryable — verifiable via CLI or dev script (not React/WebSocket).
 
-**Progress (2026-10-12):** **Wave E** shipped. **Next:** Wave F close-out (optional A4 smoke, §11 checkboxes).
+**Progress (2026-10-12):** **Phase 2 complete** — Wave F closed (A4 + `run_complete_attempt_tests.php`, docs synced).
 
 **Estimate:** ~1.5–2 weeks one developer (matches plan §11).
 
@@ -20,15 +20,15 @@
 | Schema | `gi_new_test_attempts`, `attempt_questions`, `finished_attempts_explanations`, achievements, notifications, config ([001_baseline.sql](../migrations/001_baseline.sql)) |
 | Reads | `AttemptRepository::findById`, `AttemptQuestionRepository::listByAttemptId` |
 | Materials | `attempts()->materials` (`MaterialsService`, `FinishedExplanationRepository`) |
-| Tests | `tests/run_scoring_tests.php`, `run_selection_grader_tests.php`, `run_materials_mistake_tests.php`, `run_attempt_question_materials_tests.php` |
+| Tests | `tests/run_scoring_tests.php`, `run_selection_grader_tests.php`, `run_attempt_question_materials_tests.php`, `run_complete_attempt_tests.php` (A4 lifecycle) |
 | Domain for finish | `ScoringService`, `QuestionSelectionGrader`, `AttemptResultClassifier`, `TestConfig`, `catalog()->answers->maximumCorrectForTest` |
 | **Complete attempt** | `attempts()->complete` → `Services\Attempt\CompleteAttempt::finish`; `AttemptRepository` / `AttemptQuestionRepository` **insert** |
 
-**Gap (remaining):** A4 integration smoke; Wave F doc/test close-out.
+**Gap (remaining):** None — proceed to Phase 3.
 
 ---
 
-## Wave A — Attempt persistence (critical path) — **done** (except A4)
+## Wave A — Attempt persistence (critical path) — **done**
 
 ### A1. Finish payload (Phase 2 ↔ Phase 3 boundary) — **done**
 
@@ -166,14 +166,14 @@ Callable on catalog load / login (hook later). Phase 2: service + tests.
 
 ---
 
-## Wave F — Close Phase 2
+## Wave F — Close Phase 2 — **done**
 
 | Task | Notes |
 |------|--------|
-| Automated tests | Complete attempt (pass/fail), retake, outdated/critical, achievement on complete |
-| `PROJECT_CONTEXT` | Document `attempts()->complete` and related APIs |
-| [IMPLEMENTATION_PLAN.md](./IMPLEMENTATION_PLAN.md) §11 | Check boxes; refresh §3 repository state |
-| Doc hygiene | Reconcile schema version notes in IMPLEMENTATION_PLAN / migrations README if needed |
+| Automated tests | `tests/run_complete_attempt_tests.php` — pass/fail, materials, achievements, notifications (retake/validity in other `run_*` scripts) |
+| `PROJECT_CONTEXT` | `attempts()->complete` APIs + test index |
+| [IMPLEMENTATION_PLAN.md](./IMPLEMENTATION_PLAN.md) §11 | Phase 2 checkboxes; §3 repository state |
+| Doc hygiene | `migrations/README.md` lists complete-attempt script |
 
 ---
 
@@ -215,7 +215,7 @@ Log significant product choices in [CHANGELOG.md](../../../../CHANGELOG.md).
 - [x] A1 Finish payload contract (array lines on `CompleteAttempt::finish`)
 - [x] A2 Attempt + attempt_question writes (+ optional reads/updates)
 - [x] A3 `CompleteAttempt` (`attempts()->complete`)
-- [ ] A4 Scripted lifecycle script (WP/DB integration or dev Tools action)
+- [x] A4 Scripted lifecycle script (`tests/run_complete_attempt_script.php` → `run_complete_attempt_tests.php`)
 - [x] B1 Achievement + user achievement repos
 - [x] B2 Hook complete → achievements
 - [x] B3 Achievement recalculation (`recalculateForUserAndTest`)
@@ -225,4 +225,4 @@ Log significant product choices in [CHANGELOG.md](../../../../CHANGELOG.md).
 - [x] E1 Notification persistence + failed-complete hook
 - [x] E2 Retake ↔ notification block
 - [x] F Phase 2 breakdown doc + Wave A status in IMPLEMENTATION_PLAN / PROJECT_CONTEXT
-- [ ] F Remaining §11 checkboxes when B–E land
+- [x] F Remaining §11 checkboxes when B–E land
