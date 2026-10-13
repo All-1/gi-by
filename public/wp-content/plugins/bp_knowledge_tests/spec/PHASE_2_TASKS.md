@@ -24,7 +24,7 @@
 | Domain for finish | `ScoringService`, `QuestionSelectionGrader`, `AttemptResultClassifier`, `TestConfig`, `catalog()->answers->maximumCorrectForTest` |
 | **Complete attempt** | `attempts()->complete` → `Services\Attempt\CompleteAttempt::finish`; `AttemptRepository` / `AttemptQuestionRepository` **insert** |
 
-**Gap (remaining):** None — proceed to Phase 3.
+**Gap (remaining):** None — proceed to Phase **3** (admin UI; see [PHASE_3_TASKS.md](./PHASE_3_TASKS.md)).
 
 ---
 

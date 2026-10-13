@@ -6,6 +6,29 @@ This document tracks changes to the project. Entry format is defined in **Cursor
 
 ## Log
 
+### [2026-10-12] Knowledge tests: Phase 3 Wave A admin REST API
+**Author**: AI Assistant
+**Logic**:
+- React admin (Wave C) needs a capability-checked HTTP surface; delegates to existing catalog/attempt services only.
+**Changes**:
+- `bp_knowledge_tests/src/Infrastructure/Http/*` — `bp-knowledge-tests/v1` routes; `Plugin::boot()` registers `AdminRestApi`
+- `PROJECT_CONTEXT.md`: route table; `PHASE_3_TASKS.md`, `IMPLEMENTATION_PLAN.md` §11
+
+### [2026-10-12] Knowledge tests: reorder phases (admin before WS)
+**Author**: AI Assistant
+**Logic**:
+- Phase **3** = React admin (former Phase 6); Phases **4–6** = former 3–5 (WS, dealer UI, notifications); Phase **7** unchanged.
+**Changes**:
+- `spec/IMPLEMENTATION_PLAN.md` §11, §3, §14.1; `PHASE_3_TASKS.md` (admin), `PHASE_4_TASKS.md` (WS); `PROJECT_CONTEXT.md`, `bp_contracts/PROJECT_CONTEXT.md`
+
+### [2026-10-12] Knowledge tests: Phase 3 task breakdown
+**Author**: AI Assistant
+**Logic**:
+- Phase 3 spans `bp_contracts` + `bp_knowledge_tests`; execution backlog lives beside Phase 2 pattern.
+**Changes**:
+- `bp_knowledge_tests/spec/PHASE_3_TASKS.md`: [NEW] waves A–F, WS protocol, checklist
+- `spec/IMPLEMENTATION_PLAN.md`, `PROJECT_CONTEXT.md`: links to Phase 3 tasks
+
 ### [2026-10-12] Knowledge tests: Phase 2 exit (complete attempt integration)
 **Author**: AI Assistant
 **Logic**:

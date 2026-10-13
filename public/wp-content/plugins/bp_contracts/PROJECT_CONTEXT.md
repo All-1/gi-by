@@ -73,7 +73,7 @@ Domain (scoring, DB, admin) lives in **[bp_knowledge_tests](../bp_knowledge_test
 | `Chat.php` handlers | Thin; call plugin services via Worker / `InteractionInterface` |
 | Chat author UI | Stars from plugin achievement query |
 
-**WS commands (proposed — finalize Phase 3):** see [bp_knowledge_tests spec IMPLEMENTATION_PLAN §4.5](../bp_knowledge_tests/spec/IMPLEMENTATION_PLAN.md#45-websocket-spec-23). Authoritative list will be added to [src/PROJECT_CONTEXT.md](./src/PROJECT_CONTEXT.md) when implemented.
+**Phase 3 (admin):** [bp_knowledge_tests/spec/PHASE_3_TASKS.md](../bp_knowledge_tests/spec/PHASE_3_TASKS.md). **Phase 4 (WS):** [PHASE_4_TASKS.md](../bp_knowledge_tests/spec/PHASE_4_TASKS.md). **WS commands (proposed — finalize Phase 4 Wave A):** [IMPLEMENTATION_PLAN §4.5](../bp_knowledge_tests/spec/IMPLEMENTATION_PLAN.md#45-websocket-spec-23). Live list → [src/PROJECT_CONTEXT.md](./src/PROJECT_CONTEXT.md) when implemented.
 
 **Hard rule:** No scoring, pass/fail, validity, or achievement rules in `bp_contracts` — session + presentation only.
 

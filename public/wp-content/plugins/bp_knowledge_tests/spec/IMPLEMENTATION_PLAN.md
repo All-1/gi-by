@@ -7,8 +7,10 @@
 **Plugin context**: [PROJECT_CONTEXT.md](../PROJECT_CONTEXT.md)  
 **Personal account integration**: [bp_contracts/PROJECT_CONTEXT.md](../../bp_contracts/PROJECT_CONTEXT.md)
 
-**Status (repository)**: Phase **2** **complete** (lifecycle + integration tests). Schema **v3**. **Next:** Phase **3** (`TestController` + WS). WS / React UI not started. No `TestController` in `bp_contracts` yet.  
+**Status (repository)**: Phase **2** **complete**. Schema **v3**. **Next:** Phase **3** (React **admin** / test factory). Phases **4–7:** WS → dealer UI → notifications UX → hardening. No admin API or `TestController` yet.  
 **Phase 2 tasks:** [PHASE_2_TASKS.md](./PHASE_2_TASKS.md)  
+**Phase 3 tasks:** [PHASE_3_TASKS.md](./PHASE_3_TASKS.md) (admin)  
+**Phase 4 tasks:** [PHASE_4_TASKS.md](./PHASE_4_TASKS.md) (WS)  
 **Last updated**: 2026-10-12
 
 ---
@@ -61,17 +63,22 @@ bp_knowledge_tests/
 └── spec/
     ├── Testing System — Project Documentation.md
     ├── IMPLEMENTATION_PLAN.md
-    └── PHASE_2_TASKS.md
+    ├── PHASE_2_TASKS.md
+    ├── PHASE_3_TASKS.md
+    └── PHASE_4_TASKS.md
 ```
 
 **Implemented:** Phase **1** (catalog CRUD, domain scoring/classifier, dev Tools, schema **v3**, `is_correct` on answers). Phase **2** (materials, **`CompleteAttempt`**, achievements, retake, validity/critical update, notifications, `tests/run_complete_attempt_tests.php`).
 
 **Not yet present:**
 
-- `bp_contracts` `TestController`, live WS commands (Phase 3)
-- React dealer + admin UIs (Phases 4–6)
+- Phase **3** — React admin + HTTP API for catalog/settings
+- Phase **4** — `bp_contracts` `TestController`, live WS commands
+- Phases **5–6** — React dealer UI + notifications UX
 
-**Doc / integration hygiene (Phase 0):** plugin linked from [public/PROJECT_CONTEXT.md](../../../../PROJECT_CONTEXT.md); `bp_contracts` testing section exists — update WS list when Phase 3 starts.
+**Doc / integration hygiene (Phase 0):** plugin linked from [public/PROJECT_CONTEXT.md](../../../../PROJECT_CONTEXT.md); `bp_contracts` testing section exists — update WS list when **Phase 4** starts.
+
+**Phase order (2026-10-12):** Admin (**3**) before WS/dealer (**4–6**) so staging has real catalog content; see [PHASE_3_TASKS.md](./PHASE_3_TASKS.md).
 
 ---
 
@@ -141,7 +148,7 @@ Follow User Rules and DEVELOPMENT_RULES §2 — summary for this plugin only:
 - New WS message titles must be listed in [bp_contracts/src/PROJECT_CONTEXT.md](../../bp_contracts/src/PROJECT_CONTEXT.md).
 - Client handlers follow `handler` + `PascalCase(title)` in `communication_server.js`.
 
-**Proposed client → server commands (names to finalize in Phase 3):**
+**Proposed client → server commands (names to finalize in Phase 4):**
 
 | Command | Purpose |
 |---------|---------|
@@ -431,7 +438,7 @@ Per-question % for UI/analytics may use `max(0, right − failed) / correct_opti
 | Data | Storage | Purpose |
 |------|---------|---------|
 | Which option rows are **correct** for each question | **`gi_new_test_answers.is_correct`** (D6) | Authoring + every attempt uses the same key |
-| User’s **current** checkbox selections, shuffle order | **`TestController` RAM** (Phase 3) | In-progress attempt + immediate feedback |
+| User’s **current** checkbox selections, shuffle order | **`TestController` RAM** (Phase 4) | In-progress attempt + immediate feedback |
 | Totals after user continues | **Session RAM**, then **attempt** rows on finish | `valid_answers` / `invalid_answers`; per-question `right_answers` / `failed_answers` — counts only (spec §9.2–9.3) |
 
 RAM does **not** replace D6: without persisted correct-option keys, finish/scoring cannot be reproduced.
@@ -557,7 +564,7 @@ Store dismiss counts and policy in `gi_new_test_config` / `gi_new_test_notificat
 
 - [x] `bp_knowledge_tests/PROJECT_CONTEXT.md` (plugin root index — extend with APIs/tables as code lands)
 - [x] Link plugin from `public/PROJECT_CONTEXT.md`
-- [x] `bp_contracts` testing section in PROJECT_CONTEXT (WS command list → Phase 3 live titles)
+- [x] `bp_contracts` testing section in PROJECT_CONTEXT (WS command list → Phase 4 live titles)
 - [x] SQL migrations draft + **multi-select** scoring rules (D4 → spec §2.1.1)
 - [x] [CHANGELOG.md](../../../../CHANGELOG.md) entries for implementation / doc decisions
 
@@ -588,7 +595,20 @@ Store dismiss counts and policy in `gi_new_test_config` / `gi_new_test_notificat
 
 **Exit:** Complete attempt lifecycle without UI (scripted).
 
-### Phase 3 — TestController & WebSocket (1.5–2 weeks)
+### Phase 3 — Admin UI (React) (2–2.5 weeks)
+
+**Task breakdown:** [PHASE_3_TASKS.md](./PHASE_3_TASKS.md) (waves A–F, readiness, checklist). *Former plan Phase 6.*
+
+- [x] Admin HTTP API for catalog, config, critical update (capability-checked)
+- [ ] React screens for §15–16 minimum (§17–18 optional in same phase or stretch)
+- [ ] Critical update tested from admin UI
+- [ ] Retire dev Tools catalog dependence
+
+**Exit:** Content team self-service via React admin (at least full test authoring).
+
+### Phase 4 — TestController & WebSocket (1.5–2 weeks)
+
+**Task breakdown:** [PHASE_4_TASKS.md](./PHASE_4_TASKS.md) (waves A–F, checklist, cross-plugin ownership). *Former plan Phase 3.*
 
 - [ ] `TestController` + session model
 - [ ] WS commands documented and implemented
@@ -597,7 +617,7 @@ Store dismiss counts and policy in `gi_new_test_config` / `gi_new_test_notificat
 
 **Exit:** End-to-end test over WS on staging.
 
-### Phase 4 — User-facing UI (React) (2 weeks)
+### Phase 5 — User-facing UI (React) (2 weeks)
 
 - [ ] React Tests list + pagination (§19)
 - [ ] In-test flow (one question, counter, Continue) via WS payloads (§20)
@@ -607,19 +627,12 @@ Store dismiss counts and policy in `gi_new_test_config` / `gi_new_test_notificat
 
 **Exit:** Full dealer journey QA in React.
 
-### Phase 5 — Notifications UX (React + shared WS) (1 week)
+### Phase 6 — Notifications UX (React + shared WS) (1 week)
 
 - [ ] Popup / block / bottom bar from config in React (or shared notification host)
 - [ ] Integration with existing notification stack where applicable
 
 **Exit:** Config matrix tested.
-
-### Phase 6 — Admin UI (React) (2–2.5 weeks)
-
-- [ ] React screens for §15–18 (catalog uses plugin application API)
-- [ ] Critical update tested
-
-**Exit:** Content team self-service via React admin.
 
 ### Phase 7 — Hardening & release (1–1.5 weeks)
 
@@ -631,7 +644,7 @@ Store dismiss counts and policy in `gi_new_test_config` / `gi_new_test_notificat
 
 ### Rough total
 
-**~10–14 weeks** one developer familiar with `bp_contracts`; Phases 1 and 6 can overlap partially.
+**~10–14 weeks** one developer familiar with `bp_contracts`; Phase **3** (admin) before **4** (WS) is the default sequence (2026-10-12).
 
 ---
 
@@ -671,7 +684,7 @@ Store dismiss counts and policy in `gi_new_test_config` / `gi_new_test_notificat
 
 | ID | Topic | Status |
 |----|-------|--------|
-| D1 | Exact WS command naming | Proposed §4.5 — finalize in Phase 3 |
+| D1 | Exact WS command naming | Proposed §4.5 — finalize in Phase 4 |
 | D2 | Which roles see Tests / admin | TBD with product |
 | D3 | Question difficulty formula | Deferred; raw data in V1 |
 | D4 | Multi-select counting (valid/invalid/missed, global vs per-question score) | **Resolved** — spec §2.1.1; engineering §5.1.1 |
@@ -688,7 +701,8 @@ Store dismiss counts and policy in `gi_new_test_config` / `gi_new_test_notificat
 |----------|------|--------|
 | **Soon** | **D10** — notification rows | `NotificationService` |
 | **Parallel** | **D2** — capabilities / roles | Admin + dealer menu visibility |
-| **Phase 3** | **D1** — WS names | `Chat.php` + React client |
+| **Phase 3** | **D2** — admin vs dealer roles | Admin API + nav |
+| **Phase 4** | **D1** — WS names | `Chat.php` + React client |
 | **Deferred** | **D3** — difficulty formula | Analytics UI only |
 
 **Not blocking Phase 2 start if documented:** `user_id` → `gi_new_users.id_user` resolver (implement in attempt services); retake = `retake_delay_days` with “1 = following day” (spec §2.6).

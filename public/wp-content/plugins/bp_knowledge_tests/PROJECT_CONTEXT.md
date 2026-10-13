@@ -4,7 +4,7 @@
 
 WordPress plugin for **dealer knowledge tests** in the personal account. Domain logic lives here; **`bp_contracts`** provides UI shell, WebSocket transport, and in-memory `TestController` for unfinished attempts (later phases).
 
-**Status**: Phase **2** **complete** — full attempt lifecycle + `tests/run_complete_attempt_tests.php` (in-memory integration, no WP). **Next:** Phase 3 (`TestController` + WS in `bp_contracts`). **Product UI is React** — not in this plugin. **Tools → Knowledge Tests (dev)** is smoke-only.
+**Status**: Phase **2** **complete**. Phase **3** Wave **A** (admin REST) shipped. **Next:** Wave B–C (React mount + test factory UI). Phase **4** = `TestController` + WS. **Tools → Knowledge Tests (dev)** remains until React admin lists catalog.
 
 ## Documentation (canonical)
 
@@ -13,6 +13,8 @@ WordPress plugin for **dealer knowledge tests** in the personal account. Domain 
 | [spec/Testing System — Project Documentation.md](./spec/Testing%20System%20%E2%80%94%20Project%20Documentation.md) | Business requirements, rules, DB fields, UI (baseline §1 must not be silently changed) |
 | [spec/IMPLEMENTATION_PLAN.md](./spec/IMPLEMENTATION_PLAN.md) | Architecture, phases, integration, WS proposal, engineering standards (§4.3), QA checklist |
 | [spec/PHASE_2_TASKS.md](./spec/PHASE_2_TASKS.md) | Phase 2 work breakdown (waves, checklist, exit criteria) |
+| [spec/PHASE_3_TASKS.md](./spec/PHASE_3_TASKS.md) | Phase 3 work breakdown (admin UI / test factory) |
+| [spec/PHASE_4_TASKS.md](./spec/PHASE_4_TASKS.md) | Phase 4 work breakdown (`TestController`, WS, plugin bridge) |
 
 ## Integration
 
@@ -26,7 +28,7 @@ WordPress plugin for **dealer knowledge tests** in the personal account. Domain 
 | Dealer Tests + materials (§19–21) | React in personal account |
 | Test-factory admin (§15–18) | React admin |
 | Domain, scoring, DB, catalog API | **`bp_knowledge_tests`** (this plugin) |
-| In-progress session transport | **`bp_contracts`** `TestController` + WS (Phase 3) |
+| In-progress session transport | **`bp_contracts`** `TestController` + WS (Phase 4) |
 
 This plugin does **not** ship React bundles. Expose stable application/WS contracts for the frontend; avoid new jQuery/`modal_window.js` flows for knowledge tests.
 
@@ -35,7 +37,7 @@ This plugin does **not** ship React bundles. Expose stable application/WS contra
 | Item | Location |
 |------|----------|
 | Entry | `index.php` — autoload, `PluginBootstrap::run()` (no hooks in entry) |
-| Runtime | `Plugin::boot()` — dev admin page; `catalog()` / `domain()` / `attempts()` APIs |
+| Runtime | `Plugin::boot()` — admin REST + dev Tools; `catalog()` / `domain()` / `attempts()` APIs |
 | Services | `CatalogServices`, `DomainServices`, `AttemptServices` (`CompleteAttempt`, `MaterialsService`), `ScoringService`, `Catalog\*` — wired in `PluginBootstrap::compose()` |
 | Domain | `Domain\TestConfig`, `Domain\AttemptResultClassifier`, `Domain\QuestionSelectionGrader`, `Domain\Record\*` |
 | Activation | `PluginBootstrap::activate()` — versioned schema |
@@ -54,6 +56,33 @@ This plugin does **not** ship React bundles. Expose stable application/WS contra
 | Validity / outdated tests | `php tests/run_validity_tests.php` |
 | Notification retake block tests | `php tests/run_notification_retake_tests.php` |
 | Complete attempt integration (A4) | `php tests/run_complete_attempt_tests.php` (or `run_complete_attempt_script.php`) |
+| Admin REST (Phase 3 Wave A) | `Infrastructure\Http\AdminRestApi` — namespace `bp-knowledge-tests/v1` |
+
+### Admin REST API (Phase 3 Wave A)
+
+**Base URL:** `/wp-json/bp-knowledge-tests/v1`  
+**Auth:** logged-in user with `manage_options` (interim until D2); send cookie session + `X-WP-Nonce` from `wp_create_nonce('wp_rest')`.  
+**JSON:** camelCase in request/response bodies.
+
+| Method | Route | Body (JSON) | Response |
+|--------|-------|-------------|----------|
+| GET | `/tests` | — | `{ tests: Test[] }` |
+| POST | `/tests` | `{ title, achievementArea? }` | `{ test }` |
+| GET | `/tests/{id}` | — | `{ test }` |
+| PUT/PATCH | `/tests/{id}` | `{ title, achievementArea? }` | `{ test }` |
+| DELETE | `/tests/{id}` | — | `{ deleted: true }` |
+| GET | `/tests/{testId}/questions` | — | `{ questions }` |
+| POST | `/tests/{testId}/questions` | `{ question, explanation, reference }` | `{ question }` |
+| GET/PUT/DELETE | `/questions/{id}` | same fields on PUT | `{ question }` or `{ deleted }` |
+| GET | `/questions/{questionId}/answers` | — | `{ answers, correctAnswerIds }` |
+| POST | `/questions/{questionId}/answers` | `{ answer, isCorrect? }` | `{ answer }` |
+| GET/PUT/DELETE | `/answers/{id}` | `{ answer, isCorrect? }` on PUT | `{ answer }` or `{ deleted }` |
+| PUT/PATCH | `/questions/{questionId}/correct-answer-ids` | `{ answerIds: number[] }` | `{ correctAnswerIds }` |
+| GET | `/config` | — | `{ settings: Record<string,string> }` |
+| PUT/PATCH | `/config` | `{ name, value }` or `{ settings: {…} }` | `{ settings }` |
+| POST | `/tests/{id}/critical-update` | — | `{ test }` (version bumped) |
+
+`Test`, `Question`, `Answer` shapes match `Infrastructure\Http\ResourcePresenter`.
 
 ### Catalog services (admin CRUD)
 
@@ -88,7 +117,7 @@ Example: `$plugin->catalog()->answers->create($questionId, 'Option text', true)`
 | `attempts()->validity` | `refreshForUser`, `refreshForUserAndTest` — latest `passed` → `outdated` after one year; strip achievement (§2.3, §2.15) |
 | `attempts()->criticalUpdate` | `execute(testId)` — all `passed` → `outdated`, clear test achievements, bump test `version` (§6) |
 
-**Finish payload:** list of `['questionId' => int, 'rightAnswers' => int, 'failedAnswers' => int]` — full question set for the test. Phase 3 `TestController` builds this on `finishTest`.
+**Finish payload:** list of `['questionId' => int, 'rightAnswers' => int, 'failedAnswers' => int]` — full question set for the test. Phase 4 `TestController` builds this on `finishTest`.
 
 ## Database
 
