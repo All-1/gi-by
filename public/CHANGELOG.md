@@ -6,6 +6,13 @@ This document tracks changes to the project. Entry format is defined in **Cursor
 
 ## Log
 
+### [2026-10-15] Knowledge tests: correct-answer checkbox IDs from REST
+**Author**: AI Assistant
+**Logic**:
+- Listing correct answer IDs used a single-column `id` select. DBWorker unwraps that to plain integers, so `RecordMapper::rows()` produced no rows and REST always returned `correctAnswerIds: []`, undoing the checkbox after reload.
+**Changes**:
+- `AnswerRepository::listCorrectAnswerIdsForQuestion()`: select full rows (`*`) before mapping IDs
+
 ### [2026-10-14] Knowledge tests: question/answer findById row mapping
 **Author**: AI Assistant
 **Logic**:
