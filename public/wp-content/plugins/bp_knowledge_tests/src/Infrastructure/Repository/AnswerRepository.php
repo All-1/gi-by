@@ -127,7 +127,7 @@ final class AnswerRepository
             'sql' => 'question_id = %d AND is_correct = 1',
             'values' => [$questionId],
             'OrderBy' => 'id ASC',
-        ], 'id');
+        ], '*');
 
         $ids = [];
         foreach ($this->mapper->rows($rows) as $row) {
