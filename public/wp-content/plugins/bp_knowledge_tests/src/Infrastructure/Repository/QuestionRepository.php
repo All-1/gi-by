@@ -28,8 +28,9 @@ final class QuestionRepository
             'sql' => 'id = %d',
             'values' => [$id],
         ], '*');
+        $rows = $this->mapper->rows($row);
 
-        return is_object($row) ? $this->mapper->toQuestionRecord($row) : null;
+        return isset($rows[0]) ? $this->mapper->toQuestionRecord($rows[0]) : null;
     }
 
     /**

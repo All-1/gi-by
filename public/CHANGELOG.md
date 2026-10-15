@@ -6,6 +6,83 @@ This document tracks changes to the project. Entry format is defined in **Cursor
 
 ## Log
 
+### [2026-10-14] Knowledge tests: question/answer findById row mapping
+**Author**: AI Assistant
+**Logic**:
+- `DBWorker::selectUni_2` can return camelCase arrays, not only objects. Question and answer `findById` ignored those rows, so REST create returned 500 and answer routes reported “Question not found.”
+**Changes**:
+- `QuestionRepository.php`, `AnswerRepository.php`: use `RecordMapper::rows()` like `TestRepository::findById`
+
+### [2026-10-14] Knowledge tests: React catalog UI only
+**Author**: AI Assistant
+**Logic**:
+- PHP forms duplicated the list and never opened the question editor. The admin screens should be the React app.
+**Changes**:
+- `AdminCatalogMenu` renders only the React mount; bundle prints in `admin_footer` after that node
+- Removed `AdminTestEditor`; rebuilt `assets/admin/app.js`
+
+### [2026-10-14] Knowledge tests: PHP test editor
+**Author**: AI Assistant
+**Logic**:
+- React never mounted, so Edit showed the catalog list twice plus “Loading test factory…”. Editing must work without that bundle.
+**Changes**:
+- `AdminCatalogMenu`: one All Tests table; Add Test is create-only
+- `AdminTestEditor`: [NEW] save test, questions, answers, correct flags
+
+### [2026-10-14] Knowledge tests: map DBWorker rows before catalog list
+**Author**: AI Assistant
+**Logic**:
+- A single `DBWorker` result is an unwrapped camelCase array. Listing treated the numeric id as a row and crashed `toTestRecord()`.
+**Changes**:
+- `RecordMapper::rows()` normalizes objects and camelCase arrays; `TestRepository::listAll()` queries `gi_new_tests`
+
+### [2026-10-14] Knowledge tests: fix test list query (empty admin / REST)
+**Author**: AI Assistant
+**Logic**:
+- `TestRepository::listAll()` used raw SQL on DBWorker key `KnowledgeTests` instead of `gi_new_tests`, so list/API returned no rows while create still worked.
+**Changes**:
+- `TestRepository.php`, `ConfigRepository.php`; PHP catalog table on admin list/edit screens
+
+### [2026-10-14] Knowledge tests: Phase 3 Wave C admin catalog UI
+**Author**: AI Assistant
+**Logic**:
+- Content admins need §15 test factory in React (list, editor, critical update), not read-only shell.
+**Changes**:
+- `admin/src`: `AllTestsPage`, `TestEditorPage`, `QuestionEditor`, API client, styles; rebuild `assets/admin/app.js`
+- `PHASE_3_TASKS.md`, `IMPLEMENTATION_PLAN.md`, `PROJECT_CONTEXT.md`
+
+### [2026-10-14] Knowledge tests: schema on boot + WP Admin menu
+**Author**: AI Assistant
+**Logic**:
+- Activation could skip schema when `$servicesContainer` was missing; boot exited silently with no UI.
+**Changes**:
+- Load `wordpress_framework` when active but container unset; admin notice if framework missing
+- `installSchemaIfNeeded()` on activate and every boot; WP Admin **Knowledge Tests** menu
+- `CatalogCapability::registerCaps` grants catalog cap to roles with `manage_options`
+
+### [2026-10-13] Knowledge tests: plugin autoload on activate
+**Author**: AI Assistant
+**Logic**:
+- Activation failed when neither site nor plugin `vendor/autoload.php` mapped `BpKnowledgeTests\`.
+**Changes**:
+- `bp_knowledge_tests/index.php`: PSR-4 fallback autoloader; `PROJECT_CONTEXT.md` entry note
+
+### [2026-10-13] Knowledge tests: defer boot until services container exists
+**Author**: AI Assistant
+**Logic**:
+- Plugin `index.php` ran before `wordpress_framework` set `$servicesContainer`, causing a TypeError on construct.
+**Changes**:
+- `index.php`: `plugins_loaded` (priority 11) for `run()`; activation hook resolves container after dependencies load
+
+### [2026-10-13] Knowledge tests: Phase 3 Wave B capabilities + React mount
+**Author**: AI Assistant
+**Logic**:
+- Admin UI needs a stable capability boundary and a personal-account mount with REST nonce/config before Wave C screens.
+**Changes**:
+- `bp_knowledge_tests/src/Infrastructure/Security/CatalogCapability.php`, `Admin/AdminAppMount.php`, `AdminAppConfig.php`; REST `RestPermission` delegates to capability
+- `admin/` Vite React shell → `assets/admin/app.js`; shortcode `[knowledge_tests_admin]`
+- `tests/run_catalog_capability_tests.php`; `PHASE_3_TASKS.md`, `PROJECT_CONTEXT.md`, `IMPLEMENTATION_PLAN.md`
+
 ### [2026-10-12] Knowledge tests: Phase 3 Wave A admin REST API
 **Author**: AI Assistant
 **Logic**:

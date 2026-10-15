@@ -30,8 +30,9 @@ final class AnswerRepository
             'sql' => 'id = %d',
             'values' => [$id],
         ], '*');
+        $rows = $this->mapper->rows($row);
 
-        return is_object($row) ? $this->mapper->toAnswerRecord($row) : null;
+        return isset($rows[0]) ? $this->mapper->toAnswerRecord($rows[0]) : null;
     }
 
     /**

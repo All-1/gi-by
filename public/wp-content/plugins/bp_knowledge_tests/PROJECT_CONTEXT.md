@@ -4,7 +4,7 @@
 
 WordPress plugin for **dealer knowledge tests** in the personal account. Domain logic lives here; **`bp_contracts`** provides UI shell, WebSocket transport, and in-memory `TestController` for unfinished attempts (later phases).
 
-**Status**: Phase **2** **complete**. Phase **3** Wave **A** (admin REST) shipped. **Next:** Wave B–C (React mount + test factory UI). Phase **4** = `TestController` + WS. **Tools → Knowledge Tests (dev)** remains until React admin lists catalog.
+**Status**: Phase **2** **complete**. Phase **3** Waves **A–C** shipped (REST, mount, §15 catalog UI). **Next:** Wave D (settings §16). Phase **4** = `TestController` + WS. Dev Tools page may retire in Wave F.
 
 ## Documentation (canonical)
 
@@ -36,7 +36,7 @@ This plugin does **not** ship React bundles. Expose stable application/WS contra
 
 | Item | Location |
 |------|----------|
-| Entry | `index.php` — autoload, `PluginBootstrap::run()` (no hooks in entry) |
+| Entry | `index.php` — autoload fallback; `PluginBootstrap::run()` on `plugins_loaded` (11) after `wordpress_framework` sets `$servicesContainer` |
 | Runtime | `Plugin::boot()` — admin REST + dev Tools; `catalog()` / `domain()` / `attempts()` APIs |
 | Services | `CatalogServices`, `DomainServices`, `AttemptServices` (`CompleteAttempt`, `MaterialsService`), `ScoringService`, `Catalog\*` — wired in `PluginBootstrap::compose()` |
 | Domain | `Domain\TestConfig`, `Domain\AttemptResultClassifier`, `Domain\QuestionSelectionGrader`, `Domain\Record\*` |
@@ -57,12 +57,21 @@ This plugin does **not** ship React bundles. Expose stable application/WS contra
 | Notification retake block tests | `php tests/run_notification_retake_tests.php` |
 | Complete attempt integration (A4) | `php tests/run_complete_attempt_tests.php` (or `run_complete_attempt_script.php`) |
 | Admin REST (Phase 3 Wave A) | `Infrastructure\Http\AdminRestApi` — namespace `bp-knowledge-tests/v1` |
+| Catalog capability (Wave B) | `Infrastructure\Security\CatalogCapability` — `bp_manage_knowledge_tests_catalog` |
+| Admin React mount (Wave B) | WP Admin **Knowledge Tests** menu (`AdminCatalogMenu`) + shortcode `[knowledge_tests_admin]`; bundle `assets/admin/app.js` (build: `admin/`) |
 
 ### Admin REST API (Phase 3 Wave A)
 
 **Base URL:** `/wp-json/bp-knowledge-tests/v1`  
-**Auth:** logged-in user with `manage_options` (interim until D2); send cookie session + `X-WP-Nonce` from `wp_create_nonce('wp_rest')`.  
+**Auth:** logged-in user with `bp_manage_knowledge_tests_catalog`, or `manage_options`, or filter `bp_knowledge_tests_can_manage_catalog`; send cookie session + `X-WP-Nonce` from `wp_create_nonce('wp_rest')`.  
 **JSON:** camelCase in request/response bodies.
+
+### Admin React mount (Phase 3 Wave B)
+
+- WP Admin sidebar: **Knowledge Tests** (factory admin / `manage_options`; React shell).
+- Optional page shortcode: **`[knowledge_tests_admin]`** (personal account).
+- Global `window.bpKnowledgeTestsAdmin`: `{ restUrl, restNonce, pluginVersion }` (`restUrl` includes `/wp-json/bp-knowledge-tests/v1`).
+- Rebuild after UI changes: `cd admin && npm run build` (see `admin/README.md`).
 
 | Method | Route | Body (JSON) | Response |
 |--------|-------|-------------|----------|

@@ -15,15 +15,67 @@ use BpKnowledgeTests\Domain\Record\TestRecord;
 final class RecordMapper
 {
     /**
+     * DBWorker returns either stdClass rows or camelCase arrays, and unwraps a single row.
+     *
      * @return list<object>
      */
     public function rows(mixed $result): array
     {
-        if ($result === null) {
+        if ($result === null || $result === false || $result === []) {
             return [];
         }
 
-        return is_array($result) ? $result : [$result];
+        if (is_object($result)) {
+            return [$result];
+        }
+
+        if (!is_array($result)) {
+            return [];
+        }
+
+        if ($this->isAssociativeRow($result)) {
+            return [$this->toRowObject($result)];
+        }
+
+        $rows = [];
+        foreach ($result as $item) {
+            if (is_object($item)) {
+                $rows[] = $item;
+                continue;
+            }
+            if (is_array($item)) {
+                $rows[] = $this->toRowObject($item);
+            }
+        }
+
+        return $rows;
+    }
+
+    /**
+     * @param array<mixed> $row
+     */
+    private function isAssociativeRow(array $row): bool
+    {
+        return array_keys($row) !== range(0, count($row) - 1);
+    }
+
+    /**
+     * @param array<mixed> $row
+     */
+    private function toRowObject(array $row): object
+    {
+        $snake = [];
+        foreach ($row as $key => $value) {
+            $name = is_string($key) ? $this->camelToSnake($key) : (string) $key;
+            $snake[$name] = $value;
+        }
+
+        return (object) $snake;
+    }
+
+    private function camelToSnake(string $key): string
+    {
+        return strtolower((string) preg_replace('/[A-Z]/', '_$0', $key));
     }
 
     public function toTestRecord(object $row): TestRecord

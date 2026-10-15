@@ -28,8 +28,9 @@ final class TestRepository
             'sql' => 'id = %d',
             'values' => [$id],
         ], '*');
+        $rows = $this->mapper->rows($row);
 
-        return is_object($row) ? $this->mapper->toTestRecord($row) : null;
+        return isset($rows[0]) ? $this->mapper->toTestRecord($rows[0]) : null;
     }
 
     /**
@@ -37,8 +38,9 @@ final class TestRepository
      */
     public function listAll(): array
     {
+        $table = $this->db->getPathTable(self::TABLE);
         $rows = $this->db->getRawSQL(
-            'SELECT * FROM `' . self::TABLE . '` ORDER BY title ASC',
+            'SELECT * FROM `' . $table . '` ORDER BY title ASC',
             []
         );
 

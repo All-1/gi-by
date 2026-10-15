@@ -29,16 +29,47 @@ final class ConfigRepository
      */
     public function getAllAsMap(): array
     {
+        $table = $this->db->getPathTable(self::TABLE);
         $rows = $this->db->getRawSQL(
-            'SELECT name, value FROM `' . self::TABLE . '` ORDER BY name ASC',
+            'SELECT name, value FROM `' . $table . '` ORDER BY name ASC',
             []
         );
         $map = [];
-        foreach ($rows ?: [] as $row) {
+        foreach ($this->configRows($rows) as $row) {
             $map[(string) $row->name] = (string) $row->value;
         }
 
         return $map;
+    }
+
+    /**
+     * @return list<object>
+     */
+    private function configRows(mixed $rows): array
+    {
+        if ($rows === null || $rows === []) {
+            return [];
+        }
+        if (is_object($rows)) {
+            return [$rows];
+        }
+        if (!is_array($rows)) {
+            return [];
+        }
+        if (isset($rows['name']) || isset($rows['value'])) {
+            return [(object) $rows];
+        }
+
+        $list = [];
+        foreach ($rows as $row) {
+            if (is_object($row)) {
+                $list[] = $row;
+            } elseif (is_array($row)) {
+                $list[] = (object) $row;
+            }
+        }
+
+        return $list;
     }
 
     public function setValue(string $name, string $value): void
