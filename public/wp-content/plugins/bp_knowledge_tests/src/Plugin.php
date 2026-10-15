@@ -7,6 +7,8 @@ namespace BpKnowledgeTests;
 use BpKnowledgeTests\Services\AttemptServices;
 use BpKnowledgeTests\Services\CatalogServices;
 use BpKnowledgeTests\Services\DomainServices;
+use BpKnowledgeTests\Infrastructure\Admin\AdminAppMount;
+use BpKnowledgeTests\Infrastructure\Admin\AdminCatalogMenu;
 use BpKnowledgeTests\Infrastructure\Admin\DevToolsMenu;
 use BpKnowledgeTests\Infrastructure\Http\AdminRestApi;
 
@@ -24,8 +26,12 @@ final class Plugin
     public function boot(): void
     {
         $adminRestApi = new AdminRestApi($this);
+        $adminAppMount = new AdminAppMount($this);
+        
         $adminRestApi->register();
+        $adminAppMount->register();
         if (is_admin()) {
+            (new AdminCatalogMenu($this))->register();
             (new DevToolsMenu($this))->register();
         }
     }

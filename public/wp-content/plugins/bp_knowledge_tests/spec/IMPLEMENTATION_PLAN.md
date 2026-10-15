@@ -7,11 +7,11 @@
 **Plugin context**: [PROJECT_CONTEXT.md](../PROJECT_CONTEXT.md)  
 **Personal account integration**: [bp_contracts/PROJECT_CONTEXT.md](../../bp_contracts/PROJECT_CONTEXT.md)
 
-**Status (repository)**: Phase **2** **complete**. Schema **v3**. **Next:** Phase **3** (React **admin** / test factory). Phases **4–7:** WS → dealer UI → notifications UX → hardening. No admin API or `TestController` yet.  
+**Status (repository)**: Phase **2** **complete**. Schema **v3**. Phase **3** Waves **A–C** done (REST, mount, catalog UI §15); **next:** Wave D (settings). Phases **4–7:** WS → dealer UI → notifications UX → hardening. No `TestController` yet.  
 **Phase 2 tasks:** [PHASE_2_TASKS.md](./PHASE_2_TASKS.md)  
 **Phase 3 tasks:** [PHASE_3_TASKS.md](./PHASE_3_TASKS.md) (admin)  
 **Phase 4 tasks:** [PHASE_4_TASKS.md](./PHASE_4_TASKS.md) (WS)  
-**Last updated**: 2026-10-12
+**Last updated**: 2026-10-13
 
 ---
 
@@ -600,8 +600,10 @@ Store dismiss counts and policy in `gi_new_test_config` / `gi_new_test_notificat
 **Task breakdown:** [PHASE_3_TASKS.md](./PHASE_3_TASKS.md) (waves A–F, readiness, checklist). *Former plan Phase 6.*
 
 - [x] Admin HTTP API for catalog, config, critical update (capability-checked)
-- [ ] React screens for §15–16 minimum (§17–18 optional in same phase or stretch)
-- [ ] Critical update tested from admin UI
+- [x] Capabilities + React mount (`[knowledge_tests_admin]`, Wave B)
+- [x] React screens for §15 (All Tests + editor + critical update, Wave C)
+- [ ] Settings UI §16 (Wave D)
+- [x] Critical update from admin UI
 - [ ] Retire dev Tools catalog dependence
 
 **Exit:** Content team self-service via React admin (at least full test authoring).
@@ -685,7 +687,7 @@ Store dismiss counts and policy in `gi_new_test_config` / `gi_new_test_notificat
 | ID | Topic | Status |
 |----|-------|--------|
 | D1 | Exact WS command naming | Proposed §4.5 — finalize in Phase 4 |
-| D2 | Which roles see Tests / admin | TBD with product |
+| D2 | Which roles see Tests / admin | **Interim (Wave B):** catalog = factory `administrator` + `sales_manager` + `manage_options`; dealer Tests TBD Phase 4–5 |
 | D3 | Question difficulty formula | Deferred; raw data in V1 |
 | D4 | Multi-select counting (valid/invalid/missed, global vs per-question score) | **Resolved** — spec §2.1.1; engineering §5.1.1 |
 | D5 | Plugin root `PROJECT_CONTEXT.md` vs spec-only docs | **Resolved:** lean root index + this plan + product spec (no duplicate column lists in root) |

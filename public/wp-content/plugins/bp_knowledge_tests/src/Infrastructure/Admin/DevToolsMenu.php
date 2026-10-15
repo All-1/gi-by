@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace BpKnowledgeTests\Infrastructure\Admin;
 
+use BpKnowledgeTests\Infrastructure\Security\CatalogCapability;
 use BpKnowledgeTests\Plugin;
 
 final class DevToolsMenu
@@ -19,14 +20,14 @@ final class DevToolsMenu
 
     public function addPage(): void
     {
-        if (!current_user_can('manage_options')) {
+        if (!CatalogCapability::canManageCatalog()) {
             return;
         }
 
         add_management_page(
             'Knowledge Tests (dev)',
             'Knowledge Tests (dev)',
-            'manage_options',
+            CatalogCapability::CAP_MANAGE_CATALOG,
             'bp-knowledge-tests-dev',
             [$this, 'render'],
         );
@@ -34,7 +35,7 @@ final class DevToolsMenu
 
     public function render(): void
     {
-        if (!current_user_can('manage_options')) {
+        if (!CatalogCapability::canManageCatalog()) {
             wp_die(esc_html__('You do not have permission to access this page.'));
         }
 

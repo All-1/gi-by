@@ -8,7 +8,7 @@
 
 **Goal (exit criterion):** Content/admin users can **create and edit tests** (questions, answers, `is_correct`, explanations, references), adjust **settings** (§16), run **Critical Update**, and retire **Tools → Knowledge Tests (dev)** for catalog work. **Results (§17)** and **Analytics (§18)** may ship in Phase 3b or early Phase 5 if timeboxed — minimum exit is **catalog + settings + critical update**.
 
-**Progress (2026-10-12):** Wave **A** done (REST). **Next:** Wave B (capabilities/mount) + C (React).
+**Progress (2026-10-14):** Waves **A–C** done. **Next:** Wave D (settings UI).
 
 **Estimate:** ~2–2.5 weeks one developer (full §15–18); ~1–1.5 weeks for **MVP** (§15 + §16 + critical update only).
 
@@ -58,23 +58,25 @@ Thin controllers in `bp_knowledge_tests` (or documented `admin-ajax` / REST name
 
 ---
 
-## Wave B — Capabilities & mount (D2) — **not started**
+## Wave B — Capabilities & mount (D2) — **done**
 
-- Decide roles (test factory vs read-only vs dealer-only).
-- Register admin menu entry / React route in personal account admin shell.
-- Enqueue admin bundle; pass nonce + base URL to JS.
+- **D2 interim:** capability `bp_manage_knowledge_tests_catalog` on factory WP roles `administrator`, `sales_manager`; `manage_options` fallback; filter `bp_knowledge_tests_can_manage_catalog`.
+- Shortcode **`[knowledge_tests_admin]`** — React mount `#bp-knowledge-tests-admin-root`, `wp_localize_script` → `bpKnowledgeTestsAdmin` (`restUrl`, `restNonce`, `pluginVersion`).
+- Bundle: `admin/` (Vite) → `assets/admin/app.js`.
 
-**Acceptance:** Unauthorized users cannot hit Wave A endpoints.
+**Acceptance:** Unauthorized users cannot hit Wave A endpoints (REST uses `CatalogCapability`).
+
+**Setup:** Create a personal-account page with `[knowledge_tests_admin]`; see `admin/README.md`.
 
 ---
 
-## Wave C — React: All Tests + editor (§15) — **not started**
+## Wave C — React: All Tests + editor (§15) — **done**
 
-- **All Tests** — list, version, expandable questions (contracts-admin pattern per plan §8).
-- **Add / Edit Test** — question text, answers, correct flags, explanation, reference, achievement area.
-- **Critical Update** button — confirm dialog → Wave A critical-update endpoint.
+- **All Tests** — list, version, expandable question previews (`admin/src/pages/AllTestsPage.tsx`).
+- **Add / Edit Test** — title, achievement area, questions, answers, correct flags, explanation, reference (`TestEditorPage`, `QuestionEditor`).
+- **Critical Update** — two-step confirm modal → `POST /tests/{id}/critical-update`.
 
-**Acceptance:** New test with multi-select question can be created entirely in UI; `maximumCorrectForTest` reflects `is_correct` rows.
+**Acceptance:** New test with multi-select question can be created entirely in UI; correct options via `correct-answer-ids` / `is_correct`.
 
 ---
 
@@ -125,8 +127,8 @@ A (API) → B (auth + mount) → C (catalog UI) → D (settings) → E (optional
 ## Task checklist (copy for PRs)
 
 - [x] A Admin HTTP API + documented contracts
-- [ ] B Capabilities + React mount
-- [ ] C All Tests + Add/Edit + Critical Update UI
+- [x] B Capabilities + React mount
+- [x] C All Tests + Add/Edit + Critical Update UI
 - [ ] D Settings UI
 - [ ] E Results/Analytics (or documented deferral)
 - [ ] F Dev Tools retired + doc sync
