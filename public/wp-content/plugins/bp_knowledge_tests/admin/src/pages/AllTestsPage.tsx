@@ -1,13 +1,15 @@
 import { Fragment, useCallback, useEffect, useState } from 'react';
 import type { Question, Test } from '../api/types';
 import { listQuestions, listTests } from '../api/catalog';
+import { AdminSubnav } from '../components/AdminSubnav';
 
 type Props = {
   onAddTest: () => void;
   onEditTest: (id: number) => void;
+  onOpenSettings: () => void;
 };
 
-export function AllTestsPage({ onAddTest, onEditTest }: Props) {
+export function AllTestsPage({ onAddTest, onEditTest, onOpenSettings }: Props) {
   const [tests, setTests] = useState<Test[]>([]);
   const [expandedId, setExpandedId] = useState<number | null>(null);
   const [questionsByTest, setQuestionsByTest] = useState<Record<number, Question[]>>({});
@@ -61,6 +63,8 @@ export function AllTestsPage({ onAddTest, onEditTest }: Props) {
           </button>
         )}
       </header>
+
+      <AdminSubnav active="tests" onNavigateSettings={onOpenSettings} />
 
       {loading && <p>Loading…</p>}
       {error !== null && <p className="bp-kt-error">{error}</p>}

@@ -66,6 +66,48 @@
   font-weight: 600;
 }
 
+.bp-kt-notice {
+  color: #1d2327;
+  font-weight: 600;
+}
+
+.bp-kt-subnav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem 1rem;
+  margin-bottom: 1rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid #c3c4c7;
+}
+
+.bp-kt-subnav a,
+.bp-kt-subnav button {
+  background: none;
+  border: none;
+  padding: 0;
+  font-size: 14px;
+  cursor: pointer;
+  color: #2271b1;
+  text-decoration: none;
+}
+
+.bp-kt-subnav .current {
+  color: #1d2327;
+  font-weight: 600;
+  pointer-events: none;
+}
+
+.bp-kt-card select {
+  display: block;
+  margin-top: 0.25rem;
+  max-width: 320px;
+}
+
+.bp-kt-settings h2 {
+  margin-top: 0;
+  font-size: 1.1rem;
+}
+
 .bp-kt-question-panel {
   border: 1px solid #dcdcde;
   margin-bottom: 0.75rem;

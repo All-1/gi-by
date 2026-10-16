@@ -13,6 +13,8 @@ final class AdminCatalogMenu
 
     public const SLUG_ADD = 'bp-knowledge-tests-add';
 
+    public const SLUG_SETTINGS = 'bp-knowledge-tests-settings';
+
     public function __construct(private Plugin $plugin)
     {
     }
@@ -26,7 +28,7 @@ final class AdminCatalogMenu
     public function enqueueBundle(): void
     {
         $page = isset($_GET['page']) ? (string) $_GET['page'] : '';
-        if ($page !== self::MENU_SLUG && $page !== self::SLUG_ADD) {
+        if ($page !== self::MENU_SLUG && $page !== self::SLUG_ADD && $page !== self::SLUG_SETTINGS) {
             return;
         }
 
@@ -64,6 +66,14 @@ final class AdminCatalogMenu
             $cap,
             self::SLUG_ADD,
             fn () => $this->renderMount($this->addScreenView()),
+        );
+        add_submenu_page(
+            self::MENU_SLUG,
+            __('Settings', 'bp_knowledge_tests'),
+            __('Settings', 'bp_knowledge_tests'),
+            $cap,
+            self::SLUG_SETTINGS,
+            fn () => $this->renderMount('settings'),
         );
     }
 

@@ -7,7 +7,7 @@
 **Plugin context**: [PROJECT_CONTEXT.md](../PROJECT_CONTEXT.md)  
 **Personal account integration**: [bp_contracts/PROJECT_CONTEXT.md](../../bp_contracts/PROJECT_CONTEXT.md)
 
-**Status (repository)**: Phase **2** **complete**. Schema **v3**. Phase **3** Waves **A–C** done (REST, mount, catalog UI §15); **next:** Wave D (settings). Phases **4–7:** WS → dealer UI → notifications UX → hardening. No `TestController` yet.  
+**Status (repository)**: Phase **2** **complete**. Schema **v3**. Phase **3** Waves **A–D** done (REST, mount, catalog §15, settings §16); **next:** Wave F (optional E, retire dev Tools). Phases **4–7:** WS → dealer UI → notifications UX → hardening. No `TestController` yet.  
 **Phase 2 tasks:** [PHASE_2_TASKS.md](./PHASE_2_TASKS.md)  
 **Phase 3 tasks:** [PHASE_3_TASKS.md](./PHASE_3_TASKS.md) (admin)  
 **Phase 4 tasks:** [PHASE_4_TASKS.md](./PHASE_4_TASKS.md) (WS)  
@@ -602,7 +602,7 @@ Store dismiss counts and policy in `gi_new_test_config` / `gi_new_test_notificat
 - [x] Admin HTTP API for catalog, config, critical update (capability-checked)
 - [x] Capabilities + React mount (`[knowledge_tests_admin]`, Wave B)
 - [x] React screens for §15 (All Tests + editor + critical update, Wave C)
-- [ ] Settings UI §16 (Wave D)
+- [x] Settings UI §16 (Wave D)
 - [x] Critical update from admin UI
 - [ ] Retire dev Tools catalog dependence
 

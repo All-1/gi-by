@@ -4,9 +4,12 @@ declare(strict_types=1);
 
 namespace BpKnowledgeTests\Infrastructure\Http\Routes;
 
+use BpKnowledgeTests\Infrastructure\Config\AdminConfigKeys;
 use BpKnowledgeTests\Infrastructure\Http\RestError;
 use BpKnowledgeTests\Infrastructure\Http\RestPermission;
 use BpKnowledgeTests\Plugin;
+use BpKnowledgeTests\Services\Catalog\AdminConfigValidator;
+use BpKnowledgeTests\Services\Catalog\ConfigSaveService;
 use WP_Error;
 use WP_REST_Request;
 use WP_REST_Response;
@@ -46,19 +49,33 @@ final class ConfigRestRoutes
 
     public function set(WP_REST_Request $request): WP_REST_Response|WP_Error
     {
+        $payload = $this->normalizePayload($request);
+        if ($payload instanceof WP_Error) {
+            return $payload;
+        }
+
+        $result = $this->saveService()->apply($payload);
+        if (isset($result['error'])) {
+            return RestError::badRequest((string) $result['error']);
+        }
+
+        return new WP_REST_Response(
+            [
+                'settings' => $result['settings'],
+                'achievementsRecalculated' => $result['achievementsRecalculated'],
+            ],
+            200,
+        );
+    }
+
+    /**
+     * @return array<string, scalar>|WP_Error
+     */
+    private function normalizePayload(WP_REST_Request $request): array|WP_Error
+    {
         $settings = $request->get_param('settings');
         if (is_array($settings)) {
-            foreach ($settings as $name => $value) {
-                if (!is_string($name) || !is_scalar($value)) {
-                    return RestError::badRequest('settings must be string keys with scalar values.');
-                }
-                $this->plugin->catalog()->config->set($name, (string) $value);
-            }
-
-            return new WP_REST_Response(
-                ['settings' => $this->plugin->catalog()->config->all()],
-                200,
-            );
+            return $this->filterSettings($settings);
         }
 
         $name = $request->get_param('name');
@@ -66,11 +83,36 @@ final class ConfigRestRoutes
         if (!is_string($name) || $name === '' || !is_scalar($value)) {
             return RestError::badRequest('Provide settings object or name and value.');
         }
-        $this->plugin->catalog()->config->set($name, (string) $value);
 
-        return new WP_REST_Response(
-            ['settings' => $this->plugin->catalog()->config->all()],
-            200,
+        return $this->filterSettings([$name => $value]);
+    }
+
+    /**
+     * @param array<mixed, mixed> $settings
+     * @return array<string, scalar>|WP_Error
+     */
+    private function filterSettings(array $settings): array|WP_Error
+    {
+        $filtered = [];
+        foreach ($settings as $name => $value) {
+            if (!is_string($name) || !is_scalar($value)) {
+                return RestError::badRequest('settings must be string keys with scalar values.');
+            }
+            if (!AdminConfigKeys::isAllowed($name)) {
+                return RestError::badRequest('Unknown config key: ' . $name);
+            }
+            $filtered[$name] = $value;
+        }
+
+        return $filtered;
+    }
+
+    private function saveService(): ConfigSaveService
+    {
+        return new ConfigSaveService(
+            $this->plugin->catalog()->config,
+            new AdminConfigValidator(),
+            $this->plugin->attempts()->achievements,
         );
     }
 }

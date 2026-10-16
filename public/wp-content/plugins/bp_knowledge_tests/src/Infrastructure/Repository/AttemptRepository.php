@@ -108,4 +108,23 @@ final class AttemptRepository
 
         return $ids;
     }
+
+    /**
+     * @return list<array{userId: int, testId: int}>
+     */
+    public function listDistinctUserTestPairs(): array
+    {
+        $table = $this->db->getPathTable(self::TABLE);
+        $rows = $this->db->getRawSQL(
+            "SELECT DISTINCT user_id, test_id FROM `{$table}`",
+            [],
+        );
+
+        $pairs = [];
+        foreach ($this->mapper->rows($rows) as $row) {
+            $pairs[] = ['userId' => (int) $row->user_id, 'testId' => (int) $row->test_id];
+        }
+
+        return $pairs;
+    }
 }

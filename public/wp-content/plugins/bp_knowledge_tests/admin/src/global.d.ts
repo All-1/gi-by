@@ -9,6 +9,7 @@ declare global {
       adminUrls?: {
         list: string;
         addTest: string;
+        settings: string;
       };
     };
   }

@@ -4,7 +4,7 @@
 
 WordPress plugin for **dealer knowledge tests** in the personal account. Domain logic lives here; **`bp_contracts`** provides UI shell, WebSocket transport, and in-memory `TestController` for unfinished attempts (later phases).
 
-**Status**: Phase **2** **complete**. Phase **3** Waves **A–C** shipped (REST, mount, §15 catalog UI). **Next:** Wave D (settings §16). Phase **4** = `TestController` + WS. Dev Tools page may retire in Wave F.
+**Status**: Phase **2** **complete**. Phase **3** Waves **A–D** shipped (REST, mount, §15 catalog UI, §16 settings). **Next:** Wave F (optional E results/analytics, retire dev Tools). Phase **4** = `TestController` + WS.
 
 ## Documentation (canonical)
 
@@ -88,7 +88,7 @@ This plugin does **not** ship React bundles. Expose stable application/WS contra
 | GET/PUT/DELETE | `/answers/{id}` | `{ answer, isCorrect? }` on PUT | `{ answer }` or `{ deleted }` |
 | PUT/PATCH | `/questions/{questionId}/correct-answer-ids` | `{ answerIds: number[] }` | `{ correctAnswerIds }` |
 | GET | `/config` | — | `{ settings: Record<string,string> }` |
-| PUT/PATCH | `/config` | `{ name, value }` or `{ settings: {…} }` | `{ settings }` |
+| PUT/PATCH | `/config` | `{ name, value }` or `{ settings: {…} }` (allowlisted keys only) | `{ settings, achievementsRecalculated? }` — recalc when bronze/silver/gold/lock thresholds change |
 | POST | `/tests/{id}/critical-update` | — | `{ test }` (version bumped) |
 
 `Test`, `Question`, `Answer` shapes match `Infrastructure\Http\ResourcePresenter`.
