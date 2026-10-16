@@ -1,0 +1,13 @@
+{
+  "name": "GeoS Ideal (dev.gi.by) — WordPress",
+  "user": "ubuntu",
+  "install": "bash scripts/cloud/install.sh",
+  "start": "bash scripts/cloud/start.sh",
+  "terminals": [
+    {
+      "name": "nginx-logs",
+      "command": "sudo tail -n +1 -F /var/log/nginx/access.log /var/log/nginx/error.log"
+    }
+  ],
+  "ports": [80, 443, 8080]
+}
