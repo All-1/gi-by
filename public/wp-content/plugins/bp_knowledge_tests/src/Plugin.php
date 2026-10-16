@@ -10,7 +10,6 @@ use BpKnowledgeTests\Services\DomainServices;
 use BpKnowledgeTests\Services\ReportingServices;
 use BpKnowledgeTests\Infrastructure\Admin\AdminAppMount;
 use BpKnowledgeTests\Infrastructure\Admin\AdminCatalogMenu;
-use BpKnowledgeTests\Infrastructure\Admin\DevToolsMenu;
 use BpKnowledgeTests\Infrastructure\Http\AdminRestApi;
 
 final class Plugin
@@ -34,7 +33,6 @@ final class Plugin
         $adminAppMount->register();
         if (is_admin()) {
             (new AdminCatalogMenu($this))->register();
-            (new DevToolsMenu($this))->register();
         }
     }
 

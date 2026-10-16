@@ -6,6 +6,14 @@ This document tracks changes to the project. Entry format is defined in **Cursor
 
 ## Log
 
+### [2026-10-16] Knowledge tests: Phase 3 Wave F — close admin phase
+**Author**: AI Assistant
+**Logic**:
+- React admin covers catalog, settings, results, and analytics; the temporary **Tools → Knowledge Tests (dev)** smoke page duplicated listing and is no longer needed.
+**Changes**:
+- Removed `DevToolsMenu` and its registration from `Plugin::boot()`
+- `PROJECT_CONTEXT.md`, `IMPLEMENTATION_PLAN.md`, `PHASE_3_TASKS.md`, `PHASE_4_TASKS.md` — Phase 3 marked complete; next Phase 4
+
 ### [2026-10-16] Knowledge tests: Phase 3 Wave E results and analytics
 **Author**: AI Assistant
 **Logic**:

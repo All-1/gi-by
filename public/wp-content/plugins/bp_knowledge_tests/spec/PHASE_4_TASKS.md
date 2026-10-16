@@ -1,4 +1,4 @@
-**Prerequisite:** Phase **3** admin catalog MVP (or dev Tools seed) so staging has real tests.
+**Prerequisite:** Phase **3** **complete** — author tests via WP **Knowledge Tests** React admin (or REST) before WS work.
 
 # Phase 3 — Task breakdown (TestController & WebSocket)
 
