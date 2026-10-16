@@ -46,4 +46,11 @@ final class AttemptAchievementService
 
         $this->applyAfterComplete($userId, $testId, $attempt->score);
     }
+
+    public function recalculateAllFromLatestAttempts(): void
+    {
+        foreach ($this->attempts->listDistinctUserTestPairs() as $pair) {
+            $this->recalculateForUserAndTest($pair['userId'], $pair['testId']);
+        }
+    }
 }

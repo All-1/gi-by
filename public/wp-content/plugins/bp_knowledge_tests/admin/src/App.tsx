@@ -1,12 +1,19 @@
 import { useState } from 'react';
 import { AllTestsPage } from './pages/AllTestsPage';
+import { SettingsPage } from './pages/SettingsPage';
 import { TestEditorPage } from './pages/TestEditorPage';
 
-type View = { kind: 'list' } | { kind: 'edit'; testId: number | null };
+type View =
+  | { kind: 'list' }
+  | { kind: 'settings' }
+  | { kind: 'edit'; testId: number | null };
 
 function readInitialView(): View {
   const root = document.getElementById('bp-knowledge-tests-admin-root');
   const initial = root?.dataset.initialView ?? 'list';
+  if (initial === 'settings') {
+    return { kind: 'settings' };
+  }
   if (initial === 'edit-new') {
     return { kind: 'edit', testId: null };
   }
@@ -27,6 +34,14 @@ function navigateToList(): void {
   }
 }
 
+function navigateToSettings(): void {
+  const url = window.bpKnowledgeTestsAdmin?.adminUrls?.settings;
+  if (url) {
+    window.location.assign(url);
+    return;
+  }
+}
+
 export function App() {
   const [view, setView] = useState<View>(readInitialView);
 
@@ -38,11 +53,24 @@ export function App() {
     setView({ kind: 'list' });
   };
 
+  const goSettings = () => {
+    if (window.bpKnowledgeTestsAdmin?.adminUrls?.settings) {
+      navigateToSettings();
+      return;
+    }
+    setView({ kind: 'settings' });
+  };
+
+  if (view.kind === 'settings') {
+    return <SettingsPage onNavigateTests={goList} />;
+  }
+
   if (view.kind === 'list') {
     return (
       <AllTestsPage
         onAddTest={() => setView({ kind: 'edit', testId: null })}
         onEditTest={(id) => setView({ kind: 'edit', testId: id })}
+        onOpenSettings={goSettings}
       />
     );
   }

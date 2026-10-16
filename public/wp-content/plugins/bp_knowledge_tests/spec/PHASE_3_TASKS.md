@@ -8,7 +8,7 @@
 
 **Goal (exit criterion):** Content/admin users can **create and edit tests** (questions, answers, `is_correct`, explanations, references), adjust **settings** (§16), run **Critical Update**, and retire **Tools → Knowledge Tests (dev)** for catalog work. **Results (§17)** and **Analytics (§18)** may ship in Phase 3b or early Phase 5 if timeboxed — minimum exit is **catalog + settings + critical update**.
 
-**Progress (2026-10-14):** Waves **A–C** done. **Next:** Wave D (settings UI).
+**Progress (2026-10-16):** Waves **A–D** done. **Next:** Wave F (optional E, retire dev Tools).
 
 **Estimate:** ~2–2.5 weeks one developer (full §15–18); ~1–1.5 weeks for **MVP** (§15 + §16 + critical update only).
 
@@ -80,10 +80,11 @@ Thin controllers in `bp_knowledge_tests` (or documented `admin-ajax` / REST name
 
 ---
 
-## Wave D — Settings (§16) — **not started**
+## Wave D — Settings (§16) — **done**
 
+- React **Settings** screen + WP submenu; subnav between All tests / Settings.
 - Bronze/silver/gold/lock thresholds, `retake_delay_days`, notification dismiss limits and modes, rank display names.
-- On save: optional hook to `attempts()->achievements->recalculateForUserAndTest` where spec requires (document which keys trigger recalc).
+- REST `/config` PUT: allowlisted keys + validation; **achievement recalc** when threshold keys change (`AttemptAchievementService::recalculateAllFromLatestAttempts`).
 
 ---
 
@@ -129,6 +130,6 @@ A (API) → B (auth + mount) → C (catalog UI) → D (settings) → E (optional
 - [x] A Admin HTTP API + documented contracts
 - [x] B Capabilities + React mount
 - [x] C All Tests + Add/Edit + Critical Update UI
-- [ ] D Settings UI
+- [x] D Settings UI
 - [ ] E Results/Analytics (or documented deferral)
 - [ ] F Dev Tools retired + doc sync
