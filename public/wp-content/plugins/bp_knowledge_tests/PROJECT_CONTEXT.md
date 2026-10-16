@@ -4,7 +4,7 @@
 
 WordPress plugin for **dealer knowledge tests** in the personal account. Domain logic lives here; **`bp_contracts`** provides UI shell, WebSocket transport, and in-memory `TestController` for unfinished attempts (later phases).
 
-**Status**: Phase **2** **complete**. Phase **3** Waves **A–D** shipped (REST, mount, §15 catalog UI, §16 settings). **Next:** Wave F (optional E results/analytics, retire dev Tools). Phase **4** = `TestController` + WS.
+**Status**: Phase **3** **complete** (React admin §15–18, REST, capabilities). **Next:** Phase **4** — `TestController` + WS in `bp_contracts`.
 
 ## Documentation (canonical)
 
@@ -37,7 +37,7 @@ This plugin does **not** ship React bundles. Expose stable application/WS contra
 | Item | Location |
 |------|----------|
 | Entry | `index.php` — autoload fallback; `PluginBootstrap::run()` on `plugins_loaded` (11) after `wordpress_framework` sets `$servicesContainer` |
-| Runtime | `Plugin::boot()` — admin REST + dev Tools; `catalog()` / `domain()` / `attempts()` APIs |
+| Runtime | `Plugin::boot()` — admin REST + WP **Knowledge Tests** menu; `catalog()` / `domain()` / `attempts()` APIs |
 | Services | `CatalogServices`, `DomainServices`, `AttemptServices` (`CompleteAttempt`, `MaterialsService`), `ScoringService`, `Catalog\*` — wired in `PluginBootstrap::compose()` |
 | Domain | `Domain\TestConfig`, `Domain\AttemptResultClassifier`, `Domain\QuestionSelectionGrader`, `Domain\Record\*` |
 | Activation | `PluginBootstrap::activate()` — versioned schema |
@@ -47,7 +47,6 @@ This plugin does **not** ship React bundles. Expose stable application/WS contra
 | DB dependency | **`wordpress_framework`** required (`Requires Plugins` header). `PluginBootstrap::run()` uses `global $servicesContainer` after the framework plugin file has loaded. Activation/schema uses `$wpdb` only. |
 | Schema version | `Infrastructure\SchemaVersionRepository` → option `bp_knowledge_tests_schema_version` (target **3**) |
 | Autoload | `composer.json` → `BpKnowledgeTests\` |
-| Dev smoke (non-React) | WP Admin → **Tools → Knowledge Tests (dev)** — temporary until React admin lists catalog |
 | Scoring tests | `php tests/run_scoring_tests.php` (plugin root; no WordPress) |
 | Selection grader tests | `php tests/run_selection_grader_tests.php` |
 | Attempt-question materials filter tests | `php tests/run_attempt_question_materials_tests.php` |
@@ -90,8 +89,13 @@ This plugin does **not** ship React bundles. Expose stable application/WS contra
 | GET | `/config` | — | `{ settings: Record<string,string> }` |
 | PUT/PATCH | `/config` | `{ name, value }` or `{ settings: {…} }` (allowlisted keys only) | `{ settings, achievementsRecalculated? }` — recalc when bronze/silver/gold/lock thresholds change |
 | POST | `/tests/{id}/critical-update` | — | `{ test }` (version bumped) |
+| GET | `/results` | Query: `testId?`, `userId?`, `status?` (`passed`/`failed`/`outdated`), `page?`, `perPage?` | `{ items, total, page, perPage }` — §17 |
+| GET | `/analytics/tests` | — | `{ tests: TestAnalyticsSummary[] }` |
+| GET | `/analytics/tests/{id}` | — | `{ analytics: TestAnalyticsDetail }` — includes `questions[]` §18.2 |
 
 `Test`, `Question`, `Answer` shapes match `Infrastructure\Http\ResourcePresenter`.
+
+**Reporting (Wave E):** `Plugin::reporting()` → `ResultsListQuery`, `TestAnalyticsQuery`. Validity column: `valid` \| `expired` \| `not_applicable` from attempt `status` (`AttemptValidityLabel`).
 
 ### Catalog services (admin CRUD)
 

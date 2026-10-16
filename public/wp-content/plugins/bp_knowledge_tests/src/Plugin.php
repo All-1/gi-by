@@ -7,9 +7,9 @@ namespace BpKnowledgeTests;
 use BpKnowledgeTests\Services\AttemptServices;
 use BpKnowledgeTests\Services\CatalogServices;
 use BpKnowledgeTests\Services\DomainServices;
+use BpKnowledgeTests\Services\ReportingServices;
 use BpKnowledgeTests\Infrastructure\Admin\AdminAppMount;
 use BpKnowledgeTests\Infrastructure\Admin\AdminCatalogMenu;
-use BpKnowledgeTests\Infrastructure\Admin\DevToolsMenu;
 use BpKnowledgeTests\Infrastructure\Http\AdminRestApi;
 
 final class Plugin
@@ -20,6 +20,7 @@ final class Plugin
         private CatalogServices $catalog,
         private DomainServices $domain,
         private AttemptServices $attempts,
+        private ReportingServices $reporting,
     ) {
     }
 
@@ -32,7 +33,6 @@ final class Plugin
         $adminAppMount->register();
         if (is_admin()) {
             (new AdminCatalogMenu($this))->register();
-            (new DevToolsMenu($this))->register();
         }
     }
 
@@ -49,6 +49,11 @@ final class Plugin
     public function attempts(): AttemptServices
     {
         return $this->attempts;
+    }
+
+    public function reporting(): ReportingServices
+    {
+        return $this->reporting;
     }
 
     public function version(): string

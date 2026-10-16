@@ -8,7 +8,7 @@
 
 **Goal (exit criterion):** Content/admin users can **create and edit tests** (questions, answers, `is_correct`, explanations, references), adjust **settings** (§16), run **Critical Update**, and retire **Tools → Knowledge Tests (dev)** for catalog work. **Results (§17)** and **Analytics (§18)** may ship in Phase 3b or early Phase 5 if timeboxed — minimum exit is **catalog + settings + critical update**.
 
-**Progress (2026-10-16):** Waves **A–D** done. **Next:** Wave F (optional E, retire dev Tools).
+**Progress (2026-10-16):** Phase **3 complete** — Waves **A–F** done (dev Tools retired).
 
 **Estimate:** ~2–2.5 weeks one developer (full §15–18); ~1–1.5 weeks for **MVP** (§15 + §16 + critical update only).
 
@@ -36,7 +36,7 @@
 | Catalog writes | `TestCatalog`, `QuestionCatalog`, `AnswerCatalog`, `setCorrectAnswerIdsForQuestion`, etc. |
 | Settings | `catalog()->config` get/set |
 | Critical update | `attempts()->criticalUpdate` (service layer) |
-| Dev listing | `DevToolsMenu` — temporary; remove when React lists catalog |
+| Dev listing | ~~`DevToolsMenu`~~ removed Wave F — use WP **Knowledge Tests** React admin |
 
 ---
 
@@ -88,20 +88,22 @@ Thin controllers in `bp_knowledge_tests` (or documented `admin-ajax` / REST name
 
 ---
 
-## Wave E — Results & analytics (§17–18) — **optional / defer**
+## Wave E — Results & analytics (§17–18) — **done**
 
-- Read repositories or new query services for attempt list filters.
-- Defer to Phase 3 stretch or Phase 5 if MVP deadline matters.
+- REST: `GET /results` (filters: `testId`, `userId`, `status`, pagination).
+- REST: `GET /analytics/tests`, `GET /analytics/tests/{id}` (test + question aggregates from attempt tables).
+- React: **Results** and **Analytics** admin screens + WP submenu entries.
+- Services: `ReportingServices` (`ResultsListQuery`, `TestAnalyticsQuery`).
 
 ---
 
-## Wave F — Close Phase 3 — **not started**
+## Wave F — Close Phase 3 — **done**
 
 | Task | Notes |
 |------|--------|
-| Remove or gate dev Tools page | Plan §11 Phase 1 — when React admin lists catalog |
-| Docs | `IMPLEMENTATION_PLAN` §3, §11 Phase 3 checkboxes |
-| CHANGELOG | Significant API + capability decisions |
+| Remove or gate dev Tools page | `DevToolsMenu` removed; catalog via React admin only |
+| Docs | `IMPLEMENTATION_PLAN` §3, §11; `PROJECT_CONTEXT.md` status |
+| CHANGELOG | Wave F close entry in [CHANGELOG.md](../../../../CHANGELOG.md) |
 
 ---
 
@@ -131,5 +133,5 @@ A (API) → B (auth + mount) → C (catalog UI) → D (settings) → E (optional
 - [x] B Capabilities + React mount
 - [x] C All Tests + Add/Edit + Critical Update UI
 - [x] D Settings UI
-- [ ] E Results/Analytics (or documented deferral)
-- [ ] F Dev Tools retired + doc sync
+- [x] E Results/Analytics
+- [x] F Dev Tools retired + doc sync

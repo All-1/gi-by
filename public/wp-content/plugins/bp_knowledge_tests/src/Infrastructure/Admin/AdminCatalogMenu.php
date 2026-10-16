@@ -15,6 +15,10 @@ final class AdminCatalogMenu
 
     public const SLUG_SETTINGS = 'bp-knowledge-tests-settings';
 
+    public const SLUG_RESULTS = 'bp-knowledge-tests-results';
+
+    public const SLUG_ANALYTICS = 'bp-knowledge-tests-analytics';
+
     public function __construct(private Plugin $plugin)
     {
     }
@@ -28,7 +32,14 @@ final class AdminCatalogMenu
     public function enqueueBundle(): void
     {
         $page = isset($_GET['page']) ? (string) $_GET['page'] : '';
-        if ($page !== self::MENU_SLUG && $page !== self::SLUG_ADD && $page !== self::SLUG_SETTINGS) {
+        $pages = [
+            self::MENU_SLUG,
+            self::SLUG_ADD,
+            self::SLUG_SETTINGS,
+            self::SLUG_RESULTS,
+            self::SLUG_ANALYTICS,
+        ];
+        if (!in_array($page, $pages, true)) {
             return;
         }
 
@@ -74,6 +85,22 @@ final class AdminCatalogMenu
             $cap,
             self::SLUG_SETTINGS,
             fn () => $this->renderMount('settings'),
+        );
+        add_submenu_page(
+            self::MENU_SLUG,
+            __('Results', 'bp_knowledge_tests'),
+            __('Results', 'bp_knowledge_tests'),
+            $cap,
+            self::SLUG_RESULTS,
+            fn () => $this->renderMount('results'),
+        );
+        add_submenu_page(
+            self::MENU_SLUG,
+            __('Analytics', 'bp_knowledge_tests'),
+            __('Analytics', 'bp_knowledge_tests'),
+            $cap,
+            self::SLUG_ANALYTICS,
+            fn () => $this->renderMount('analytics'),
         );
     }
 

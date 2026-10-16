@@ -14,7 +14,13 @@ final class AdminAppConfig
      *   restUrl: string,
      *   restNonce: string,
      *   pluginVersion: string,
-     *   adminUrls: array{list: string, addTest: string, settings: string}
+     *   adminUrls: array{
+     *     list: string,
+     *     addTest: string,
+     *     settings: string,
+     *     results: string,
+     *     analytics: string
+     *   }
      * }
      */
     public static function forCurrentUser(Plugin $plugin): array
@@ -27,6 +33,8 @@ final class AdminAppConfig
                 'list' => admin_url('admin.php?page=' . AdminCatalogMenu::MENU_SLUG),
                 'addTest' => admin_url('admin.php?page=' . AdminCatalogMenu::SLUG_ADD),
                 'settings' => admin_url('admin.php?page=' . AdminCatalogMenu::SLUG_SETTINGS),
+                'results' => admin_url('admin.php?page=' . AdminCatalogMenu::SLUG_RESULTS),
+                'analytics' => admin_url('admin.php?page=' . AdminCatalogMenu::SLUG_ANALYTICS),
             ],
         ];
     }

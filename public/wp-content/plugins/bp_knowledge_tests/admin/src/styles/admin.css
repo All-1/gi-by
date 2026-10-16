@@ -168,3 +168,20 @@
   gap: 0.5rem;
   margin-top: 1rem;
 }
+
+.bp-kt-filters {
+  display: grid;
+  gap: 0.75rem;
+  max-width: 720px;
+}
+
+.bp-kt-analytics-grid {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+}
+
+.bp-kt-stats-list {
+  margin: 0.25rem 0 0;
+  padding-left: 1.25rem;
+}

@@ -6,6 +6,24 @@ This document tracks changes to the project. Entry format is defined in **Cursor
 
 ## Log
 
+### [2026-10-16] Knowledge tests: Phase 3 Wave F — close admin phase
+**Author**: AI Assistant
+**Logic**:
+- React admin covers catalog, settings, results, and analytics; the temporary **Tools → Knowledge Tests (dev)** smoke page duplicated listing and is no longer needed.
+**Changes**:
+- Removed `DevToolsMenu` and its registration from `Plugin::boot()`
+- `PROJECT_CONTEXT.md`, `IMPLEMENTATION_PLAN.md`, `PHASE_3_TASKS.md`, `PHASE_4_TASKS.md` — Phase 3 marked complete; next Phase 4
+
+### [2026-10-16] Knowledge tests: Phase 3 Wave E results and analytics
+**Author**: AI Assistant
+**Logic**:
+- Admins need §17 completed-attempt listing and §18 test/question analytics from existing attempt tables without duplicating domain rules in React.
+**Changes**:
+- `ReportingServices`, `ResultsListQuery`, `TestAnalyticsQuery`; `AttemptAdminRepository`, `AttemptAnalyticsRepository`
+- REST `GET /results`, `GET /analytics/tests`, `GET /analytics/tests/{id}`; WP admin **Results** / **Analytics** menus
+- `admin/src/pages/ResultsPage.tsx`, `AnalyticsPage.tsx`; rebuilt `assets/admin/app.js`
+- `tests/run_attempt_validity_label_tests.php`; `PHASE_3_TASKS.md`, `PROJECT_CONTEXT.md`, `IMPLEMENTATION_PLAN.md`
+
 ### [2026-10-15] Knowledge tests: correct-answer checkbox IDs from REST
 **Author**: AI Assistant
 **Logic**:

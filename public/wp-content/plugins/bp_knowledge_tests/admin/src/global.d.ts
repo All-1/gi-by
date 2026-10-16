@@ -10,6 +10,8 @@ declare global {
         list: string;
         addTest: string;
         settings: string;
+        results: string;
+        analytics: string;
       };
     };
   }

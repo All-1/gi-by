@@ -7,11 +7,11 @@
 **Plugin context**: [PROJECT_CONTEXT.md](../PROJECT_CONTEXT.md)  
 **Personal account integration**: [bp_contracts/PROJECT_CONTEXT.md](../../bp_contracts/PROJECT_CONTEXT.md)
 
-**Status (repository)**: Phase **2** **complete**. Schema **v3**. Phase **3** Waves **A–D** done (REST, mount, catalog §15, settings §16); **next:** Wave F (optional E, retire dev Tools). Phases **4–7:** WS → dealer UI → notifications UX → hardening. No `TestController` yet.  
+**Status (repository)**: Phase **3** **complete**. Schema **v3**. Admin: REST, React §15–18, capabilities; dev Tools retired (Wave F). **Next:** Phase **4** — `TestController` + WS. Phases **5–7:** dealer UI → notifications UX → hardening. No `TestController` yet.  
 **Phase 2 tasks:** [PHASE_2_TASKS.md](./PHASE_2_TASKS.md)  
 **Phase 3 tasks:** [PHASE_3_TASKS.md](./PHASE_3_TASKS.md) (admin)  
 **Phase 4 tasks:** [PHASE_4_TASKS.md](./PHASE_4_TASKS.md) (WS)  
-**Last updated**: 2026-10-13
+**Last updated**: 2026-10-16
 
 ---
 
@@ -68,13 +68,13 @@ bp_knowledge_tests/
     └── PHASE_4_TASKS.md
 ```
 
-**Implemented:** Phase **1** (catalog CRUD, domain scoring/classifier, dev Tools, schema **v3**, `is_correct` on answers). Phase **2** (materials, **`CompleteAttempt`**, achievements, retake, validity/critical update, notifications, `tests/run_complete_attempt_tests.php`).
+**Implemented:** Phase **1** (catalog CRUD, domain scoring/classifier, schema **v3**, `is_correct` on answers; Phase 1 dev Tools removed in Phase 3 Wave F). Phase **2** (materials, **`CompleteAttempt`**, achievements, retake, validity/critical update, notifications, `tests/run_complete_attempt_tests.php`). Phase **3** (admin REST `bp-knowledge-tests/v1`, `CatalogCapability`, React test factory §15–18, results/analytics).
 
 **Not yet present:**
 
-- Phase **3** — React admin + HTTP API for catalog/settings
 - Phase **4** — `bp_contracts` `TestController`, live WS commands
 - Phases **5–6** — React dealer UI + notifications UX
+- Phase **7** — hardening / release checklist
 
 **Doc / integration hygiene (Phase 0):** plugin linked from [public/PROJECT_CONTEXT.md](../../../../PROJECT_CONTEXT.md); `bp_contracts` testing section exists — update WS list when **Phase 4** starts.
 
@@ -577,9 +577,9 @@ Store dismiss counts and policy in `gi_new_test_config` / `gi_new_test_notificat
 - [x] Application catalog CRUD (`Catalog\TestCatalog` etc. via `Plugin::catalog()`)
 - [x] Domain: `ScoringService`, pass/fail (`AttemptResultClassifier`), `TestConfigReader` (focused classes per §4.3)
 - [x] Automated scoring tests — `tests/run_scoring_tests.php` (User Rules §8.3)
-- [x] Temporary PHP smoke page — **Tools → Knowledge Tests (dev)** only (not product UI; remove when React admin can list catalog)
+- [x] Temporary PHP smoke page — **Tools → Knowledge Tests (dev)** (removed Phase 3 Wave F; catalog via React admin)
 
-**Exit:** CRUD verifiable without React (smoke page or WP-CLI); scoring tests green. **Met** (smoke + scoring script).
+**Exit:** CRUD verifiable without React (smoke page or WP-CLI); scoring tests green. **Met** (smoke + scoring script; smoke retired Wave F).
 
 ### Phase 2 — Attempts, materials, achievements (1.5–2 weeks)
 
@@ -604,9 +604,10 @@ Store dismiss counts and policy in `gi_new_test_config` / `gi_new_test_notificat
 - [x] React screens for §15 (All Tests + editor + critical update, Wave C)
 - [x] Settings UI §16 (Wave D)
 - [x] Critical update from admin UI
-- [ ] Retire dev Tools catalog dependence
+- [x] Results §17 + Analytics §18 (Wave E)
+- [x] Retire dev Tools catalog dependence (Wave F)
 
-**Exit:** Content team self-service via React admin (at least full test authoring).
+**Exit:** Content team self-service via React admin (at least full test authoring). **Met**.
 
 ### Phase 4 — TestController & WebSocket (1.5–2 weeks)
 
