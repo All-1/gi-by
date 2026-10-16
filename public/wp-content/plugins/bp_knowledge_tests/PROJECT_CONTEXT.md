@@ -4,7 +4,7 @@
 
 WordPress plugin for **dealer knowledge tests** in the personal account. Domain logic lives here; **`bp_contracts`** provides UI shell, WebSocket transport, and in-memory `TestController` for unfinished attempts (later phases).
 
-**Status**: Phase **2** **complete**. Phase **3** Waves **A–D** shipped (REST, mount, §15 catalog UI, §16 settings). **Next:** Wave F (optional E results/analytics, retire dev Tools). Phase **4** = `TestController` + WS.
+**Status**: Phase **2** **complete**. Phase **3** Waves **A–E** shipped (REST, mount, §15 catalog, §16 settings, §17–18 results/analytics). **Next:** Wave F (retire dev Tools). Phase **4** = `TestController` + WS.
 
 ## Documentation (canonical)
 
@@ -90,8 +90,13 @@ This plugin does **not** ship React bundles. Expose stable application/WS contra
 | GET | `/config` | — | `{ settings: Record<string,string> }` |
 | PUT/PATCH | `/config` | `{ name, value }` or `{ settings: {…} }` (allowlisted keys only) | `{ settings, achievementsRecalculated? }` — recalc when bronze/silver/gold/lock thresholds change |
 | POST | `/tests/{id}/critical-update` | — | `{ test }` (version bumped) |
+| GET | `/results` | Query: `testId?`, `userId?`, `status?` (`passed`/`failed`/`outdated`), `page?`, `perPage?` | `{ items, total, page, perPage }` — §17 |
+| GET | `/analytics/tests` | — | `{ tests: TestAnalyticsSummary[] }` |
+| GET | `/analytics/tests/{id}` | — | `{ analytics: TestAnalyticsDetail }` — includes `questions[]` §18.2 |
 
 `Test`, `Question`, `Answer` shapes match `Infrastructure\Http\ResourcePresenter`.
+
+**Reporting (Wave E):** `Plugin::reporting()` → `ResultsListQuery`, `TestAnalyticsQuery`. Validity column: `valid` \| `expired` \| `not_applicable` from attempt `status` (`AttemptValidityLabel`).
 
 ### Catalog services (admin CRUD)
 

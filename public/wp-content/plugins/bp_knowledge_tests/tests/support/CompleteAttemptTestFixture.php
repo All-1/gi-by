@@ -8,6 +8,7 @@ use BpKnowledgeTests\Plugin;
 use BpKnowledgeTests\Services\AttemptServices;
 use BpKnowledgeTests\Services\CatalogServices;
 use BpKnowledgeTests\Services\DomainServices;
+use BpKnowledgeTests\Services\ReportingServices;
 use PersonalAccount\Core\Container;
 use PersonalAccount\Utilities\DBUtilities;
 use PersonalAccount\Utilities\SimpleUtilities;
@@ -35,8 +36,9 @@ final class CompleteAttemptTestFixture
         $catalog = new CatalogServices($this->container);
         $domain = new DomainServices($catalog);
         $attempts = new AttemptServices($this->container, $catalog, $domain);
+        $reporting = new ReportingServices($this->container, $catalog);
 
-        return new Plugin($catalog, $domain, $attempts);
+        return new Plugin($catalog, $domain, $attempts, $reporting);
     }
 
     public function memoryDb(): MemoryDBWorker

@@ -1,11 +1,15 @@
 import { useState } from 'react';
 import { AllTestsPage } from './pages/AllTestsPage';
+import { AnalyticsPage } from './pages/AnalyticsPage';
+import { ResultsPage } from './pages/ResultsPage';
 import { SettingsPage } from './pages/SettingsPage';
 import { TestEditorPage } from './pages/TestEditorPage';
 
 type View =
   | { kind: 'list' }
   | { kind: 'settings' }
+  | { kind: 'results' }
+  | { kind: 'analytics' }
   | { kind: 'edit'; testId: number | null };
 
 function readInitialView(): View {
@@ -13,6 +17,12 @@ function readInitialView(): View {
   const initial = root?.dataset.initialView ?? 'list';
   if (initial === 'settings') {
     return { kind: 'settings' };
+  }
+  if (initial === 'results') {
+    return { kind: 'results' };
+  }
+  if (initial === 'analytics') {
+    return { kind: 'analytics' };
   }
   if (initial === 'edit-new') {
     return { kind: 'edit', testId: null };
@@ -26,19 +36,10 @@ function readInitialView(): View {
   return { kind: 'list' };
 }
 
-function navigateToList(): void {
-  const url = window.bpKnowledgeTestsAdmin?.adminUrls?.list;
+function navigateToAdminPage(key: 'list' | 'settings' | 'results' | 'analytics'): void {
+  const url = window.bpKnowledgeTestsAdmin?.adminUrls?.[key];
   if (url) {
     window.location.assign(url);
-    return;
-  }
-}
-
-function navigateToSettings(): void {
-  const url = window.bpKnowledgeTestsAdmin?.adminUrls?.settings;
-  if (url) {
-    window.location.assign(url);
-    return;
   }
 }
 
@@ -47,7 +48,7 @@ export function App() {
 
   const goList = () => {
     if (view.kind === 'edit' && window.bpKnowledgeTestsAdmin?.adminUrls?.list) {
-      navigateToList();
+      navigateToAdminPage('list');
       return;
     }
     setView({ kind: 'list' });
@@ -55,14 +56,56 @@ export function App() {
 
   const goSettings = () => {
     if (window.bpKnowledgeTestsAdmin?.adminUrls?.settings) {
-      navigateToSettings();
+      navigateToAdminPage('settings');
       return;
     }
     setView({ kind: 'settings' });
   };
 
+  const goResults = () => {
+    if (window.bpKnowledgeTestsAdmin?.adminUrls?.results) {
+      navigateToAdminPage('results');
+      return;
+    }
+    setView({ kind: 'results' });
+  };
+
+  const goAnalytics = () => {
+    if (window.bpKnowledgeTestsAdmin?.adminUrls?.analytics) {
+      navigateToAdminPage('analytics');
+      return;
+    }
+    setView({ kind: 'analytics' });
+  };
+
   if (view.kind === 'settings') {
-    return <SettingsPage onNavigateTests={goList} />;
+    return (
+      <SettingsPage
+        onNavigateTests={goList}
+        onNavigateResults={goResults}
+        onNavigateAnalytics={goAnalytics}
+      />
+    );
+  }
+
+  if (view.kind === 'results') {
+    return (
+      <ResultsPage
+        onNavigateTests={goList}
+        onNavigateSettings={goSettings}
+        onNavigateAnalytics={goAnalytics}
+      />
+    );
+  }
+
+  if (view.kind === 'analytics') {
+    return (
+      <AnalyticsPage
+        onNavigateTests={goList}
+        onNavigateSettings={goSettings}
+        onNavigateResults={goResults}
+      />
+    );
   }
 
   if (view.kind === 'list') {
@@ -71,6 +114,8 @@ export function App() {
         onAddTest={() => setView({ kind: 'edit', testId: null })}
         onEditTest={(id) => setView({ kind: 'edit', testId: id })}
         onOpenSettings={goSettings}
+        onOpenResults={goResults}
+        onOpenAnalytics={goAnalytics}
       />
     );
   }

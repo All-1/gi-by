@@ -137,6 +137,28 @@ final class AnswerRepository
         return $ids;
     }
 
+    /**
+     * @return array<int, int> questionId => count of correct options
+     */
+    public function countCorrectOptionsByTest(int $testId): array
+    {
+        $answers = $this->db->getPathTable(self::TABLE);
+        $questions = $this->db->getPathTable(self::TABLE_QUESTIONS);
+        $rows = $this->db->getRawSQL(
+            "SELECT a.question_id, COUNT(1) AS cnt FROM `{$answers}` a
+            INNER JOIN `{$questions}` q ON q.id = a.question_id
+            WHERE q.test_id = %d AND a.is_correct = 1
+            GROUP BY a.question_id",
+            [$testId],
+        );
+        $map = [];
+        foreach ($this->mapper->rows($rows) as $row) {
+            $map[(int) $row->question_id] = (int) $row->cnt;
+        }
+
+        return $map;
+    }
+
     public function countCorrectForTest(int $testId): int
     {
         $answers = $this->db->getPathTable(self::TABLE);

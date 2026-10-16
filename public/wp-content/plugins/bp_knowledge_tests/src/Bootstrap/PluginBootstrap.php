@@ -7,6 +7,7 @@ namespace BpKnowledgeTests\Bootstrap;
 use BpKnowledgeTests\Services\AttemptServices;
 use BpKnowledgeTests\Services\CatalogServices;
 use BpKnowledgeTests\Services\DomainServices;
+use BpKnowledgeTests\Services\ReportingServices;
 use BpKnowledgeTests\Infrastructure\SchemaDefiner;
 use BpKnowledgeTests\Infrastructure\SchemaVersionRepository;
 use BpKnowledgeTests\Infrastructure\Security\CatalogCapability;
@@ -27,8 +28,9 @@ final class PluginBootstrap
         $catalog = new CatalogServices($this->servicesContainer);
         $domain = new DomainServices($catalog);
         $attempts = new AttemptServices($this->servicesContainer, $catalog, $domain);
+        $reporting = new ReportingServices($this->servicesContainer, $catalog);
 
-        return new Plugin($catalog, $domain, $attempts);
+        return new Plugin($catalog, $domain, $attempts, $reporting);
     }
 
     public function run(): void

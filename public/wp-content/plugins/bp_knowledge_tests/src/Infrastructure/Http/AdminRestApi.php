@@ -4,10 +4,12 @@ declare(strict_types=1);
 
 namespace BpKnowledgeTests\Infrastructure\Http;
 
+use BpKnowledgeTests\Infrastructure\Http\Routes\AnalyticsRestRoutes;
 use BpKnowledgeTests\Infrastructure\Http\Routes\AnswersRestRoutes;
 use BpKnowledgeTests\Infrastructure\Http\Routes\ConfigRestRoutes;
 use BpKnowledgeTests\Infrastructure\Http\Routes\CriticalUpdateRestRoutes;
 use BpKnowledgeTests\Infrastructure\Http\Routes\QuestionsRestRoutes;
+use BpKnowledgeTests\Infrastructure\Http\Routes\ResultsRestRoutes;
 use BpKnowledgeTests\Infrastructure\Http\Routes\TestsRestRoutes;
 use BpKnowledgeTests\Plugin;
 
@@ -27,6 +29,8 @@ final class AdminRestApi
             (new AnswersRestRoutes($this->plugin))->register();
             (new ConfigRestRoutes($this->plugin))->register();
             (new CriticalUpdateRestRoutes($this->plugin))->register();
+            (new ResultsRestRoutes($this->plugin))->register();
+            (new AnalyticsRestRoutes($this->plugin))->register();
         });
     }
 }

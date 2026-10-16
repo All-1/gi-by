@@ -7,9 +7,17 @@ type Props = {
   onAddTest: () => void;
   onEditTest: (id: number) => void;
   onOpenSettings: () => void;
+  onOpenResults: () => void;
+  onOpenAnalytics: () => void;
 };
 
-export function AllTestsPage({ onAddTest, onEditTest, onOpenSettings }: Props) {
+export function AllTestsPage({
+  onAddTest,
+  onEditTest,
+  onOpenSettings,
+  onOpenResults,
+  onOpenAnalytics,
+}: Props) {
   const [tests, setTests] = useState<Test[]>([]);
   const [expandedId, setExpandedId] = useState<number | null>(null);
   const [questionsByTest, setQuestionsByTest] = useState<Record<number, Question[]>>({});
@@ -64,7 +72,12 @@ export function AllTestsPage({ onAddTest, onEditTest, onOpenSettings }: Props) {
         )}
       </header>
 
-      <AdminSubnav active="tests" onNavigateSettings={onOpenSettings} />
+      <AdminSubnav
+        active="tests"
+        onNavigateSettings={onOpenSettings}
+        onNavigateResults={onOpenResults}
+        onNavigateAnalytics={onOpenAnalytics}
+      />
 
       {loading && <p>Loading…</p>}
       {error !== null && <p className="bp-kt-error">{error}</p>}

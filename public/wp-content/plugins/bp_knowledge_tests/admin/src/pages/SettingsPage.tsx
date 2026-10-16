@@ -11,9 +11,11 @@ import {
 
 type Props = {
   onNavigateTests: () => void;
+  onNavigateResults: () => void;
+  onNavigateAnalytics: () => void;
 };
 
-export function SettingsPage({ onNavigateTests }: Props) {
+export function SettingsPage({ onNavigateTests, onNavigateResults, onNavigateAnalytics }: Props) {
   const [form, setForm] = useState<SettingsForm>(DEFAULT_SETTINGS);
   const [error, setError] = useState<string | null>(null);
   const [notice, setNotice] = useState<string | null>(null);
@@ -66,7 +68,12 @@ export function SettingsPage({ onNavigateTests }: Props) {
         <h1>Settings</h1>
       </header>
 
-      <AdminSubnav active="settings" onNavigateTests={onNavigateTests} />
+      <AdminSubnav
+        active="settings"
+        onNavigateTests={onNavigateTests}
+        onNavigateResults={onNavigateResults}
+        onNavigateAnalytics={onNavigateAnalytics}
+      />
 
       {loading && <p>Loading…</p>}
       {error !== null && <p className="bp-kt-error">{error}</p>}
