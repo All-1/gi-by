@@ -7,11 +7,11 @@
 **Plugin context**: [PROJECT_CONTEXT.md](../PROJECT_CONTEXT.md) (directory index — details in nested `PROJECT_CONTEXT.md` files)  
 **Personal account integration**: [bp_contracts/PROJECT_CONTEXT.md](../../bp_contracts/PROJECT_CONTEXT.md)
 
-**Status (repository)**: Phase **3** **complete**. Schema **v3**. Admin: REST, React §15–18, capabilities; dev Tools retired (Wave F). **Next:** Phase **4** — `TestController` + WS. Phases **5–7:** dealer UI → notifications UX → hardening. No `TestController` yet.  
+**Status (repository)**: Phase **3** **complete**. Phase **4** Wave **A** complete (WS protocol locked — [WS_PROTOCOL.md](./WS_PROTOCOL.md)). Schema **v3**. **Next:** Phase **4** Waves **B–F** — `TestController` + WS handlers. Phases **5–7:** dealer UI → notifications UX → hardening. No `TestController` code yet.  
 **Phase 2 tasks:** [PHASE_2_TASKS.md](./PHASE_2_TASKS.md)  
 **Phase 3 tasks:** [PHASE_3_TASKS.md](./PHASE_3_TASKS.md) (admin)  
 **Phase 4 tasks:** [PHASE_4_TASKS.md](./PHASE_4_TASKS.md) (WS)  
-**Last updated**: 2026-10-16
+**Last updated**: 2026-10-19
 
 ---
 
@@ -613,6 +613,7 @@ Store dismiss counts and policy in `gi_new_test_config` / `gi_new_test_notificat
 
 **Task breakdown:** [PHASE_4_TASKS.md](./PHASE_4_TASKS.md) (waves A–F, checklist, cross-plugin ownership). *Former plan Phase 3.*
 
+- [x] Wave A — WS protocol documented ([WS_PROTOCOL.md](./WS_PROTOCOL.md), D1)
 - [ ] `TestController` + session model
 - [ ] WS commands documented and implemented
 - [ ] Plugin called from `InteractionInterface` only for domain ops
@@ -687,7 +688,7 @@ Store dismiss counts and policy in `gi_new_test_config` / `gi_new_test_notificat
 
 | ID | Topic | Status |
 |----|-------|--------|
-| D1 | Exact WS command naming | Proposed §4.5 — finalize in Phase 4 |
+| D1 | Exact WS command naming | **Resolved** — [WS_PROTOCOL.md](./WS_PROTOCOL.md) (Phase 4 Wave A) |
 | D2 | Which roles see Tests / admin | **Interim (Wave B):** catalog = factory `administrator` + `sales_manager` + `manage_options`; dealer Tests TBD Phase 4–5 |
 | D3 | Question difficulty formula | Deferred; raw data in V1 |
 | D4 | Multi-select counting (valid/invalid/missed, global vs per-question score) | **Resolved** — spec §2.1.1; engineering §5.1.1 |

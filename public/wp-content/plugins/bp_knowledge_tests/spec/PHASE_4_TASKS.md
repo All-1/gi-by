@@ -1,6 +1,6 @@
 **Prerequisite:** Phase **3** **complete** — author tests via WP **Knowledge Tests** React admin (or REST) before WS work.
 
-# Phase 3 — Task breakdown (TestController & WebSocket)
+# Phase 4 — Task breakdown (TestController & WebSocket)
 
 **Primary owner:** `bp_contracts` (RAM session + WS transport)  
 **Domain owner:** `bp_knowledge_tests` (grading, finish, retake, materials — no duplicated rules)  
@@ -12,7 +12,7 @@
 
 **Goal (exit criterion):** A dealer (or tester) can **start → answer questions → finish** a knowledge test **over WebSocket** on staging; unfinished state lives in **RAM** only; **finish** persists via `attempts()->complete->finish` with the Phase 2 payload contract. **No React product UI required** for exit (manual WS client or temporary harness is enough).
 
-**Progress (2026-10-12):** Not started (renumbered from Phase 3).
+**Progress (2026-10-19):** Wave **A** complete (protocol locked). Waves **B–F** not started.
 
 **Estimate:** ~1.5–2 weeks one developer (matches plan §11).
 
@@ -33,9 +33,11 @@
 
 ---
 
-## Wave A — Protocol & documentation (D1) — **not started**
+## Wave A — Protocol & documentation (D1) — **complete**
 
 Finalize names before merging handlers (plan §4.5 proposals).
+
+**Canonical doc:** [WS_PROTOCOL.md](./WS_PROTOCOL.md) (titles, payloads, error codes). Live index: [bp_contracts/src/PROJECT_CONTEXT.md](../../bp_contracts/src/PROJECT_CONTEXT.md).
 
 ### A1. Client → server commands
 
@@ -219,7 +221,7 @@ F
 
 | # | Topic | Where |
 |---|--------|--------|
-| D1 | Exact WS command/response names | §4.5, Wave A |
+| D1 | Exact WS command/response names | **Resolved** — [WS_PROTOCOL.md](./WS_PROTOCOL.md) |
 | D2 | Which roles see Tests / start tests | Product + `UserControler` / capabilities |
 | 1 | `user_id` on WS | `gi_new_users.id_user` — same as Phase 2 |
 | 2 | Resume after reconnect | Same WS process only; new process = lost session (spec) |
@@ -241,8 +243,8 @@ Log significant protocol or product choices in [CHANGELOG.md](../../../../CHANGE
 
 ## Task checklist (copy for PRs)
 
-- [ ] A1 Client → server titles documented (live list in bp_contracts PROJECT_CONTEXT)
-- [ ] A2 Server → client titles + handler names documented
+- [x] A1 Client → server titles documented (live list in bp_contracts PROJECT_CONTEXT)
+- [x] A2 Server → client titles + handler names documented
 - [ ] B1 `AttemptSession` RAM model
 - [ ] B2 `TestController` API + finish payload builder
 - [ ] B3 Registered in `SystemConstructor`

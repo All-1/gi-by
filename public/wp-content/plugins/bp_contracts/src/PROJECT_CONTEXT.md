@@ -115,13 +115,34 @@ See [Workers/Analytics](./Workers/Analytics/PROJECT_CONTEXT.md) and [Users/trait
 
 Convention: `communication_server.js` → `handlerRequestFromServer(caseTitle, data)` → `window['handler' + toCapsCase(caseTitle)]`.
 
-## Knowledge tests (planned — not implemented)
+## Knowledge tests (protocol locked — handlers pending Phase 4 B–F)
 
-Client → server (proposed names): `showTests`, `startTest`, `submitTestQuestion`, `finishTest`, `abandonTest`, `getTestMaterials`, `confirmTestMaterialsExamined`.
+**D1 finalized** 2026-10-19. JSON shapes and error codes: [bp_knowledge_tests/spec/WS_PROTOCOL.md](../../bp_knowledge_tests/spec/WS_PROTOCOL.md). Engineering map: [IMPLEMENTATION_PLAN](../../bp_knowledge_tests/spec/IMPLEMENTATION_PLAN.md).
 
-Server → client (proposed): `TestsOnPage`, `TestQuestionOnPage`, `TestFinishedOnPage`, `TestMaterialsOnPage`.
+Commands are **not** wired in `Chat.php` yet. When implemented, add rows to the tables below and remove the “pending” note.
 
-Engineering map: [bp_knowledge_tests/spec/IMPLEMENTATION_PLAN.md](../../bp_knowledge_tests/spec/IMPLEMENTATION_PLAN.md). Remove this stub section when commands are live in `Chat.php`.
+### Client → server
+
+| Command | Body (JSON) | Purpose |
+|:--------|:------------|:--------|
+| `showTests` | `{ "page"?, "perPage"? }` | Test list + derived row state |
+| `startTest` | `{ "testId" }` | Start or resume RAM session |
+| `submitTestQuestion` | `{ "testId", "selectedAnswerIds" }` | Answer current question + feedback |
+| `finishTest` | `{ "testId" }` | Persist attempt via plugin |
+| `abandonTest` | `{ "testId" }` | Clear RAM session |
+| `getTestMaterials` | `{ "testId" }` | Pending materials for user/test |
+| `confirmTestMaterialsExamined` | `{ "testId", "attemptId" }` | Delete temp explanation rows |
+
+### Server → client
+
+| Title | Handler (`handler` + PascalCase title) |
+|:------|:---------------------------------------|
+| `TestsOnPage` | `handlerTestsOnPage` |
+| `TestQuestionOnPage` | `handlerTestQuestionOnPage` |
+| `TestFinishedOnPage` | `handlerTestFinishedOnPage` |
+| `TestMaterialsOnPage` | `handlerTestMaterialsOnPage` |
+
+**Boundary:** `bp_contracts` holds RAM session + WS only; scoring/retake/validity → `bp_knowledge_tests`.
 
 ## Related
 - [Core (DI bootstrap)](./Core/PROJECT_CONTEXT.md)

@@ -18,7 +18,8 @@ No subdirectories — product and phase markdown files live in this folder (see 
 | [IMPLEMENTATION_PLAN.md](./IMPLEMENTATION_PLAN.md) | Developers | Phases 0–7, architecture, full column list §5.0, WS sketch, risks, open decisions §14 |
 | [PHASE_2_TASKS.md](./PHASE_2_TASKS.md) | Developers | Attempts, materials, achievements — **complete** |
 | [PHASE_3_TASKS.md](./PHASE_3_TASKS.md) | Developers | Admin REST + React — **complete** |
-| [PHASE_4_TASKS.md](./PHASE_4_TASKS.md) | Developers | `TestController`, WS — **next** |
+| [WS_PROTOCOL.md](./WS_PROTOCOL.md) | Integrators | Locked WS titles + JSON shapes (Phase 4 Wave A) |
+| [PHASE_4_TASKS.md](./PHASE_4_TASKS.md) | Developers | `TestController`, WS — Wave A done; **B–F next** |
 
 ---
 
@@ -41,7 +42,7 @@ No subdirectories — product and phase markdown files live in this folder (see 
 
 1. **§1 baseline** — do not rewrite silently; use §2+ or CHANGELOG for changes.
 2. **DB columns** — maintain [IMPLEMENTATION_PLAN §5.0](./IMPLEMENTATION_PLAN.md#50-table-index) when migrations change; sync [migrations/PROJECT_CONTEXT.md](../migrations/PROJECT_CONTEXT.md).
-3. **WS titles** — when Phase 4 merges, update [bp_contracts/src/PROJECT_CONTEXT.md](../../bp_contracts/src/PROJECT_CONTEXT.md) and plan §4.5 together.
+3. **WS titles** — canonical [WS_PROTOCOL.md](./WS_PROTOCOL.md); keep [bp_contracts/src/PROJECT_CONTEXT.md](../../bp_contracts/src/PROJECT_CONTEXT.md) in sync when titles change.
 
 ---
 
@@ -52,7 +53,7 @@ No subdirectories — product and phase markdown files live in this folder (see 
 | 1 | Plugin skeleton, catalog, scoring tests | Done |
 | 2 | Complete attempt, materials, achievements | Done |
 | 3 | Admin REST + React factory | Done |
-| 4 | WS + TestController | Not started |
+| 4 | WS + TestController | Wave A done; B–F not started |
 | 5 | Dealer React | Not started |
 | 6 | Notifications UX | Not started |
 | 7 | Hardening / release | Not started |
