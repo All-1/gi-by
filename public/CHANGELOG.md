@@ -6,6 +6,22 @@ This document tracks changes to the project. Entry format is defined in **Cursor
 
 ## Log
 
+### [2026-10-16] Knowledge tests: expand PROJECT_CONTEXT narrative
+**Author**: AI Assistant
+**Logic**:
+- Index-only context files were hard to onboard from; the root and key folders need purpose, architecture, state model, and flow diagrams without duplicating the full product spec.
+**Changes**:
+- Enriched [PROJECT_CONTEXT.md](./wp-content/plugins/bp_knowledge_tests/PROJECT_CONTEXT.md) (system diagram, layering, scoring summary, phases, directory map)
+- Expanded `src/`, `spec/`, `Domain/`, `Services/Attempt/`, `admin/`, `Bootstrap/`, `Infrastructure/`, `tests/` context files
+
+### [2026-10-16] Knowledge tests: nested PROJECT_CONTEXT map
+**Author**: AI Assistant
+**Logic**:
+- Plugin root context was a monolith; per-directory context files match site conventions (`bp_contracts`) and keep facts in one canonical place.
+**Changes**:
+- `bp_knowledge_tests/**/PROJECT_CONTEXT.md` under `src/`, `admin/`, `spec/`, `migrations/`, `tests/`, `assets/`
+- Root [PROJECT_CONTEXT.md](./wp-content/plugins/bp_knowledge_tests/PROJECT_CONTEXT.md) is now an index with links; REST route table lives under `src/Infrastructure/Http/`
+
 ### [2026-10-16] Knowledge tests: Phase 3 Wave F — close admin phase
 **Author**: AI Assistant
 **Logic**:
