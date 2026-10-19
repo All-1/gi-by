@@ -12,7 +12,7 @@ This WordPress plugin owns **business rules and persistence** (`gi_new_test_*`).
 | Tests menu, live session (RAM), WS commands, dealer UI, chat stars | **`bp_contracts`** (Phases 4–5) |
 | Test-factory admin UI (§15–18) | **React in this plugin** → [assets/admin/](./assets/PROJECT_CONTEXT.md) |
 
-**Delivery status:** Phase **3** complete (REST + React admin). **Next:** Phase **4** — `TestController` + WebSocket ([spec/PHASE_4_TASKS.md](./spec/PHASE_4_TASKS.md)).
+**Delivery status:** Phase **3** complete (REST + React admin). Phase **4** Wave **A** complete ([WS protocol](./spec/WS_PROTOCOL.md)). **Next:** Phase **4** Waves **B–F** — `TestController` + WS ([spec/PHASE_4_TASKS.md](./spec/PHASE_4_TASKS.md)).
 
 **Parent:** [Site PROJECT_CONTEXT.md](../../../PROJECT_CONTEXT.md)  
 **Shell integration:** [bp_contracts/PROJECT_CONTEXT.md](../bp_contracts/PROJECT_CONTEXT.md)
@@ -37,7 +37,8 @@ Each parent `PROJECT_CONTEXT.md` lists **only immediate subdirectories** that ha
 | Layer | Document | Use when |
 |-------|----------|----------|
 | **Product** | [Testing System — Project Documentation.md](./spec/Testing%20System%20%E2%80%94%20Project%20Documentation.md) | What the business wants (§1 baseline; §2+ agreed rules) |
-| **Engineering plan** | [IMPLEMENTATION_PLAN.md](./spec/IMPLEMENTATION_PLAN.md) | Phases, DB columns §5.0, WS proposal, QA checklist |
+| **Engineering plan** | [IMPLEMENTATION_PLAN.md](./spec/IMPLEMENTATION_PLAN.md) | Phases, DB columns §5.0, QA checklist |
+| **WS protocol** | [WS_PROTOCOL.md](./spec/WS_PROTOCOL.md) | Locked titles + JSON (Phase 4) |
 | **This plugin (code)** | Nested `PROJECT_CONTEXT.md` under each folder | How the repo implements the plan |
 | **Tasks** | [PHASE_*_TASKS.md](./spec/PROJECT_CONTEXT.md) | Wave checklists per phase |
 
@@ -228,7 +229,7 @@ Mandatory automated coverage includes scoring, retake, validity, complete attemp
 
 | ID | Topic | Status |
 |----|--------|--------|
-| D1 | WS command names | Proposed in [IMPLEMENTATION_PLAN §4.5](./spec/IMPLEMENTATION_PLAN.md#45-websocket-spec-23) — finalize in Phase 4 |
+| D1 | WS command names | **Resolved** — [spec/WS_PROTOCOL.md](./spec/WS_PROTOCOL.md) |
 | D2 | Dealer roles for Tests menu | TBD Phase 4–5 |
 | D10 | Notification row shape | `notification_type` per user/test — confirm in use |
 

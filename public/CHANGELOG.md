@@ -6,6 +6,15 @@ This document tracks changes to the project. Entry format is defined in **Cursor
 
 ## Log
 
+### [2026-10-19] Knowledge tests: Phase 4 Wave A — lock WS protocol (D1)
+**Author**: AI Assistant
+**Logic**:
+- Handlers must not merge until client/server message titles and minimal JSON contracts are agreed; IMPLEMENTATION_PLAN §4.5 proposals are adopted unchanged.
+**Changes**:
+- `bp_knowledge_tests/spec/WS_PROTOCOL.md`: [NEW] canonical titles, payloads, error codes, command→response map
+- `bp_contracts/src/PROJECT_CONTEXT.md`: knowledge-tests command tables (handlers still pending)
+- `bp_knowledge_tests/spec/PHASE_4_TASKS.md`, `IMPLEMENTATION_PLAN.md`, plugin `PROJECT_CONTEXT.md`, `spec/PROJECT_CONTEXT.md`: Wave A status and D1 resolved
+
 ### [2026-10-16] Knowledge tests: expand PROJECT_CONTEXT narrative
 **Author**: AI Assistant
 **Logic**:
