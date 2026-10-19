@@ -4,7 +4,7 @@
 **Companion spec (requirements baseline)**: [Testing System — Project Documentation.md](./Testing%20System%20%E2%80%94%20Project%20Documentation.md)  
 **Site rules**: [DEVELOPMENT_RULES.md](../../../../DEVELOPMENT_RULES.md) (WordPress / `public/` — not a copy of global rules)  
 **Global standards**: Cursor **Settings → Rules** (security, GRASP/SOLID, code size §11, CHANGELOG, automated tests, PR checklist)  
-**Plugin context**: [PROJECT_CONTEXT.md](../PROJECT_CONTEXT.md)  
+**Plugin context**: [PROJECT_CONTEXT.md](../PROJECT_CONTEXT.md) (directory index — details in nested `PROJECT_CONTEXT.md` files)  
 **Personal account integration**: [bp_contracts/PROJECT_CONTEXT.md](../../bp_contracts/PROJECT_CONTEXT.md)
 
 **Status (repository)**: Phase **3** **complete**. Schema **v3**. Admin: REST, React §15–18, capabilities; dev Tools retired (Wave F). **Next:** Phase **4** — `TestController` + WS. Phases **5–7:** dealer UI → notifications UX → hardening. No `TestController` yet.  
