@@ -40,6 +40,9 @@ use PersonalAccount\Workers\Analytics\DialogAnalyticsQueries;
 use PersonalAccount\Workers\Collector\MessageCollector;
 use PersonalAccount\Workers\Collector\UserCollector;
 
+use PersonalAccount\Testing\TestController;
+use PersonalAccount\Testing\PluginQuestionSelectionGrader;
+
 class SystemConstructor
 {
     private Chat $chat;
@@ -144,6 +147,9 @@ class SystemConstructor
 
         $userCollector = new UserCollector($linkContainer);
         $this->container->set('UserCollector', $userCollector);
+
+        $testController = new TestController(new PluginQuestionSelectionGrader());
+        $this->container->set('TestController', $testController);
     }
 
     public function getContainer(): Container

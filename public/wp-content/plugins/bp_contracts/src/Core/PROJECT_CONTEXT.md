@@ -47,6 +47,7 @@ Simple service locator: `set($name, $service)`, `get($name)`.
 | `OrderAnalyticsQueries` | `Workers\Analytics\OrderAnalyticsQueries` |
 | `AnalyticsCollector` | `Workers\Collector\AnalyticsCollector` |
 | `UserCollector` | `Workers\Collector\UserCollector` |
+| `TestController` | `Testing\TestController` (in-memory knowledge test sessions) |
 
 ### Not in the container
 - **`AnalyticsWorker`**: constructed inside `Users\Admin` for `ManageAnalytics` (uses container only for query services if resolved manually in constructor).

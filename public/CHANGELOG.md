@@ -6,6 +6,16 @@ This document tracks changes to the project. Entry format is defined in **Cursor
 
 ## Log
 
+### [2026-10-19] Knowledge tests: Phase 4 Wave B — TestController RAM session
+**Author**: AI Assistant
+**Logic**:
+- Unfinished attempts must live in bp_contracts RAM per spec §2.5 before WS handlers call finish in the plugin.
+**Changes**:
+- `bp_contracts/src/Testing/*`: [NEW] `TestController`, `AttemptSession`, grader interface + plugin bridge
+- `bp_contracts/src/Core/SystemConstructor.php`: register `TestController`
+- `bp_contracts/tests/run_test_controller.php`: [NEW] isolated smoke test
+- Phase 4 task/plan context files updated (Wave B complete)
+
 ### [2026-10-19] Knowledge tests: Phase 4 Wave A — lock WS protocol (D1)
 **Author**: AI Assistant
 **Logic**:
