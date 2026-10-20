@@ -12,7 +12,7 @@
 
 **Goal (exit criterion):** A dealer (or tester) can **start → answer questions → finish** a knowledge test **over WebSocket** on staging; unfinished state lives in **RAM** only; **finish** persists via `attempts()->complete->finish` with the Phase 2 payload contract. **No React product UI required** for exit (manual WS client or temporary harness is enough).
 
-**Progress (2026-10-19):** Wave **A** complete (protocol locked). Waves **B–F** not started.
+**Progress (2026-10-19):** Waves **A–B** complete. Waves **C–F** not started.
 
 **Estimate:** ~1.5–2 weeks one developer (matches plan §11).
 
@@ -66,7 +66,9 @@ Finalize names before merging handlers (plan §4.5 proposals).
 
 ---
 
-## Wave B — Session model & `TestController` — **not started**
+## Wave B — Session model & `TestController` — **complete**
+
+**Code:** `bp_contracts/src/Testing/` — smoke test `bp_contracts/tests/run_test_controller.php`.
 
 **Location:** `bp_contracts/src/Testing/TestController.php` (+ small session type(s) in same folder).
 
@@ -245,9 +247,9 @@ Log significant protocol or product choices in [CHANGELOG.md](../../../../CHANGE
 
 - [x] A1 Client → server titles documented (live list in bp_contracts PROJECT_CONTEXT)
 - [x] A2 Server → client titles + handler names documented
-- [ ] B1 `AttemptSession` RAM model
-- [ ] B2 `TestController` API + finish payload builder
-- [ ] B3 Registered in `SystemConstructor`
+- [x] B1 `AttemptSession` RAM model
+- [x] B2 `TestController` API + finish payload builder
+- [x] B3 Registered in `SystemConstructor`
 - [ ] C1 Plugin bootstrap access from WS layer
 - [ ] C2 Thin gateway / InteractionInterface delegation
 - [ ] D1–D3 WS routing + client handler registration

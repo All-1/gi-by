@@ -115,11 +115,11 @@ See [Workers/Analytics](./Workers/Analytics/PROJECT_CONTEXT.md) and [Users/trait
 
 Convention: `communication_server.js` → `handlerRequestFromServer(caseTitle, data)` → `window['handler' + toCapsCase(caseTitle)]`.
 
-## Knowledge tests (protocol locked — handlers pending Phase 4 B–F)
+## Knowledge tests (protocol locked — RAM session live; WS handlers pending C–F)
 
-**D1 finalized** 2026-10-19. JSON shapes and error codes: [bp_knowledge_tests/spec/WS_PROTOCOL.md](../../bp_knowledge_tests/spec/WS_PROTOCOL.md). Engineering map: [IMPLEMENTATION_PLAN](../../bp_knowledge_tests/spec/IMPLEMENTATION_PLAN.md).
+**D1 finalized** 2026-10-19. **`TestController`** registered in DI ([Testing/PROJECT_CONTEXT.md](./Testing/PROJECT_CONTEXT.md)). JSON shapes: [bp_knowledge_tests/spec/WS_PROTOCOL.md](../../bp_knowledge_tests/spec/WS_PROTOCOL.md).
 
-Commands are **not** wired in `Chat.php` yet. When implemented, add rows to the tables below and remove the “pending” note.
+Commands are **not** wired in `Chat.php` yet.
 
 ### Client → server
 

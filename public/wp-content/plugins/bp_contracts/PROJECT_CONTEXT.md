@@ -68,7 +68,7 @@ Domain (scoring, DB, admin) lives in **[bp_knowledge_tests](../bp_knowledge_test
 
 | Piece | Role |
 |-------|------|
-| `TestController` (RAM) | Unfinished attempt session; cleared at daily WS restart (~03:00) |
+| `TestController` (RAM) | `src/Testing/TestController.php`; DI key `TestController`; cleared at daily WS restart (~03:00) |
 | **Tests** nav + flows | **React** in personal account (V1); not new `modal_window.js` / `tests.js` flows |
 | `Chat.php` handlers | Thin; call plugin services via Worker / `InteractionInterface` |
 | Chat author UI | Stars from plugin achievement query |

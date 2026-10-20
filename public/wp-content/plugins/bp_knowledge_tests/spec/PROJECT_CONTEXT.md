@@ -53,7 +53,7 @@ No subdirectories — product and phase markdown files live in this folder (see 
 | 1 | Plugin skeleton, catalog, scoring tests | Done |
 | 2 | Complete attempt, materials, achievements | Done |
 | 3 | Admin REST + React factory | Done |
-| 4 | WS + TestController | Wave A done; B–F not started |
+| 4 | WS + TestController | Waves A–B done; C–F not started |
 | 5 | Dealer React | Not started |
 | 6 | Notifications UX | Not started |
 | 7 | Hardening / release | Not started |

@@ -7,7 +7,7 @@
 **Plugin context**: [PROJECT_CONTEXT.md](../PROJECT_CONTEXT.md) (directory index — details in nested `PROJECT_CONTEXT.md` files)  
 **Personal account integration**: [bp_contracts/PROJECT_CONTEXT.md](../../bp_contracts/PROJECT_CONTEXT.md)
 
-**Status (repository)**: Phase **3** **complete**. Phase **4** Wave **A** complete (WS protocol locked — [WS_PROTOCOL.md](./WS_PROTOCOL.md)). Schema **v3**. **Next:** Phase **4** Waves **B–F** — `TestController` + WS handlers. Phases **5–7:** dealer UI → notifications UX → hardening. No `TestController` code yet.  
+**Status (repository)**: Phase **3** **complete**. Phase **4** Waves **A–B** complete (protocol + `TestController` RAM in `bp_contracts`). Schema **v3**. **Next:** Phase **4** Waves **C–F** — plugin gateway + WS handlers. Phases **5–7:** dealer UI → notifications UX → hardening.  
 **Phase 2 tasks:** [PHASE_2_TASKS.md](./PHASE_2_TASKS.md)  
 **Phase 3 tasks:** [PHASE_3_TASKS.md](./PHASE_3_TASKS.md) (admin)  
 **Phase 4 tasks:** [PHASE_4_TASKS.md](./PHASE_4_TASKS.md) (WS)  
@@ -614,7 +614,7 @@ Store dismiss counts and policy in `gi_new_test_config` / `gi_new_test_notificat
 **Task breakdown:** [PHASE_4_TASKS.md](./PHASE_4_TASKS.md) (waves A–F, checklist, cross-plugin ownership). *Former plan Phase 3.*
 
 - [x] Wave A — WS protocol documented ([WS_PROTOCOL.md](./WS_PROTOCOL.md), D1)
-- [ ] `TestController` + session model
+- [x] Wave B — `TestController` + `AttemptSession` ([bp_contracts/src/Testing/](../../bp_contracts/src/Testing/))
 - [ ] WS commands documented and implemented
 - [ ] Plugin called from `InteractionInterface` only for domain ops
 - [ ] Randomization + per-question feedback payloads
