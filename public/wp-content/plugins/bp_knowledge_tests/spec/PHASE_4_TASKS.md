@@ -12,7 +12,7 @@
 
 **Goal (exit criterion):** A dealer (or tester) can **start → answer questions → finish** a knowledge test **over WebSocket** on staging; unfinished state lives in **RAM** only; **finish** persists via `attempts()->complete->finish` with the Phase 2 payload contract. **No React product UI required** for exit (manual WS client or temporary harness is enough).
 
-**Progress (2026-10-19):** Waves **A–B** complete. Waves **C–F** not started.
+**Progress (2026-10-20):** Waves **A–C** complete. Waves **D–F** not started.
 
 **Estimate:** ~1.5–2 weeks one developer (matches plan §11).
 
@@ -102,28 +102,26 @@ Hold per user (and active `testId`):
 
 ---
 
-## Wave C — Plugin bridge (no business logic in contracts) — **not started**
+## Wave C — Plugin bridge (no business logic in contracts) — **complete**
 
 ### C1. Access `bp_knowledge_tests` from WS layer
 
 - Resolve `Plugin` (or narrow facade) from existing bootstrap — same pattern as other cross-plugin use; document entry in [bp_knowledge_tests/PROJECT_CONTEXT.md](../PROJECT_CONTEXT.md).
 - **Forbidden:** copy scoring thresholds, retake rules, or achievement mapping into `bp_contracts`.
 
-### C2. Thin orchestrator (contracts)
+### C2. Contracts integration surface (no proxy façade)
 
-Suggested: `Testing\KnowledgeTestsGateway` (name indicative) called from `InteractionInterface`:
+| Piece | Role |
+|-------|------|
+| `KnowledgeTestsPluginResolver` | `bp_knowledge_tests_plugin()` / `PluginBootstrap::compose()` |
+| `PluginQuestionSelectionGrader` | `domain()->selection->grade` (used by `TestController`) |
+| `SessionQuestionLoader` | Catalog rows for `TestController::startOrResume` |
 
-| Operation | Delegates to |
-|-----------|----------------|
-| Grade selection | `domain()->selection->grade` |
-| Finish | `attempts()->complete->finish` |
-| Retake check | `attempts()->retake->evaluate` (+ `TestController::hasSession` when starting) |
-| Catalog reads | `catalog()->tests`, `questions`, `answers` |
-| Materials | `attempts()->materials` |
+WS handlers call `$resolver->plugin()->attempts()` / `catalog()` directly for finish, retake, materials, list tests — **no** one-line wrapper class per operation.
 
 ### C3. Optional plugin use cases (only if handlers grow)
 
-Plan §6 names `TestCatalogQuery`, `StartTestSession`, `SubmitQuestion` — add **only when** `InteractionInterface` would otherwise exceed thin-controller rule. Prefer gateway methods until a second call site exists.
+Plan §6 names `TestCatalogQuery`, `StartTestSession`, `SubmitQuestion` — add **only when** `InteractionInterface` would otherwise exceed thin-controller rule. Prefer a **single** multi-step orchestrator in `bp_contracts` (e.g. `startTest` flow) over many proxy methods.
 
 **Acceptance:** `Chat.php` / `InteractionInterface` methods stay short; domain stays in plugin `src/`.
 
@@ -250,8 +248,8 @@ Log significant protocol or product choices in [CHANGELOG.md](../../../../CHANGE
 - [x] B1 `AttemptSession` RAM model
 - [x] B2 `TestController` API + finish payload builder
 - [x] B3 Registered in `SystemConstructor`
-- [ ] C1 Plugin bootstrap access from WS layer
-- [ ] C2 Thin gateway / InteractionInterface delegation
+- [x] C1 Plugin bootstrap access from WS layer
+- [x] C2 Resolver + `SessionQuestionLoader` (no proxy gateway)
 - [ ] D1–D3 WS routing + client handler registration
 - [ ] E1 `startTest` (retake + shuffle + resume)
 - [ ] E2 `submitTestQuestion` (plugin grader + feedback payload)

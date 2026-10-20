@@ -5,35 +5,23 @@ declare(strict_types=1);
 namespace PersonalAccount\Testing;
 
 use PersonalAccount\Testing\Contract\QuestionSelectionGraderInterface;
-use BpKnowledgeTests\Bootstrap\PluginBootstrap;
-use BpKnowledgeTests\Plugin;
-
 /**
- * Thin bridge to bp_knowledge_tests (Wave B); gateway may wrap this in Wave C.
+ * Thin bridge to bp_knowledge_tests grading (Wave B); used by TestController.
  */
 final class PluginQuestionSelectionGrader implements QuestionSelectionGraderInterface
 {
+    public function __construct(private KnowledgeTestsPluginResolver $resolver)
+    {
+    }
+
     public function grade(array $correctAnswerIds, array $selectedAnswerIds): GradedQuestionCounts
     {
-        $counts = $this->plugin()->domain()->selection->grade($correctAnswerIds, $selectedAnswerIds);
+        $counts = $this->resolver->plugin()->domain()->selection->grade($correctAnswerIds, $selectedAnswerIds);
 
         return new GradedQuestionCounts(
             $counts->rightAnswers,
             $counts->failedAnswers,
             $counts->missedCorrect,
         );
-    }
-
-    private function plugin(): Plugin
-    {
-        static $instance = null;
-        if ($instance instanceof Plugin) {
-            return $instance;
-        }
-
-        global $wpdb, $servicesContainer;
-        $instance = (new PluginBootstrap($wpdb, $servicesContainer))->compose();
-
-        return $instance;
     }
 }

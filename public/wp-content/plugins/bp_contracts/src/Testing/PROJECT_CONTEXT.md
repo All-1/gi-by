@@ -21,11 +21,21 @@ Sessions die when the Ratchet process restarts (nightly ~**03:00**).
 | `AttemptSession` | Shuffled question/answer ids, progress index, stats for finish payload |
 | `Contract\QuestionSelectionGraderInterface` | Grade one question’s selections (implemented by plugin bridge) |
 | `PluginQuestionSelectionGrader` | Calls `BpKnowledgeTests\Domain\QuestionSelectionGrader` |
+| `KnowledgeTestsPluginResolver` | Resolves `Plugin` via `bp_knowledge_tests_plugin()` or `PluginBootstrap` |
+| `SessionQuestionLoader` | Catalog → `TestController::startOrResume` question rows |
 | `SubmitQuestionResult` / `GradedQuestionCounts` | DTOs for WS layer (Wave D+) |
 
 ## DI
 
-Registered in `SystemConstructor` as container key **`TestController`** (singleton per WS process).
+Registered in `SystemConstructor` (singleton per WS process):
+
+| Container key | Type |
+|---------------|------|
+| `KnowledgeTestsPluginResolver` | `KnowledgeTestsPluginResolver` |
+| `SessionQuestionLoader` | `SessionQuestionLoader` |
+| `TestController` | `TestController` |
+
+WS handlers (Wave D–E) use **`KnowledgeTestsPluginResolver`** + **`TestController`** (+ **`SessionQuestionLoader`** for `startTest`). Call plugin facades via `$resolver->plugin()` for finish, retake, materials — no duplicated scoring rules in `Chat.php`. Add a multi-step orchestrator only when a handler would otherwise exceed the thin-controller rule.
 
 ## Protocol
 

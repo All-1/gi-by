@@ -217,7 +217,7 @@ Built by `TestController` (Wave B) — see [PROJECT_CONTEXT.md](../PROJECT_CONTE
 | Wave | Work |
 |------|------|
 | B | `TestController` / `AttemptSession` |
-| C | `KnowledgeTestsGateway` → plugin facades |
+| C | `KnowledgeTestsPluginResolver` → plugin facades; `SessionQuestionLoader` for start |
 | D–E | `Chat.php` + `InteractionInterface` handlers |
 | F | Staging harness + QA |
 

@@ -6,6 +6,16 @@ This document tracks changes to the project. Entry format is defined in **Cursor
 
 ## Log
 
+### [2026-10-20] Knowledge tests: Phase 4 Wave C — plugin resolver (no proxy gateway)
+**Author**: AI Assistant
+**Logic**:
+- WS layer needs a single plugin entry point without duplicating scoring rules; a façade of one-line proxy methods violates project anti-patterns (§13.2).
+**Changes**:
+- `bp_knowledge_tests/index.php`: `bp_knowledge_tests_plugin()` shared runtime accessor
+- `bp_contracts/src/Testing/KnowledgeTestsPluginResolver.php`, `SessionQuestionLoader.php`: [NEW] resolver + catalog→session rows
+- `bp_contracts/src/Testing/PluginQuestionSelectionGrader.php`, `SystemConstructor.php`: wire resolver into DI
+- Phase 4 task/plan/context docs: Wave C complete
+
 ### [2026-10-19] Knowledge tests: Phase 4 Wave B — TestController RAM session
 **Author**: AI Assistant
 **Logic**:

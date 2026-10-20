@@ -42,6 +42,8 @@ use PersonalAccount\Workers\Collector\UserCollector;
 
 use PersonalAccount\Testing\TestController;
 use PersonalAccount\Testing\PluginQuestionSelectionGrader;
+use PersonalAccount\Testing\KnowledgeTestsPluginResolver;
+use PersonalAccount\Testing\SessionQuestionLoader;
 
 class SystemConstructor
 {
@@ -148,7 +150,11 @@ class SystemConstructor
         $userCollector = new UserCollector($linkContainer);
         $this->container->set('UserCollector', $userCollector);
 
-        $testController = new TestController(new PluginQuestionSelectionGrader());
+        $knowledgeTestsResolver = new KnowledgeTestsPluginResolver();
+        $knowledgeTestsGrader = new PluginQuestionSelectionGrader($knowledgeTestsResolver);
+        $testController = new TestController($knowledgeTestsGrader);
+        $this->container->set('KnowledgeTestsPluginResolver', $knowledgeTestsResolver);
+        $this->container->set('SessionQuestionLoader', new SessionQuestionLoader($knowledgeTestsResolver));
         $this->container->set('TestController', $testController);
     }
 

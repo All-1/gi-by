@@ -7,11 +7,11 @@
 **Plugin context**: [PROJECT_CONTEXT.md](../PROJECT_CONTEXT.md) (directory index — details in nested `PROJECT_CONTEXT.md` files)  
 **Personal account integration**: [bp_contracts/PROJECT_CONTEXT.md](../../bp_contracts/PROJECT_CONTEXT.md)
 
-**Status (repository)**: Phase **3** **complete**. Phase **4** Waves **A–B** complete (protocol + `TestController` RAM in `bp_contracts`). Schema **v3**. **Next:** Phase **4** Waves **C–F** — plugin gateway + WS handlers. Phases **5–7:** dealer UI → notifications UX → hardening.  
+**Status (repository)**: Phase **3** **complete**. Phase **4** Waves **A–C** complete (protocol + `TestController` + plugin resolver in `bp_contracts`). Schema **v3**. **Next:** Phase **4** Waves **D–F** — WS handlers + behavior wiring. Phases **5–7:** dealer UI → notifications UX → hardening.  
 **Phase 2 tasks:** [PHASE_2_TASKS.md](./PHASE_2_TASKS.md)  
 **Phase 3 tasks:** [PHASE_3_TASKS.md](./PHASE_3_TASKS.md) (admin)  
 **Phase 4 tasks:** [PHASE_4_TASKS.md](./PHASE_4_TASKS.md) (WS)  
-**Last updated**: 2026-10-19
+**Last updated**: 2026-10-20
 
 ---
 
@@ -72,7 +72,7 @@ bp_knowledge_tests/
 
 **Not yet present:**
 
-- Phase **4** — `bp_contracts` `TestController`, live WS commands
+- Phase **4** — live WS commands (`Chat.php` / `InteractionInterface` handlers)
 - Phases **5–6** — React dealer UI + notifications UX
 - Phase **7** — hardening / release checklist
 
@@ -615,6 +615,7 @@ Store dismiss counts and policy in `gi_new_test_config` / `gi_new_test_notificat
 
 - [x] Wave A — WS protocol documented ([WS_PROTOCOL.md](./WS_PROTOCOL.md), D1)
 - [x] Wave B — `TestController` + `AttemptSession` ([bp_contracts/src/Testing/](../../bp_contracts/src/Testing/))
+- [x] Wave C — `KnowledgeTestsPluginResolver` + `SessionQuestionLoader` + `bp_knowledge_tests_plugin()`
 - [ ] WS commands documented and implemented
 - [ ] Plugin called from `InteractionInterface` only for domain ops
 - [ ] Randomization + per-question feedback payloads
