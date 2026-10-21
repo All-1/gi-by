@@ -17,7 +17,7 @@ Sessions die when the Ratchet process restarts (nightly ~**03:00**).
 
 | Class | Role |
 |-------|------|
-| `TestController` | Per-process map `userId:testId` → `AttemptSession` |
+| `TestController` | Per-process map `userId:testId` → `AttemptSession`; **one** in-progress test per user (`inProgressTestId`) |
 | `AttemptSession` | Shuffled question/answer ids, progress index, stats for finish payload |
 | `Contract\QuestionSelectionGraderInterface` | Grade one question’s selections |
 | `SubmitQuestionResult` / `GradedQuestionCounts` | DTOs for WS layer |

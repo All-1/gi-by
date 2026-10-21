@@ -7,11 +7,11 @@
 **Plugin context**: [PROJECT_CONTEXT.md](../PROJECT_CONTEXT.md) (directory index — details in nested `PROJECT_CONTEXT.md` files)  
 **Personal account integration**: [bp_contracts/PROJECT_CONTEXT.md](../../bp_contracts/PROJECT_CONTEXT.md)
 
-**Status (repository)**: Phase **3** **complete**. Phase **4** Waves **A–D** complete (WS wired in `Chat.php` + `KnowledgeTestsWsWorker`). Schema **v3**. **Next:** Phase **4** Wave **F** QA; **E4** cross-test in-progress guard. Phases **5–7:** dealer UI → notifications UX → hardening.  
+**Status (repository)**: Phases **1–4** **complete** (WS + `TestController` + `test_in_progress` guard). Schema **v3**. **Next:** Phase **5** dealer React UI; run Phase **4** staging QA on staging before dealer release ([PHASE_4_TASKS.md](./PHASE_4_TASKS.md) Wave F). Phases **6–7:** notifications UX → hardening.  
 **Phase 2 tasks:** [PHASE_2_TASKS.md](./PHASE_2_TASKS.md)  
 **Phase 3 tasks:** [PHASE_3_TASKS.md](./PHASE_3_TASKS.md) (admin)  
 **Phase 4 tasks:** [PHASE_4_TASKS.md](./PHASE_4_TASKS.md) (WS)  
-**Last updated**: 2026-10-20
+**Last updated**: 2026-10-21
 
 ---
 
@@ -68,15 +68,14 @@ bp_knowledge_tests/
     └── PHASE_4_TASKS.md
 ```
 
-**Implemented:** Phase **1** (catalog CRUD, domain scoring/classifier, schema **v3**, `is_correct` on answers; Phase 1 dev Tools removed in Phase 3 Wave F). Phase **2** (materials, **`CompleteAttempt`**, achievements, retake, validity/critical update, notifications, `tests/run_complete_attempt_tests.php`). Phase **3** (admin REST `bp-knowledge-tests/v1`, `CatalogCapability`, React test factory §15–18, results/analytics).
+**Implemented:** Phases **1–3** as before. Phase **4** — `TestController` RAM, `KnowledgeTestsWsWorker`, `Chat.php` / `InteractionInterface` commands per [WS_PROTOCOL.md](./WS_PROTOCOL.md); cross-test **`test_in_progress`** guard; client stubs in `communication_server.js`.
 
 **Not yet present:**
 
-- Phase **4** — live WS commands (`Chat.php` / `InteractionInterface` handlers)
 - Phases **5–6** — React dealer UI + notifications UX
 - Phase **7** — hardening / release checklist
 
-**Doc / integration hygiene (Phase 0):** plugin linked from [public/PROJECT_CONTEXT.md](../../../../PROJECT_CONTEXT.md); `bp_contracts` testing section exists — update WS list when **Phase 4** starts.
+**Doc / integration hygiene (Phase 0):** plugin linked from [public/PROJECT_CONTEXT.md](../../../../PROJECT_CONTEXT.md); WS titles in [bp_contracts/src/PROJECT_CONTEXT.md](../../bp_contracts/src/PROJECT_CONTEXT.md).
 
 **Phase order (2026-10-12):** Admin (**3**) before WS/dealer (**4–6**) so staging has real catalog content; see [PHASE_3_TASKS.md](./PHASE_3_TASKS.md).
 
@@ -617,11 +616,10 @@ Store dismiss counts and policy in `gi_new_test_config` / `gi_new_test_notificat
 - [x] Wave B — `TestController` + `AttemptSession` ([bp_contracts/src/Testing/](../../bp_contracts/src/Testing/))
 - [x] Wave C — `KnowledgeTestsSessionWorker` + `bp_knowledge_tests_plugin()`
 - [x] Wave D — WS commands in `Chat.php` + client handler stubs
-- [ ] Wave F — staging QA checklist
-- [ ] Plugin called from `InteractionInterface` only for domain ops
-- [ ] Randomization + per-question feedback payloads
+- [x] Wave E — start / submit / finish / materials + `test_in_progress` (E4)
+- [x] Wave F — doc sync + staging QA checklist ([PHASE_4_TASKS.md](./PHASE_4_TASKS.md))
 
-**Exit:** End-to-end test over WS on staging.
+**Exit:** End-to-end test over WS on staging (operator checklist in Phase 4 Wave F).
 
 ### Phase 5 — User-facing UI (React) (2 weeks)
 

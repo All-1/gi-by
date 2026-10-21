@@ -12,7 +12,7 @@
 
 **Goal (exit criterion):** A dealer (or tester) can **start → answer questions → finish** a knowledge test **over WebSocket** on staging; unfinished state lives in **RAM** only; **finish** persists via `attempts()->complete->finish` with the Phase 2 payload contract. **No React product UI required** for exit (manual WS client or temporary harness is enough).
 
-**Progress (2026-10-20):** Waves **A–D** complete; **E** core flow implemented in `KnowledgeTestsWsWorker`. Wave **F** pending.
+**Progress (2026-10-21):** Phase **4** **complete** in repo (Waves **A–F**). Run **staging QA** checklist below before Phase **5** dealer UI release.
 
 **Estimate:** ~1.5–2 weeks one developer (matches plan §11).
 
@@ -147,7 +147,7 @@ Plan §6 names `TestCatalogQuery`, `StartTestSession`, `SubmitQuestion` — add 
 
 ---
 
-## Wave E — Behavior wiring — **mostly complete** (in `KnowledgeTestsWsWorker`)
+## Wave E — Behavior wiring — **complete** (`KnowledgeTestsWsWorker`)
 
 ### E1. `startTest`
 
@@ -183,14 +183,21 @@ Plan §6 names `TestCatalogQuery`, `StartTestSession`, `SubmitQuestion` — add 
 
 ---
 
-## Wave F — Close Phase 3 — **not started**
+## Wave F — Close Phase 4 — **complete** (repo); staging QA manual
 
 | Task | Notes |
 |------|--------|
-| Staging QA | Checklist: start, submit (pass/fail question), finish, reconnect resume, restart WS loses RAM |
-| Security | Auth on commands; no cross-user session access (DEVELOPMENT_RULES §1) |
-| Docs | `IMPLEMENTATION_PLAN.md` §3 + §11 Phase 4 checkboxes; `bp_contracts` + plugin PROJECT_CONTEXT |
-| WS deploy | Restart Ratchet/WS after protocol change (DEVELOPMENT_RULES §4) |
+| Staging QA | **Operator checklist** (run on staging before Phase 5): |
+| | 1. `showTests` → row `displayStatus` / `canStart` sane for user with no attempts |
+| | 2. `startTest` → `TestQuestionOnPage`; answer wrong → feedback + explanation |
+| | 3. `submitTestQuestion` until complete → `finishTest` → `TestFinishedOnPage`; row in DB |
+| | 4. Reconnect WS (same process) → `startTest` same `testId` resumes question index |
+| | 5. `startTest` other `testId` while one in RAM → `test_in_progress` |
+| | 6. After WS restart: in-progress lost; `startTest` allowed per retake rules |
+| | 7. Failed finish → `getTestMaterials` / `confirmTestMaterialsExamined` |
+| Security | Commands use `knowledgeTestsUserId($idWebsocket)` — same as other PA WS; no `testId` without session on submit/finish |
+| Docs | `IMPLEMENTATION_PLAN.md` §3 + §11; `bp_contracts` + plugin PROJECT_CONTEXT synced |
+| WS deploy | Restart Ratchet/WS after deploy (DEVELOPMENT_RULES §4) |
 
 ---
 
@@ -253,6 +260,6 @@ Log significant protocol or product choices in [CHANGELOG.md](../../../../CHANGE
 - [x] E1 `startTest` (retake + shuffle + resume)
 - [x] E2 `submitTestQuestion` (plugin grader + feedback payload)
 - [x] E3 `finishTest` → `CompleteAttempt` + clear session
-- [ ] E4 In-progress blocks retake / duplicate start (cross-test `test_in_progress` TBD)
+- [x] E4 In-progress blocks retake / duplicate start (`test_in_progress` via `TestController::inProgressTestId`)
 - [x] E5 Materials WS commands (or explicit defer + CHANGELOG)
-- [ ] F Staging QA + doc sync + IMPLEMENTATION_PLAN §11
+- [x] F Doc sync + IMPLEMENTATION_PLAN §11 (staging QA checklist above — run on staging)

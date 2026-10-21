@@ -34,7 +34,7 @@ No subdirectories — product and phase markdown files live in this folder (see 
 | §6 critical update | `CriticalUpdateTest`, REST `POST .../critical-update` |
 | §15–18 admin UI | `admin/src/pages/*`, REST under `Infrastructure/Http` |
 | §19–21 dealer UI | **Not in this plugin yet** — `bp_contracts` Phase 5 |
-| §23 RAM session | **Not in this plugin** — `bp_contracts` Phase 4 |
+| §23 RAM session | **`bp_contracts`** `TestController` + WS ([WS_PROTOCOL.md](./WS_PROTOCOL.md)) |
 
 ---
 

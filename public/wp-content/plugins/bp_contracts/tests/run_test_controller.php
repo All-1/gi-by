@@ -81,4 +81,10 @@ assertTrue(count($payload) === 2, 'finish payload line count');
 $controller->clear($userId, $testId);
 assertTrue(!$controller->hasSession($userId, $testId), 'cleared');
 
+$otherTestId = 2;
+$controller->startOrResume($userId, $testId, $questions);
+assertTrue($controller->inProgressTestId($userId) === $testId, 'inProgressTestId');
+assertTrue(!$controller->hasSession($userId, $otherTestId), 'other test not started');
+$controller->clear($userId, $testId);
+
 echo "OK: TestController smoke tests passed.\n";
