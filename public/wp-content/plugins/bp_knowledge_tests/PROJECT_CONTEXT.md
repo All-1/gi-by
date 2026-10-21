@@ -12,7 +12,7 @@ This WordPress plugin owns **business rules and persistence** (`gi_new_test_*`).
 | Tests menu, live session (RAM), WS commands, dealer UI, chat stars | **`bp_contracts`** (Phases 4–5) |
 | Test-factory admin UI (§15–18) | **React in this plugin** → [assets/admin/](./assets/PROJECT_CONTEXT.md) |
 
-**Delivery status:** Phase **3** complete (REST + React admin). Phase **4** Waves **A–C** complete ([WS protocol](./spec/WS_PROTOCOL.md), [`TestController` + plugin resolver](../bp_contracts/src/Testing/PROJECT_CONTEXT.md)). **Next:** Phase **4** Waves **D–F** — WS handlers + behavior wiring ([spec/PHASE_4_TASKS.md](./spec/PHASE_4_TASKS.md)).
+**Delivery status:** Phase **3** complete (REST + React admin). Phase **4** Waves **A–D** complete + core WS commands ([WS protocol](./spec/WS_PROTOCOL.md), [`KnowledgeTestsWsWorker`](../bp_contracts/src/Workers/KnowledgeTestsWsWorker.php)). **Next:** Phase **4** Wave **F** (staging QA) and **E4** edge cases; then Phase **5** dealer React.
 
 **Parent:** [Site PROJECT_CONTEXT.md](../../../PROJECT_CONTEXT.md)  
 **Shell integration:** [bp_contracts/PROJECT_CONTEXT.md](../bp_contracts/PROJECT_CONTEXT.md)

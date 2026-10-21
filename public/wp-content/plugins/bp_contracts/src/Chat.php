@@ -301,6 +301,49 @@ class Chat implements MessageComponentInterface
     $this->sendMassChanges($usersForUpdate, 'showContracts', 'ContractOnPage');
     $this->sendMassChanges($usersForUpdate, 'showContract', 'sendDataForContract', $message->serialNumber);
   }
+  private function showKnowledgeTests($from, $body)
+  {
+    $idWebsocket = $this->findCurrentConnection($from);
+    $payload = $this->interactionInterface->showTestsWS($idWebsocket, $body);
+    $from->send('TestsOnPage::: ' . json_encode($payload));
+  }
+  private function startKnowledgeTest($from, $body)
+  {
+    $idWebsocket = $this->findCurrentConnection($from);
+    $payload = $this->interactionInterface->startTestWS($idWebsocket, $body);
+    $from->send('TestQuestionOnPage::: ' . json_encode($payload));
+  }
+  private function submitKnowledgeTestQuestion($from, $body)
+  {
+    $idWebsocket = $this->findCurrentConnection($from);
+    $payload = $this->interactionInterface->submitTestQuestionWS($idWebsocket, $body);
+    $from->send('TestQuestionOnPage::: ' . json_encode($payload));
+  }
+  private function finishKnowledgeTest($from, $body)
+  {
+    $idWebsocket = $this->findCurrentConnection($from);
+    $payload = $this->interactionInterface->finishTestWS($idWebsocket, $body);
+    $from->send('TestFinishedOnPage::: ' . json_encode($payload));
+  }
+  private function abandonKnowledgeTest($from, $body)
+  {
+    $idWebsocket = $this->findCurrentConnection($from);
+    $payload = $this->interactionInterface->abandonTestWS($idWebsocket, $body);
+    $from->send('TestsOnPage::: ' . json_encode($payload));
+  }
+  private function getKnowledgeTestMaterials($from, $body)
+  {
+    $idWebsocket = $this->findCurrentConnection($from);
+    $payload = $this->interactionInterface->getTestMaterialsWS($idWebsocket, $body);
+    $from->send('TestMaterialsOnPage::: ' . json_encode($payload));
+  }
+  private function confirmKnowledgeTestMaterialsExamined($from, $body)
+  {
+    $idWebsocket = $this->findCurrentConnection($from);
+    $payload = $this->interactionInterface->confirmTestMaterialsExaminedWS($idWebsocket, $body);
+    $from->send('TestMaterialsOnPage::: ' . json_encode($payload));
+  }
+
   private function showOrders($from)
   {
     $idWebsocket = $this->findCurrentConnection($from);
@@ -784,6 +827,27 @@ class Chat implements MessageComponentInterface
         break;
       case "getDealerDependentsAnalytics":
         $this->getDealerDependentsAnalytics($from, $body);
+        break;
+      case "showTests":
+        $this->showKnowledgeTests($from, $body);
+        break;
+      case "startTest":
+        $this->startKnowledgeTest($from, $body);
+        break;
+      case "submitTestQuestion":
+        $this->submitKnowledgeTestQuestion($from, $body);
+        break;
+      case "finishTest":
+        $this->finishKnowledgeTest($from, $body);
+        break;
+      case "abandonTest":
+        $this->abandonKnowledgeTest($from, $body);
+        break;
+      case "getTestMaterials":
+        $this->getKnowledgeTestMaterials($from, $body);
+        break;
+      case "confirmTestMaterialsExamined":
+        $this->confirmKnowledgeTestMaterialsExamined($from, $body);
         break;
      
     }

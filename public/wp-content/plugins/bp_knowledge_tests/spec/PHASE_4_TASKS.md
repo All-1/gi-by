@@ -12,7 +12,7 @@
 
 **Goal (exit criterion):** A dealer (or tester) can **start → answer questions → finish** a knowledge test **over WebSocket** on staging; unfinished state lives in **RAM** only; **finish** persists via `attempts()->complete->finish` with the Phase 2 payload contract. **No React product UI required** for exit (manual WS client or temporary harness is enough).
 
-**Progress (2026-10-20):** Waves **A–C** complete. Waves **D–F** not started.
+**Progress (2026-10-20):** Waves **A–D** complete; **E** core flow implemented in `KnowledgeTestsWsWorker`. Wave **F** pending.
 
 **Estimate:** ~1.5–2 weeks one developer (matches plan §11).
 
@@ -113,11 +113,10 @@ Hold per user (and active `testId`):
 
 | Piece | Role |
 |-------|------|
-| `KnowledgeTestsPluginResolver` | `bp_knowledge_tests_plugin()` / `PluginBootstrap::compose()` |
-| `PluginQuestionSelectionGrader` | `domain()->selection->grade` (used by `TestController`) |
-| `SessionQuestionLoader` | Catalog rows for `TestController::startOrResume` |
+| `KnowledgeTestsSessionWorker` | Plugin resolve, grading, `TestController`, session question rows |
+| `KnowledgeTestsWsWorker` | WS payloads; uses session worker via container |
 
-WS handlers call `$resolver->plugin()->attempts()` / `catalog()` directly for finish, retake, materials, list tests — **no** one-line wrapper class per operation.
+WS worker calls `$sessionWorker->plugin()->attempts()` / `catalog()` — **no** extra proxy types.
 
 ### C3. Optional plugin use cases (only if handlers grow)
 
@@ -127,7 +126,7 @@ Plan §6 names `TestCatalogQuery`, `StartTestSession`, `SubmitQuestion` — add 
 
 ---
 
-## Wave D — WebSocket implementation — **not started**
+## Wave D — WebSocket implementation — **complete**
 
 ### D1. `InteractionInterface`
 
@@ -148,7 +147,7 @@ Plan §6 names `TestCatalogQuery`, `StartTestSession`, `SubmitQuestion` — add 
 
 ---
 
-## Wave E — Behavior wiring — **not started**
+## Wave E — Behavior wiring — **mostly complete** (in `KnowledgeTestsWsWorker`)
 
 ### E1. `startTest`
 
@@ -249,11 +248,11 @@ Log significant protocol or product choices in [CHANGELOG.md](../../../../CHANGE
 - [x] B2 `TestController` API + finish payload builder
 - [x] B3 Registered in `SystemConstructor`
 - [x] C1 Plugin bootstrap access from WS layer
-- [x] C2 Resolver + `SessionQuestionLoader` (no proxy gateway)
-- [ ] D1–D3 WS routing + client handler registration
-- [ ] E1 `startTest` (retake + shuffle + resume)
-- [ ] E2 `submitTestQuestion` (plugin grader + feedback payload)
-- [ ] E3 `finishTest` → `CompleteAttempt` + clear session
-- [ ] E4 In-progress blocks retake / duplicate start
-- [ ] E5 Materials WS commands (or explicit defer + CHANGELOG)
+- [x] C2 `KnowledgeTestsSessionWorker` + `KnowledgeTestsWsWorker` (container)
+- [x] D1–D3 WS routing + client handler registration
+- [x] E1 `startTest` (retake + shuffle + resume)
+- [x] E2 `submitTestQuestion` (plugin grader + feedback payload)
+- [x] E3 `finishTest` → `CompleteAttempt` + clear session
+- [ ] E4 In-progress blocks retake / duplicate start (cross-test `test_in_progress` TBD)
+- [x] E5 Materials WS commands (or explicit defer + CHANGELOG)
 - [ ] F Staging QA + doc sync + IMPLEMENTATION_PLAN §11

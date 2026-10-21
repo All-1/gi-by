@@ -46,6 +46,8 @@ function addJsLinks()
 		src="/wp-content/plugins/bp_contracts/js/controls_for_page.js<?php echo $version; ?>"></script>
 	<script type="text/javascript"
 		src="/wp-content/plugins/bp_contracts/js/notification.js<?php echo $version; ?>"></script>
+	<script type="text/javascript"
+		src="/wp-content/plugins/bp_contracts/js/knowledge_tests.js<?php echo $version; ?>"></script>
 	<?php
 }
 function invoiceJsFunctionals()

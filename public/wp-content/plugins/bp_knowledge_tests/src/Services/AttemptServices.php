@@ -8,6 +8,7 @@ use BpKnowledgeTests\Infrastructure\DatabaseClock;
 use BpKnowledgeTests\Infrastructure\Mapping\RecordMapper;
 use BpKnowledgeTests\Infrastructure\Repository\AchievementRepository;
 use BpKnowledgeTests\Infrastructure\Repository\AttemptQuestionRepository;
+use BpKnowledgeTests\Domain\Record\AttemptRecord;
 use BpKnowledgeTests\Infrastructure\Repository\AttemptRepository;
 use BpKnowledgeTests\Infrastructure\Repository\FinishedExplanationRepository;
 use BpKnowledgeTests\Infrastructure\Repository\NotificationRepository;
@@ -27,6 +28,8 @@ use PersonalAccount\Core\Container;
 
 final class AttemptServices
 {
+    private AttemptRepository $attemptRepository;
+
     public readonly MaterialsService $materials;
     public readonly AttemptAchievementService $achievements;
     public readonly CompleteAttempt $complete;
@@ -45,7 +48,8 @@ final class AttemptServices
         $mapper = new RecordMapper();
         $clock = new DatabaseClock();
 
-        $attemptRepository = new AttemptRepository($db, $dbUtilities, $mapper);
+        $this->attemptRepository = new AttemptRepository($db, $dbUtilities, $mapper);
+        $attemptRepository = $this->attemptRepository;
         $attemptQuestionRepository = new AttemptQuestionRepository($db, $dbUtilities, $mapper);
         $questionRepository = new QuestionRepository($db, $dbUtilities, $clock, $mapper);
         $explanationRepository = new FinishedExplanationRepository($db, $dbUtilities, $mapper);
@@ -105,5 +109,10 @@ final class AttemptServices
             $attemptRepository,
             $userAchievementRepository,
         );
+    }
+
+    public function findLatestAttempt(int $userId, int $testId): ?AttemptRecord
+    {
+        return $this->attemptRepository->findLatestByUserAndTest($userId, $testId);
     }
 }

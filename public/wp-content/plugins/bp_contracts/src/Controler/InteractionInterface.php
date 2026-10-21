@@ -7,6 +7,7 @@ use PersonalAccount\Core\Container;
 use PersonalAccount\Controler\UserControler;
 use PersonalAccount\Controler\ControlerObjectsRelationship;
 use PersonalAccount\Workers\DBWorker;
+use PersonalAccount\Workers\KnowledgeTestsWsWorker;
 use PersonalAccount\Workers\NotificationWorker;
 use PersonalAccount\Utilities\SimpleUtilities;
 use PersonalAccount\Workers\CatcherBugs;
@@ -40,6 +41,8 @@ class InteractionInterface
 
   /** @var UserUtilities */
   private $userUtilities;
+  /** @var KnowledgeTestsWsWorker */
+  private $knowledgeTestsWsWorker;
   // private $mainObjects;
   public function __construct($container)
   {
@@ -52,6 +55,7 @@ class InteractionInterface
     $this->simpleUtilities = $this->container->get('SimpleUtilities');
     $this->catcherBugs = $this->container->get('CatcherBugs');
     $this->userUtilities = $this->container->get('UserUtilities');
+    $this->knowledgeTestsWsWorker = $this->container->get('KnowledgeTestsWsWorker');
     $this->chat = $this->container->get('Chat');
     // $this->bindSystem($closures);
   }
@@ -767,5 +771,73 @@ class InteractionInterface
   public function searchAndFilterOrder($idUser, $perPage, $currentPage, $paramQuery)
   {
 
+  }
+
+  public function showTestsWS($idWebsocket, $bodyJson)
+  {
+    return $this->knowledgeTestsWsWorker->showTests(
+      $this->knowledgeTestsUserId($idWebsocket),
+      $this->knowledgeTestsBody($bodyJson),
+    );
+  }
+
+  public function startTestWS($idWebsocket, $bodyJson)
+  {
+    return $this->knowledgeTestsWsWorker->startTest(
+      $this->knowledgeTestsUserId($idWebsocket),
+      $this->knowledgeTestsBody($bodyJson),
+    );
+  }
+
+  public function submitTestQuestionWS($idWebsocket, $bodyJson)
+  {
+    return $this->knowledgeTestsWsWorker->submitTestQuestion(
+      $this->knowledgeTestsUserId($idWebsocket),
+      $this->knowledgeTestsBody($bodyJson),
+    );
+  }
+
+  public function finishTestWS($idWebsocket, $bodyJson)
+  {
+    return $this->knowledgeTestsWsWorker->finishTest(
+      $this->knowledgeTestsUserId($idWebsocket),
+      $this->knowledgeTestsBody($bodyJson),
+    );
+  }
+
+  public function abandonTestWS($idWebsocket, $bodyJson)
+  {
+    return $this->knowledgeTestsWsWorker->abandonTest(
+      $this->knowledgeTestsUserId($idWebsocket),
+      $this->knowledgeTestsBody($bodyJson),
+    );
+  }
+
+  public function getTestMaterialsWS($idWebsocket, $bodyJson)
+  {
+    return $this->knowledgeTestsWsWorker->getTestMaterials(
+      $this->knowledgeTestsUserId($idWebsocket),
+      $this->knowledgeTestsBody($bodyJson),
+    );
+  }
+
+  public function confirmTestMaterialsExaminedWS($idWebsocket, $bodyJson)
+  {
+    return $this->knowledgeTestsWsWorker->confirmTestMaterialsExamined(
+      $this->knowledgeTestsUserId($idWebsocket),
+      $this->knowledgeTestsBody($bodyJson),
+    );
+  }
+
+  private function knowledgeTestsUserId($idWebsocket)
+  {
+    return (int) $this->userControler->getUserIdByIdWebsocket($idWebsocket);
+  }
+
+  private function knowledgeTestsBody($bodyJson)
+  {
+    $body = json_decode($bodyJson, true);
+
+    return is_array($body) ? $body : [];
   }
 }

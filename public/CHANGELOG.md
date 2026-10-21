@@ -6,6 +6,26 @@ This document tracks changes to the project. Entry format is defined in **Cursor
 
 ## Log
 
+### [2026-10-21] Knowledge tests: consolidate contracts workers
+**Author**: AI Assistant
+**Logic**:
+- Too many small KnowledgeTests* classes; align with bp_contracts container style (`OrdersWorker` pattern).
+**Changes**:
+- `bp_contracts/src/Workers/KnowledgeTestsSessionWorker.php`, `KnowledgeTestsWsWorker.php`: [NEW] two container services
+- Removed resolver, payload helpers, `KnowledgeTestsWsCommands` from `src/Testing/`
+- `SystemConstructor.php`, `InteractionInterface.php`, context docs updated
+
+### [2026-10-20] Knowledge tests: Phase 4 Wave D — WS routing + commands
+**Author**: AI Assistant
+**Logic**:
+- Dealers need locked protocol titles routed through Chat/InteractionInterface with responses matching WS_PROTOCOL.md.
+**Changes**:
+- `bp_contracts/src/Chat.php`, `Controler/InteractionInterface.php`: knowledge-test command dispatch
+- `bp_contracts/src/Testing/KnowledgeTestsWsCommands.php` (+ payload helpers): command handling
+- `bp_contracts/js/communication_server.js`: stub handlers for TestsOnPage / TestQuestionOnPage / …
+- `bp_knowledge_tests/src/Services/AttemptServices.php`: `findLatestAttempt()` for test list rows
+- Phase 4 docs: Wave D complete; E largely implemented
+
 ### [2026-10-20] Knowledge tests: Phase 4 Wave C — plugin resolver (no proxy gateway)
 **Author**: AI Assistant
 **Logic**:

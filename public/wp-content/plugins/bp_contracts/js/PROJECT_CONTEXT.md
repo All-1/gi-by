@@ -38,6 +38,7 @@ Example: server sends `AnalyticsOnPage::: {...}` → `handlerAnalyticsOnPage` in
 | `points.js` / `points_dev.js` | `points_manager_new` / `points_dev` |
 | `invoice_print.js` | Invoice PDF client render |
 | `integer_to_words.js` | Amount wording for documents |
+| `knowledge_tests.js` | Knowledge tests WS handlers (`handlerTestsOnPage`, …); enqueued via `addJsLinks()` |
 
 ### `analytics.js` (summary)
 - Global `where = 'analytics'`; on load → `showAnalytics` via `sendShowWhere`.
