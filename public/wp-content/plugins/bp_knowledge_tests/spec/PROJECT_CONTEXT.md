@@ -19,7 +19,8 @@ No subdirectories — product and phase markdown files live in this folder (see 
 | [PHASE_2_TASKS.md](./PHASE_2_TASKS.md) | Developers | Attempts, materials, achievements — **complete** |
 | [PHASE_3_TASKS.md](./PHASE_3_TASKS.md) | Developers | Admin REST + React — **complete** |
 | [WS_PROTOCOL.md](./WS_PROTOCOL.md) | Integrators | Locked WS titles + JSON shapes (Phase 4 Wave A) |
-| [PHASE_4_TASKS.md](./PHASE_4_TASKS.md) | Developers | `TestController`, WS — Wave A done; **B–F next** |
+| [PHASE_4_TASKS.md](./PHASE_4_TASKS.md) | Developers | `TestController`, WS — **complete** |
+| [PHASE_5_TASKS.md](./PHASE_5_TASKS.md) | Developers | Dealer React §19–21 — **next** |
 
 ---
 
@@ -34,7 +35,7 @@ No subdirectories — product and phase markdown files live in this folder (see 
 | §6 critical update | `CriticalUpdateTest`, REST `POST .../critical-update` |
 | §15–18 admin UI | `admin/src/pages/*`, REST under `Infrastructure/Http` |
 | §19–21 dealer UI | **Not in this plugin yet** — `bp_contracts` Phase 5 |
-| §23 RAM session | **Not in this plugin** — `bp_contracts` Phase 4 |
+| §23 RAM session | **`bp_contracts`** `TestController` + WS ([WS_PROTOCOL.md](./WS_PROTOCOL.md)) |
 
 ---
 
@@ -53,7 +54,7 @@ No subdirectories — product and phase markdown files live in this folder (see 
 | 1 | Plugin skeleton, catalog, scoring tests | Done |
 | 2 | Complete attempt, materials, achievements | Done |
 | 3 | Admin REST + React factory | Done |
-| 4 | WS + TestController | Waves A–B done; C–F not started |
-| 5 | Dealer React | Not started |
+| 4 | WS + TestController | Done |
+| 5 | Dealer React | Not started — [PHASE_5_TASKS.md](./PHASE_5_TASKS.md) |
 | 6 | Notifications UX | Not started |
 | 7 | Hardening / release | Not started |

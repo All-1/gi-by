@@ -6,6 +6,24 @@ This document tracks changes to the project. Entry format is defined in **Cursor
 
 ## Log
 
+### [2026-10-21] Knowledge tests: Phase 5 task breakdown
+**Author**: AI Assistant
+**Logic**:
+- Dealer React work needs the same wave/checklist structure as Phases 3–4 before implementation starts.
+**Changes**:
+- `bp_knowledge_tests/spec/PHASE_5_TASKS.md`: [NEW] waves A–G, readiness, PR checklist
+- `spec/PROJECT_CONTEXT.md`, `IMPLEMENTATION_PLAN.md`, `bp_contracts/PROJECT_CONTEXT.md`: links to Phase 5 tasks
+
+### [2026-10-21] Knowledge tests: Phase 4 complete — cross-test in-progress guard
+**Author**: AI Assistant
+**Logic**:
+- WS protocol requires `test_in_progress` when RAM holds another test; list rows must not offer Start on other tests.
+**Changes**:
+- `bp_contracts/src/Testing/TestController.php`: `inProgressTestId()`
+- `bp_contracts/src/Workers/KnowledgeTestsWsWorker.php`: block `startTest`, `canStart` on cross-test session
+- `bp_contracts/tests/run_test_controller.php`: cover `inProgressTestId`
+- Phase 4 / IMPLEMENTATION_PLAN / PROJECT_CONTEXT docs: Phase 4 closed
+
 ### [2026-10-21] Knowledge tests: consolidate contracts workers
 **Author**: AI Assistant
 **Logic**:

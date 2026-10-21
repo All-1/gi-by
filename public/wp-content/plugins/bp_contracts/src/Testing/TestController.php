@@ -24,6 +24,22 @@ final class TestController
         return isset($this->sessions[$this->sessionKey($userId, $testId)]);
     }
 
+    /** Active in-progress test for user, or null when none (at most one session per user). */
+    public function inProgressTestId(int $userId): ?int
+    {
+        $prefix = $userId . ':';
+        foreach (array_keys($this->sessions) as $key) {
+            if (!str_starts_with($key, $prefix)) {
+                continue;
+            }
+            $testId = (int) substr($key, strlen($prefix));
+
+            return $testId > 0 ? $testId : null;
+        }
+
+        return null;
+    }
+
     public function getSession(int $userId, int $testId): ?AttemptSession
     {
         return $this->sessions[$this->sessionKey($userId, $testId)] ?? null;

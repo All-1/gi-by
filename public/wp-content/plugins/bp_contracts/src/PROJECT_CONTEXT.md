@@ -115,7 +115,7 @@ See [Workers/Analytics](./Workers/Analytics/PROJECT_CONTEXT.md) and [Users/trait
 
 Convention: `communication_server.js` → `handlerRequestFromServer(caseTitle, data)` → `window['handler' + toCapsCase(caseTitle)]`.
 
-## Knowledge tests (protocol locked — RAM session live; WS handlers pending C–F)
+## Knowledge tests (Phase 4 complete — RAM + WS live)
 
 **D1 finalized** 2026-10-19. RAM session in [Testing/](./Testing/PROJECT_CONTEXT.md); WS via **`KnowledgeTestsSessionWorker`** + **`KnowledgeTestsWsWorker`** in the container. JSON: [bp_knowledge_tests/spec/WS_PROTOCOL.md](../../bp_knowledge_tests/spec/WS_PROTOCOL.md).
 

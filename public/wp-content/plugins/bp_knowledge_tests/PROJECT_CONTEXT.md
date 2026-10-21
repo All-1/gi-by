@@ -12,7 +12,7 @@ This WordPress plugin owns **business rules and persistence** (`gi_new_test_*`).
 | Tests menu, live session (RAM), WS commands, dealer UI, chat stars | **`bp_contracts`** (Phases 4–5) |
 | Test-factory admin UI (§15–18) | **React in this plugin** → [assets/admin/](./assets/PROJECT_CONTEXT.md) |
 
-**Delivery status:** Phase **3** complete (REST + React admin). Phase **4** Waves **A–D** complete + core WS commands ([WS protocol](./spec/WS_PROTOCOL.md), [`KnowledgeTestsWsWorker`](../bp_contracts/src/Workers/KnowledgeTestsWsWorker.php)). **Next:** Phase **4** Wave **F** (staging QA) and **E4** edge cases; then Phase **5** dealer React.
+**Delivery status:** Phases **1–4** complete. Dealer flow over WS: [WS protocol](./spec/WS_PROTOCOL.md), [`KnowledgeTestsWsWorker`](../bp_contracts/src/Workers/KnowledgeTestsWsWorker.php), [`TestController`](../bp_contracts/src/Testing/TestController.php). **Next:** Phase **5** dealer React; run Phase **4** staging QA on staging before dealer release ([PHASE_4_TASKS.md](./spec/PHASE_4_TASKS.md) Wave F).
 
 **Parent:** [Site PROJECT_CONTEXT.md](../../../PROJECT_CONTEXT.md)  
 **Shell integration:** [bp_contracts/PROJECT_CONTEXT.md](../bp_contracts/PROJECT_CONTEXT.md)
@@ -40,7 +40,7 @@ Each parent `PROJECT_CONTEXT.md` lists **only immediate subdirectories** that ha
 | **Engineering plan** | [IMPLEMENTATION_PLAN.md](./spec/IMPLEMENTATION_PLAN.md) | Phases, DB columns §5.0, QA checklist |
 | **WS protocol** | [WS_PROTOCOL.md](./spec/WS_PROTOCOL.md) | Locked titles + JSON (Phase 4) |
 | **This plugin (code)** | Nested `PROJECT_CONTEXT.md` under each folder | How the repo implements the plan |
-| **Tasks** | [PHASE_*_TASKS.md](./spec/PROJECT_CONTEXT.md) | Wave checklists per phase |
+| **Tasks** | [PHASE_*_TASKS.md](./spec/PROJECT_CONTEXT.md) | Wave checklists per phase ([Phase 5](./spec/PHASE_5_TASKS.md)) |
 
 **Rule:** Do not silently rewrite product spec §1. Code changes that affect behavior → update the **lowest** relevant `PROJECT_CONTEXT.md` and [CHANGELOG.md](../../../CHANGELOG.md) when significant.
 
@@ -112,8 +112,7 @@ All SQL goes through **`DBWorker`** from `wordpress_framework` / `bp_contracts` 
 ## 5. User identity
 
 - **Business key:** `user_id` = `gi_new_users.id_user` (not raw `wp_users.ID` alone).
-- Admin REST uses WordPress login + capability; dealer WS (Phase 4) will use the same personal-account user id as other `bp_contracts` features.
-- Resolver at the integration boundary should be documented in `bp_contracts` when Phase 4 lands.
+- Admin REST uses WordPress login + capability; dealer WS uses `gi_new_users.id_user` via `InteractionInterface::knowledgeTestsUserId()` (same as other `bp_contracts` WS).
 
 ---
 

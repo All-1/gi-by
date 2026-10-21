@@ -62,6 +62,11 @@ class KnowledgeTestsWsWorker
       return $this->questionPage($userId, $testId, null);
     }
 
+    $crossBlock = $this->crossTestInProgressError($userId, $testId);
+    if ($crossBlock !== null) {
+      return $crossBlock;
+    }
+
     $retake = $this->plugin()->attempts()->retake->evaluate($userId, $testId);
     if (!$retake->canStart) {
       return $this->retakeError($retake);
@@ -160,6 +165,28 @@ class KnowledgeTestsWsWorker
     return $this->materialsPage($userId, ['testId' => $testId]);
   }
 
+  /** @return array<string, mixed>|null */
+  private function crossTestInProgressError(int $userId, int $testId): ?array
+  {
+    $active = $this->testController()->inProgressTestId($userId);
+    if ($active !== null && $active !== $testId) {
+      return $this->error('test_in_progress', ['test_in_progress']);
+    }
+
+    return null;
+  }
+
+  private function canStartTest(int $userId, int $testId, RetakeEligibility $retake): bool
+  {
+    $controller = $this->testController();
+    if ($controller->hasSession($userId, $testId)) {
+      return false;
+    }
+    $active = $controller->inProgressTestId($userId);
+
+    return $retake->canStart && ($active === null || $active === $testId);
+  }
+
   private function testController(): TestController
   {
     return $this->sessionWorker->testController();
@@ -191,7 +218,7 @@ class KnowledgeTestsWsWorker
       'displayStatus' => $displayStatus,
       'score' => $latest?->score,
       'medalId' => null,
-      'canStart' => $retake->canStart && !$controller->hasSession($userId, $testId),
+      'canStart' => $this->canStartTest($userId, $testId, $retake),
       'canOpenMaterials' => $this->plugin()->attempts()->materials->hasPendingMaterials($userId, $testId),
       'achievementArea' => $test->achievementArea,
     ];
