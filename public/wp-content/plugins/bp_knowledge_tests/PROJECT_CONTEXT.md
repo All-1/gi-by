@@ -40,7 +40,7 @@ Each parent `PROJECT_CONTEXT.md` lists **only immediate subdirectories** that ha
 | **Engineering plan** | [IMPLEMENTATION_PLAN.md](./spec/IMPLEMENTATION_PLAN.md) | Phases, DB columns §5.0, QA checklist |
 | **WS protocol** | [WS_PROTOCOL.md](./spec/WS_PROTOCOL.md) | Locked titles + JSON (Phase 4) |
 | **This plugin (code)** | Nested `PROJECT_CONTEXT.md` under each folder | How the repo implements the plan |
-| **Tasks** | [PHASE_*_TASKS.md](./spec/PROJECT_CONTEXT.md) | Wave checklists per phase |
+| **Tasks** | [PHASE_*_TASKS.md](./spec/PROJECT_CONTEXT.md) | Wave checklists per phase ([Phase 5](./spec/PHASE_5_TASKS.md)) |
 
 **Rule:** Do not silently rewrite product spec §1. Code changes that affect behavior → update the **lowest** relevant `PROJECT_CONTEXT.md` and [CHANGELOG.md](../../../CHANGELOG.md) when significant.
 

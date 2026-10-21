@@ -11,6 +11,7 @@
 **Phase 2 tasks:** [PHASE_2_TASKS.md](./PHASE_2_TASKS.md)  
 **Phase 3 tasks:** [PHASE_3_TASKS.md](./PHASE_3_TASKS.md) (admin)  
 **Phase 4 tasks:** [PHASE_4_TASKS.md](./PHASE_4_TASKS.md) (WS)  
+**Phase 5 tasks:** [PHASE_5_TASKS.md](./PHASE_5_TASKS.md) (dealer React)  
 **Last updated**: 2026-10-21
 
 ---
@@ -65,7 +66,8 @@ bp_knowledge_tests/
     ├── IMPLEMENTATION_PLAN.md
     ├── PHASE_2_TASKS.md
     ├── PHASE_3_TASKS.md
-    └── PHASE_4_TASKS.md
+    ├── PHASE_4_TASKS.md
+    └── PHASE_5_TASKS.md
 ```
 
 **Implemented:** Phases **1–3** as before. Phase **4** — `TestController` RAM, `KnowledgeTestsWsWorker`, `Chat.php` / `InteractionInterface` commands per [WS_PROTOCOL.md](./WS_PROTOCOL.md); cross-test **`test_in_progress`** guard; client stubs in `communication_server.js`.
@@ -622,6 +624,8 @@ Store dismiss counts and policy in `gi_new_test_config` / `gi_new_test_notificat
 **Exit:** End-to-end test over WS on staging (operator checklist in Phase 4 Wave F).
 
 ### Phase 5 — User-facing UI (React) (2 weeks)
+
+**Task breakdown:** [PHASE_5_TASKS.md](./PHASE_5_TASKS.md) (waves A–G, checklist, D2).
 
 - [ ] React Tests list + pagination (§19)
 - [ ] In-test flow (one question, counter, Continue) via WS payloads (§20)

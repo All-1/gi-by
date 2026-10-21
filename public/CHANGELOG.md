@@ -6,6 +6,14 @@ This document tracks changes to the project. Entry format is defined in **Cursor
 
 ## Log
 
+### [2026-10-21] Knowledge tests: Phase 5 task breakdown
+**Author**: AI Assistant
+**Logic**:
+- Dealer React work needs the same wave/checklist structure as Phases 3–4 before implementation starts.
+**Changes**:
+- `bp_knowledge_tests/spec/PHASE_5_TASKS.md`: [NEW] waves A–G, readiness, PR checklist
+- `spec/PROJECT_CONTEXT.md`, `IMPLEMENTATION_PLAN.md`, `bp_contracts/PROJECT_CONTEXT.md`: links to Phase 5 tasks
+
 ### [2026-10-21] Knowledge tests: Phase 4 complete — cross-test in-progress guard
 **Author**: AI Assistant
 **Logic**:
