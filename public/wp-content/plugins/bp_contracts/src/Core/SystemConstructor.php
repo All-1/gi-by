@@ -22,6 +22,8 @@ use PersonalAccount\Workers\ContractsWorker;
 use PersonalAccount\Workers\MessageWorker;
 use PersonalAccount\Workers\OrdersWorker;
 use PersonalAccount\Workers\ManageContractorsWorker;
+use PersonalAccount\Workers\KnowledgeTestsSessionWorker;
+use PersonalAccount\Workers\KnowledgeTestsWsWorker;
 
 use PersonalAccount\Utilities\UserUtilities;
 use PersonalAccount\Utilities\SimpleUtilities;
@@ -39,9 +41,6 @@ use PersonalAccount\Workers\Analytics\OrderAnalyticsQueries;
 use PersonalAccount\Workers\Analytics\DialogAnalyticsQueries;
 use PersonalAccount\Workers\Collector\MessageCollector;
 use PersonalAccount\Workers\Collector\UserCollector;
-
-use PersonalAccount\Testing\TestController;
-use PersonalAccount\Testing\PluginQuestionSelectionGrader;
 
 class SystemConstructor
 {
@@ -103,6 +102,12 @@ class SystemConstructor
         $InvoiceWorker = new InvoiceWorker($linkContainer);
         $this->container->set('InvoiceWorker', $InvoiceWorker);
 
+        $knowledgeTestsSessionWorker = new KnowledgeTestsSessionWorker($linkContainer);
+        $this->container->set('KnowledgeTestsSessionWorker', $knowledgeTestsSessionWorker);
+
+        $knowledgeTestsWsWorker = new KnowledgeTestsWsWorker($linkContainer);
+        $this->container->set('KnowledgeTestsWsWorker', $knowledgeTestsWsWorker);
+
         $InteractionInterface = new InteractionInterface($linkContainer);
         $this->container->set('InteractionInterface', $InteractionInterface);
 
@@ -147,9 +152,6 @@ class SystemConstructor
 
         $userCollector = new UserCollector($linkContainer);
         $this->container->set('UserCollector', $userCollector);
-
-        $testController = new TestController(new PluginQuestionSelectionGrader());
-        $this->container->set('TestController', $testController);
     }
 
     public function getContainer(): Container

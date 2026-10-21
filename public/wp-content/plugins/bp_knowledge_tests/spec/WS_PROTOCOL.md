@@ -1,6 +1,6 @@
 # Knowledge Tests — WebSocket Protocol (V1)
 
-**Status:** **Locked** (Phase 4 Wave A, 2026-10-19). Handlers in `bp_contracts` are **not implemented** until later waves.
+**Status:** **Locked** (Phase 4 Wave A, 2026-10-19). Handlers live in `bp_contracts` (`KnowledgeTestsWsWorker`, Wave D).
 
 **Transport:** Same as personal account — `title::: {json}` after `idUser` registration ([bp_contracts/src/PROJECT_CONTEXT.md](../../bp_contracts/src/PROJECT_CONTEXT.md)).
 
@@ -217,8 +217,8 @@ Built by `TestController` (Wave B) — see [PROJECT_CONTEXT.md](../PROJECT_CONTE
 | Wave | Work |
 |------|------|
 | B | `TestController` / `AttemptSession` |
-| C | `KnowledgeTestsGateway` → plugin facades |
-| D–E | `Chat.php` + `InteractionInterface` handlers |
+| C | `KnowledgeTestsSessionWorker` (plugin + RAM) |
+| D–E | `KnowledgeTestsWsWorker` via `Chat.php` / `InteractionInterface` |
 | F | Staging harness + QA |
 
 **Live command index:** [bp_contracts/src/PROJECT_CONTEXT.md](../../bp_contracts/src/PROJECT_CONTEXT.md) (must stay in sync with this file when titles change).

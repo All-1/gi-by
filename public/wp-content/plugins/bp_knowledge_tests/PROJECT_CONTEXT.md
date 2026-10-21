@@ -12,7 +12,7 @@ This WordPress plugin owns **business rules and persistence** (`gi_new_test_*`).
 | Tests menu, live session (RAM), WS commands, dealer UI, chat stars | **`bp_contracts`** (Phases 4–5) |
 | Test-factory admin UI (§15–18) | **React in this plugin** → [assets/admin/](./assets/PROJECT_CONTEXT.md) |
 
-**Delivery status:** Phase **3** complete (REST + React admin). Phase **4** Waves **A–B** complete ([WS protocol](./spec/WS_PROTOCOL.md), [`TestController`](../bp_contracts/src/Testing/PROJECT_CONTEXT.md)). **Next:** Phase **4** Waves **C–F** — gateway + WS ([spec/PHASE_4_TASKS.md](./spec/PHASE_4_TASKS.md)).
+**Delivery status:** Phase **3** complete (REST + React admin). Phase **4** Waves **A–D** complete + core WS commands ([WS protocol](./spec/WS_PROTOCOL.md), [`KnowledgeTestsWsWorker`](../bp_contracts/src/Workers/KnowledgeTestsWsWorker.php)). **Next:** Phase **4** Wave **F** (staging QA) and **E4** edge cases; then Phase **5** dealer React.
 
 **Parent:** [Site PROJECT_CONTEXT.md](../../../PROJECT_CONTEXT.md)  
 **Shell integration:** [bp_contracts/PROJECT_CONTEXT.md](../bp_contracts/PROJECT_CONTEXT.md)
@@ -172,6 +172,7 @@ Full columns: [IMPLEMENTATION_PLAN §5.0](./spec/IMPLEMENTATION_PLAN.md#50-table
 | Step | Location |
 |------|----------|
 | Plugin header + hooks | [index.php](./index.php) |
+| Cross-plugin runtime (`bp_contracts` WS) | `bp_knowledge_tests_plugin()` in [index.php](./index.php) |
 | Requires active `wordpress_framework` (`$servicesContainer`) | `bp_knowledge_tests_boot()` / activate |
 | Schema migrate + seed | `PluginBootstrap::installSchemaIfNeeded()` |
 | Capabilities on `init` | `CatalogCapability::registerCaps` |

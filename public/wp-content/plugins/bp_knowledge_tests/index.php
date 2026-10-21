@@ -10,6 +10,7 @@
 declare(strict_types=1);
 
 use BpKnowledgeTests\Bootstrap\PluginBootstrap;
+use BpKnowledgeTests\Plugin;
 use PersonalAccount\Core\Container;
 
 if (!defined('ABSPATH')) {
@@ -110,4 +111,26 @@ function bp_knowledge_tests_boot(): void
     }
 
     (new PluginBootstrap($wpdb, $container))->run();
+}
+
+/**
+ * Shared runtime Plugin instance for bp_contracts WS gateway (Phase 4 Wave C).
+ */
+function bp_knowledge_tests_plugin(): ?Plugin
+{
+    global $wpdb;
+
+    static $plugin = null;
+    if ($plugin instanceof Plugin) {
+        return $plugin;
+    }
+
+    $container = bp_knowledge_tests_resolve_container();
+    if ($container === null) {
+        return null;
+    }
+
+    $plugin = (new PluginBootstrap($wpdb, $container))->compose();
+
+    return $plugin;
 }

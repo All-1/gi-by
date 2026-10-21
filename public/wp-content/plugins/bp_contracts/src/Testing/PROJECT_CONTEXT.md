@@ -10,22 +10,28 @@ Sessions die when the Ratchet process restarts (nightly ~**03:00**).
 
 | Path | Role |
 |------|------|
-| `Contract/` | Boundaries toward `bp_knowledge_tests` (interfaces only) |
-| `*.php` (root) | Session RAM, DTOs, plugin bridge implementations |
+| `Contract/` | Grader interface toward `bp_knowledge_tests` |
+| `*.php` (root) | Session RAM + DTOs |
 
-## Types
+## Types (this folder)
 
 | Class | Role |
 |-------|------|
 | `TestController` | Per-process map `userId:testId` → `AttemptSession` |
 | `AttemptSession` | Shuffled question/answer ids, progress index, stats for finish payload |
-| `Contract\QuestionSelectionGraderInterface` | Grade one question’s selections (implemented by plugin bridge) |
-| `PluginQuestionSelectionGrader` | Calls `BpKnowledgeTests\Domain\QuestionSelectionGrader` |
-| `SubmitQuestionResult` / `GradedQuestionCounts` | DTOs for WS layer (Wave D+) |
+| `Contract\QuestionSelectionGraderInterface` | Grade one question’s selections |
+| `SubmitQuestionResult` / `GradedQuestionCounts` | DTOs for WS layer |
 
-## DI
+## Workers (container)
 
-Registered in `SystemConstructor` as container key **`TestController`** (singleton per WS process).
+Integration and WS commands live in **`Workers/`** (same pattern as `OrdersWorker`):
+
+| Container key | Class |
+|---------------|--------|
+| `KnowledgeTestsSessionWorker` | Plugin resolve, grading bridge, `TestController`, session question rows |
+| `KnowledgeTestsWsWorker` | WS command → JSON payloads |
+
+`Chat.php` → `InteractionInterface` → `KnowledgeTestsWsWorker`. Domain rules stay in **`bp_knowledge_tests`**.
 
 ## Protocol
 

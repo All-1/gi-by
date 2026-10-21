@@ -117,9 +117,9 @@ Convention: `communication_server.js` → `handlerRequestFromServer(caseTitle, d
 
 ## Knowledge tests (protocol locked — RAM session live; WS handlers pending C–F)
 
-**D1 finalized** 2026-10-19. **`TestController`** registered in DI ([Testing/PROJECT_CONTEXT.md](./Testing/PROJECT_CONTEXT.md)). JSON shapes: [bp_knowledge_tests/spec/WS_PROTOCOL.md](../../bp_knowledge_tests/spec/WS_PROTOCOL.md).
+**D1 finalized** 2026-10-19. RAM session in [Testing/](./Testing/PROJECT_CONTEXT.md); WS via **`KnowledgeTestsSessionWorker`** + **`KnowledgeTestsWsWorker`** in the container. JSON: [bp_knowledge_tests/spec/WS_PROTOCOL.md](../../bp_knowledge_tests/spec/WS_PROTOCOL.md).
 
-Commands are **not** wired in `Chat.php` yet.
+Commands: `Chat.php` → `InteractionInterface` → `KnowledgeTestsWsWorker`.
 
 ### Client → server
 
