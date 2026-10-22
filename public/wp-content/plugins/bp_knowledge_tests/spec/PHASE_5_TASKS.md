@@ -1,8 +1,8 @@
 **Prerequisite:** Phase **4** **complete** in repo — WS commands live per [WS_PROTOCOL.md](./WS_PROTOCOL.md). Run Phase **4** Wave **F** staging QA on staging before dealer release ([PHASE_4_TASKS.md](./PHASE_4_TASKS.md)).
 
-# Phase 5 — Task breakdown (Dealer React UI)
+# Phase 5 — Task breakdown (Dealer UI — vanilla JS)
 
-**Primary owner:** `bp_contracts` (personal account shell, nav, React mount, open-in-place host, chat stars)  
+**Primary owner:** `bp_contracts` (personal account shell, `knowledge_tests.js`, `index.php` shortcode, open-in-place overlay, chat stars)  
 **Domain owner:** `bp_knowledge_tests` (achievement/medal queries, any new read APIs — no scoring in contracts)  
 **Parent plan:** [IMPLEMENTATION_PLAN.md §9 / §11](./IMPLEMENTATION_PLAN.md#9-user-ui-v1)  
 **Requirements:** [Testing System — Project Documentation.md](./Testing%20System%20%E2%80%94%20Project%20Documentation.md) (§3.2 failed nav, §2.11 stars, §19–21 dealer UI, §19.2 open-in-place)  
@@ -11,7 +11,7 @@
 
 **Goal (exit criterion):** A dealer with the agreed role can open **Tests** in the personal account, see the paginated list (§19), **Start** or **resume** a test in the existing additional-window pattern (§19.2), complete the **one-question + Continue** flow with immediate feedback (§20), **finish** and see results; after failure, open **Materials**, mark references reviewed, and **Examined** (§21). Chat shows **latest-result stars** per test area (§2.11). Failed-test **menu styling** applies when applicable (§3.2).
 
-**Progress (2026-10-21):** **Not started** — Phase 4 WS stubs only (`bp_contracts/js/knowledge_tests.js`).
+**Progress (2026-10-21):** Wave **A** **complete** — PA page + `knowledge_tests.js` (list, overlay, WS handlers). Same pattern as [orders.js](../../bp_contracts/js/orders.js) / [js/PROJECT_CONTEXT.md](../../bp_contracts/js/PROJECT_CONTEXT.md). **No React** on dealer UI (admin factory stays React).
 
 **Estimate:** ~2 weeks one developer (matches plan §11); ~1 week **MVP** (list + in-test + finish; stars/materials polish in 5b).
 
@@ -22,8 +22,8 @@
 | Ready | Not ready / decide first |
 |-------|---------------------------|
 | WS commands + payloads (`showTests`, `startTest`, `submitTestQuestion`, `finishTest`, materials) | **D2** — which `gi_new_users` / PA roles see **Tests** and may start attempts |
-| Client handler names registered (`handlerTestsOnPage`, …) | **Bundle location** — `bp_contracts` dealer package vs shared frontend (mirror admin: plugin owns domain, contracts owns PA) |
-| `displayStatus`, `canStart`, `canOpenMaterials`, pagination | **Open-in-place** — which existing contracts component hosts the overlay (document chosen pattern in `bp_contracts` PROJECT_CONTEXT) |
+| Client handler names registered (`handlerTestsOnPage`, …) | **Nav link** — WP menu entry to `knowledge_tests()` page |
+| `displayStatus`, `canStart`, `canOpenMaterials`, pagination | **`medalId`** on list/finish still `null` in gateway |
 | Admin-authored catalog on staging | **`medalId` on list/finish** — gateway currently returns `null`; needs plugin read (user achievement per test) before UI can show medals |
 | Phase 4 staging QA checklist | **Achievement hover tooltips** (§2.11) — may need small REST or WS read batch for chat |
 
@@ -37,15 +37,29 @@
 |------|-------------|
 | WS transport | `Chat.php` → `InteractionInterface` → `KnowledgeTestsWsWorker` |
 | Protocol | [WS_PROTOCOL.md](./WS_PROTOCOL.md), index in [bp_contracts/src/PROJECT_CONTEXT.md](../../bp_contracts/src/PROJECT_CONTEXT.md) |
-| Client stubs | `bp_contracts/js/knowledge_tests.js` — logs errors; no UI |
+| Page JS | `knowledge_tests.js` — `where`, `setDefaultState`, handlers, DOM (Wave A scaffold) |
 | RAM session | `TestController` — shuffle, progress, `test_in_progress` guard |
 | Domain finish | `CompleteAttempt`, materials rows, retake evaluation |
 
-**Gap:** React dealer app, nav entry, real handlers, stars, nav styling, `medalId` wiring.
+**Gap:** Nav menu link, polish/QA, stars (§2.11), failed-nav class wiring, `medalId`, resume UX edge cases.
 
 ---
 
-## Wave A — Decisions & scaffold — **not started**
+## Wave A — Decisions & scaffold — **complete**
+
+**Convention (matches orders / analytics):**
+
+| Piece | Location |
+|-------|----------|
+| PHP page shell | `bp_contracts/index.php` → `knowledge_tests()` + `transferUserToJS` + `communication_server.js` |
+| Table markup | `bp_contracts/index.php` → `knowledge_tests()` (same as `orders_dev` / `analytics`) |
+| Page logic | `bp_contracts/js/knowledge_tests.js` — global `where = 'knowledge_tests'`, `setDefaultState` → `showTests` |
+| Open-in-place | `#knowledge_tests_overlay.modal_window_contracts` (§19.2) |
+| Access (D2) | `DealerTestsCapability` + filter `bp_knowledge_tests_can_access_dealer_tests` |
+
+---
+
+## Wave A (historical notes) — **superseded by table above**
 
 Lock conventions before large UI PRs.
 
@@ -58,15 +72,9 @@ Lock conventions before large UI PRs.
 
 **Deliverable:** Capability or `UserControler` check documented; WS already binds `userId` from websocket — menu hide ≠ security (server must still enforce if needed later).
 
-### A2. Frontend package layout
+### A2. Frontend — **vanilla JS only** (not React)
 
-| Piece | Suggested owner | Notes |
-|-------|-----------------|-------|
-| Vite + React + TS | `bp_contracts` (dealer) or `bp_contracts/dealer/` | Mirror `bp_knowledge_tests/admin/` pattern: source in repo, built bundle enqueued on PA pages |
-| WS bridge | Thin module calling existing `sendMessageToServer` / site WS API | Handlers dispatch to React store or event bus — replace stub bodies in `knowledge_tests.js` |
-| Styles | PA design tokens / existing contracts CSS | Failed Tests nav class per §3.2 |
-
-**Deliverable:** `package.json`, build script, enqueue on Tests route only; README snippet for local dev.
+Dealer UI follows `js/PROJECT_CONTEXT.md`: no bundler; `utility.js` helpers + `socket.send('command::: json')`.
 
 ### A3. Open-in-place host (§19.2)
 
@@ -76,18 +84,16 @@ Lock conventions before large UI PRs.
 
 ---
 
-## Wave B — WS ↔ React integration — **not started**
+## Wave B — WS + DOM polish — **in progress**
 
-### B1. Handler wiring
+### B1. Handler wiring — **done (scaffold)**
 
-Replace stubs in `knowledge_tests.js`:
-
-| Server title | Client handler | React responsibility |
-|--------------|----------------|----------------------|
-| `TestsOnPage` | `handlerTestsOnPage` | Update list store; handle `ok: false` (retake codes, etc.) |
-| `TestQuestionOnPage` | `handlerTestQuestionOnPage` | In-test view: question, progress, feedback |
-| `TestFinishedOnPage` | `handlerTestFinishedOnPage` | Result summary; prompt materials if `materialsRequired` |
-| `TestMaterialsOnPage` | `handlerTestMaterialsOnPage` | Materials view state |
+| Server title | Client handler | DOM |
+|--------------|----------------|-----|
+| `TestsOnPage` | `handlerTestsOnPage` | `#main_container_knowledge_tests` |
+| `TestQuestionOnPage` | `handlerTestQuestionOnPage` | Overlay question + Continue |
+| `TestFinishedOnPage` | `handlerTestFinishedOnPage` | Overlay result |
+| `TestMaterialsOnPage` | `handlerTestMaterialsOnPage` | Overlay materials + Examined |
 
 ### B2. Outbound commands
 
@@ -250,11 +256,11 @@ Log significant UI or protocol choices in [CHANGELOG.md](../../../../CHANGELOG.m
 
 ## Task checklist (copy for PRs)
 
-- [ ] A1 D2 roles documented + nav gated
-- [ ] A2 React package + build + enqueue
-- [ ] A3 Open-in-place host integrated
-- [ ] B1 WS handlers drive React state
-- [ ] B2 Outbound commands wired
+- [x] A1 D2 `DealerTestsCapability` + documented roles
+- [x] A2 Page JS (`knowledge_tests.js`) + enqueue on Tests page only
+- [x] A3 Open-in-place overlay (`modal_window_contracts`)
+- [x] B1 WS handlers → DOM (scaffold)
+- [x] B2 Outbound commands in `knowledge_tests.js`
 - [ ] B3 `medalId` (and finish medal) from plugin
 - [ ] C1 Tests nav + page shell
 - [ ] C2 Row UI per §19.1

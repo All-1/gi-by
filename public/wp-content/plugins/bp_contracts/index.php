@@ -18,6 +18,11 @@ add_shortcode('contractors_management', 'contractors_management');
 add_shortcode('reg_users', 'reg_users');
 add_shortcode('invoices', 'invoices');
 add_shortcode('analytics', 'analytics');
+add_shortcode('knowledge_tests', 'knowledge_tests');
+
+if (!defined('BP_CONTRACTS_FILE')) {
+	define('BP_CONTRACTS_FILE', __FILE__);
+}
 
 function transferUserToJS($Id, $user_role)
 {
@@ -46,8 +51,6 @@ function addJsLinks()
 		src="/wp-content/plugins/bp_contracts/js/controls_for_page.js<?php echo $version; ?>"></script>
 	<script type="text/javascript"
 		src="/wp-content/plugins/bp_contracts/js/notification.js<?php echo $version; ?>"></script>
-	<script type="text/javascript"
-		src="/wp-content/plugins/bp_contracts/js/knowledge_tests.js<?php echo $version; ?>"></script>
 	<?php
 }
 function invoiceJsFunctionals()
@@ -782,6 +785,64 @@ function reg_users()
 	<script type="text/javascript"
 		src="/wp-content/plugins/bp_contracts/js/communication_server.js<?php echo $version; ?>"></script>
 	<?php
+	$html = ob_get_clean();
+	return $html;
+}
+
+function knowledge_tests()
+{
+	require($_SERVER['DOCUMENT_ROOT'] . '/wp-load.php');
+	require($_SERVER['DOCUMENT_ROOT'] . '/lang-admin.php');
+	$Id = get_current_user_id();
+	$user_data = get_userdata($Id);
+	$user_role = $user_data->roles[0];
+	$version = setVPC();
+	if ($user_role === 'subscriber') {
+		$user_role = 'dealer';
+	}
+	$canAccessTests = function_exists('bp_knowledge_tests_plugin')
+		&& bp_knowledge_tests_plugin()->dealerTestsCapability()->canAccess();
+	ob_start();
+	?>
+	<h1>Тесты</h1>
+	<?php if (!$canAccessTests) { ?>
+		<p>Нет доступа к тестам.</p>
+	<?php } else { ?>
+		<div class="scrolling_div_knowledge_tests">
+			<div class="table_div_knowledge_tests">
+				<div class="tr_div_header_knowledge_tests" id="tr_header_knowledge_tests">
+					<div class="td_div_header_knowledge_tests kt-col-title">Название</div>
+					<div class="td_div_header_knowledge_tests kt-col-status">Статус</div>
+					<div class="td_div_header_knowledge_tests kt-col-score">Оценка</div>
+					<div class="td_div_header_knowledge_tests kt-col-actions">Действия</div>
+					<div class="clear-fix"></div>
+				</div>
+			</div>
+			<div class="main_container_knowledge_tests" id="main_container_knowledge_tests"></div>
+		</div>
+		<div class="control-table-contract">
+			<div id="box-before-pagination"></div>
+			<div class="pagination-admin" id="pagination_knowledge_tests"></div>
+		</div>
+		<div id="knowledge_tests_overlay" class="modal_window_contracts knowledge_tests_overlay" style="display:none;"
+			aria-hidden="true">
+			<button type="button" class="knowledge_tests_overlay_close" id="close_knowledge_tests_overlay"
+				aria-label="Закрыть">×</button>
+			<div id="knowledge_tests_overlay_content" class="knowledge_tests_overlay_content"></div>
+		</div>
+	<?php } ?>
+	<?php
+	transferUserToJS($Id, $user_role);
+	addCssLinks();
+	if ($canAccessTests) {
+		addJsLinks();
+		?>
+		<script type="text/javascript"
+			src="/wp-content/plugins/bp_contracts/js/knowledge_tests.js<?php echo $version; ?>"></script>
+		<script type="text/javascript"
+			src="/wp-content/plugins/bp_contracts/js/communication_server.js<?php echo $version; ?>"></script>
+		<?php
+	}
 	$html = ob_get_clean();
 	return $html;
 }

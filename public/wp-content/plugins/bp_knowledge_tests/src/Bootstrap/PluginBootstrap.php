@@ -11,6 +11,7 @@ use BpKnowledgeTests\Services\ReportingServices;
 use BpKnowledgeTests\Infrastructure\SchemaDefiner;
 use BpKnowledgeTests\Infrastructure\SchemaVersionRepository;
 use BpKnowledgeTests\Infrastructure\Security\CatalogCapability;
+use BpKnowledgeTests\Infrastructure\Security\DealerTestsCapability;
 use BpKnowledgeTests\Infrastructure\Seeder;
 use BpKnowledgeTests\Plugin;
 use PersonalAccount\Core\Container;
@@ -29,13 +30,18 @@ final class PluginBootstrap
         $domain = new DomainServices($catalog);
         $attempts = new AttemptServices($this->servicesContainer, $catalog, $domain);
         $reporting = new ReportingServices($this->servicesContainer, $catalog);
+        $dealerTestsCapability = new DealerTestsCapability();
 
-        return new Plugin($catalog, $domain, $attempts, $reporting);
+        return new Plugin($catalog, $domain, $attempts, $reporting, $dealerTestsCapability);
     }
 
     public function run(): void
     {
-        add_action('init', [CatalogCapability::class, 'registerCaps']);
+        $dealerCapability = new DealerTestsCapability();
+        add_action('init', static function () use ($dealerCapability): void {
+            CatalogCapability::registerCaps();
+            $dealerCapability->registerCaps();
+        });
         $this->installSchemaIfNeeded();
         $this->compose()->boot();
     }
@@ -43,6 +49,7 @@ final class PluginBootstrap
     public function activate(): void
     {
         CatalogCapability::registerCaps();
+        (new DealerTestsCapability())->registerCaps();
         $this->installSchemaIfNeeded();
     }
 

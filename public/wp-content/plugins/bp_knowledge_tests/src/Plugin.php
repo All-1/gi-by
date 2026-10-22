@@ -11,6 +11,7 @@ use BpKnowledgeTests\Services\ReportingServices;
 use BpKnowledgeTests\Infrastructure\Admin\AdminAppMount;
 use BpKnowledgeTests\Infrastructure\Admin\AdminCatalogMenu;
 use BpKnowledgeTests\Infrastructure\Http\AdminRestApi;
+use BpKnowledgeTests\Infrastructure\Security\DealerTestsCapability;
 
 final class Plugin
 {
@@ -21,6 +22,7 @@ final class Plugin
         private DomainServices $domain,
         private AttemptServices $attempts,
         private ReportingServices $reporting,
+        private DealerTestsCapability $dealerTestsCapability,
     ) {
     }
 
@@ -28,12 +30,17 @@ final class Plugin
     {
         $adminRestApi = new AdminRestApi($this);
         $adminAppMount = new AdminAppMount($this);
-        
+
         $adminRestApi->register();
         $adminAppMount->register();
         if (is_admin()) {
             (new AdminCatalogMenu($this))->register();
         }
+    }
+
+    public function dealerTestsCapability(): DealerTestsCapability
+    {
+        return $this->dealerTestsCapability;
     }
 
     public function catalog(): CatalogServices

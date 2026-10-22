@@ -56,6 +56,7 @@ Pages are **shortcodes** that render HTML shells and enqueue JS; business logic 
 | `my_profile` | `my_profile()` | `my_profile.js` |
 | `reg_users` | `reg_users()` | `reg_users.js` |
 | `points_manager_new` / `points_dev` | `points_manager_new()` / `points_dev()` | `points.js` / `points_dev.js` |
+| `knowledge_tests` | `knowledge_tests()` | `knowledge_tests.js` |
 
 **Auth bridge**: Shortcodes use `get_current_user_id()` and WP role (e.g. `subscriber` → `dealer` in `analytics()`). The WebSocket layer maps connections to **`gi_new_users`**, not WP users — see Auth Fragmentation below.
 
@@ -69,7 +70,7 @@ Domain (scoring, DB, admin) lives in **[bp_knowledge_tests](../bp_knowledge_test
 | Piece | Role |
 |-------|------|
 | `TestController` (RAM) | `src/Testing/TestController.php`; DI key `TestController`; cleared at daily WS restart (~03:00) |
-| **Tests** nav + flows | **React** in personal account (V1); not new `modal_window.js` / `tests.js` flows |
+| **Tests** nav + flows | **`knowledge_tests.js`** + overlay (V1); same WS pattern as orders; not new `modal_window.js` contract flows |
 | `Chat.php` handlers | Thin; call plugin services via Worker / `InteractionInterface` |
 | Chat author UI | Stars from plugin achievement query |
 

@@ -2226,3 +2226,64 @@ body.admin-bar .table-points .points-header-wrapper.fixed-header-table {
     font-size: 12px;
   }
 }
+
+/* Knowledge tests (personal account) */
+.tr_div_header_knowledge_tests,
+.tr_div_knowledge_tests {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  border-bottom: 1px solid #e0e0e0;
+  padding: 8px 0;
+}
+
+.td_div_header_knowledge_tests,
+.td_div_knowledge_tests {
+  padding: 4px 8px;
+}
+
+.kt-col-title {
+  flex: 2 1 200px;
+}
+
+.kt-col-status,
+.kt-col-score {
+  flex: 1 1 100px;
+}
+
+.kt-col-actions {
+  flex: 1 1 140px;
+}
+
+.knowledge_tests_action_btn {
+  margin-right: 8px;
+  cursor: pointer;
+}
+
+.knowledge_tests_error {
+  color: #c62828;
+  padding: 12px 0;
+}
+
+.knowledge_tests_overlay_content {
+  padding: 32px 24px 48px;
+  max-width: 720px;
+  margin: 0 auto;
+}
+
+.knowledge_tests_overlay_close {
+  position: fixed;
+  top: 72px;
+  right: 48px;
+  z-index: 4;
+  border: none;
+  background: transparent;
+  font-size: 2rem;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.account_navigation a.bp-ktd-nav--failed {
+  color: #c62828;
+  font-weight: 600;
+}

@@ -6,6 +6,25 @@ This document tracks changes to the project. Entry format is defined in **Cursor
 
 ## Log
 
+### [2026-10-22] Knowledge tests: dealer page markup in bp_contracts
+**Author**: AI Assistant
+**Logic**:
+- Personal account HTML belongs in `bp_contracts/index.php` shortcodes, not plugin PHP string markup.
+**Changes**:
+- `bp_contracts/index.php`: `knowledge_tests()` shell + `add_shortcode('knowledge_tests')`
+- Removed `DealerTestsMount.php`; `Plugin` exposes `dealerTestsCapability()` for access check only
+
+### [2026-10-21] Knowledge tests: dealer UI — vanilla JS (not React)
+**Author**: AI Assistant
+**Logic**:
+- Personal account modules use page-specific JS + `communication_server.js`, not a React bundle; align Tests UI with orders/analytics.
+**Changes**:
+- `bp_contracts/js/knowledge_tests.js`: list, overlay, WS handlers; removed React dispatch bridge
+- `bp_contracts/index.php`: `knowledge_tests()` page; dropped global enqueue of `knowledge_tests.js`
+- `DealerTestsMount.php`: HTML shell only; removed React asset enqueue classes
+- Removed `bp_contracts/dealer/` React scaffold; CSS in `css/style.css`
+- `PHASE_5_TASKS.md`: dealer UI = vanilla JS
+
 ### [2026-10-21] Knowledge tests: Phase 5 task breakdown
 **Author**: AI Assistant
 **Logic**:
