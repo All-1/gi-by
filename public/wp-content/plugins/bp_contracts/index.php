@@ -44,6 +44,8 @@ function addCssLinks()
 function addJsLinks()
 {
 	$version = setVPC();
+	$enqueueKnowledgeTestsNav = function_exists('bp_knowledge_tests_plugin')
+		&& bp_knowledge_tests_plugin()->dealerTestsCapability()->canAccess();
 	?>
 	<script type="text/javascript" src="/wp-content/plugins/bp_contracts/js/utility.js<?php echo $version; ?>"></script>
 	<script type="text/javascript" src="/wp-content/plugins/bp_contracts/js/user.js<?php echo $version; ?>"></script>
@@ -51,6 +53,10 @@ function addJsLinks()
 		src="/wp-content/plugins/bp_contracts/js/controls_for_page.js<?php echo $version; ?>"></script>
 	<script type="text/javascript"
 		src="/wp-content/plugins/bp_contracts/js/notification.js<?php echo $version; ?>"></script>
+	<?php if ($enqueueKnowledgeTestsNav) { ?>
+		<script type="text/javascript"
+			src="/wp-content/plugins/bp_contracts/js/knowledge_tests_nav.js<?php echo $version; ?>"></script>
+	<?php } ?>
 	<?php
 }
 function invoiceJsFunctionals()
@@ -814,6 +820,7 @@ function knowledge_tests()
 					<div class="td_div_header_knowledge_tests kt-col-title">Название</div>
 					<div class="td_div_header_knowledge_tests kt-col-status">Статус</div>
 					<div class="td_div_header_knowledge_tests kt-col-score">Оценка</div>
+					<div class="td_div_header_knowledge_tests kt-col-medal">Медаль</div>
 					<div class="td_div_header_knowledge_tests kt-col-actions">Действия</div>
 					<div class="clear-fix"></div>
 				</div>

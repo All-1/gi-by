@@ -35,6 +35,7 @@ $lang_adm = (object) array(
 	'm_staff_management' => 'Персонал',
 	'm_co_workers' => 'Коллеги',
 	'm_analytics' => 'Аналитика',
+	'm_knowledge_tests' => 'Тесты',
 	'apply_btn' => 'Внести правки',
 	'cur_bel_rub' => 'Бел. руб',
 	'cur_ros_rub' => 'Рос. руб',

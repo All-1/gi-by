@@ -46,6 +46,7 @@ class KnowledgeTestsWsWorker
       'ok' => true,
       'tests' => $tests,
       'pagination' => ['page' => $page, 'perPage' => $perPage, 'total' => count($all)],
+      'navFailedHighlight' => $this->navFailedHighlight($userId, $all),
     ];
   }
 
@@ -195,6 +196,19 @@ class KnowledgeTestsWsWorker
   private function plugin(): Plugin
   {
     return $this->sessionWorker->plugin();
+  }
+
+  /** @param list<TestRecord> $catalog */
+  private function navFailedHighlight(int $userId, array $catalog): bool
+  {
+    foreach ($catalog as $test) {
+      $row = $this->testListRow($userId, $test);
+      if (($row['displayStatus'] ?? '') === 'failed') {
+        return true;
+      }
+    }
+
+    return false;
   }
 
   /** @return array<string, mixed> */

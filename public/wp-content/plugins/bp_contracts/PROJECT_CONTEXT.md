@@ -56,7 +56,9 @@ Pages are **shortcodes** that render HTML shells and enqueue JS; business logic 
 | `my_profile` | `my_profile()` | `my_profile.js` |
 | `reg_users` | `reg_users()` | `reg_users.js` |
 | `points_manager_new` / `points_dev` | `points_manager_new()` / `points_dev()` | `points.js` / `points_dev.js` |
-| `knowledge_tests` | `knowledge_tests()` | `knowledge_tests.js` |
+| `knowledge_tests` | `knowledge_tests()` | `knowledge_tests.js`, `knowledge_tests_nav.js` (all PA pages with cap) |
+
+**Tests page setup:** WordPress page `/tests/` (My account template) with content `[knowledge_tests]`. Nav link in theme `myaccount-page.php`.
 
 **Auth bridge**: Shortcodes use `get_current_user_id()` and WP role (e.g. `subscriber` → `dealer` in `analytics()`). The WebSocket layer maps connections to **`gi_new_users`**, not WP users — see Auth Fragmentation below.
 

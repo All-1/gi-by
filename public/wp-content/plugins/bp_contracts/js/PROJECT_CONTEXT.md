@@ -39,6 +39,7 @@ Example: server sends `AnalyticsOnPage::: {...}` → `handlerAnalyticsOnPage` in
 | `invoice_print.js` | Invoice PDF client render |
 | `integer_to_words.js` | Amount wording for documents |
 | `knowledge_tests.js` | `knowledge_tests` shortcode page — `where`, list + overlay UI, WS handlers (like `orders.js`) |
+| `knowledge_tests_nav.js` | Enqueued via `addJsLinks()` when dealer Tests cap — `navFailedHighlight` + minimal `handlerTestsOnPage` on non-Tests PA pages |
 
 ### `analytics.js` (summary)
 - Global `where = 'analytics'`; on load → `showAnalytics` via `sendShowWhere`.

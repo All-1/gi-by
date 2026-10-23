@@ -11,6 +11,14 @@ let knowledgeTestsPage = 1;
 let knowledgeTestsPerPage = 20;
 let knowledgeTestsOverlayTestId = null;
 
+const KNOWLEDGE_TESTS_STATUS_LABELS = {
+  not_started: "Не начат",
+  in_progress: "В процессе",
+  failed: "Не сдан",
+  passed: "Сдан",
+  outdated: "Устарел",
+};
+
 function setDefaultState(where) {
   if (typeof socket === "undefined" || socket.readyState !== WebSocket.OPEN) {
     return;
@@ -40,6 +48,7 @@ function initKnowledgeTestsPage() {
 initKnowledgeTestsPage();
 
 function handlerTestsOnPage(data, user) {
+  updateKnowledgeTestsNavFromList(data);
   if (!data || data.ok === false) {
     renderKnowledgeTestsListError(data);
     return;
@@ -78,6 +87,13 @@ function renderKnowledgeTestsList(data) {
   }
   container.innerHTML = "";
   let tests = data.tests || [];
+  if (tests.length === 0) {
+    container.appendChild(
+      createTagHtml("div", "knowledge_tests_empty", "Нет доступных тестов."),
+    );
+    renderKnowledgeTestsPagination(data.pagination || {});
+    return;
+  }
   tests.forEach(function (row) {
     container.appendChild(buildKnowledgeTestsListRow(row));
   });
@@ -86,49 +102,82 @@ function renderKnowledgeTestsList(data) {
 
 function buildKnowledgeTestsListRow(row) {
   let line = createTagHtml("div", "tr_div_knowledge_tests");
-  let title = createTagHtml("div", "td_div_knowledge_tests kt-col-title", row.title || "");
+  let titleCell = createTagHtml("div", "td_div_knowledge_tests kt-col-title");
+  titleCell.appendChild(createTagHtml("div", "knowledge_tests_row_title", row.title || ""));
+  if (row.achievementArea) {
+    titleCell.appendChild(
+      createTagHtml("div", "knowledge_tests_row_area", row.achievementArea),
+    );
+  }
+  let statusCode = row.displayStatus || "";
   let status = createTagHtml(
     "div",
-    "td_div_knowledge_tests kt-col-status",
-    formatKnowledgeTestsStatus(row.displayStatus),
+    "td_div_knowledge_tests kt-col-status knowledge_tests_status--" + statusCode,
+    formatKnowledgeTestsStatus(statusCode),
   );
-  let scoreText = row.score != null ? String(row.score) : "—";
+  let scoreText = formatKnowledgeTestsScore(row.score);
   let score = createTagHtml("div", "td_div_knowledge_tests kt-col-score", scoreText);
+  let medal = createTagHtml(
+    "div",
+    "td_div_knowledge_tests kt-col-medal",
+    formatKnowledgeTestsMedal(row.medalId),
+  );
   let actions = createTagHtml("div", "td_div_knowledge_tests kt-col-actions");
-  if (row.displayStatus === "in_progress" || row.canStart) {
-    let startLabel = row.displayStatus === "in_progress" ? "Resume" : "Start";
+  if (statusCode === "in_progress") {
     actions.appendChild(
-      createKnowledgeTestsActionButton(startLabel, function () {
+      createKnowledgeTestsActionButton("Продолжить", function () {
         openKnowledgeTestsOverlay(row.testId, row.title, "startTest");
       }),
     );
+  } else if (row.canStart) {
+    actions.appendChild(
+      createKnowledgeTestsActionButton("Начать", function () {
+        openKnowledgeTestsOverlay(row.testId, row.title, "startTest");
+      }),
+    );
+  } else if (statusCode === "not_started" || statusCode === "failed" || statusCode === "outdated") {
+    actions.appendChild(createKnowledgeTestsActionButton("Начать", null, true));
   }
   if (row.canOpenMaterials) {
     actions.appendChild(
-      createKnowledgeTestsActionButton("Materials", function () {
+      createKnowledgeTestsActionButton("Материалы", function () {
         openKnowledgeTestsOverlay(row.testId, row.title, "getTestMaterials");
       }),
     );
+  } else if (statusCode === "failed") {
+    actions.appendChild(createKnowledgeTestsActionButton("Материалы", null, true));
   }
-  massAppendChild(line, title, status, score, actions);
+  massAppendChild(line, titleCell, status, score, medal, actions);
   return line;
 }
 
-function createKnowledgeTestsActionButton(label, onClick) {
+function createKnowledgeTestsActionButton(label, onClick, disabled) {
   let btn = createTagHtml("button", "knowledge_tests_action_btn", label, "", "button");
-  btn.addEventListener("click", onClick);
+  if (disabled) {
+    btn.disabled = true;
+    btn.setAttribute("aria-disabled", "true");
+  } else if (onClick) {
+    btn.addEventListener("click", onClick);
+  }
   return btn;
 }
 
 function formatKnowledgeTestsStatus(code) {
-  let map = {
-    not_started: "Not started",
-    in_progress: "In progress",
-    failed: "Failed",
-    passed: "Passed",
-    outdated: "Outdated",
-  };
-  return map[code] || code || "—";
+  return KNOWLEDGE_TESTS_STATUS_LABELS[code] || code || "—";
+}
+
+function formatKnowledgeTestsScore(score) {
+  if (score == null || score === "") {
+    return "—";
+  }
+  return String(score) + "%";
+}
+
+function formatKnowledgeTestsMedal(medalId) {
+  if (medalId == null || medalId === "") {
+    return "—";
+  }
+  return "★ " + medalId;
 }
 
 function renderKnowledgeTestsPagination(pagination) {
@@ -141,7 +190,14 @@ function renderKnowledgeTestsPagination(pagination) {
   let total = pagination.total || 0;
   let pages = Math.max(1, Math.ceil(total / perPage));
   box.innerHTML = "";
-  let info = createTagHtml("span", "knowledge_tests_page_info", "Page " + page + " / " + pages);
+  if (total === 0) {
+    return;
+  }
+  let info = createTagHtml(
+    "span",
+    "knowledge_tests_page_info",
+    "Страница " + page + " из " + pages + " (" + total + ")",
+  );
   box.appendChild(info);
   if (page > 1) {
     box.appendChild(
@@ -180,7 +236,7 @@ function openKnowledgeTestsOverlay(testId, title, command) {
   overlay.setAttribute("aria-hidden", "false");
   content.innerHTML = "";
   content.appendChild(createTagHtml("h2", "knowledge_tests_overlay_title", title || ""));
-  content.appendChild(createTagHtml("p", "knowledge_tests_loading", "Loading…"));
+  content.appendChild(createTagHtml("p", "knowledge_tests_loading", "Загрузка…"));
   let body = { testId: testId };
   if (command === "startTest") {
     sendKnowledgeTestsCommand("startTest", body);
@@ -215,10 +271,22 @@ function showKnowledgeTestsOverlayError(data) {
 
 function knowledgeTestsErrorMessage(data) {
   if (!data || !data.error) {
-    return "Request failed.";
+    return "Не удалось выполнить запрос.";
   }
+  let code = data.error.code || "";
   let reasons = data.error.reasons || [];
-  return data.error.code + (reasons.length ? ": " + reasons.join(", ") : "");
+  let codeLabels = {
+    retake_delay: "Повторная попытка пока недоступна",
+    pending_materials: "Сначала изучите материалы",
+    test_locked: "Тест заблокирован",
+    notification_blocked: "Тест недоступен (уведомление)",
+    test_in_progress: "Уже открыт другой тест",
+    no_session: "Сессия теста не найдена",
+    invalid_test: "Тест не найден",
+    validation: "Некорректные данные",
+  };
+  let label = codeLabels[code] || code;
+  return label + (reasons.length ? " (" + reasons.join(", ") + ")" : "");
 }
 
 function renderKnowledgeTestsQuestion(data) {
@@ -233,7 +301,7 @@ function renderKnowledgeTestsQuestion(data) {
     createTagHtml(
       "p",
       "knowledge_tests_progress",
-      "Question " + ((progress.index || 0) + 1) + " / " + (progress.total || "—"),
+      "Вопрос " + ((progress.index || 0) + 1) + " из " + (progress.total || "—"),
     ),
   );
   content.appendChild(createTagHtml("p", "knowledge_tests_question_text", q.text || ""));
@@ -248,7 +316,7 @@ function renderKnowledgeTestsQuestion(data) {
     form.appendChild(row);
   });
   content.appendChild(form);
-  let continueBtn = createKnowledgeTestsActionButton("Continue", function () {
+  let continueBtn = createKnowledgeTestsActionButton("Далее", function () {
     submitKnowledgeTestsQuestion(data.testId, form);
   });
   content.appendChild(continueBtn);
@@ -257,7 +325,7 @@ function renderKnowledgeTestsQuestion(data) {
   }
   if (data.sessionComplete) {
     content.appendChild(
-      createKnowledgeTestsActionButton("Finish test", function () {
+      createKnowledgeTestsActionButton("Завершить тест", function () {
         sendKnowledgeTestsCommand("finishTest", { testId: data.testId });
       }),
     );
@@ -294,13 +362,17 @@ function renderKnowledgeTestsFinished(data) {
   content.innerHTML = "";
   let attempt = data.attempt || {};
   content.appendChild(
-    createTagHtml("p", "", "Status: " + (attempt.status || "") + ", score: " + (attempt.score ?? "—")),
+    createTagHtml(
+      "p",
+      "",
+      "Результат: " + formatKnowledgeTestsStatus(attempt.status || "") + ", оценка: " + formatKnowledgeTestsScore(attempt.score),
+    ),
   );
   if (data.materialsRequired) {
-    content.appendChild(createTagHtml("p", "", "Review materials before retake."));
+    content.appendChild(createTagHtml("p", "", "Изучите материалы перед повторной попыткой."));
   }
   content.appendChild(
-    createKnowledgeTestsActionButton("Close", function () {
+    createKnowledgeTestsActionButton("Закрыть", function () {
       closeKnowledgeTestsOverlay();
     }),
   );
@@ -318,7 +390,7 @@ function renderKnowledgeTestsMaterials(data) {
     content.appendChild(createTagHtml("p", "knowledge_tests_reference", item.reference || ""));
   });
   content.appendChild(
-    createKnowledgeTestsActionButton("Examined", function () {
+    createKnowledgeTestsActionButton("Изучено", function () {
       sendKnowledgeTestsCommand("confirmTestMaterialsExamined", {
         testId: data.testId,
         attemptId: data.attemptId,

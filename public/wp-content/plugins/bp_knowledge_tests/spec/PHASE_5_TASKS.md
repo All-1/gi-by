@@ -84,7 +84,7 @@ Dealer UI follows `js/PROJECT_CONTEXT.md`: no bundler; `utility.js` helpers + `s
 
 ---
 
-## Wave B — WS + DOM polish — **in progress**
+## Wave B — WS + DOM polish — **in progress** (B3 `medalId` open)
 
 ### B1. Handler wiring — **done (scaffold)**
 
@@ -118,7 +118,7 @@ Dealer UI follows `js/PROJECT_CONTEXT.md`: no bundler; `utility.js` helpers + `s
 
 ---
 
-## Wave C — Tests list (§19) — **not started**
+## Wave C — Tests list (§19) — **complete** (repo)
 
 ### C1. Page & nav
 
@@ -262,9 +262,9 @@ Log significant UI or protocol choices in [CHANGELOG.md](../../../../CHANGELOG.m
 - [x] B1 WS handlers → DOM (scaffold)
 - [x] B2 Outbound commands in `knowledge_tests.js`
 - [ ] B3 `medalId` (and finish medal) from plugin
-- [ ] C1 Tests nav + page shell
-- [ ] C2 Row UI per §19.1
-- [ ] C3 Pagination
+- [x] C1 Tests nav + page shell (`/tests/`, `[knowledge_tests]`, theme menu)
+- [x] C2 Row UI per §19.1 (RU labels, area, medal column placeholder, disabled actions)
+- [x] C3 Pagination + `navFailedHighlight` for §3.2 nav
 - [ ] D1–D4 In-test + finish + resume/errors
 - [ ] E Materials + Examined
 - [ ] F Chat stars §2.11

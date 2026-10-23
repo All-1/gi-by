@@ -59,6 +59,15 @@ function choseWhereForWindow(where) {
   return newWhere;
 }
 
+function updateKnowledgeTestsNavFromList(data) {
+  let link = document.querySelector('.knowledge_tests_nav_link');
+  if (!link || !data || data.ok === false) {
+    return;
+  }
+  let highlight = data.navFailedHighlight === true;
+  link.classList.toggle('bp-ktd-nav--failed', highlight);
+}
+
 function switchWhere(where) {
   if (where.length === 0) return ''; // Если строка пустая, возвращаем пустую строку
 

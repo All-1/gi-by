@@ -2247,12 +2247,38 @@ body.admin-bar .table-points .points-header-wrapper.fixed-header-table {
 }
 
 .kt-col-status,
-.kt-col-score {
+.kt-col-score,
+.kt-col-medal {
   flex: 1 1 100px;
 }
 
 .kt-col-actions {
   flex: 1 1 140px;
+}
+
+.knowledge_tests_row_area {
+  font-size: 12px;
+  color: #666;
+  margin-top: 2px;
+}
+
+.knowledge_tests_status--failed {
+  color: #c62828;
+  font-weight: 600;
+}
+
+.knowledge_tests_status--passed {
+  color: #2e7d32;
+}
+
+.knowledge_tests_empty {
+  padding: 16px 8px;
+  color: #666;
+}
+
+.knowledge_tests_action_btn:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
 }
 
 .knowledge_tests_action_btn {
