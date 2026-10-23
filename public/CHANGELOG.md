@@ -6,6 +6,17 @@ This document tracks changes to the project. Entry format is defined in **Cursor
 
 ## Log
 
+### [2026-10-23] Knowledge tests: dev-first delivery — Phase 6 next, manual QA after Phase 7
+**Author**: AI Assistant
+**Logic**:
+- Team chose to finish Phases **6–7** development before consolidated staging QA, instead of blocking Phase 6 on Phase 4–5 operator checklists.
+- Single operator script avoids duplicate QA passes and matches vanilla JS dealer UI (not React) already in repo.
+**Changes**:
+- `bp_knowledge_tests/spec/MANUAL_QA_V1.md`: [NEW] consolidated staging checklist (Phases 4–6 + §12)
+- `bp_knowledge_tests/spec/PHASE_6_TASKS.md`: [NEW] notifications task breakdown
+- `bp_knowledge_tests/spec/IMPLEMENTATION_PLAN.md`: delivery sequence, D7 UI split, phase exits, §14.1 gates
+- `bp_knowledge_tests/spec/PROJECT_CONTEXT.md`, `bp_knowledge_tests/PROJECT_CONTEXT.md`, `PHASE_4_TASKS.md`, `PHASE_5_TASKS.md`, `bp_contracts/PROJECT_CONTEXT.md`, `admin/PROJECT_CONTEXT.md`
+
 ### [2026-10-23] Knowledge tests: Phase 5 B3/E/F — medals, materials, chat stars
 **Author**: AI Assistant
 **Logic**:

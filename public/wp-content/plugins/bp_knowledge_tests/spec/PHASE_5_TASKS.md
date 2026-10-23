@@ -1,4 +1,4 @@
-**Prerequisite:** Phase **4** **complete** in repo — WS commands live per [WS_PROTOCOL.md](./WS_PROTOCOL.md). Run Phase **4** Wave **F** staging QA on staging before dealer release ([PHASE_4_TASKS.md](./PHASE_4_TASKS.md)).
+**Prerequisite:** Phase **4** **development complete** in repo — WS commands live per [WS_PROTOCOL.md](./WS_PROTOCOL.md). Manual QA: [MANUAL_QA_V1.md](./MANUAL_QA_V1.md) (after Phase **6–7**, not before Phase **6**).
 
 # Phase 5 — Task breakdown (Dealer UI — vanilla JS)
 
@@ -11,7 +11,7 @@
 
 **Goal (exit criterion):** A dealer with the agreed role can open **Tests** in the personal account, see the paginated list (§19), **Start** or **resume** a test in the existing additional-window pattern (§19.2), complete the **one-question + Continue** flow with immediate feedback (§20), **finish** and see results; after failure, open **Materials**, mark references reviewed, and **Examined** (§21). Chat shows **latest-result stars** per test area (§2.11). Failed-test **menu styling** applies when applicable (§3.2).
 
-**Progress (2026-10-21):** Wave **A** **complete** — PA page + `knowledge_tests.js` (list, overlay, WS handlers). Same pattern as [orders.js](../../bp_contracts/js/orders.js) / [js/PROJECT_CONTEXT.md](../../bp_contracts/js/PROJECT_CONTEXT.md). **No React** on dealer UI (admin factory stays React).
+**Progress (2026-10-23):** Phase **5** **development complete** — Waves **A–F** in repo; Wave **G** = doc/a11y close only; operator journey → [MANUAL_QA_V1.md](./MANUAL_QA_V1.md) §3. **No React** on dealer UI (admin factory stays React).
 
 **Estimate:** ~2 weeks one developer (matches plan §11); ~1 week **MVP** (list + in-test + finish; stars/materials polish in 5b).
 
@@ -24,7 +24,7 @@
 | WS commands + payloads (`showTests`, `startTest`, `submitTestQuestion`, `finishTest`, materials) | **D2** — which `gi_new_users` / PA roles see **Tests** and may start attempts |
 | Client handler names registered (`handlerTestsOnPage`, …) | **Nav link** — WP menu entry to `knowledge_tests()` page |
 | `displayStatus`, `canStart`, `canOpenMaterials`, pagination | **`medalId`** on list/finish still `null` in gateway |
-| Admin-authored catalog on staging | Phase 4 staging QA checklist (operator) |
+| Admin-authored catalog on staging | Needed for [MANUAL_QA_V1.md](./MANUAL_QA_V1.md) (post Phase 6–7) |
 | `medalId` + chat stars WS | Plugin read via gateway + `getKnowledgeTestChatStars` |
 
 **Verdict:** Start with **Wave A** (decisions + scaffold), then **Wave C–D** (list + in-test) in parallel once mount and WS bridge exist.
@@ -41,7 +41,7 @@
 | RAM session | `TestController` — shuffle, progress, `test_in_progress` guard |
 | Domain finish | `CompleteAttempt`, materials rows, retake evaluation |
 
-**Gap:** Operator dealer QA on staging; optional medal tier labels in list (ids shown today).
+**Gap:** Consolidated manual QA not yet run ([MANUAL_QA_V1.md](./MANUAL_QA_V1.md)); optional medal tier labels in list (ids shown today).
 
 ---
 
@@ -198,14 +198,14 @@ Per row from WS:
 
 ---
 
-## Wave G — Close Phase 5 — **in progress** (docs + operator QA)
+## Wave G — Close Phase 5 — **complete** (development)
 
 | Task | Notes |
 |------|--------|
-| Dealer QA | Journey: list → start → submit all → finish → (fail) materials → examined → retake after delay |
-| Accessibility | Focus trap in overlay; keyboard Continue |
-| Docs | `IMPLEMENTATION_PLAN.md` §11 Phase 5 checkboxes; `bp_contracts` + plugin PROJECT_CONTEXT; §19–21 map updated |
-| Out of scope reminder | Notification popup/block/bottom bar → **Phase 6** |
+| Dealer QA | [MANUAL_QA_V1.md](./MANUAL_QA_V1.md) §3 — run after Phase **6–7** |
+| Accessibility | Focus trap in overlay; keyboard Continue / Escape (repo) |
+| Docs | `IMPLEMENTATION_PLAN.md` §11; `spec/PROJECT_CONTEXT.md`; delivery model 2026-10-23 |
+| Out of scope reminder | Notification popup/block/bottom bar → **Phase 6** ([PHASE_6_TASKS.md](./PHASE_6_TASKS.md)) |
 
 ---
 
@@ -250,7 +250,7 @@ Log significant UI or protocol choices in [CHANGELOG.md](../../../../CHANGELOG.m
 | Phase | Work |
 |-------|------|
 | **6** | New-test / failed-test notification popup, block, bottom bar (§3.1, §10) |
-| **7** | Hardening, full §12 / spec §28 QA matrix, rate limits |
+| **7** | Hardening, deploy checklist; manual QA → [MANUAL_QA_V1.md](./MANUAL_QA_V1.md) |
 
 ---
 
@@ -268,4 +268,4 @@ Log significant UI or protocol choices in [CHANGELOG.md](../../../../CHANGELOG.m
 - [x] D1–D4 In-test + finish + resume/errors (two-step feedback; `startTest` advance; WS reconnect banner)
 - [x] E Materials + Examined
 - [x] F Chat stars §2.11
-- [ ] G Dealer QA on staging + final sign-off
+- [x] G Development close (docs/a11y); operator sign-off → [MANUAL_QA_V1.md](./MANUAL_QA_V1.md) §3 + §6
