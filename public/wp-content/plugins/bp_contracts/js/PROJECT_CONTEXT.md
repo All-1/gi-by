@@ -42,6 +42,7 @@ Example: server sends `AnalyticsOnPage::: {...}` → `handlerAnalyticsOnPage` in
 | `integer_to_words.js` | Amount wording for documents |
 | `knowledge_tests.js` | `knowledge_tests` shortcode page — `where`, list + overlay UI, WS handlers (like `orders.js`). In-test: `submitTestQuestion` → feedback → `startTest` (next) or `finishTest` (last) |
 | `knowledge_tests_nav.js` | When dealer Tests cap — `requestKnowledgeTestsNavHighlight`, minimal `handlerTestsOnPage`; reconnect via `onKnowledgeTestsWebSocketOpen` / `Close` (called from `communication_server.js`) |
+| `knowledge_test_notifications.js` | Phase 6 — `getKnowledgeTestNotifications` on WS open; `handlerKnowledgeTestNotificationsOnPage`; popup / block / bottom bar; `dismissKnowledgeTestNotification` |
 | `knowledge_test_chat_stars.js` | `getKnowledgeTestChatStars` batch on dialog load; `modal_window.js` appends stars to `.author_message` |
 
 ### `analytics.js` (summary)

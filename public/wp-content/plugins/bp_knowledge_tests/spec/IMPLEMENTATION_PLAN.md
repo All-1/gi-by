@@ -14,6 +14,7 @@
 **Phase 4 tasks:** [PHASE_4_TASKS.md](./PHASE_4_TASKS.md) (WS)  
 **Phase 5 tasks:** [PHASE_5_TASKS.md](./PHASE_5_TASKS.md) (dealer vanilla JS in `bp_contracts`)  
 **Phase 6 tasks:** [PHASE_6_TASKS.md](./PHASE_6_TASKS.md) (notifications)  
+**Phase 7 tasks:** [PHASE_7_TASKS.md](./PHASE_7_TASKS.md) (hardening)  
 **Manual QA (post-dev):** [MANUAL_QA_V1.md](./MANUAL_QA_V1.md)  
 **Last updated**: 2026-10-23
 
@@ -73,10 +74,11 @@ bp_knowledge_tests/
     ├── PHASE_4_TASKS.md
     ├── PHASE_5_TASKS.md
     ├── PHASE_6_TASKS.md
+    ├── PHASE_7_TASKS.md
     └── MANUAL_QA_V1.md
 ```
 
-**Implemented (development):** Phases **1–5** — catalog admin React; `TestController` + [WS_PROTOCOL.md](./WS_PROTOCOL.md); dealer `knowledge_tests.js` + materials + chat stars.
+**Implemented (development):** Phases **1–6** — catalog admin React; `TestController` + [WS_PROTOCOL.md](./WS_PROTOCOL.md); dealer `knowledge_tests.js` + materials + chat stars; notification UX (`knowledge_test_notifications.js`, `NotificationUiQuery`, WS §Phase 6).
 
 **Not yet present (development):**
 
@@ -571,8 +573,7 @@ Store dismiss counts and policy in `gi_new_test_config` / `gi_new_test_notificat
 ### Delivery sequence (2026-10-23)
 
 ```text
-Phases 0–5  →  development complete (repo)
-Phase 6     →  notifications UX (development)
+Phases 0–6  →  development complete (repo)
 Phase 7     →  hardening (development)
 MANUAL_QA   →  [MANUAL_QA_V1.md](./MANUAL_QA_V1.md) on staging (single gate before production)
 ```
@@ -665,6 +666,8 @@ MANUAL_QA   →  [MANUAL_QA_V1.md](./MANUAL_QA_V1.md) on staging (single gate be
 **Exit (development):** Notification UX implemented; §4 scenarios in [MANUAL_QA_V1.md](./MANUAL_QA_V1.md) ready to execute.
 
 ### Phase 7 — Hardening & release prep (1–1.5 weeks)
+
+**Task breakdown:** [PHASE_7_TASKS.md](./PHASE_7_TASKS.md) (waves A–F, deploy checklist).
 
 - [ ] Auth, WS validation, rate-limit considerations for new WS titles (DEVELOPMENT_RULES §1.2)
 - [ ] Regression automation for product spec §28 principles + keep Phases 1–2 CLI runners in CI or documented pre-release script

@@ -22,7 +22,8 @@ No subdirectories — product and phase markdown files live in this folder (see 
 | [WS_PROTOCOL.md](./WS_PROTOCOL.md) | Integrators | Locked WS titles + JSON shapes (Phase 4 Wave A) |
 | [PHASE_4_TASKS.md](./PHASE_4_TASKS.md) | Developers | `TestController`, WS — **development complete** |
 | [PHASE_5_TASKS.md](./PHASE_5_TASKS.md) | Developers | Dealer vanilla JS §19–21 — **development complete** |
-| [PHASE_6_TASKS.md](./PHASE_6_TASKS.md) | Developers | Notifications UX — **next (development)** |
+| [PHASE_6_TASKS.md](./PHASE_6_TASKS.md) | Developers | Notifications UX — **development complete** |
+| [PHASE_7_TASKS.md](./PHASE_7_TASKS.md) | Developers | Hardening & release prep — **next (development)** |
 
 ---
 
@@ -37,7 +38,7 @@ No subdirectories — product and phase markdown files live in this folder (see 
 | §6 critical update | `CriticalUpdateTest`, REST `POST .../critical-update` |
 | §15–18 admin UI | `admin/src/pages/*`, REST under `Infrastructure/Http` |
 | §19–21 dealer UI | `bp_contracts/js/knowledge_tests.js`, overlay, chat stars |
-| §3.1–3.4 notifications UI | Phase **6** — `bp_contracts` host + plugin notification services |
+| §3.1–3.4 notifications UI | `knowledge_test_notifications.js` + `NotificationUiQuery` / WS ([MANUAL_QA §4](./MANUAL_QA_V1.md#4-notifications-ux-phase-6)) |
 | §23 RAM session | **`bp_contracts`** `TestController` + WS ([WS_PROTOCOL.md](./WS_PROTOCOL.md)) |
 
 ---
@@ -60,6 +61,6 @@ No subdirectories — product and phase markdown files live in this folder (see 
 | 3 | Admin REST + React factory | Done |
 | 4 | WS + TestController | Dev complete — manual §2 in [MANUAL_QA_V1.md](./MANUAL_QA_V1.md) |
 | 5 | Dealer vanilla JS (`bp_contracts`) | Dev complete — manual §3 in [MANUAL_QA_V1.md](./MANUAL_QA_V1.md) |
-| 6 | Notifications UX | **Next** — [PHASE_6_TASKS.md](./PHASE_6_TASKS.md) |
-| 7 | Hardening / release prep | Not started |
+| 6 | Notifications UX | **Dev complete** — [PHASE_6_TASKS.md](./PHASE_6_TASKS.md); manual §4 in [MANUAL_QA_V1.md](./MANUAL_QA_V1.md) |
+| 7 | Hardening / release prep | **Next** — [PHASE_7_TASKS.md](./PHASE_7_TASKS.md) |
 | — | Manual QA (staging) | **After** Phase 6–7 — [MANUAL_QA_V1.md](./MANUAL_QA_V1.md) |
