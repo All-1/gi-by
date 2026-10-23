@@ -6,6 +6,25 @@ This document tracks changes to the project. Entry format is defined in **Cursor
 
 ## Log
 
+### [2026-10-23] Knowledge tests: Phase 7 task breakdown
+**Author**: AI Assistant
+**Logic**:
+- Phase 7 work (WS hardening, regression runner, deploy checklist) needs the same wave/checklist structure as Phases 4–6 before implementation starts.
+**Changes**:
+- `bp_knowledge_tests/spec/PHASE_7_TASKS.md`: [NEW] waves A–F (auth, validation, `run_all_domain_tests`, `DEPLOY_V1.md`, close)
+- `IMPLEMENTATION_PLAN.md`, `spec/PROJECT_CONTEXT.md`, plugin + `bp_contracts` PROJECT_CONTEXT: link Phase 7 tasks
+
+### [2026-10-23] Knowledge tests: Phase 6 close — operator steps in MANUAL_QA only
+**Author**: AI Assistant
+**Logic**:
+- Phase 6 development exit: manual verification belongs in the consolidated QA doc, not open checkboxes on the phase task list.
+- Synced stale spec index (§3) with repo state (Phases 1–6 dev complete).
+**Changes**:
+- `bp_knowledge_tests/spec/MANUAL_QA_V1.md`: §4 expanded (setup, new/failed/prerequisite/D10/retake-block steps)
+- `PHASE_6_TASKS.md`: Wave D complete; status **development complete**
+- `spec/PROJECT_CONTEXT.md`, `IMPLEMENTATION_PLAN.md` §3 + delivery sequence
+- `bp_contracts/PROJECT_CONTEXT.md`, `bp_contracts/js/PROJECT_CONTEXT.md`: Phase 6 complete note + `knowledge_test_notifications.js`
+
 ### [2026-10-23] Knowledge tests: Phase 6 notifications UX (WS + PA client)
 **Author**: AI Assistant
 **Logic**:
