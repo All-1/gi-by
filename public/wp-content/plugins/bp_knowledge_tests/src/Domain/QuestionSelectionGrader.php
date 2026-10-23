@@ -20,7 +20,7 @@ final class QuestionSelectionGrader
 
         $right = 0;
         $failed = 0;
-        foreach ($selected as $answerId) {
+        foreach ($selected as $answerId => $_ignored) {
             if (isset($correct[$answerId])) {
                 ++$right;
             } else {

@@ -6,6 +6,17 @@ This document tracks changes to the project. Entry format is defined in **Cursor
 
 ## Log
 
+### [2026-10-23] Knowledge tests: fix CLI tests and selection grader iteration
+**Author**: AI Assistant
+**Logic**:
+- `QuestionSelectionGrader` iterated set values (`true`) instead of answer ids (keys), breaking §2.1.1 counts when wrong options were selected.
+- Two runners required `vendor/autoload.php`; fixture omitted `DealerTestsCapability` on `Plugin`.
+**Changes**:
+- `Domain/QuestionSelectionGrader.php`: foreach over id => value map
+- `tests/support/require_plugin_autoload.php`: [NEW] fallback autoload
+- `run_admin_config_validator_tests.php`, `run_attempt_validity_label_tests.php`: use fallback
+- `CompleteAttemptTestFixture.php`: fifth `Plugin` dependency
+
 ### [2026-10-23] Knowledge tests: Phase 7 task breakdown
 **Author**: AI Assistant
 **Logic**:

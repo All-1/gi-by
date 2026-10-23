@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-require_once dirname(__DIR__) . '/vendor/autoload.php';
+require_once __DIR__ . '/support/require_plugin_autoload.php';
 
 use BpKnowledgeTests\Services\Catalog\AdminConfigValidator;
 
