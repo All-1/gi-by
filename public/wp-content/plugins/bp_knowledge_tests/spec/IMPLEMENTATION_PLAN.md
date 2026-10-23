@@ -7,12 +7,15 @@
 **Plugin context**: [PROJECT_CONTEXT.md](../PROJECT_CONTEXT.md) (directory index — details in nested `PROJECT_CONTEXT.md` files)  
 **Personal account integration**: [bp_contracts/PROJECT_CONTEXT.md](../../bp_contracts/PROJECT_CONTEXT.md)
 
-**Status (repository)**: Phases **1–4** **complete** (WS + `TestController` + `test_in_progress` guard). Schema **v3**. **Next:** Phase **5** dealer React UI; run Phase **4** staging QA on staging before dealer release ([PHASE_4_TASKS.md](./PHASE_4_TASKS.md) Wave F). Phases **6–7:** notifications UX → hardening.  
+**Status (repository)**: Phases **1–5** **development complete** (admin React, WS + `TestController`, dealer **vanilla JS** in `bp_contracts`). Schema **v3**. **Next:** Phase **6** notifications UX → Phase **7** hardening → **[MANUAL_QA_V1.md](./MANUAL_QA_V1.md)** on staging before production.  
+**Delivery model (2026-10-23):** Finish **all V1 development** (Phases 6–7), then one **consolidated manual QA** pass — not a gate between Phase 5 and Phase 6. Keep CLI domain tests green during development.  
 **Phase 2 tasks:** [PHASE_2_TASKS.md](./PHASE_2_TASKS.md)  
 **Phase 3 tasks:** [PHASE_3_TASKS.md](./PHASE_3_TASKS.md) (admin)  
 **Phase 4 tasks:** [PHASE_4_TASKS.md](./PHASE_4_TASKS.md) (WS)  
 **Phase 5 tasks:** [PHASE_5_TASKS.md](./PHASE_5_TASKS.md) (dealer vanilla JS in `bp_contracts`)  
-**Last updated**: 2026-10-21
+**Phase 6 tasks:** [PHASE_6_TASKS.md](./PHASE_6_TASKS.md) (notifications)  
+**Manual QA (post-dev):** [MANUAL_QA_V1.md](./MANUAL_QA_V1.md)  
+**Last updated**: 2026-10-23
 
 ---
 
@@ -46,8 +49,9 @@ Implementation must not satisfy the product spec by violating (1) or (2).
 | **Shell** | Tests menu, modals, notifications, in-progress session, WS transport, chat stars → **`bp_contracts`** |
 | **In-progress attempts** | RAM via **`TestController`** in `bp_contracts`; cleared at **03:00** server restart |
 | **Completed attempts** | MySQL tables `gi_new_test_*` (see §5) |
-| **V1 UI** | **React** for dealer Tests UI and test-factory admin (spec §15–21 behavior; implementation in React, not legacy `modal_window.js` / PHP admin screens) |
-| **V1 integration** | `bp_contracts` (or shared frontend package): mount React, nav entry, WS client; **`bp_knowledge_tests`**: domain + persistence + thin HTTP/WS-facing application API |
+| **V1 UI** | **React** test-factory admin (§15–18); **vanilla JS** dealer Tests (§19–21) in `bp_contracts` (`knowledge_tests.js`, overlay pattern §19.2) — spec behavior, not legacy jQuery modals for new flows |
+| **V1 integration** | `bp_contracts`: nav, WS client, dealer page JS, notification host (Phase 6); **`bp_knowledge_tests`**: domain + persistence + admin REST + WS-facing gateway |
+| **V1 QA** | **Development** through Phase **7**; **manual** operator checklist once — [MANUAL_QA_V1.md](./MANUAL_QA_V1.md) |
 | **Future platform** | API-shaped plugin layers remain compatible with Laravel + PostgreSQL + Reverb (spec §24–25) |
 
 ---
@@ -67,15 +71,19 @@ bp_knowledge_tests/
     ├── PHASE_2_TASKS.md
     ├── PHASE_3_TASKS.md
     ├── PHASE_4_TASKS.md
-    └── PHASE_5_TASKS.md
+    ├── PHASE_5_TASKS.md
+    ├── PHASE_6_TASKS.md
+    └── MANUAL_QA_V1.md
 ```
 
-**Implemented:** Phases **1–3** as before. Phase **4** — `TestController` RAM, `KnowledgeTestsWsWorker`, `Chat.php` / `InteractionInterface` commands per [WS_PROTOCOL.md](./WS_PROTOCOL.md); cross-test **`test_in_progress`** guard; client stubs in `communication_server.js`.
+**Implemented (development):** Phases **1–5** — catalog admin React; `TestController` + [WS_PROTOCOL.md](./WS_PROTOCOL.md); dealer `knowledge_tests.js` + materials + chat stars.
 
-**Not yet present:**
+**Not yet present (development):**
 
-- Phases **5–6** — React dealer UI + notifications UX
-- Phase **7** — hardening / release checklist
+- Phase **6** — notifications UX (popup / block / bottom bar)
+- Phase **7** — hardening (auth/WS validation, regression automation, deploy checklist prep)
+
+**Not yet run:** [MANUAL_QA_V1.md](./MANUAL_QA_V1.md) — after Phases **6–7** dev complete.
 
 **Doc / integration hygiene (Phase 0):** plugin linked from [public/PROJECT_CONTEXT.md](../../../../PROJECT_CONTEXT.md); WS titles in [bp_contracts/src/PROJECT_CONTEXT.md](../../bp_contracts/src/PROJECT_CONTEXT.md).
 
@@ -511,10 +519,10 @@ Admin CRUD wraps same repositories with capability checks.
 | `TestController` | `bp_contracts/src/Testing/TestController.php` | In-memory `AttemptSession` per user only (no domain rules) |
 | WS glue | `Chat.php` + `InteractionInterface` | Thin; call plugin services; document titles before merge |
 | Role wiring | Injected **Worker** (or existing controller path) | **Avoid** new `WorkWith*` traits in `bp_contracts` (DEVELOPMENT_RULES §2.7); capability checks in plugin admin layer |
-| Menu item **Tests** | React router / nav in personal account | Red styling on failed (§3.2) |
-| Tests & materials UI | **React** (open-in-place / overlay per product §19.2 UX, not new jQuery modals) | Consumes WS (+ REST if added) from plugin |
-| Stars in messages | React message list or legacy host until migrated | Achievements from plugin query |
-| Notifications | React + existing WS `Notification` where shared | Config-driven block vs bottom bar |
+| Menu item **Tests** | PA nav + `/tests/` page | Red styling on failed (§3.2) |
+| Tests & materials UI | **Vanilla JS** (`knowledge_tests.js`, overlay §19.2) | Consumes WS from plugin gateway |
+| Stars in messages | `knowledge_test_chat_stars.js` + WS `getKnowledgeTestChatStars` | Achievements from plugin query |
+| Notifications | PA notification host + Phase **6** UI | Config-driven block vs bottom bar; `Notification:::` where shared |
 
 Register `TestController` in `SystemConstructor` when introduced.
 
@@ -537,7 +545,7 @@ Menus (spec §15):
 
 ## 9. User UI (V1)
 
-**Implementation:** React in the personal account (dealer Tests area).
+**Implementation:** Vanilla JS in the personal account (`bp_contracts`, dealer Tests area).
 
 - Single **Tests** page with pagination (§19).
 - Per row: title, status, Start / Materials, score, medal.
@@ -560,6 +568,17 @@ Store dismiss counts and policy in `gi_new_test_config` / `gi_new_test_notificat
 ---
 
 ## 11. Implementation phases
+
+### Delivery sequence (2026-10-23)
+
+```text
+Phases 0–5  →  development complete (repo)
+Phase 6     →  notifications UX (development)
+Phase 7     →  hardening (development)
+MANUAL_QA   →  [MANUAL_QA_V1.md](./MANUAL_QA_V1.md) on staging (single gate before production)
+```
+
+**During development:** run `tests/run_*.php` after domain changes; optional short dealer smoke after large WS/UI diffs. **Do not** block Phase 6 on full operator QA.
 
 ### Phase 0 — Documentation & schema (2–3 days)
 
@@ -619,9 +638,9 @@ Store dismiss counts and policy in `gi_new_test_config` / `gi_new_test_notificat
 - [x] Wave C — `KnowledgeTestsSessionWorker` + `bp_knowledge_tests_plugin()`
 - [x] Wave D — WS commands in `Chat.php` + client handler stubs
 - [x] Wave E — start / submit / finish / materials + `test_in_progress` (E4)
-- [x] Wave F — doc sync + staging QA checklist ([PHASE_4_TASKS.md](./PHASE_4_TASKS.md))
+- [x] Wave F — doc sync; operator steps moved to [MANUAL_QA_V1.md](./MANUAL_QA_V1.md) §2 ([PHASE_4_TASKS.md](./PHASE_4_TASKS.md))
 
-**Exit:** End-to-end test over WS on staging (operator checklist in Phase 4 Wave F).
+**Exit (development):** WS commands + `TestController` in repo; round-trip provable via Tests page or documented WS steps. **Manual verification:** [MANUAL_QA_V1.md](./MANUAL_QA_V1.md) §2 (after Phase 6–7).
 
 ### Phase 5 — User-facing UI (vanilla JS) (2 weeks)
 
@@ -632,23 +651,27 @@ Store dismiss counts and policy in `gi_new_test_config` / `gi_new_test_notificat
 - [x] Materials UI (§21) — reviewed checkboxes + **Изучено**
 - [x] Stars beside names in chat (§2.11) — `getKnowledgeTestChatStars`
 - [x] Failed Tests nav styling (§3.2) — `navFailedHighlight` + `.bp-ktd-nav--failed`
+- [x] Wave G — development close (docs, overlay a11y); dealer journey steps in [MANUAL_QA_V1.md](./MANUAL_QA_V1.md) §3
 
-**Exit:** Operator dealer journey QA on staging ([PHASE_5_TASKS.md](./PHASE_5_TASKS.md) Wave G).
+**Exit (development):** Dealer UI + WS wiring in repo ([PHASE_5_TASKS.md](./PHASE_5_TASKS.md)). **Manual verification:** [MANUAL_QA_V1.md](./MANUAL_QA_V1.md) §3 (after Phase 6–7).
 
-### Phase 6 — Notifications UX (React + shared WS) (1 week)
+### Phase 6 — Notifications UX (shared PA host) (1 week)
 
-- [ ] Popup / block / bottom bar from config in React (or shared notification host)
-- [ ] Integration with existing notification stack where applicable
+**Task breakdown:** [PHASE_6_TASKS.md](./PHASE_6_TASKS.md) (waves A–D, **D10**).
 
-**Exit:** Config matrix tested.
+- [ ] Popup / block / bottom bar from config (§3.1, §3.2)
+- [ ] Integration with existing notification stack (`Notification:::`, `NotificationWorker`) where applicable
+- [ ] Resolve **D10** notification row shape
 
-### Phase 7 — Hardening & release (1–1.5 weeks)
+**Exit (development):** Notification UX implemented; §4 scenarios in [MANUAL_QA_V1.md](./MANUAL_QA_V1.md) ready to execute.
+
+### Phase 7 — Hardening & release prep (1–1.5 weeks)
 
 - [ ] Auth, WS validation, rate-limit considerations for new WS titles (DEVELOPMENT_RULES §1.2)
-- [ ] Regression suite for rules §28 (product spec) + automated domain tests from Phases 1–2
-- [ ] Doc sync; PR checklist (User Rules + DEVELOPMENT_RULES §4.1)
+- [ ] Regression automation for product spec §28 principles + keep Phases 1–2 CLI runners in CI or documented pre-release script
+- [ ] Doc sync; production deploy checklist (User Rules + DEVELOPMENT_RULES §4.1)
 
-**Exit:** Production deploy checklist.
+**Exit (development):** Code and docs ready for staging sign-off. **Release gate:** [MANUAL_QA_V1.md](./MANUAL_QA_V1.md) complete → production deploy.
 
 ### Rough total
 
@@ -657,6 +680,8 @@ Store dismiss counts and policy in `gi_new_test_config` / `gi_new_test_notificat
 ---
 
 ## 12. Testing & QA checklist (V1)
+
+**Operator execution:** Use [MANUAL_QA_V1.md](./MANUAL_QA_V1.md) (sections 2–6) **after** Phase **6–7** development. This section is the rule index; checkboxes are tracked in `MANUAL_QA_V1.md` during QA.
 
 - [ ] Score formula examples from spec §2.1
 - [ ] Pass at Bronze; fail below
@@ -698,22 +723,19 @@ Store dismiss counts and policy in `gi_new_test_config` / `gi_new_test_notificat
 | D4 | Multi-select counting (valid/invalid/missed, global vs per-question score) | **Resolved** — spec §2.1.1; engineering §5.1.1 |
 | D5 | Plugin root `PROJECT_CONTEXT.md` vs spec-only docs | **Resolved:** lean root index + this plan + product spec (no duplicate column lists in root) |
 | D6 | How to store “correct” answer **options** (spec §8.3 prose) | **Resolved** — `gi_new_test_answers.is_correct`; `catalog()->answers` |
-| D7 | V1 UI technology | **Resolved:** **React** for dealer Tests + test-factory admin; plugin owns API/domain only; legacy jQuery modals not extended for new flows |
+| D7 | V1 UI technology | **Resolved:** **React** test-factory admin (§15–18); **vanilla JS** dealer Tests in `bp_contracts` (§19–21); plugin owns API/domain only |
 | D8 | `is_correct` on `gi_new_test_answers` | **Superseded** — adopted 2026-10-05 (explicit project decision); replaces junction-table experiment |
 | D9 | `gi_new_test_achievements` seed model vs rank **display** names | **Resolved** — medal rows Bronze/Silver/Gold/Lock in achievements; `rank_name_*` in `gi_new_test_config` (Seeder v3) |
 | D10 | `gi_new_test_notifications` row shape | **Open** — schema has `notification_type`; confirm one row per `(user, test, type)` vs single row per `(user, test)` |
 
-### 14.1 Before Phase 2 (gate)
+### 14.1 Current gates
 
 | Priority | Item | Blocks |
 |----------|------|--------|
-| **Soon** | **D10** — notification rows | `NotificationService` |
-| **Parallel** | **D2** — capabilities / roles | Admin + dealer menu visibility |
-| **Phase 3** | **D2** — admin vs dealer roles | Admin API + nav |
-| **Phase 4** | **D1** — WS names | `Chat.php` + React client |
+| **Phase 6** | **D10** — notification rows | `NotificationService` + dismiss UI |
+| **Parallel** | **D2** — dealer roles (document vs product) | Menu visibility / `startTest` policy |
+| **After Phase 7** | [MANUAL_QA_V1.md](./MANUAL_QA_V1.md) | Production deploy |
 | **Deferred** | **D3** — difficulty formula | Analytics UI only |
-
-**Not blocking Phase 2 start if documented:** `user_id` → `gi_new_users.id_user` resolver (implement in attempt services); retake = `retake_delay_days` with “1 = following day” (spec §2.6).
 
 ---
 
@@ -734,6 +756,8 @@ When code changes:
 | Document | Path |
 |----------|------|
 | Product specification | [Testing System — Project Documentation.md](./Testing%20System%20%E2%80%94%20Project%20Documentation.md) |
+| Manual QA (post-dev) | [MANUAL_QA_V1.md](./MANUAL_QA_V1.md) |
+| Phase 6 tasks | [PHASE_6_TASKS.md](./PHASE_6_TASKS.md) |
 | Site architecture | [public/PROJECT_CONTEXT.md](../../../../PROJECT_CONTEXT.md) |
 | Development rules | [public/DEVELOPMENT_RULES.md](../../../../DEVELOPMENT_RULES.md) |
 | Plugin index | [bp_knowledge_tests/PROJECT_CONTEXT.md](../PROJECT_CONTEXT.md) |

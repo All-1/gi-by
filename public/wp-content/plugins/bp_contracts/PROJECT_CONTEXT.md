@@ -76,7 +76,7 @@ Domain (scoring, DB, admin) lives in **[bp_knowledge_tests](../bp_knowledge_test
 | `Chat.php` handlers | Thin; call plugin services via Worker / `InteractionInterface` |
 | Chat author UI | Stars from plugin achievement query |
 
-**Phase 3 (admin):** [bp_knowledge_tests/spec/PHASE_3_TASKS.md](../bp_knowledge_tests/spec/PHASE_3_TASKS.md). **Phase 4 (WS):** complete — [PHASE_4_TASKS.md](../bp_knowledge_tests/spec/PHASE_4_TASKS.md). **Phase 5 (dealer UI):** [PHASE_5_TASKS.md](../bp_knowledge_tests/spec/PHASE_5_TASKS.md). **WS protocol:** [bp_knowledge_tests/spec/WS_PROTOCOL.md](../bp_knowledge_tests/spec/WS_PROTOCOL.md). Command index → [src/PROJECT_CONTEXT.md](./src/PROJECT_CONTEXT.md).
+**Phase 3 (admin):** [PHASE_3_TASKS.md](../bp_knowledge_tests/spec/PHASE_3_TASKS.md). **Phases 4–5 (WS + dealer JS):** development complete. **Phase 6 (notifications):** [PHASE_6_TASKS.md](../bp_knowledge_tests/spec/PHASE_6_TASKS.md). **Manual QA (after Phase 6–7):** [MANUAL_QA_V1.md](../bp_knowledge_tests/spec/MANUAL_QA_V1.md). **WS protocol:** [WS_PROTOCOL.md](../bp_knowledge_tests/spec/WS_PROTOCOL.md). Command index → [src/PROJECT_CONTEXT.md](./src/PROJECT_CONTEXT.md).
 
 **Hard rule:** No scoring, pass/fail, validity, or achievement rules in `bp_contracts` — session + presentation only.
 

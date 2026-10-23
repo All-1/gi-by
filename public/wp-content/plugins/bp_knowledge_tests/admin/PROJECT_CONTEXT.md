@@ -2,7 +2,7 @@
 
 **Test factory** React app (product spec §15–18): create tests, questions, correct options, settings, critical update, results, analytics.
 
-Dealer test-taking UI is **not** this package — it will mount from `bp_contracts` in Phase 5.
+Dealer test-taking UI is **not** this package — it lives in `bp_contracts` (`knowledge_tests.js`, Phase 5).
 
 **Parent:** [../PROJECT_CONTEXT.md](../PROJECT_CONTEXT.md)
 

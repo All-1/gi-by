@@ -12,7 +12,7 @@
 
 **Goal (exit criterion):** A dealer (or tester) can **start → answer questions → finish** a knowledge test **over WebSocket** on staging; unfinished state lives in **RAM** only; **finish** persists via `attempts()->complete->finish` with the Phase 2 payload contract. **No React product UI required** for exit (manual WS client or temporary harness is enough).
 
-**Progress (2026-10-21):** Phase **4** **complete** in repo (Waves **A–F**). Run **staging QA** checklist below before Phase **5** dealer UI release.
+**Progress (2026-10-23):** Phase **4** **development complete** in repo (Waves **A–F**). Staging operator steps → [MANUAL_QA_V1.md](./MANUAL_QA_V1.md) §2 (run after Phase **6–7**, not before Phase **6**).
 
 **Estimate:** ~1.5–2 weeks one developer (matches plan §11).
 
@@ -183,18 +183,11 @@ Plan §6 names `TestCatalogQuery`, `StartTestSession`, `SubmitQuestion` — add 
 
 ---
 
-## Wave F — Close Phase 4 — **complete** (repo); staging QA manual
+## Wave F — Close Phase 4 — **complete** (development)
 
 | Task | Notes |
 |------|--------|
-| Staging QA | **Operator checklist** (run on staging before Phase 5): |
-| | 1. `showTests` → row `displayStatus` / `canStart` sane for user with no attempts |
-| | 2. `startTest` → `TestQuestionOnPage`; answer wrong → feedback + explanation |
-| | 3. `submitTestQuestion` until complete → `finishTest` → `TestFinishedOnPage`; row in DB |
-| | 4. Reconnect WS (same process) → `startTest` same `testId` resumes question index |
-| | 5. `startTest` other `testId` while one in RAM → `test_in_progress` |
-| | 6. After WS restart: in-progress lost; `startTest` allowed per retake rules |
-| | 7. Failed finish → `getTestMaterials` / `confirmTestMaterialsExamined` |
+| Staging QA | Moved to [MANUAL_QA_V1.md](./MANUAL_QA_V1.md) §2 — execute after Phase **6–7** development |
 | Security | Commands use `knowledgeTestsUserId($idWebsocket)` — same as other PA WS; no `testId` without session on submit/finish |
 | Docs | `IMPLEMENTATION_PLAN.md` §3 + §11; `bp_contracts` + plugin PROJECT_CONTEXT synced |
 | WS deploy | Restart Ratchet/WS after deploy (DEVELOPMENT_RULES §4) |
@@ -219,7 +212,7 @@ E4 → E5 (retake + materials WS)
 F
 ```
 
-**Minimum before Phase 5 (dealer React):** **A**, **B**, **C**, **E1–E3**, **D** for `showTests` / `startTest` / `submitTestQuestion` / `finishTest`. Materials WS (**E5**) can ship with Phase 5 if list UI needs it — but retake after fail requires materials path before dealer QA.
+**Minimum before Phase 5 dealer UI (done):** **A**, **B**, **C**, **E1–E3**, **D** for `showTests` / `startTest` / `submitTestQuestion` / `finishTest`; materials WS (**E5**) for retake-after-fail.
 
 ---
 

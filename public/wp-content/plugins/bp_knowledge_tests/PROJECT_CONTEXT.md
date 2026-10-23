@@ -12,7 +12,7 @@ This WordPress plugin owns **business rules and persistence** (`gi_new_test_*`).
 | Tests menu, live session (RAM), WS commands, dealer UI, chat stars | **`bp_contracts`** (Phases 4–5) |
 | Test-factory admin UI (§15–18) | **React in this plugin** → [assets/admin/](./assets/PROJECT_CONTEXT.md) |
 
-**Delivery status:** Phases **1–5** implemented in repo (dealer UI vanilla JS). Run Phase **4** + **5** operator QA on staging before dealer release ([PHASE_4_TASKS.md](./spec/PHASE_4_TASKS.md) Wave F, [PHASE_5_TASKS.md](./spec/PHASE_5_TASKS.md) Wave G). WS: [WS protocol](./spec/WS_PROTOCOL.md), [`KnowledgeTestsWsWorker`](../bp_contracts/src/Workers/KnowledgeTestsWsWorker.php).
+**Delivery status:** Phases **1–5** **development complete** (dealer UI vanilla JS in `bp_contracts`). **Next:** Phase **6** notifications → Phase **7** hardening → consolidated staging QA ([MANUAL_QA_V1.md](./spec/MANUAL_QA_V1.md)). WS: [WS protocol](./spec/WS_PROTOCOL.md), [`KnowledgeTestsWsWorker`](../bp_contracts/src/Workers/KnowledgeTestsWsWorker.php).
 
 **Parent:** [Site PROJECT_CONTEXT.md](../../../PROJECT_CONTEXT.md)  
 **Shell integration:** [bp_contracts/PROJECT_CONTEXT.md](../bp_contracts/PROJECT_CONTEXT.md)
@@ -40,7 +40,7 @@ Each parent `PROJECT_CONTEXT.md` lists **only immediate subdirectories** that ha
 | **Engineering plan** | [IMPLEMENTATION_PLAN.md](./spec/IMPLEMENTATION_PLAN.md) | Phases, DB columns §5.0, QA checklist |
 | **WS protocol** | [WS_PROTOCOL.md](./spec/WS_PROTOCOL.md) | Locked titles + JSON (Phase 4) |
 | **This plugin (code)** | Nested `PROJECT_CONTEXT.md` under each folder | How the repo implements the plan |
-| **Tasks** | [PHASE_*_TASKS.md](./spec/PROJECT_CONTEXT.md) | Wave checklists per phase ([Phase 5](./spec/PHASE_5_TASKS.md)) |
+| **Tasks** | [PHASE_*_TASKS.md](./spec/PROJECT_CONTEXT.md) | Per-phase dev checklists; [MANUAL_QA_V1.md](./spec/MANUAL_QA_V1.md) after Phase 6–7 |
 
 **Rule:** Do not silently rewrite product spec §1. Code changes that affect behavior → update the **lowest** relevant `PROJECT_CONTEXT.md` and [CHANGELOG.md](../../../CHANGELOG.md) when significant.
 
@@ -57,7 +57,7 @@ flowchart TB
   end
   subgraph ui [UI]
     AdminReact[Test-factory React]
-    DealerReact[Dealer Tests React - Phase 5]
+    DealerJS[Dealer Tests JS - Phase 5]
   end
   subgraph transport [Realtime]
     WS[Ratchet WebSocket - Phase 4]
@@ -68,7 +68,7 @@ flowchart TB
   FW --> KT
   FW --> BC
   AdminReact -->|REST bp-knowledge-tests/v1| KT
-  DealerReact --> WS
+  DealerJS --> WS
   WS --> BC
   BC -->|thin calls| KT
   RAM --> BC
