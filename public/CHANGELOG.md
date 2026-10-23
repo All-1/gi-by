@@ -6,6 +6,17 @@ This document tracks changes to the project. Entry format is defined in **Cursor
 
 ## Log
 
+### [2026-10-23] Knowledge tests: Phase 6 notifications UX (WS + PA client)
+**Author**: AI Assistant
+**Logic**:
+- Product §3.1–§3.2 requires dismiss limits, then block or bottom bar; domain already persisted rows and retake blocks in Phase 2.
+- **D10:** one notification row per `(user_id, test_id, notification_type)` matches baseline DDL and `NotificationRepository`.
+**Changes**:
+- `bp_knowledge_tests`: `NotificationUiQuery`, `NotificationPresentation`; `attempts()->notificationUi`; pass attempt clears `new_test` row
+- `bp_contracts`: WS commands + `knowledge_test_notifications.js`; styles; enqueue with dealer nav
+- `WS_PROTOCOL.md`, `IMPLEMENTATION_PLAN.md` §11 Phase 6, `PHASE_6_TASKS.md`, `PROJECT_CONTEXT.md` files
+- `tests/run_notification_presentation_tests.php`: [NEW] presentation phase unit checks
+
 ### [2026-10-23] Knowledge tests: dev-first delivery — Phase 6 next, manual QA after Phase 7
 **Author**: AI Assistant
 **Logic**:

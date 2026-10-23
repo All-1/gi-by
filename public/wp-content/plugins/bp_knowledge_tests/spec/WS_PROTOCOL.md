@@ -28,6 +28,8 @@ Names match [IMPLEMENTATION_PLAN §4.5](./IMPLEMENTATION_PLAN.md#45-websocket-sp
 | `getTestMaterials` | `{ "testId": number }` | Load pending temporary materials for user/test |
 | `confirmTestMaterialsExamined` | `{ "testId": number, "attemptId": number }` | User pressed **Examined** — delete temp explanation rows |
 | `getKnowledgeTestChatStars` | `{ "userIds": number[] }` | Batch read latest-result stars per user for chat (§2.11) |
+| `getKnowledgeTestNotifications` | `{}` | Active notification UX items (Phase 6, §3.1–§3.2) |
+| `dismissKnowledgeTestNotification` | `{ "testId": number, "notificationType": "new_test" \| "failed_test" }` | Increment dismiss count; returns refreshed list |
 
 Empty body is allowed where all fields are optional (`showTests` with `{}`).
 
@@ -57,6 +59,8 @@ Convention: `communication_server.js` → `handler` + PascalCase(title).
 | `getTestMaterials` | `TestMaterialsOnPage` | |
 | `confirmTestMaterialsExamined` | `TestMaterialsOnPage` | Empty `items` after success |
 | `getKnowledgeTestChatStars` | `KnowledgeTestChatStarsOnPage` | `starsByUserId` map keyed by user id |
+| `getKnowledgeTestNotifications` | `KnowledgeTestNotificationsOnPage` | `items`, `accountBlocked` |
+| `dismissKnowledgeTestNotification` | `KnowledgeTestNotificationsOnPage` | Same shape as get |
 
 ### 2.1 Errors
 

@@ -80,6 +80,9 @@ function handlerTestFinishedOnPage(data, user) {
     return;
   }
   renderKnowledgeTestsFinished(data);
+  if (typeof requestKnowledgeTestNotifications === "function") {
+    requestKnowledgeTestNotifications();
+  }
 }
 
 function handlerTestMaterialsOnPage(data, user) {

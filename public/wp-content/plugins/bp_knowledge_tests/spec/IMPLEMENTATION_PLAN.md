@@ -7,7 +7,7 @@
 **Plugin context**: [PROJECT_CONTEXT.md](../PROJECT_CONTEXT.md) (directory index — details in nested `PROJECT_CONTEXT.md` files)  
 **Personal account integration**: [bp_contracts/PROJECT_CONTEXT.md](../../bp_contracts/PROJECT_CONTEXT.md)
 
-**Status (repository)**: Phases **1–5** **development complete** (admin React, WS + `TestController`, dealer **vanilla JS** in `bp_contracts`). Schema **v3**. **Next:** Phase **6** notifications UX → Phase **7** hardening → **[MANUAL_QA_V1.md](./MANUAL_QA_V1.md)** on staging before production.  
+**Status (repository)**: Phases **1–6** **development complete** (notifications UX + WS). Schema **v3**. **Next:** Phase **7** hardening → **[MANUAL_QA_V1.md](./MANUAL_QA_V1.md)** on staging before production.  
 **Delivery model (2026-10-23):** Finish **all V1 development** (Phases 6–7), then one **consolidated manual QA** pass — not a gate between Phase 5 and Phase 6. Keep CLI domain tests green during development.  
 **Phase 2 tasks:** [PHASE_2_TASKS.md](./PHASE_2_TASKS.md)  
 **Phase 3 tasks:** [PHASE_3_TASKS.md](./PHASE_3_TASKS.md) (admin)  
@@ -80,7 +80,6 @@ bp_knowledge_tests/
 
 **Not yet present (development):**
 
-- Phase **6** — notifications UX (popup / block / bottom bar)
 - Phase **7** — hardening (auth/WS validation, regression automation, deploy checklist prep)
 
 **Not yet run:** [MANUAL_QA_V1.md](./MANUAL_QA_V1.md) — after Phases **6–7** dev complete.
@@ -659,9 +658,9 @@ MANUAL_QA   →  [MANUAL_QA_V1.md](./MANUAL_QA_V1.md) on staging (single gate be
 
 **Task breakdown:** [PHASE_6_TASKS.md](./PHASE_6_TASKS.md) (waves A–D, **D10**).
 
-- [ ] Popup / block / bottom bar from config (§3.1, §3.2)
-- [ ] Integration with existing notification stack (`Notification:::`, `NotificationWorker`) where applicable
-- [ ] Resolve **D10** notification row shape
+- [x] Popup / block / bottom bar from config (§3.1, §3.2) — `NotificationUiQuery` + `knowledge_test_notifications.js`
+- [x] WS `getKnowledgeTestNotifications` / `dismissKnowledgeTestNotification` (dedicated channel; not `Notification:::` chat payloads)
+- [x] **D10** — one row per `(user, test, notification_type)`
 
 **Exit (development):** Notification UX implemented; §4 scenarios in [MANUAL_QA_V1.md](./MANUAL_QA_V1.md) ready to execute.
 
@@ -726,13 +725,13 @@ MANUAL_QA   →  [MANUAL_QA_V1.md](./MANUAL_QA_V1.md) on staging (single gate be
 | D7 | V1 UI technology | **Resolved:** **React** test-factory admin (§15–18); **vanilla JS** dealer Tests in `bp_contracts` (§19–21); plugin owns API/domain only |
 | D8 | `is_correct` on `gi_new_test_answers` | **Superseded** — adopted 2026-10-05 (explicit project decision); replaces junction-table experiment |
 | D9 | `gi_new_test_achievements` seed model vs rank **display** names | **Resolved** — medal rows Bronze/Silver/Gold/Lock in achievements; `rank_name_*` in `gi_new_test_config` (Seeder v3) |
-| D10 | `gi_new_test_notifications` row shape | **Open** — schema has `notification_type`; confirm one row per `(user, test, type)` vs single row per `(user, test)` |
+| D10 | `gi_new_test_notifications` row shape | **Resolved** — `UNIQUE (user_id, test_id, notification_type)`; types `new_test` \| `failed_test` |
 
 ### 14.1 Current gates
 
 | Priority | Item | Blocks |
 |----------|------|--------|
-| **Phase 6** | **D10** — notification rows | `NotificationService` + dismiss UI |
+| **Phase 7** | Hardening + deploy checklist | Production |
 | **Parallel** | **D2** — dealer roles (document vs product) | Menu visibility / `startTest` policy |
 | **After Phase 7** | [MANUAL_QA_V1.md](./MANUAL_QA_V1.md) | Production deploy |
 | **Deferred** | **D3** — difficulty formula | Analytics UI only |

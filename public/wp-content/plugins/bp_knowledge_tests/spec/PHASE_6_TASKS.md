@@ -62,8 +62,8 @@
 
 ## Task checklist (copy for PRs)
 
-- [ ] A D10 decided + documented
-- [ ] A Read/dismiss API at plugin boundary
-- [ ] B New-test popup / block / bottom bar
-- [ ] C Failed-test bottom notification + materials link
-- [ ] D Docs + MANUAL_QA §4 steps
+- [x] A D10 decided + documented
+- [x] A Read/dismiss API at plugin boundary (`NotificationUiQuery`, WS)
+- [x] B New-test popup / block / bottom bar
+- [x] C Failed-test bottom notification + materials link
+- [ ] D Docs + MANUAL_QA §4 steps (concrete operator steps — fill during QA prep)

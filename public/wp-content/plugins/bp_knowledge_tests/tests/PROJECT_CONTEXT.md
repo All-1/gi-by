@@ -35,6 +35,7 @@ Run all critical scripts before merging changes to `Domain/` or `Services/Attemp
 | `run_retake_eligibility_tests.php` | Delay, materials, lock, notification |
 | `run_validity_tests.php` | One-year outdated |
 | `run_notification_retake_tests.php` | Retake blocked by notification policy |
+| `run_notification_presentation_tests.php` | Popup vs block vs bottom presentation resolver |
 | `run_attempt_question_materials_tests.php` | Material rows only for mistake questions |
 | `run_attempt_validity_label_tests.php` | Admin results validity column |
 | `run_complete_attempt_tests.php` | Full `CompleteAttempt` integration |

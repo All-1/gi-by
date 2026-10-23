@@ -351,6 +351,20 @@ class Chat implements MessageComponentInterface
     $from->send('TestMaterialsOnPage::: ' . json_encode($payload));
   }
 
+  private function getKnowledgeTestNotifications($from, $body)
+  {
+    $idWebsocket = $this->findCurrentConnection($from);
+    $payload = $this->interactionInterface->getKnowledgeTestNotificationsWS($idWebsocket, $body);
+    $from->send('KnowledgeTestNotificationsOnPage::: ' . json_encode($payload));
+  }
+
+  private function dismissKnowledgeTestNotification($from, $body)
+  {
+    $idWebsocket = $this->findCurrentConnection($from);
+    $payload = $this->interactionInterface->dismissKnowledgeTestNotificationWS($idWebsocket, $body);
+    $from->send('KnowledgeTestNotificationsOnPage::: ' . json_encode($payload));
+  }
+
   private function showOrders($from)
   {
     $idWebsocket = $this->findCurrentConnection($from);
@@ -858,6 +872,12 @@ class Chat implements MessageComponentInterface
         break;
       case "getKnowledgeTestChatStars":
         $this->getKnowledgeTestChatStars($from, $body);
+        break;
+      case "getKnowledgeTestNotifications":
+        $this->getKnowledgeTestNotifications($from, $body);
+        break;
+      case "dismissKnowledgeTestNotification":
+        $this->dismissKnowledgeTestNotification($from, $body);
         break;
      
     }
