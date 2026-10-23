@@ -27,6 +27,7 @@ Names match [IMPLEMENTATION_PLAN §4.5](./IMPLEMENTATION_PLAN.md#45-websocket-sp
 | `abandonTest` | `{ "testId": number }` | Drop in-memory session without persisting |
 | `getTestMaterials` | `{ "testId": number }` | Load pending temporary materials for user/test |
 | `confirmTestMaterialsExamined` | `{ "testId": number, "attemptId": number }` | User pressed **Examined** — delete temp explanation rows |
+| `getKnowledgeTestChatStars` | `{ "userIds": number[] }` | Batch read latest-result stars per user for chat (§2.11) |
 
 Empty body is allowed where all fields are optional (`showTests` with `{}`).
 
@@ -38,6 +39,7 @@ Empty body is allowed where all fields are optional (`showTests` with `{}`).
 | `TestQuestionOnPage` | `handlerTestQuestionOnPage` |
 | `TestFinishedOnPage` | `handlerTestFinishedOnPage` |
 | `TestMaterialsOnPage` | `handlerTestMaterialsOnPage` |
+| `KnowledgeTestChatStarsOnPage` | `handlerKnowledgeTestChatStarsOnPage` |
 
 Convention: `communication_server.js` → `handler` + PascalCase(title).
 
@@ -54,6 +56,7 @@ Convention: `communication_server.js` → `handler` + PascalCase(title).
 | `abandonTest` | `TestsOnPage` | Refreshed list; session cleared |
 | `getTestMaterials` | `TestMaterialsOnPage` | |
 | `confirmTestMaterialsExamined` | `TestMaterialsOnPage` | Empty `items` after success |
+| `getKnowledgeTestChatStars` | `KnowledgeTestChatStarsOnPage` | `starsByUserId` map keyed by user id |
 
 ### 2.1 Errors
 
@@ -150,6 +153,8 @@ Plugin retake reasons use constants in `BpKnowledgeTests\Domain\RetakeEligibilit
 - **`feedback`:** Present after `submitTestQuestion` when the user may proceed (§20.1). Omitted on cold `startTest` until first submit.
 - **`sessionComplete`:** `true` when all questions have submitted counts; client still calls `finishTest` to persist.
 
+**Client flow (Phase 5 Wave D):** First **Далее** → `submitTestQuestion`. While `feedback` is present, show explanation and use **Следующий вопрос** → `startTest` (resume session, next question). On last question after feedback, **Завершить тест** → `finishTest`. Do not call `submitTestQuestion` twice for the same question.
+
 ### 3.3 `TestFinishedOnPage`
 
 ```json
@@ -192,6 +197,28 @@ Maps to `AttemptRecord` + achievement side effects from `CompleteAttempt::finish
 ```
 
 After **`confirmTestMaterialsExamined`**, success returns `"items": []` (rows deleted per spec §10.2).
+
+### 3.3 `KnowledgeTestChatStarsOnPage` (chat §2.11)
+
+```json
+{
+  "ok": true,
+  "starsByUserId": {
+    "42": [
+      {
+        "testId": 1,
+        "medalId": 3,
+        "achievementArea": "Продажи",
+        "tierValue": "gold",
+        "rankName": "Guru",
+        "testTitle": "Базовый тест"
+      }
+    ]
+  }
+}
+```
+
+One star entry per test the user has a **latest-result** row in `gi_new_test_user_achievements`. Client: `knowledge_test_chat_stars.js` + `modal_window.js` author line.
 
 ---
 

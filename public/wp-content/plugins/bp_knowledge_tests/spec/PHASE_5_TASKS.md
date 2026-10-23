@@ -24,8 +24,8 @@
 | WS commands + payloads (`showTests`, `startTest`, `submitTestQuestion`, `finishTest`, materials) | **D2** — which `gi_new_users` / PA roles see **Tests** and may start attempts |
 | Client handler names registered (`handlerTestsOnPage`, …) | **Nav link** — WP menu entry to `knowledge_tests()` page |
 | `displayStatus`, `canStart`, `canOpenMaterials`, pagination | **`medalId`** on list/finish still `null` in gateway |
-| Admin-authored catalog on staging | **`medalId` on list/finish** — gateway currently returns `null`; needs plugin read (user achievement per test) before UI can show medals |
-| Phase 4 staging QA checklist | **Achievement hover tooltips** (§2.11) — may need small REST or WS read batch for chat |
+| Admin-authored catalog on staging | Phase 4 staging QA checklist (operator) |
+| `medalId` + chat stars WS | Plugin read via gateway + `getKnowledgeTestChatStars` |
 
 **Verdict:** Start with **Wave A** (decisions + scaffold), then **Wave C–D** (list + in-test) in parallel once mount and WS bridge exist.
 
@@ -41,7 +41,7 @@
 | RAM session | `TestController` — shuffle, progress, `test_in_progress` guard |
 | Domain finish | `CompleteAttempt`, materials rows, retake evaluation |
 
-**Gap:** Nav menu link, polish/QA, stars (§2.11), failed-nav class wiring, `medalId`, resume UX edge cases.
+**Gap:** Operator dealer QA on staging; optional medal tier labels in list (ids shown today).
 
 ---
 
@@ -84,7 +84,7 @@ Dealer UI follows `js/PROJECT_CONTEXT.md`: no bundler; `utility.js` helpers + `s
 
 ---
 
-## Wave B — WS + DOM polish — **in progress** (B3 `medalId` open)
+## Wave B — WS + DOM polish — **complete** (repo)
 
 ### B1. Handler wiring — **done (scaffold)**
 
@@ -148,7 +148,7 @@ Per row from WS:
 
 ---
 
-## Wave D — In-test flow (§20) — **not started**
+## Wave D — In-test flow (§20) — **complete** (repo)
 
 ### D1. Layout
 
@@ -177,7 +177,7 @@ Per row from WS:
 
 ---
 
-## Wave E — Materials UI (§21) — **not started**
+## Wave E — Materials UI (§21) — **complete** (repo)
 
 - Open from list **Materials** or post-finish prompt.
 - Show all items from `TestMaterialsOnPage` (question, explanation, reference).
@@ -187,7 +187,7 @@ Per row from WS:
 
 ---
 
-## Wave F — Stars in chat (§2.11) — **not started**
+## Wave F — Stars in chat (§2.11) — **complete** (repo)
 
 - Display **latest completed** medal per test/area next to user name in messages (not best historical).
 - Multiple stars per user when multiple tests/areas apply.
@@ -198,7 +198,7 @@ Per row from WS:
 
 ---
 
-## Wave G — Close Phase 5 — **not started**
+## Wave G — Close Phase 5 — **in progress** (docs + operator QA)
 
 | Task | Notes |
 |------|--------|
@@ -261,11 +261,11 @@ Log significant UI or protocol choices in [CHANGELOG.md](../../../../CHANGELOG.m
 - [x] A3 Open-in-place overlay (`modal_window_contracts`)
 - [x] B1 WS handlers → DOM (scaffold)
 - [x] B2 Outbound commands in `knowledge_tests.js`
-- [ ] B3 `medalId` (and finish medal) from plugin
+- [x] B3 `medalId` (and finish medal) from plugin
 - [x] C1 Tests nav + page shell (`/tests/`, `[knowledge_tests]`, theme menu)
 - [x] C2 Row UI per §19.1 (RU labels, area, medal column placeholder, disabled actions)
 - [x] C3 Pagination + `navFailedHighlight` for §3.2 nav
-- [ ] D1–D4 In-test + finish + resume/errors
-- [ ] E Materials + Examined
-- [ ] F Chat stars §2.11
-- [ ] G Dealer QA + doc sync
+- [x] D1–D4 In-test + finish + resume/errors (two-step feedback; `startTest` advance; WS reconnect banner)
+- [x] E Materials + Examined
+- [x] F Chat stars §2.11
+- [ ] G Dealer QA on staging + final sign-off

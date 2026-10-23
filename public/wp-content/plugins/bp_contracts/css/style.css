@@ -2281,6 +2281,32 @@ body.admin-bar .table-points .points-header-wrapper.fixed-header-table {
   cursor: not-allowed;
 }
 
+.knowledge_tests_answer_row--right {
+  color: #2e7d32;
+}
+
+.knowledge_tests_answer_row--wrong {
+  color: #c62828;
+}
+
+.knowledge_tests_feedback_ok {
+  color: #2e7d32;
+}
+
+.knowledge_tests_overlay_actions {
+  margin-top: 16px;
+}
+
+.knowledge_tests_disconnect_banner {
+  background: #fff3e0;
+  color: #e65100;
+  padding: 10px 16px;
+  margin: 0;
+  border-bottom: 1px solid #ffcc80;
+  font-size: 13px;
+  line-height: 1.4;
+}
+
 .knowledge_tests_action_btn {
   margin-right: 8px;
   cursor: pointer;
@@ -2312,4 +2338,48 @@ body.admin-bar .table-points .points-header-wrapper.fixed-header-table {
 .account_navigation a.bp-ktd-nav--failed {
   color: #c62828;
   font-weight: 600;
+}
+
+.knowledge_tests_material_block {
+  margin-bottom: 20px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid #eee;
+}
+
+.knowledge_tests_material_reviewed {
+  display: block;
+  margin-top: 8px;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.knowledge_test_chat_stars {
+  margin-left: 6px;
+  white-space: nowrap;
+}
+
+.knowledge_test_chat_star {
+  font-size: 14px;
+  margin-left: 2px;
+  opacity: 0.35;
+}
+
+.knowledge_test_chat_star--bronze {
+  color: #8d6e63;
+  opacity: 1;
+}
+
+.knowledge_test_chat_star--silver {
+  color: #757575;
+  opacity: 1;
+}
+
+.knowledge_test_chat_star--gold {
+  color: #f9a825;
+  opacity: 1;
+}
+
+.knowledge_test_chat_star--lock {
+  color: #5e35b1;
+  opacity: 1;
 }

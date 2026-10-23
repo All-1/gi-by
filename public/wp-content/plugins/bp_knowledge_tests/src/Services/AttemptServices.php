@@ -29,6 +29,7 @@ use PersonalAccount\Core\Container;
 final class AttemptServices
 {
     private AttemptRepository $attemptRepository;
+    private UserAchievementRepository $userAchievementRepository;
 
     public readonly MaterialsService $materials;
     public readonly AttemptAchievementService $achievements;
@@ -55,6 +56,7 @@ final class AttemptServices
         $explanationRepository = new FinishedExplanationRepository($db, $dbUtilities, $mapper);
         $achievementRepository = new AchievementRepository($db);
         $userAchievementRepository = new UserAchievementRepository($db, $dbUtilities);
+        $this->userAchievementRepository = $userAchievementRepository;
         $testRepository = new TestRepository($db, $dbUtilities, $clock, $mapper);
 
         $this->materials = new MaterialsService(
@@ -69,6 +71,7 @@ final class AttemptServices
             $achievementRepository,
             $userAchievementRepository,
             $attemptRepository,
+            $catalog,
         );
 
         $this->notifications = new NotificationRepository($db, $dbUtilities, $mapper);
@@ -114,5 +117,10 @@ final class AttemptServices
     public function findLatestAttempt(int $userId, int $testId): ?AttemptRecord
     {
         return $this->attemptRepository->findLatestByUserAndTest($userId, $testId);
+    }
+
+    public function findMedalIdForUserAndTest(int $userId, int $testId): ?int
+    {
+        return $this->userAchievementRepository->findMedalIdForUserAndTest($userId, $testId);
     }
 }

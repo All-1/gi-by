@@ -6,6 +6,49 @@ This document tracks changes to the project. Entry format is defined in **Cursor
 
 ## Log
 
+### [2026-10-23] Knowledge tests: Phase 5 B3/E/F — medals, materials, chat stars
+**Author**: AI Assistant
+**Logic**:
+- List/finish medals and chat stars need plugin reads without duplicating scoring rules in `bp_contracts`.
+- Materials flow requires per-reference acknowledgment before **Изучено**; empty `items` after confirm closes overlay and refreshes list.
+**Changes**:
+- `bp_knowledge_tests`: `UserAchievementRepository` / `AchievementRepository` read helpers; `AttemptAchievementService` medal + chat star batch
+- `KnowledgeTestsWsWorker`: `medalId` on list/finish; `chatStarsForUsers`
+- `Chat.php` / `InteractionInterface`: `getKnowledgeTestChatStars` → `KnowledgeTestChatStarsOnPage`
+- `bp_contracts/js/knowledge_test_chat_stars.js`: [NEW] batch fetch + author line stars
+- `knowledge_tests.js`: materials reviewed checkboxes; overlay focus + Escape
+- `modal_window.js`: request stars on dialog load; append to `.author_message`
+- `style.css`: material blocks + chat star tier colors
+- `WS_PROTOCOL.md`, `PHASE_5_TASKS.md`, `IMPLEMENTATION_PLAN.md` §11, plugin + contracts `PROJECT_CONTEXT.md`
+
+### [2026-10-23] bp_contracts: onWebSocketSessionReady in communication_server (no openConnection patch)
+**Author**: AI Assistant
+**Logic**:
+- The PA client has one `socket`; session bootstrap belongs in the connection owner, not monkey-patched wrappers.
+**Changes**:
+- `communication_server.js`: `onWebSocketSessionReady` / `onWebSocketSessionClosed` (`setDefaultState`, optional knowledge-tests globals)
+- Removed `ws_open_extensions.js`
+- `DEVELOPMENT_RULES.md` §2.5, `js/PROJECT_CONTEXT.md`: socket ownership and hook contract
+
+### [2026-10-23] DEVELOPMENT_RULES: avoid editing communication_server.js
+**Author**: AI Assistant
+**Logic**:
+- Shared WS bootstrap is high-risk; feature hooks belong in page/feature scripts unless there is no practical alternative.
+**Changes**:
+- `DEVELOPMENT_RULES.md` §2.5: `communication_server.js` stability rule (v2.6)
+- Reverted knowledge-tests hooks from `communication_server.js`; bridge lives in `knowledge_tests_nav.js`
+- `bp_contracts/js/PROJECT_CONTEXT.md`: pointer to §2.5
+
+### [2026-10-23] Knowledge tests: Phase 5 Wave D — in-test flow (§20)
+**Author**: AI Assistant
+**Logic**:
+- Spec requires immediate feedback, then explicit continue before the next question; RAM session advances on submit, so the client resumes via `startTest` for the next step.
+**Changes**:
+- `bp_contracts/js/knowledge_tests.js`: two-step answer/feedback UI, finish + materials CTA, reconnect hooks
+- `bp_contracts/js/knowledge_tests_nav.js`: WS bridge for nav + in-test reconnect (no `communication_server.js` hooks)
+- `bp_contracts/css/style.css`: answer feedback + disconnect banner styles
+- `WS_PROTOCOL.md`, `PHASE_5_TASKS.md`: Wave D client flow documented
+
 ### [2026-10-22] Knowledge tests: Phase 5 Wave C — Tests list nav and UI
 **Author**: AI Assistant
 **Logic**:

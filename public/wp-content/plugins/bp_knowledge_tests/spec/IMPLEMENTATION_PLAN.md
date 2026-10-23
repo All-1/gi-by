@@ -11,7 +11,7 @@
 **Phase 2 tasks:** [PHASE_2_TASKS.md](./PHASE_2_TASKS.md)  
 **Phase 3 tasks:** [PHASE_3_TASKS.md](./PHASE_3_TASKS.md) (admin)  
 **Phase 4 tasks:** [PHASE_4_TASKS.md](./PHASE_4_TASKS.md) (WS)  
-**Phase 5 tasks:** [PHASE_5_TASKS.md](./PHASE_5_TASKS.md) (dealer React)  
+**Phase 5 tasks:** [PHASE_5_TASKS.md](./PHASE_5_TASKS.md) (dealer vanilla JS in `bp_contracts`)  
 **Last updated**: 2026-10-21
 
 ---
@@ -623,17 +623,17 @@ Store dismiss counts and policy in `gi_new_test_config` / `gi_new_test_notificat
 
 **Exit:** End-to-end test over WS on staging (operator checklist in Phase 4 Wave F).
 
-### Phase 5 — User-facing UI (React) (2 weeks)
+### Phase 5 — User-facing UI (vanilla JS) (2 weeks)
 
 **Task breakdown:** [PHASE_5_TASKS.md](./PHASE_5_TASKS.md) (waves A–G, checklist, D2).
 
-- [ ] React Tests list + pagination (§19)
-- [ ] In-test flow (one question, counter, Continue) via WS payloads (§20)
-- [ ] Materials UI (§21)
-- [ ] Stars beside names in chat (§2.11)
-- [ ] Failed Tests nav styling (§3.2)
+- [x] Tests list + pagination (§19) — `knowledge_tests.js` + `/tests/` page
+- [x] In-test flow (§20) — overlay + WS two-step feedback
+- [x] Materials UI (§21) — reviewed checkboxes + **Изучено**
+- [x] Stars beside names in chat (§2.11) — `getKnowledgeTestChatStars`
+- [x] Failed Tests nav styling (§3.2) — `navFailedHighlight` + `.bp-ktd-nav--failed`
 
-**Exit:** Full dealer journey QA in React.
+**Exit:** Operator dealer journey QA on staging ([PHASE_5_TASKS.md](./PHASE_5_TASKS.md) Wave G).
 
 ### Phase 6 — Notifications UX (React + shared WS) (1 week)
 

@@ -4,8 +4,10 @@
 Each WordPress shortcode in `index.php` enqueues a **page-specific script** plus shared `communication_server.js`. There is no bundler: globals (`where`, `socket`, `lastSN`, `handler*` functions) coordinate UI and WebSocket I/O.
 
 ## 1. Core: `communication_server.js`
+- **Ownership**: Single global **`socket`** and connect/reconnect — see [DEVELOPMENT_RULES.md](../../../../DEVELOPMENT_RULES.md) §2.5. Do not patch `openConnection` from other scripts.
 - **Connection**: `WebSocket` to `ws://127.0.0.1:8080` (or production `wss://…`).
-- **Bootstrap**: On open → `idUser::: ` + `setDefaultState(where)` + `reloadDataForWindow`.
+- **On open**: `idUser::: ` → `inicializationWebsocket(socket)` → `reloadDataForWindow` → **`onWebSocketSessionReady()`** (`setDefaultState(where)`, optional feature callbacks).
+- **On close**: **`onWebSocketSessionClosed()`** (e.g. knowledge-tests overlay banner) before reconnect heartbeat.
 - **Heartbeat / reconnect**: `startHeartbeat`, visibility-aware `intervalReconnect`.
 - **Inbound routing**:
   - `paramForClient` → builds `mainUser` (`user.js`).
@@ -38,8 +40,9 @@ Example: server sends `AnalyticsOnPage::: {...}` → `handlerAnalyticsOnPage` in
 | `points.js` / `points_dev.js` | `points_manager_new` / `points_dev` |
 | `invoice_print.js` | Invoice PDF client render |
 | `integer_to_words.js` | Amount wording for documents |
-| `knowledge_tests.js` | `knowledge_tests` shortcode page — `where`, list + overlay UI, WS handlers (like `orders.js`) |
-| `knowledge_tests_nav.js` | Enqueued via `addJsLinks()` when dealer Tests cap — `navFailedHighlight` + minimal `handlerTestsOnPage` on non-Tests PA pages |
+| `knowledge_tests.js` | `knowledge_tests` shortcode page — `where`, list + overlay UI, WS handlers (like `orders.js`). In-test: `submitTestQuestion` → feedback → `startTest` (next) or `finishTest` (last) |
+| `knowledge_tests_nav.js` | When dealer Tests cap — `requestKnowledgeTestsNavHighlight`, minimal `handlerTestsOnPage`; reconnect via `onKnowledgeTestsWebSocketOpen` / `Close` (called from `communication_server.js`) |
+| `knowledge_test_chat_stars.js` | `getKnowledgeTestChatStars` batch on dialog load; `modal_window.js` appends stars to `.author_message` |
 
 ### `analytics.js` (summary)
 - Global `where = 'analytics'`; on load → `showAnalytics` via `sendShowWhere`.

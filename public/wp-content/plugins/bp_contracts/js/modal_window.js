@@ -82,6 +82,11 @@ function contractForWindow(data, user) {
             message.serialNumber = parseInt(message.serialNumber, 10);
             message.idParticipant = dialog.idParticipant;
             message.didntReadMessages = didntReadMessages;
+          });
+          if (typeof requestKnowledgeTestChatStars === 'function') {
+            requestKnowledgeTestChatStars(collectDialogAuthorIds(dialog.messages));
+          }
+          dialog.messages.forEach(message => {
             showTopic(message, findOnPageWindow, user, dialog.messages);
           });
           controlPrevMessage(dialog.messages, findOnPageWindow, flagSecondMessageDialog);
@@ -1334,6 +1339,9 @@ function createHeaderMessage(data, dataFlaged, didntRead, participants) {
   let messageAuthor = createTagHtml('span', 'author_message', data.firstNameAuthor + ' ' + data.lastNameAuthor);
   if (!dataFlaged.flagAuthor) {
     messageAuthor.classList.add('author_message_manager');
+  }
+  if (typeof appendKnowledgeTestStarsToAuthor === 'function' && data.idAuthor) {
+    appendKnowledgeTestStarsToAuthor(messageAuthor, data.idAuthor);
   }
   let redditBullShit = createTagHtml('div', 'reddit-bulshit', '•');
   let messageDate = createTagHtml('span', 'date_message', getTimeAgo(data.dateSendTimestamp));

@@ -57,6 +57,10 @@ function addJsLinks()
 		<script type="text/javascript"
 			src="/wp-content/plugins/bp_contracts/js/knowledge_tests_nav.js<?php echo $version; ?>"></script>
 	<?php } ?>
+	<?php if (function_exists('bp_knowledge_tests_plugin')) { ?>
+		<script type="text/javascript"
+			src="/wp-content/plugins/bp_contracts/js/knowledge_test_chat_stars.js<?php echo $version; ?>"></script>
+	<?php } ?>
 	<?php
 }
 function invoiceJsFunctionals()

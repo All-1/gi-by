@@ -829,6 +829,14 @@ class InteractionInterface
     );
   }
 
+  public function knowledgeTestChatStarsWS($idWebsocket, $bodyJson)
+  {
+    return $this->knowledgeTestsWsWorker->chatStarsForUsers(
+      $this->knowledgeTestsUserId($idWebsocket),
+      $this->knowledgeTestsBody($bodyJson),
+    );
+  }
+
   private function knowledgeTestsUserId($idWebsocket)
   {
     return (int) $this->userControler->getUserIdByIdWebsocket($idWebsocket);

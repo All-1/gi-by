@@ -129,9 +129,31 @@ class KnowledgeTestsWsWorker
     return [
       'ok' => true,
       'attempt' => $this->attemptPayload($attempt),
-      'medalId' => null,
+      'medalId' => $this->plugin()->attempts()->findMedalIdForUserAndTest($userId, $testId),
       'materialsRequired' => $attempt->isFailed()
         && $this->plugin()->attempts()->materials->hasPendingMaterials($userId, $testId),
+    ];
+  }
+
+  /** @param array<string, mixed> $body */
+  public function chatStarsForUsers(int $requestingUserId, array $body): array
+  {
+    if (!$this->sessionWorker->isPluginAvailable()) {
+      return $this->error('validation', ['plugin_unavailable']);
+    }
+    $raw = $body['userIds'] ?? [];
+    if (!is_array($raw)) {
+      return $this->error('validation', ['validation']);
+    }
+    $userIds = array_values(array_unique(array_map('intval', $raw)));
+    $userIds = array_values(array_filter($userIds, static fn (int $id): bool => $id > 0));
+    if ($userIds === []) {
+      return ['ok' => true, 'starsByUserId' => []];
+    }
+
+    return [
+      'ok' => true,
+      'starsByUserId' => $this->plugin()->attempts()->achievements->chatStarsForUserIds($userIds),
     ];
   }
 
@@ -149,7 +171,25 @@ class KnowledgeTestsWsWorker
   /** @param array<string, mixed> $body */
   public function getTestMaterials(int $userId, array $body): array
   {
-    return $this->materialsPage($userId, $body);
+    $testId = $this->requiredTestId($body);
+    if ($testId === null || !$this->sessionWorker->isPluginAvailable()) {
+      return $this->error('validation', ['validation']);
+    }
+
+    $plugin = $this->plugin();
+    $items = $plugin->attempts()->materials->listPendingForUserAndTest($userId, $testId);
+    $attemptId = isset($items[0]) ? $items[0]->attemptId : 0;
+    $mapped = [];
+    foreach ($items as $row) {
+      $mapped[] = $this->materialItem($row, $plugin);
+    }
+
+    return [
+      'ok' => true,
+      'testId' => $testId,
+      'attemptId' => $attemptId,
+      'items' => $mapped,
+    ];
   }
 
   /** @param array<string, mixed> $body */
@@ -163,7 +203,7 @@ class KnowledgeTestsWsWorker
 
     $this->plugin()->attempts()->materials->confirmExamined($userId, $attemptId);
 
-    return $this->materialsPage($userId, ['testId' => $testId]);
+    return $this->getTestMaterials($userId, ['testId' => $testId]);
   }
 
   /** @return array<string, mixed>|null */
@@ -231,7 +271,7 @@ class KnowledgeTestsWsWorker
       'title' => $test->title,
       'displayStatus' => $displayStatus,
       'score' => $latest?->score,
-      'medalId' => null,
+      'medalId' => $this->plugin()->attempts()->findMedalIdForUserAndTest($userId, $testId),
       'canStart' => $this->canStartTest($userId, $testId, $retake),
       'canOpenMaterials' => $this->plugin()->attempts()->materials->hasPendingMaterials($userId, $testId),
       'achievementArea' => $test->achievementArea,
@@ -276,30 +316,6 @@ class KnowledgeTestsWsWorker
     }
 
     return $payload;
-  }
-
-  /** @param array<string, mixed> $body */
-  private function materialsPage(int $userId, array $body): array
-  {
-    $testId = $this->requiredTestId($body);
-    if ($testId === null || !$this->sessionWorker->isPluginAvailable()) {
-      return $this->error('validation', ['validation']);
-    }
-
-    $plugin = $this->plugin();
-    $items = $plugin->attempts()->materials->listPendingForUserAndTest($userId, $testId);
-    $attemptId = isset($items[0]) ? $items[0]->attemptId : 0;
-    $mapped = [];
-    foreach ($items as $row) {
-      $mapped[] = $this->materialItem($row, $plugin);
-    }
-
-    return [
-      'ok' => true,
-      'testId' => $testId,
-      'attemptId' => $attemptId,
-      'items' => $mapped,
-    ];
   }
 
   /** @param list<int> $shuffledAnswerIds */
