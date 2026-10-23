@@ -107,9 +107,12 @@ Plugin retake reasons use constants in `BpKnowledgeTests\Domain\RetakeEligibilit
     "page": 1,
     "perPage": 20,
     "total": 3
-  }
+  },
+  "navFailedHighlight": false
 }
 ```
+
+**`navFailedHighlight`:** `true` when the user has at least one test with `displayStatus` `failed` (§3.2 menu styling; computed over full catalog, not only the current page).
 
 **`displayStatus`** (spec §2.14): `not_started` | `in_progress` | `failed` | `passed` | `outdated`.
 

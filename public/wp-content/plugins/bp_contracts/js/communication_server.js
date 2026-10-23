@@ -70,6 +70,9 @@ function openConnection(server) {
         if (typeof setDefaultState !== 'undefined') {
           setDefaultState(where);
         }
+        if (typeof requestKnowledgeTestsNavHighlight === 'function') {
+          requestKnowledgeTestsNavHighlight();
+        }
         inicializationWebsocket(socket);
         if (typeof where !== 'undefined') {
           reloadDataForWindow(where, lastSN);

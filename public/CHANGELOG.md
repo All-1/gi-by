@@ -6,6 +6,19 @@ This document tracks changes to the project. Entry format is defined in **Cursor
 
 ## Log
 
+### [2026-10-22] Knowledge tests: Phase 5 Wave C — Tests list nav and UI
+**Author**: AI Assistant
+**Logic**:
+- Dealers need a **Tests** menu entry, §19 list rows, pagination, and §3.2 failed-state nav styling driven from WS list payload.
+**Changes**:
+- `wp-diary/myaccount-page.php`: **Тесты** nav (`/tests/`) when `DealerTestsCapability` allows
+- `lang-admin.php`: `m_knowledge_tests`
+- `bp_contracts/js/knowledge_tests.js`: RU list UI, medal column placeholder, disabled actions, nav sync
+- `bp_contracts/js/knowledge_tests_nav.js`: [NEW] nav highlight on other PA pages
+- `bp_contracts/js/utility.js`, `communication_server.js`: `updateKnowledgeTestsNavFromList`, WS bootstrap
+- `KnowledgeTestsWsWorker.php`: `navFailedHighlight` on `TestsOnPage`
+- `WS_PROTOCOL.md`, `PHASE_5_TASKS.md`: Wave C status
+
 ### [2026-10-22] Knowledge tests: dealer page markup in bp_contracts
 **Author**: AI Assistant
 **Logic**:

@@ -14,6 +14,8 @@
  * @subpackage WP Diary
  * @since 1.0.0
  */
+global $wpdb;
+global $lang_adm;
 $current_user_id = get_current_user_id();
 $check_user_blocked = "SELECT status_activity FROM gi_new_users WHERE id_user = '$current_user_id'";
 $result_user_blocked = $wpdb->get_var($check_user_blocked);
@@ -103,6 +105,14 @@ get_header(); ?>
 
 				$analytics = "<a href='/analytics/' title='$lang_adm->m_analytics' class='analytics_link'> <i class='fa fa-analytics'></i> <span class='menu_link_text'> $lang_adm->m_analytics</span></a>";
 
+				$knowledge_tests = '';
+				if (function_exists('bp_knowledge_tests_plugin')) {
+					$ktPlugin = bp_knowledge_tests_plugin();
+					if ($ktPlugin !== null && $ktPlugin->dealerTestsCapability()->canAccess($current_user_id)) {
+						$knowledge_tests = "<a href='/tests/' title='$lang_adm->m_knowledge_tests' class='knowledge_tests_nav_link'> <i class='fa fa-check-square-o'></i> <span class='menu_link_text'> $lang_adm->m_knowledge_tests</span></a>";
+					}
+				}
+
 				//MENU FOR ROLES
 				switch ($user_role) {
 					case "designer_architect":
@@ -117,6 +127,7 @@ get_header(); ?>
 						$menu =
 							$account_navigation_start .
 							$contracts .
+							$knowledge_tests .
 							$my_orders_development .
 							$factory_news .
 							// $my_salons .
@@ -134,6 +145,7 @@ get_header(); ?>
 						$menu =
 							$account_navigation_start .
 							$contracts .
+							$knowledge_tests .
 							$my_orders_development .
 							$invoices .
 							$factory_news .
@@ -151,6 +163,7 @@ get_header(); ?>
 						$menu =
 							$account_navigation_start .
 							$contracts .
+							$knowledge_tests .
 							$my_orders_development .
 							$factory_news .
 							$my_profile .
@@ -233,7 +246,7 @@ get_header(); ?>
 					default:
 						$menu =
 							$account_navigation_start .
-							$my_orders .
+							$my_orders_development .
 							$my_samples .
 							$factory_news .
 							$my_files .
