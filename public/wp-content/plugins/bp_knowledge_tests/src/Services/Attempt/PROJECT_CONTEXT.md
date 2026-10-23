@@ -45,6 +45,7 @@ Counts come from `QuestionSelectionGrader` per question when the user submits se
 | `ValidityMaintenance` | On login/catalog refresh — one-year outdated |
 | `CriticalUpdateTest` | Admin critical update — all `passed` → `outdated`, strip medals, bump `version` |
 | `NotificationRetakePolicy` | Blocks retake when notification config requires action |
+| `NotificationUiQuery` | PA list/dismiss; lazy `new_test` rows when prior tests completed (catalog order) |
 
 Policies: `RetakeEligibilityPolicy`, `AttemptValidityPolicy` — keep rules testable in isolation.
 

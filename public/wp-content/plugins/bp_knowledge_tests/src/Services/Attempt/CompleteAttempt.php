@@ -53,6 +53,7 @@ final class CompleteAttempt
             $this->notifications->resetDismissCount($userId, $testId, NotificationRecord::TYPE_FAILED_TEST);
         } else {
             $this->notifications->deleteByUserTestAndType($userId, $testId, NotificationRecord::TYPE_FAILED_TEST);
+            $this->notifications->deleteByUserTestAndType($userId, $testId, NotificationRecord::TYPE_NEW_TEST);
         }
 
         $this->achievements->applyAfterComplete($userId, $testId, $attempt->score);

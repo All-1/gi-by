@@ -837,6 +837,22 @@ class InteractionInterface
     );
   }
 
+  public function getKnowledgeTestNotificationsWS($idWebsocket, $bodyJson)
+  {
+    return $this->knowledgeTestsWsWorker->getKnowledgeTestNotifications(
+      $this->knowledgeTestsUserId($idWebsocket),
+      $this->knowledgeTestsBody($bodyJson),
+    );
+  }
+
+  public function dismissKnowledgeTestNotificationWS($idWebsocket, $bodyJson)
+  {
+    return $this->knowledgeTestsWsWorker->dismissKnowledgeTestNotification(
+      $this->knowledgeTestsUserId($idWebsocket),
+      $this->knowledgeTestsBody($bodyJson),
+    );
+  }
+
   private function knowledgeTestsUserId($idWebsocket)
   {
     return (int) $this->userControler->getUserIdByIdWebsocket($idWebsocket);

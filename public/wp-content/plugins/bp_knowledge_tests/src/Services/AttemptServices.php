@@ -22,6 +22,7 @@ use BpKnowledgeTests\Services\Attempt\CriticalUpdateTest;
 use BpKnowledgeTests\Services\Attempt\NotificationRetakePolicy;
 use BpKnowledgeTests\Services\Attempt\ValidityMaintenance;
 use BpKnowledgeTests\Services\Attempt\MaterialsService;
+use BpKnowledgeTests\Services\Attempt\NotificationUiQuery;
 use BpKnowledgeTests\Services\Attempt\RetakeEligibilityPolicy;
 use BpKnowledgeTests\Services\Attempt\RetakeEligibilityQuery;
 use PersonalAccount\Core\Container;
@@ -38,6 +39,7 @@ final class AttemptServices
     public readonly ValidityMaintenance $validity;
     public readonly CriticalUpdateTest $criticalUpdate;
     public readonly NotificationRepository $notifications;
+    public readonly NotificationUiQuery $notificationUi;
 
     public function __construct(
         Container $servicesContainer,
@@ -111,6 +113,14 @@ final class AttemptServices
             $testRepository,
             $attemptRepository,
             $userAchievementRepository,
+        );
+
+        $this->notificationUi = new NotificationUiQuery(
+            $catalog,
+            $attemptRepository,
+            $this->notifications,
+            $domain,
+            $this->materials,
         );
     }
 

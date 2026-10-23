@@ -133,6 +133,8 @@ Commands: `Chat.php` → `InteractionInterface` → `KnowledgeTestsWsWorker`.
 | `getTestMaterials` | `{ "testId" }` | Pending materials for user/test |
 | `confirmTestMaterialsExamined` | `{ "testId", "attemptId" }` | Delete temp explanation rows |
 | `getKnowledgeTestChatStars` | `{ "userIds": number[] }` | Chat stars batch (plugin read) |
+| `getKnowledgeTestNotifications` | `{}` | Notification UX payload (Phase 6) |
+| `dismissKnowledgeTestNotification` | `{ "testId", "notificationType" }` | Dismiss popup / bottom bar |
 
 ### Server → client
 
@@ -143,6 +145,9 @@ Commands: `Chat.php` → `InteractionInterface` → `KnowledgeTestsWsWorker`.
 | `TestFinishedOnPage` | `handlerTestFinishedOnPage` |
 | `TestMaterialsOnPage` | `handlerTestMaterialsOnPage` |
 | `KnowledgeTestChatStarsOnPage` | `handlerKnowledgeTestChatStarsOnPage` |
+| `KnowledgeTestNotificationsOnPage` | `handlerKnowledgeTestNotificationsOnPage` |
+
+**Phase 6 UI:** `js/knowledge_test_notifications.js` (popup / block / bottom); loaded with dealer Tests nav.
 
 **Boundary:** `bp_contracts` holds RAM session + WS only; scoring/retake/validity → `bp_knowledge_tests`.
 

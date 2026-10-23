@@ -206,6 +206,49 @@ class KnowledgeTestsWsWorker
     return $this->getTestMaterials($userId, ['testId' => $testId]);
   }
 
+  /** @param array<string, mixed> $body */
+  public function getKnowledgeTestNotifications(int $userId, array $body): array
+  {
+    if (!$this->sessionWorker->isPluginAvailable()) {
+      return $this->error('validation', ['plugin_unavailable']);
+    }
+
+    return $this->notificationsPayload($userId);
+  }
+
+  /** @param array<string, mixed> $body */
+  public function dismissKnowledgeTestNotification(int $userId, array $body): array
+  {
+    if (!$this->sessionWorker->isPluginAvailable()) {
+      return $this->error('validation', ['plugin_unavailable']);
+    }
+    $testId = $this->requiredTestId($body);
+    $type = (string) ($body['notificationType'] ?? '');
+    if ($testId === null || $type === '') {
+      return $this->error('validation', ['validation']);
+    }
+    if (!$this->plugin()->attempts()->notificationUi->dismiss($userId, $testId, $type)) {
+      return $this->error('validation', ['validation']);
+    }
+
+    return $this->notificationsPayload($userId);
+  }
+
+  /** @return array<string, mixed> */
+  private function notificationsPayload(int $userId): array
+  {
+    $items = $this->plugin()->attempts()->notificationUi->listActive($userId);
+    $accountBlocked = false;
+    foreach ($items as $item) {
+      if (($item['presentation'] ?? '') === 'block') {
+        $accountBlocked = true;
+        break;
+      }
+    }
+
+    return ['ok' => true, 'items' => $items, 'accountBlocked' => $accountBlocked];
+  }
+
   /** @return array<string, mixed>|null */
   private function crossTestInProgressError(int $userId, int $testId): ?array
   {
