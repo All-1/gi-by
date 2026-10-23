@@ -132,6 +132,7 @@ Commands: `Chat.php` → `InteractionInterface` → `KnowledgeTestsWsWorker`.
 | `abandonTest` | `{ "testId" }` | Clear RAM session |
 | `getTestMaterials` | `{ "testId" }` | Pending materials for user/test |
 | `confirmTestMaterialsExamined` | `{ "testId", "attemptId" }` | Delete temp explanation rows |
+| `getKnowledgeTestChatStars` | `{ "userIds": number[] }` | Chat stars batch (plugin read) |
 
 ### Server → client
 
@@ -141,6 +142,7 @@ Commands: `Chat.php` → `InteractionInterface` → `KnowledgeTestsWsWorker`.
 | `TestQuestionOnPage` | `handlerTestQuestionOnPage` |
 | `TestFinishedOnPage` | `handlerTestFinishedOnPage` |
 | `TestMaterialsOnPage` | `handlerTestMaterialsOnPage` |
+| `KnowledgeTestChatStarsOnPage` | `handlerKnowledgeTestChatStarsOnPage` |
 
 **Boundary:** `bp_contracts` holds RAM session + WS only; scoring/retake/validity → `bp_knowledge_tests`.
 

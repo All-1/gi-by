@@ -7,6 +7,7 @@ namespace BpKnowledgeTests\Services\Attempt;
 use BpKnowledgeTests\Infrastructure\Repository\AchievementRepository;
 use BpKnowledgeTests\Infrastructure\Repository\AttemptRepository;
 use BpKnowledgeTests\Infrastructure\Repository\UserAchievementRepository;
+use BpKnowledgeTests\Services\CatalogServices;
 use BpKnowledgeTests\Services\DomainServices;
 
 final class AttemptAchievementService
@@ -16,6 +17,7 @@ final class AttemptAchievementService
         private AchievementRepository $achievements,
         private UserAchievementRepository $userAchievements,
         private AttemptRepository $attempts,
+        private CatalogServices $catalog,
     ) {
     }
 
@@ -52,5 +54,47 @@ final class AttemptAchievementService
         foreach ($this->attempts->listDistinctUserTestPairs() as $pair) {
             $this->recalculateForUserAndTest($pair['userId'], $pair['testId']);
         }
+    }
+
+    /**
+     * @param list<int> $userIds
+     * @return array<int, list<array<string, mixed>>>
+     */
+    public function chatStarsForUserIds(array $userIds): array
+    {
+        $result = [];
+        foreach ($userIds as $rawId) {
+            $userId = (int) $rawId;
+            if ($userId <= 0) {
+                continue;
+            }
+            $result[$userId] = $this->chatStarsForUser($userId);
+        }
+
+        return $result;
+    }
+
+    /** @return list<array<string, mixed>> */
+    private function chatStarsForUser(int $userId): array
+    {
+        $stars = [];
+        foreach ($this->userAchievements->listMedalRowsForUser($userId) as $pair) {
+            $test = $this->catalog->tests->find($pair['testId']);
+            $medal = $this->achievements->findMedalById($pair['medalId']);
+            if ($test === null || $medal === null) {
+                continue;
+            }
+            $area = $test->achievementArea !== '' ? $test->achievementArea : $test->title;
+            $stars[] = [
+                'testId' => $pair['testId'],
+                'medalId' => $pair['medalId'],
+                'achievementArea' => $area,
+                'tierValue' => $medal['value'],
+                'rankName' => $medal['name'],
+                'testTitle' => $test->title,
+            ];
+        }
+
+        return $stars;
     }
 }

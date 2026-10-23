@@ -23,4 +23,18 @@ final class AchievementRepository
 
         return is_object($row) ? (int) $row->id : null;
     }
+
+    /** @return array{name: string, value: string}|null */
+    public function findMedalById(int $medalId): ?array
+    {
+        $row = $this->db->selectUni_2(self::TABLE, [
+            'sql' => 'id = %d',
+            'values' => [$medalId],
+        ], 'name, value');
+        if (!is_object($row)) {
+            return null;
+        }
+
+        return ['name' => (string) $row->name, 'value' => (string) $row->value];
+    }
 }

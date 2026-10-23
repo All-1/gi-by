@@ -1,6 +1,6 @@
 # Development Rules (GeoS Ideal WordPress `public/`)
 
-**Version**: 2.5 | **Last Updated**: 2026-10-01
+**Version**: 2.6 | **Last Updated**: 2026-10-23
 
 Global rules — security baseline, precedence, GRASP, SOLID, composition, documentation principles, CHANGELOG format, debugging workflow, code size limits, git/PR conduct — live in **Cursor Settings → Rules** only. **This file is not a copy of Settings**; it adds WordPress and this repository.
 
@@ -97,6 +97,7 @@ Known issues are in [PROJECT_CONTEXT.md](./PROJECT_CONTEXT.md). **Do not weaken*
 | Per-user temp tables | `bp_zakazi` | No new features on temp tables |
 | Custom auth table | `gi_new_users` vs WP users | Do not add a third user store |
 | Unbundled global JS | `bp_contracts/js/*` | New UI: isolate globals; document in [js/PROJECT_CONTEXT.md](./wp-content/plugins/bp_contracts/js/PROJECT_CONTEXT.md) |
+| **`communication_server.js`** | Shared WS client for every PA page | Owns **`socket`** lifecycle and **`onWebSocketSessionReady` / `onWebSocketSessionClosed`** (calls page `setDefaultState(where)` and optional feature globals). **Do not** monkey-patch `openConnection` or `socket.onopen` from other files. New inbound titles → page `handler*`; new outbound commands → page JS. Extend session hooks only via optional `window` callbacks invoked from `onWebSocketSessionReady` (document in [js/PROJECT_CONTEXT.md](./wp-content/plugins/bp_contracts/js/PROJECT_CONTEXT.md)). Unrelated refactors: avoid; record **why** in [CHANGELOG.md](./CHANGELOG.md). |
 
 ### 2.6 Design patterns (local examples)
 

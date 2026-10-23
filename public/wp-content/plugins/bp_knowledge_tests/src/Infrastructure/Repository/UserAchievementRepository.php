@@ -62,6 +62,34 @@ final class UserAchievementRepository
         );
     }
 
+    public function findMedalIdForUserAndTest(int $userId, int $testId): ?int
+    {
+        $row = $this->db->selectUni_2(self::TABLE, [
+            'sql' => 'user_id = %d AND test_id = %d',
+            'values' => [$userId, $testId],
+        ], 'medal_id');
+
+        return is_object($row) && isset($row->medal_id) ? (int) $row->medal_id : null;
+    }
+
+    /** @return list<array{testId: int, medalId: int}> */
+    public function listMedalRowsForUser(int $userId): array
+    {
+        $rows = $this->db->selectResultsFromDBU('gi_new_test_user_achievements', 'user_id', $userId);
+        if ($rows === null) {
+            return [];
+        }
+        $pairs = [];
+        foreach ($rows as $row) {
+            $pairs[] = [
+                'testId' => (int) $row->test_id,
+                'medalId' => (int) $row->medal_id,
+            ];
+        }
+
+        return $pairs;
+    }
+
     private function findRowId(int $userId, int $testId): ?int
     {
         $row = $this->db->selectUni_2(self::TABLE, [

@@ -4,7 +4,7 @@
 
 Dealers take **knowledge tests** in the personal account: multi-select questions, weighted scoring, bronze/silver/gold medals, temporary study materials after failures, retake rules, and admin-managed test content.
 
-This WordPress plugin owns **business rules and persistence** (`gi_new_test_*`). The personal account shell, WebSocket transport, in-memory sessions, and (later) dealer-facing React UI live in **`bp_contracts`**.
+This WordPress plugin owns **business rules and persistence** (`gi_new_test_*`). The personal account shell, WebSocket transport, in-memory sessions, and dealer Tests UI (`knowledge_tests.js`) live in **`bp_contracts`**.
 
 | Concern | Owner |
 |---------|--------|
@@ -12,7 +12,7 @@ This WordPress plugin owns **business rules and persistence** (`gi_new_test_*`).
 | Tests menu, live session (RAM), WS commands, dealer UI, chat stars | **`bp_contracts`** (Phases 4–5) |
 | Test-factory admin UI (§15–18) | **React in this plugin** → [assets/admin/](./assets/PROJECT_CONTEXT.md) |
 
-**Delivery status:** Phases **1–4** complete. Dealer flow over WS: [WS protocol](./spec/WS_PROTOCOL.md), [`KnowledgeTestsWsWorker`](../bp_contracts/src/Workers/KnowledgeTestsWsWorker.php), [`TestController`](../bp_contracts/src/Testing/TestController.php). **Next:** Phase **5** dealer React; run Phase **4** staging QA on staging before dealer release ([PHASE_4_TASKS.md](./spec/PHASE_4_TASKS.md) Wave F).
+**Delivery status:** Phases **1–5** implemented in repo (dealer UI vanilla JS). Run Phase **4** + **5** operator QA on staging before dealer release ([PHASE_4_TASKS.md](./spec/PHASE_4_TASKS.md) Wave F, [PHASE_5_TASKS.md](./spec/PHASE_5_TASKS.md) Wave G). WS: [WS protocol](./spec/WS_PROTOCOL.md), [`KnowledgeTestsWsWorker`](../bp_contracts/src/Workers/KnowledgeTestsWsWorker.php).
 
 **Parent:** [Site PROJECT_CONTEXT.md](../../../PROJECT_CONTEXT.md)  
 **Shell integration:** [bp_contracts/PROJECT_CONTEXT.md](../bp_contracts/PROJECT_CONTEXT.md)

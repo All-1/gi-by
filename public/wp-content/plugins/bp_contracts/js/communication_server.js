@@ -67,16 +67,11 @@ function openConnection(server) {
       // Пример отправки сообщения на сервер
       try {
         socket.send('idUser::: ' + userId);
-        if (typeof setDefaultState !== 'undefined') {
-          setDefaultState(where);
-        }
-        if (typeof requestKnowledgeTestsNavHighlight === 'function') {
-          requestKnowledgeTestsNavHighlight();
-        }
         inicializationWebsocket(socket);
         if (typeof where !== 'undefined') {
           reloadDataForWindow(where, lastSN);
         }
+        onWebSocketSessionReady();
       } catch (error) {
         socket = null;
       }
@@ -88,6 +83,7 @@ function openConnection(server) {
     closeConnection(socket);
   };
   socket.onclose = function () {
+    onWebSocketSessionClosed();
     const isReload = sessionStorage.getItem('isPageReload');
     if (isReload === 'false') {
       let now = new Date();
@@ -144,6 +140,28 @@ function reloadDataForWindow(where, lastSN) {
   }
 }
 
+/**
+ * After idUser, inbound handlers, and reloadDataForWindow — page refresh and optional feature hooks.
+ * Page modules define setDefaultState(where); features may register optional globals (see js/PROJECT_CONTEXT.md).
+ */
+function onWebSocketSessionReady() {
+  if (typeof setDefaultState === 'function' && typeof where !== 'undefined') {
+    setDefaultState(where);
+  }
+  if (typeof requestKnowledgeTestsNavHighlight === 'function') {
+    requestKnowledgeTestsNavHighlight();
+  }
+  if (typeof onKnowledgeTestsWebSocketOpen === 'function') {
+    onKnowledgeTestsWebSocketOpen();
+  }
+}
+
+function onWebSocketSessionClosed() {
+  if (typeof onKnowledgeTestsWebSocketClose === 'function') {
+    onKnowledgeTestsWebSocketClose();
+  }
+}
+
 function createNotifier(title, body, button = null) {
   let shadeBoxNotification = createTagHtml('div', 'shade-full-screen-box');
   let blockDisconnectNotification = createTagHtml('div', 'box-denied-notification');
@@ -164,7 +182,6 @@ function createNotifier(title, body, button = null) {
 
   return shadeBoxNotification;
 }
-
 
 function handlerRequestFromServer(caseTitle, data, user) {
   const functionName = 'handler' + toCapsCase(caseTitle); // Формируем имя функции
@@ -236,8 +253,6 @@ function handlerParamForClientPages(user) {
     console.warn(`Function "${functionName}" is not defined`);
   }
 }
-
-
 
 
 
