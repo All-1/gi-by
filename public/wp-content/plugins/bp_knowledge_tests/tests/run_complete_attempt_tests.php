@@ -84,15 +84,16 @@ $userId = 9001;
 $passLines = [['questionId' => $questionId, 'rightAnswers' => 7, 'failedAnswers' => 0]];
 $passed = $complete->finish($userId, $testId, $passLines);
 $assert($passed->status === 'passed', 'bronze pass status');
-$assert(abs($passed->score - 70.0) < 0.01, 'score 70% with 7/10 correct options');
+$assert(abs($passed->score - 100.0) < 0.01, 'score 100% with no wrong selections (10 max options)');
 $assert($materials->listForAttempt($userId, $passed->id) === [], 'passed attempt has no materials');
 $assert(count($db->allRows('KnowledgeTestUserAchievements')) === 1, 'achievement row after pass');
 $notif = $notifications->findByUserTestAndType($userId, $testId, NotificationRecord::TYPE_FAILED_TEST);
 $assert($notif === null, 'no failed-test notification after pass');
 
-$failLines = [['questionId' => $questionId, 'rightAnswers' => 0, 'failedAnswers' => 2]];
+$failLines = [['questionId' => $questionId, 'rightAnswers' => 0, 'failedAnswers' => 4]];
 $failed = $complete->finish($userId, $testId, $failLines);
 $assert($failed->status === 'failed', 'failed status');
+$assert(abs($failed->score - 60.0) < 0.01, 'score 60% with 4 wrong of 10 max');
 $assert($materials->listForAttempt($userId, $failed->id) !== [], 'materials created on fail');
 $assert(count($db->allRows('KnowledgeTestUserAchievements')) === 0, 'achievement removed after fail');
 $failedNotif = $notifications->findByUserTestAndType($userId, $testId, NotificationRecord::TYPE_FAILED_TEST);

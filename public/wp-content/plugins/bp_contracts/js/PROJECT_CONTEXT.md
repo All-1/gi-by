@@ -40,9 +40,11 @@ Example: server sends `AnalyticsOnPage::: {...}` → `handlerAnalyticsOnPage` in
 | `points.js` / `points_dev.js` | `points_manager_new` / `points_dev` |
 | `invoice_print.js` | Invoice PDF client render |
 | `integer_to_words.js` | Amount wording for documents |
+| `knowledge_tests_medals.js` | Theme SVG medals + hover tooltip (rank + area); list, finish, chat |
 | `knowledge_tests.js` | `knowledge_tests` shortcode page — `where`, list + overlay UI, WS handlers (like `orders.js`). In-test: `submitTestQuestion` → feedback → `startTest` (next) or `finishTest` (last) |
 | `knowledge_tests_nav.js` | When dealer Tests cap — `requestKnowledgeTestsNavHighlight`, minimal `handlerTestsOnPage`; reconnect via `onKnowledgeTestsWebSocketOpen` / `Close` (called from `communication_server.js`) |
-| `knowledge_test_notifications.js` | Phase 6 — `getKnowledgeTestNotifications` on WS open; `handlerKnowledgeTestNotificationsOnPage`; popup / block / bottom bar; `dismissKnowledgeTestNotification` |
+| `communication_server.js` | WS session; calls `requestKnowledgeTestNotifications` on every PA page with tests cap |
+| `knowledge_test_notifications.js` | Phase 6 — block mode is the full-screen notice (new test: one popup first); bottom mode is the consent bar. Nothing on `/tests/` |
 | `knowledge_test_chat_stars.js` | `getKnowledgeTestChatStars` batch on dialog load; `modal_window.js` appends stars to `.author_message` |
 
 ### `analytics.js` (summary)

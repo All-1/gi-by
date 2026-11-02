@@ -420,11 +420,11 @@ gi_new_test_config
 ### 5.1 Scoring (spec §2.1)
 
 ```text
-Maximum Correct Answers = sum over all questions of (count of correct answer options)
+Maximum Correct Answers = sum over attempt questions of (count of correct answer options)
 
-Net Correct = valid_answers − invalid_answers   (from user selections across test)
+Score = max(0, 100 × (Maximum Correct Answers − invalid_answers) / Maximum Correct Answers)
 
-Score = max(0, 100 × Net Correct / Maximum Correct Answers)
+`valid_answers` is still stored (count of correct options selected) for analytics; official % uses wrong selections only (2026-10-29).
 ```
 
 Implement in `ScoringService` (Information Expert); **automated** unit tests for edge cases (all wrong → 0%, penalties, 100% cap) — not optional for V1.

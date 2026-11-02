@@ -621,9 +621,13 @@ function createTagHtml(htmlTag, htmlClass, content, id, type, ...dataAttributes)
   if (htmlTag === 'input' || htmlTag === 'textarea' || htmlTag === 'select') {
     element.name = id;
   }
-  // Если указан htmlClass, добавляем его в классы элемента
+  // Если указан htmlClass, добавляем его в классы элемента (несколько классов через пробел)
   if (htmlClass) {
-    element.classList.add(htmlClass);
+    htmlClass.trim().split(/\s+/).forEach(function (cls) {
+      if (cls !== "") {
+        element.classList.add(cls);
+      }
+    });
   }
   // Если указан content, добавляем его как текстовое содержимое элемента
   if (content && htmlTag !== 'img') {

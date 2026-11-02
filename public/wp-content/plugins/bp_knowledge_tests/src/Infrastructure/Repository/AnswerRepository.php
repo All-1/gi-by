@@ -163,14 +163,14 @@ final class AnswerRepository
     {
         $answers = $this->db->getPathTable(self::TABLE);
         $questions = $this->db->getPathTable(self::TABLE_QUESTIONS);
-        $rows = $this->db->getRawSQL(
+        $result = $this->db->getRawSQL(
             "SELECT COUNT(1) AS cnt FROM `{$answers}` a
             INNER JOIN `{$questions}` q ON q.id = a.question_id
             WHERE q.test_id = %d AND a.is_correct = 1",
             [$testId]
         );
-        if (is_array($rows) && isset($rows[0]) && is_object($rows[0]) && isset($rows[0]->cnt)) {
-            return (int) $rows[0]->cnt;
+        foreach ($this->mapper->rows($result) as $row) {
+            return (int) ($row->cnt ?? 0);
         }
 
         return 0;

@@ -68,7 +68,7 @@ final class NotificationUiQuery
             if ($this->attempts->findLatestByUserAndTest($userId, $test->id) !== null) {
                 continue;
             }
-            $this->notifications->resetDismissCount(
+            $this->notifications->ensureRowExists(
                 $userId,
                 $test->id,
                 NotificationRecord::TYPE_NEW_TEST,
@@ -121,12 +121,18 @@ final class NotificationUiQuery
         int $dismissCount,
     ): array {
         [$limit, $mode] = $this->limitAndMode($notificationType, $settings);
+        $initialPopup = $notificationType === NotificationRecord::TYPE_NEW_TEST;
 
         return [
             'testId' => $test->id,
             'testTitle' => $test->title,
             'notificationType' => $notificationType,
-            'presentation' => NotificationPresentation::resolve($dismissCount, $limit, $mode),
+            'presentation' => NotificationPresentation::resolve(
+                $dismissCount,
+                $limit,
+                $mode,
+                $initialPopup,
+            ),
             'dismissCount' => $dismissCount,
             'dismissLimit' => $limit,
             'materialsAvailable' => $notificationType === NotificationRecord::TYPE_FAILED_TEST

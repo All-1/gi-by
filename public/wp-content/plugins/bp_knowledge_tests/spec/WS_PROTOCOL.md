@@ -236,7 +236,7 @@ One star entry per test the user has a **latest-result** row in `gi_new_test_use
 
 ### 4.2 `finishTest`
 
-RAM must supply one line per catalog question for the test:
+RAM must supply one line per **session** question (snapshot at start; catalog may change mid-attempt):
 
 ```php
 ['questionId' => int, 'rightAnswers' => int, 'failedAnswers' => int]

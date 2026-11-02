@@ -43,16 +43,21 @@ $classifier = new AttemptResultClassifier();
 $config = new TestConfig(70.0, 80.0, 90.0, 95.0);
 
 $assert(
-    $scoring->calculateScore(60, 3, 62) === 91.94,
-    'Spec example: 60 valid, 3 invalid, max 62 → 91.94%'
+    $scoring->calculateScore(1, 5) === 80.0,
+    '4 correct + 1 wrong on 5-option test → 80% (max − invalid) / max'
 );
 
-$assert($scoring->calculateScore(0, 10, 20) === 0.0, 'All penalties → 0%');
-$assert($scoring->calculateScore(5, 10, 20) === 0.0, 'Net negative clamps to 0%');
-$assert($scoring->calculateScore(100, 0, 50) === 100.0, 'Score caps at 100%');
+$assert(
+    abs($scoring->calculateScore(3, 62) - 95.16) < 0.01,
+    '62 max, 3 invalid → 95.16%'
+);
+
+$assert($scoring->calculateScore(20, 20) === 0.0, 'All slots penalized → 0%');
+$assert($scoring->calculateScore(25, 20) === 0.0, 'Over penalty clamps to 0%');
+$assert($scoring->calculateScore(0, 50) === 100.0, 'No wrong selections → 100%');
 
 try {
-    $scoring->calculateScore(1, 0, 0);
+    $scoring->calculateScore(1, 0);
     $assert(false, 'Zero maximum should throw');
 } catch (\InvalidArgumentException $e) {
     $assert(true, 'Zero maximum throws InvalidArgumentException');

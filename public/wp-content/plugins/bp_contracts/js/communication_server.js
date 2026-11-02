@@ -19,8 +19,8 @@ let intervalReconnect = 1000;
 let notifierDisconnect;
 sessionStorage.setItem('isPageReload', 'false');
 
-window.addEventListener('beforeunload', function (event) {
-  // Mark that the page is being reloaded or closed.
+/** Mark intentional leave/reload so WS onclose does not show disconnect UI (replaces beforeunload). */
+window.addEventListener('pagehide', function () {
   sessionStorage.setItem('isPageReload', 'true');
 });
 document.addEventListener('visibilitychange', handleVisibilityChange);
@@ -151,12 +151,18 @@ function onWebSocketSessionReady() {
   if (typeof requestKnowledgeTestsNavHighlight === 'function') {
     requestKnowledgeTestsNavHighlight();
   }
+  if (typeof requestKnowledgeTestNotifications === 'function') {
+    requestKnowledgeTestNotifications();
+  }
   if (typeof onKnowledgeTestsWebSocketOpen === 'function') {
     onKnowledgeTestsWebSocketOpen();
   }
 }
 
 function onWebSocketSessionClosed() {
+  if (typeof noteKnowledgeTestNotificationSocketClosed === 'function') {
+    noteKnowledgeTestNotificationSocketClosed();
+  }
   if (typeof onKnowledgeTestsWebSocketClose === 'function') {
     onKnowledgeTestsWebSocketClose();
   }

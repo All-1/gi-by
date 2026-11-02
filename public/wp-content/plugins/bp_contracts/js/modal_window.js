@@ -1336,12 +1336,18 @@ function submitTopicLogic(textarea, uploadsFileslocal, type, sn, idDialog, oldFi
 
 function createHeaderMessage(data, dataFlaged, didntRead, participants) {
   let messageData = createTagHtml('div', 'dialog_message_data');
-  let messageAuthor = createTagHtml('span', 'author_message', data.firstNameAuthor + ' ' + data.lastNameAuthor);
+  let authorWrap = createTagHtml('span', 'knowledge_tests_author_with_medals');
+  let messageAuthor = createTagHtml(
+    'span',
+    'author_message knowledge_tests_author_name',
+    data.firstNameAuthor + ' ' + data.lastNameAuthor,
+  );
   if (!dataFlaged.flagAuthor) {
     messageAuthor.classList.add('author_message_manager');
   }
+  authorWrap.appendChild(messageAuthor);
   if (typeof appendKnowledgeTestStarsToAuthor === 'function' && data.idAuthor) {
-    appendKnowledgeTestStarsToAuthor(messageAuthor, data.idAuthor);
+    appendKnowledgeTestStarsToAuthor(authorWrap, data.idAuthor);
   }
   let redditBullShit = createTagHtml('div', 'reddit-bulshit', '•');
   let messageDate = createTagHtml('span', 'date_message', getTimeAgo(data.dateSendTimestamp));
@@ -1352,7 +1358,7 @@ function createHeaderMessage(data, dataFlaged, didntRead, participants) {
   let clearFix = createTagHtml('div', 'clearfix');
   massAppendChild(
     messageData,
-    messageAuthor, redditBullShit, messageDate, messageStatusBoxNew, clearFix
+    authorWrap, redditBullShit, messageDate, messageStatusBoxNew, clearFix
   );
   messageDate.appendChild(hiddenMessageDate);
   return messageData;

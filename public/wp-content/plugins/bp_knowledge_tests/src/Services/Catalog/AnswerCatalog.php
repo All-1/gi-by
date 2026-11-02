@@ -44,6 +44,21 @@ final class AnswerCatalog
         return $this->answers->countCorrectForTest($testId);
     }
 
+    /**
+     * Sum of catalog correct options for the given questions (attempt snapshot scope).
+     *
+     * @param list<int> $questionIds
+     */
+    public function maximumCorrectForQuestions(array $questionIds): int
+    {
+        $total = 0;
+        foreach ($questionIds as $questionId) {
+            $total += count($this->listCorrectAnswerIdsForQuestion((int) $questionId));
+        }
+
+        return $total;
+    }
+
     public function create(int $questionId, string $answerText, bool $isCorrect = false): int
     {
         $id = $this->answers->create($questionId, $answerText, $isCorrect);

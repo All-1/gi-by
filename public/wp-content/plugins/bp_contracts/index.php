@@ -34,6 +34,33 @@ function transferUserToJS($Id, $user_role)
 	<?php
 }
 
+/** @return array<string, string> */
+function knowledgeTestsRankLabelsForJs(): array
+{
+	if (!function_exists('bp_knowledge_tests_plugin')) {
+		return [];
+	}
+	$config = bp_knowledge_tests_plugin()->catalog()->config;
+
+	return [
+		'bronze' => (string) ($config->get('rank_name_bronze') ?? 'Specialist'),
+		'silver' => (string) ($config->get('rank_name_silver') ?? 'Expert'),
+		'gold' => (string) ($config->get('rank_name_gold') ?? 'Guru'),
+		'lock' => (string) ($config->get('rank_name_lock') ?? ''),
+	];
+}
+
+function knowledgeTestsRankLabelsScript(): void
+{
+	$labels = knowledgeTestsRankLabelsForJs();
+	if ($labels === []) {
+		return;
+	}
+	?>
+	<script>window.KNOWLEDGE_TESTS_RANK_BY_TIER = <?php echo wp_json_encode($labels); ?>;</script>
+	<?php
+}
+
 function addCssLinks()
 {
 	$version = setVPC();
@@ -59,7 +86,11 @@ function addJsLinks()
 		<script type="text/javascript"
 			src="/wp-content/plugins/bp_contracts/js/knowledge_test_notifications.js<?php echo $version; ?>"></script>
 	<?php } ?>
-	<?php if (function_exists('bp_knowledge_tests_plugin')) { ?>
+	<?php if (function_exists('bp_knowledge_tests_plugin')) {
+		knowledgeTestsRankLabelsScript();
+		?>
+		<script type="text/javascript"
+			src="/wp-content/plugins/bp_contracts/js/knowledge_tests_medals.js<?php echo $version; ?>"></script>
 		<script type="text/javascript"
 			src="/wp-content/plugins/bp_contracts/js/knowledge_test_chat_stars.js<?php echo $version; ?>"></script>
 	<?php } ?>
@@ -833,14 +864,31 @@ function knowledge_tests()
 			</div>
 			<div class="main_container_knowledge_tests" id="main_container_knowledge_tests"></div>
 		</div>
-		<div class="control-table-contract">
+		<div class="control-table-contract knowledge_tests_page">
 			<div id="box-before-pagination"></div>
-			<div class="pagination-admin" id="pagination_knowledge_tests"></div>
+			<div class="pagination-admin" id="pagination"></div>
+			<div class="choice-perpage-row">
+				<div class="perpage-text">Выводить по:</div>
+				<div class="perpage-numbers">
+					<div class="perpage-number-selected">10</div>
+					<div class="perpage-number-list">
+						<div class="perpage-number-disable">3</div>
+						<div class="perpage-number-disable">5</div>
+						<div class="perpage-number-enable">10</div>
+						<div class="perpage-number-disable">15</div>
+						<div class="perpage-number-disable">20</div>
+						<div class="perpage-number-disable">30</div>
+						<div class="perpage-number-disable">40</div>
+						<div class="perpage-number-disable">50</div>
+						<div class="perpage-number-disable">100</div>
+					</div>
+				</div>
+			</div>
 		</div>
 		<div id="knowledge_tests_overlay" class="modal_window_contracts knowledge_tests_overlay" style="display:none;"
 			aria-hidden="true">
 			<button type="button" class="knowledge_tests_overlay_close" id="close_knowledge_tests_overlay"
-				aria-label="Закрыть">×</button>
+				aria-label="Закрыть"><img src="/wp-content/themes/wp-diary/images/close-black.png" alt=""></button>
 			<div id="knowledge_tests_overlay_content" class="knowledge_tests_overlay_content"></div>
 		</div>
 	<?php } ?>

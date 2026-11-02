@@ -169,6 +169,11 @@ export function SettingsPage({ onNavigateTests, onNavigateResults, onNavigateAna
                 onChange={(e) => updateField('newTestNotificationDismissLimit', e.target.value)}
               />
             </label>
+            <p className="bp-kt-muted">
+              «Block account» is a full-screen overlay with «Понятно». A new test still
+              opens once as a popup. «Bottom bar» stays a bar you can close. The choice applies on the
+              next account entry after you save.
+            </p>
             <label>
               New test — after limit
               <select

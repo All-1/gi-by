@@ -39,7 +39,15 @@ $assert = static function (bool $condition, string $message) use (&$failures): v
 
 $assert(
     NotificationPresentation::resolve(0, 10, NotificationSettings::MODE_BLOCK) === NotificationPresentation::POPUP,
-    'below limit → popup',
+    'new test first view → popup',
+);
+$assert(
+    NotificationPresentation::resolve(1, 10, NotificationSettings::MODE_BLOCK) === NotificationPresentation::BLOCK,
+    'block mode after first dismiss → block, not bottom',
+);
+$assert(
+    NotificationPresentation::resolve(1, 10, NotificationSettings::MODE_BOTTOM) === NotificationPresentation::BOTTOM,
+    'bottom mode after first dismiss → bottom',
 );
 $assert(
     NotificationPresentation::resolve(10, 10, NotificationSettings::MODE_BLOCK) === NotificationPresentation::BLOCK,
@@ -48,6 +56,14 @@ $assert(
 $assert(
     NotificationPresentation::resolve(10, 10, NotificationSettings::MODE_BOTTOM) === NotificationPresentation::BOTTOM,
     'at limit bottom mode → bottom',
+);
+$assert(
+    NotificationPresentation::resolve(0, 10, NotificationSettings::MODE_BLOCK, false) === NotificationPresentation::BLOCK,
+    'failed test + block mode → block',
+);
+$assert(
+    NotificationPresentation::resolve(0, 10, NotificationSettings::MODE_BOTTOM, false) === NotificationPresentation::BOTTOM,
+    'failed test + bottom mode → bottom',
 );
 
 if ($failures > 0) {

@@ -26,8 +26,9 @@ final class NotificationRepository
             'sql' => 'user_id = %d AND test_id = %d AND notification_type = %s',
             'values' => [$userId, $testId, $type],
         ], '*');
+        $rows = $this->mapper->rows($row);
 
-        return is_object($row) ? $this->mapper->toNotificationRecord($row) : null;
+        return isset($rows[0]) ? $this->mapper->toNotificationRecord($rows[0]) : null;
     }
 
     public function resetDismissCount(int $userId, int $testId, string $type): void
@@ -38,18 +39,17 @@ final class NotificationRepository
             return;
         }
 
-        $this->db->insertAssoc(
-            self::TABLE,
-            $this->dbUtilities->packageWriteColumns(
-                [
-                    'user_id' => $userId,
-                    'test_id' => $testId,
-                    'notification_type' => $type,
-                    'dismiss_count' => 0,
-                ],
-                ['%d', '%d', '%s', '%d'],
-            ),
-        );
+        $this->insertRow($userId, $testId, $type, 0);
+    }
+
+    /** Create notification row once; never reset an existing dismiss count. */
+    public function ensureRowExists(int $userId, int $testId, string $type): void
+    {
+        if ($this->findByUserTestAndType($userId, $testId, $type) !== null) {
+            return;
+        }
+
+        $this->insertRow($userId, $testId, $type, 0);
     }
 
     public function incrementDismissCount(int $userId, int $testId, string $type): void
@@ -93,6 +93,22 @@ final class NotificationRepository
                     'notification_type' => $type,
                 ],
                 ['%d', '%d', '%s'],
+            ),
+        );
+    }
+
+    private function insertRow(int $userId, int $testId, string $type, int $dismissCount): void
+    {
+        $this->db->insertAssoc(
+            self::TABLE,
+            $this->dbUtilities->packageWriteColumns(
+                [
+                    'user_id' => $userId,
+                    'test_id' => $testId,
+                    'notification_type' => $type,
+                    'dismiss_count' => $dismissCount,
+                ],
+                ['%d', '%d', '%s', '%d'],
             ),
         );
     }
