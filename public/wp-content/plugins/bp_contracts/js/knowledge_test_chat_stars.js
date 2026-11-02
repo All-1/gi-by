@@ -29,7 +29,7 @@ function handlerKnowledgeTestChatStarsOnPage(data) {
   Object.keys(data.starsByUserId).forEach(function (key) {
     knowledgeTestChatStarsCache[key] = data.starsByUserId[key];
   });
-  document.querySelectorAll(".author_message[data-kt-author-id]").forEach(function (el) {
+  document.querySelectorAll(".knowledge_tests_author_with_medals[data-kt-author-id]").forEach(function (el) {
     refreshKnowledgeTestStarsOnAuthor(el);
   });
 }
@@ -44,12 +44,12 @@ function collectDialogAuthorIds(messages) {
   return ids;
 }
 
-function refreshKnowledgeTestStarsOnAuthor(authorEl) {
-  if (!authorEl) {
+function refreshKnowledgeTestStarsOnAuthor(wrapEl) {
+  if (!wrapEl) {
     return;
   }
-  let userId = authorEl.getAttribute("data-kt-author-id");
-  let existing = authorEl.querySelector(".knowledge_test_chat_stars");
+  let userId = wrapEl.getAttribute("data-kt-author-id");
+  let existing = wrapEl.querySelector(".knowledge_test_chat_stars");
   if (existing) {
     existing.remove();
   }
@@ -59,22 +59,32 @@ function refreshKnowledgeTestStarsOnAuthor(authorEl) {
   }
   let box = createTagHtml("span", "knowledge_test_chat_stars");
   stars.forEach(function (star) {
-    let tier = (star.tierValue || "").toLowerCase();
-    let tip =
-      (star.rankName || "") +
-      " — " +
-      (star.achievementArea || star.testTitle || "");
-    let span = createTagHtml("span", "knowledge_test_chat_star knowledge_test_chat_star--" + tier, "★");
-    span.setAttribute("title", tip);
-    box.appendChild(span);
+    let badge =
+      typeof createKnowledgeTestsMedalBadge === "function"
+        ? createKnowledgeTestsMedalBadge({
+            tierValue: star.tierValue,
+            rankName: star.rankName,
+            achievementArea: star.achievementArea || star.testTitle || "",
+            size: "sm",
+          })
+        : null;
+    if (badge) {
+      box.appendChild(badge);
+    }
   });
-  authorEl.appendChild(box);
-}
-
-function appendKnowledgeTestStarsToAuthor(authorEl, authorUserId) {
-  if (!authorEl || !authorUserId) {
+  if (box.childNodes.length === 0) {
     return;
   }
-  authorEl.setAttribute("data-kt-author-id", String(authorUserId));
-  refreshKnowledgeTestStarsOnAuthor(authorEl);
+  wrapEl.appendChild(box);
+}
+
+function appendKnowledgeTestStarsToAuthor(authorWrapEl, authorUserId) {
+  if (!authorWrapEl || !authorUserId) {
+    return;
+  }
+  if (!authorWrapEl.classList.contains("knowledge_tests_author_with_medals")) {
+    authorWrapEl.classList.add("knowledge_tests_author_with_medals");
+  }
+  authorWrapEl.setAttribute("data-kt-author-id", String(authorUserId));
+  refreshKnowledgeTestStarsOnAuthor(authorWrapEl);
 }

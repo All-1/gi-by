@@ -26,8 +26,9 @@ final class AttemptRepository
             'sql' => 'id = %d',
             'values' => [$id],
         ], '*');
+        $rows = $this->mapper->rows($row);
 
-        return is_object($row) ? $this->mapper->toAttemptRecord($row) : null;
+        return isset($rows[0]) ? $this->mapper->toAttemptRecord($rows[0]) : null;
     }
 
     public function findLatestByUserAndTest(int $userId, int $testId): ?AttemptRecord

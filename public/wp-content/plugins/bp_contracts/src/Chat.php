@@ -322,8 +322,21 @@ class Chat implements MessageComponentInterface
   private function finishKnowledgeTest($from, $body)
   {
     $idWebsocket = $this->findCurrentConnection($from);
-    $payload = $this->interactionInterface->finishTestWS($idWebsocket, $body);
-    $from->send('TestFinishedOnPage::: ' . json_encode($payload));
+    try {
+      $payload = $this->interactionInterface->finishTestWS($idWebsocket, $body);
+      $json = json_encode($payload);
+      if ($json === false) {
+        throw new \RuntimeException(json_last_error_msg());
+      }
+      $from->send('TestFinishedOnPage::: ' . $json);
+    } catch (\Throwable $e) {
+      error_log('finishKnowledgeTest: ' . $e->getMessage());
+      $fallback = json_encode([
+        'ok' => false,
+        'error' => ['code' => 'server_error', 'reasons' => ['finish_failed']],
+      ]);
+      $from->send('TestFinishedOnPage::: ' . $fallback);
+    }
   }
   private function abandonKnowledgeTest($from, $body)
   {

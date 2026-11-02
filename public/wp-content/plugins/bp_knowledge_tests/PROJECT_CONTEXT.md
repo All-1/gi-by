@@ -12,7 +12,7 @@ This WordPress plugin owns **business rules and persistence** (`gi_new_test_*`).
 | Tests menu, live session (RAM), WS commands, dealer UI, chat stars | **`bp_contracts`** (Phases 4–5) |
 | Test-factory admin UI (§15–18) | **React in this plugin** → [assets/admin/](./assets/PROJECT_CONTEXT.md) |
 
-**Delivery status:** Phases **1–6** **development complete** (notifications UX in `knowledge_test_notifications.js`). **Next:** Phase **7** hardening → consolidated staging QA ([MANUAL_QA_V1.md](./spec/MANUAL_QA_V1.md)). WS: [WS protocol](./spec/WS_PROTOCOL.md), [`KnowledgeTestsWsWorker`](../bp_contracts/src/Workers/KnowledgeTestsWsWorker.php).
+**Delivery status:** Phases **1–6** **development complete** (notifications UX in `knowledge_test_notifications.js`). **Next:** Phase **7** hardening ([PHASE_7_TASKS.md](./spec/PHASE_7_TASKS.md)) → consolidated staging QA ([MANUAL_QA_V1.md](./spec/MANUAL_QA_V1.md)). WS: [WS protocol](./spec/WS_PROTOCOL.md), [`KnowledgeTestsWsWorker`](../bp_contracts/src/Workers/KnowledgeTestsWsWorker.php).
 
 **Parent:** [Site PROJECT_CONTEXT.md](../../../PROJECT_CONTEXT.md)  
 **Shell integration:** [bp_contracts/PROJECT_CONTEXT.md](../bp_contracts/PROJECT_CONTEXT.md)

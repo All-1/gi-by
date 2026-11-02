@@ -33,7 +33,9 @@ final class AttemptAchievementService
 
         $medalId = $this->achievements->findIdByValue($tierValue);
         if ($medalId === null) {
-            throw new \RuntimeException('Achievement tier not found: ' . $tierValue);
+            error_log('Achievement tier not found: ' . $tierValue);
+
+            return;
         }
 
         $this->userAchievements->upsertForUserAndTest($userId, $testId, $medalId);
@@ -85,12 +87,13 @@ final class AttemptAchievementService
                 continue;
             }
             $area = $test->achievementArea !== '' ? $test->achievementArea : $test->title;
+            $tierValue = (string) $medal['value'];
             $stars[] = [
                 'testId' => $pair['testId'],
                 'medalId' => $pair['medalId'],
                 'achievementArea' => $area,
-                'tierValue' => $medal['value'],
-                'rankName' => $medal['name'],
+                'tierValue' => $tierValue,
+                'rankName' => $this->domain->config->rankLabel($tierValue),
                 'testTitle' => $test->title,
             ];
         }

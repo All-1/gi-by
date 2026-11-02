@@ -73,6 +73,10 @@ class KnowledgeTestsWsWorker
       return $this->retakeError($retake);
     }
 
+    if ($this->plugin()->catalog()->answers->maximumCorrectForTest($testId) <= 0) {
+      return $this->error('invalid_test', ['test_not_scorable']);
+    }
+
     try {
       $controller->startOrResume($userId, $testId, $this->sessionWorker->loadSessionQuestionRows($testId));
     } catch (\InvalidArgumentException $e) {
@@ -113,26 +117,44 @@ class KnowledgeTestsWsWorker
       return $this->error('no_session', ['no_session']);
     }
 
-    $lines = $this->testController()->buildFinishPayload($userId, $testId);
+    $session = $this->testController()->getSession($userId, $testId);
+    if ($session === null) {
+      return $this->error('no_session', ['no_session']);
+    }
+    if (!$session->isSessionComplete()) {
+      return $this->error('validation', ['incomplete_session']);
+    }
+
+    $lines = $session->finishQuestionLines();
     if ($lines === []) {
       return $this->error('no_session', ['no_session']);
     }
 
     try {
       $attempt = $this->plugin()->attempts()->complete->finish($userId, $testId, $lines);
+      $this->testController()->clear($userId, $testId);
+      $medalTier = $this->plugin()->attempts()->findMedalTierValueForUserAndTest($userId, $testId);
+      $test = $this->plugin()->catalog()->tests->find($testId);
+
+      return [
+        'ok' => true,
+        'attempt' => $this->attemptPayload($attempt),
+        'medalId' => $this->plugin()->attempts()->findMedalIdForUserAndTest($userId, $testId),
+        'medalTier' => $medalTier,
+        'medalRankName' => $this->plugin()->attempts()->medalRankNameForTier($medalTier),
+        'achievementArea' => $test !== null && $test->achievementArea !== ''
+          ? $test->achievementArea
+          : ($test?->title ?? ''),
+        'materialsRequired' => $attempt->isFailed()
+          && $this->plugin()->attempts()->materials->hasPendingMaterials($userId, $testId),
+      ];
     } catch (\InvalidArgumentException $e) {
-      return $this->error('validation', ['validation']);
+      return $this->finishValidationError($e);
+    } catch (\Throwable $e) {
+      error_log('KnowledgeTests finishTest: ' . $e->getMessage());
+
+      return $this->finishServerError($e);
     }
-
-    $this->testController()->clear($userId, $testId);
-
-    return [
-      'ok' => true,
-      'attempt' => $this->attemptPayload($attempt),
-      'medalId' => $this->plugin()->attempts()->findMedalIdForUserAndTest($userId, $testId),
-      'materialsRequired' => $attempt->isFailed()
-        && $this->plugin()->attempts()->materials->hasPendingMaterials($userId, $testId),
-    ];
   }
 
   /** @param array<string, mixed> $body */
@@ -308,6 +330,7 @@ class KnowledgeTestsWsWorker
     }
 
     $retake = $this->plugin()->attempts()->retake->evaluate($userId, $testId);
+    $medalTier = $this->plugin()->attempts()->findMedalTierValueForUserAndTest($userId, $testId);
 
     return [
       'testId' => $testId,
@@ -315,6 +338,8 @@ class KnowledgeTestsWsWorker
       'displayStatus' => $displayStatus,
       'score' => $latest?->score,
       'medalId' => $this->plugin()->attempts()->findMedalIdForUserAndTest($userId, $testId),
+      'medalTier' => $medalTier,
+      'medalRankName' => $this->plugin()->attempts()->medalRankNameForTier($medalTier),
       'canStart' => $this->canStartTest($userId, $testId, $retake),
       'canOpenMaterials' => $this->plugin()->attempts()->materials->hasPendingMaterials($userId, $testId),
       'achievementArea' => $test->achievementArea,
@@ -446,6 +471,29 @@ class KnowledgeTestsWsWorker
   private function error(string $code, array $reasons): array
   {
     return ['ok' => false, 'error' => ['code' => $code, 'reasons' => $reasons]];
+  }
+
+  private function finishValidationError(\InvalidArgumentException $e): array
+  {
+    $message = $e->getMessage();
+    if (str_contains($message, 'Maximum correct answers must be greater than zero')) {
+      return $this->error('invalid_test', ['test_not_scorable']);
+    }
+    if (str_contains($message, 'does not belong to this test')) {
+      return $this->error('validation', ['question_set_mismatch']);
+    }
+
+    return $this->error('validation', ['validation']);
+  }
+
+  private function finishServerError(\Throwable $e): array
+  {
+    $message = $e->getMessage();
+    if (str_contains($message, 'Attempt insert failed')) {
+      return $this->error('server_error', ['attempt_insert_failed']);
+    }
+
+    return $this->error('server_error', ['finish_failed']);
   }
 
   /** @param array<string, mixed> $body */

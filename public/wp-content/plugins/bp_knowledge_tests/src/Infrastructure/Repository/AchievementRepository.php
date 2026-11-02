@@ -21,7 +21,7 @@ final class AchievementRepository
             'values' => [$value],
         ], 'id');
 
-        return is_object($row) ? (int) $row->id : null;
+        return SelectScalar::intId($row);
     }
 
     /** @return array{name: string, value: string}|null */
@@ -30,11 +30,20 @@ final class AchievementRepository
         $row = $this->db->selectUni_2(self::TABLE, [
             'sql' => 'id = %d',
             'values' => [$medalId],
-        ], 'name, value');
-        if (!is_object($row)) {
+        ], '*');
+        if (is_object($row)) {
+            $name = $row->name ?? null;
+            $value = $row->value ?? null;
+        } elseif (is_array($row)) {
+            $name = $row['name'] ?? null;
+            $value = $row['value'] ?? null;
+        } else {
+            return null;
+        }
+        if ($name === null || $value === null) {
             return null;
         }
 
-        return ['name' => (string) $row->name, 'value' => (string) $row->value];
+        return ['name' => (string) $name, 'value' => (string) $value];
     }
 }

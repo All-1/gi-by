@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace BpKnowledgeTests\Tests\Support;
 
+use BpKnowledgeTests\Infrastructure\Security\DealerTestsCapability;
 use BpKnowledgeTests\Plugin;
 use BpKnowledgeTests\Services\AttemptServices;
 use BpKnowledgeTests\Services\CatalogServices;
@@ -38,7 +39,7 @@ final class CompleteAttemptTestFixture
         $attempts = new AttemptServices($this->container, $catalog, $domain);
         $reporting = new ReportingServices($this->container, $catalog);
 
-        return new Plugin($catalog, $domain, $attempts, $reporting);
+        return new Plugin($catalog, $domain, $attempts, $reporting, new DealerTestsCapability());
     }
 
     public function memoryDb(): MemoryDBWorker

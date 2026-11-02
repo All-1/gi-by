@@ -24,7 +24,7 @@ At finish (whole test):
   sum right → valid_answers
   sum failed → invalid_answers
   maximumCorrect = catalog count of is_correct options
-      → ScoringService::calculateScore(valid, invalid, maximum)
+      → ScoringService::calculateScore(invalid, maximum)
       → float 0..100
 
 Pass / medal / lock:

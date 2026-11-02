@@ -52,14 +52,61 @@ Run in browser on personal account (Tests page or console if needed).
 
 ## 4. Notifications UX (Phase 6)
 
-Config matrix from [IMPLEMENTATION_PLAN §10](./IMPLEMENTATION_PLAN.md#10-notifications-v1) and product §3.1–3.4.
+**Code:** `bp_contracts/js/knowledge_test_notifications.js` (loads when dealer has Tests nav). **WS:** `getKnowledgeTestNotifications`, `dismissKnowledgeTestNotification` → `KnowledgeTestNotificationsOnPage` ([WS_PROTOCOL.md](./WS_PROTOCOL.md)). **Domain:** `NotificationUiQuery` in plugin (no scoring in contracts).
 
-| # | Scenario | Expected |
-|---|----------|----------|
-| 4.1 | New test available | Popup / dismiss limit; optional block; then bottom bar |
-| 4.2 | Failed test | Red menu + bottom notification + link to materials |
-| 4.3 | Prerequisites (baseline §6) | New-test notice only when prior test completed |
-| 4.4 | Dismiss persistence | Rows in `gi_new_test_notifications` match **D10** decision |
+**Product / plan:** [IMPLEMENTATION_PLAN §10](./IMPLEMENTATION_PLAN.md#10-notifications-v1), product §3.1–3.4, prerequisite baseline §6. **D10:** one row per `(user_id, test_id, notification_type)` — types `new_test` | `failed_test`.
+
+### 4.0 Setup (do once per session)
+
+| Step | Action |
+|------|--------|
+| S1 | In admin React **Settings → Notifications**, note **New test — max dismissals**, **after limit** (`bottom` \| `block`), and the same pair for **Failed test**. For block/bottom transitions, temporarily set **max dismissals** to **1** or **2** so you do not need ten clicks. |
+| S2 | Publish at least **two** tests **A** then **B** in catalog order (factory list order = prerequisite order). |
+| S3 | Use a dealer user with Tests nav (`.knowledge_tests_nav_link` on PA pages). Open any PA page **except** `/tests/` first when testing **account block** (block overlay is suppressed on Tests page). |
+| S4 | WS connected (`onWebSocketSessionReady` triggers `getKnowledgeTestNotifications`). After deploy, restart WS ([DEVELOPMENT_RULES.md](../../../../DEVELOPMENT_RULES.md) §4). |
+
+**CLI (optional, before browser):** `php wp-content/plugins/bp_knowledge_tests/tests/run_notification_presentation_tests.php` and `run_notification_retake_tests.php`.
+
+### 4.1 New test available (§3.1)
+
+| # | Step | Expected |
+|---|------|----------|
+| 4.1.1 | User **completed test A**; test **B** has **no** attempt for this user. | — |
+| 4.1.2 | Log in → land on e.g. **Contracts** (not Tests). | Full-screen popup: title **«Доступен новый тест»**, body mentions test **B**, buttons **Перейти к тестам** / **Закрыть**. |
+| 4.1.3 | Click **Закрыть** repeatedly until `dismissCount` reaches **max dismissals** (watch popup reappear after each dismiss until limit). | Each dismiss sends `dismissKnowledgeTestNotification` with `notificationType: "new_test"`, `testId` = B. |
+| 4.1.4 | After limit, if mode = **bottom** | Bottom bar with text + **Тесты** + **Понятно** (no full-screen popup). **Понятно** dismisses again (increments count). |
+| 4.1.5 | After limit, if mode = **block** | On non-Tests pages: blocking overlay **«Требуется пройти тест»** + link to `/tests/`. Open **/tests/** → overlay hidden (`where === "knowledge_tests"`). |
+| 4.1.6 | Complete test **B** (any result). | New-test UI for B disappears; `new_test` row cleared or no longer applies. |
+
+### 4.2 Failed test (§3.2)
+
+| # | Step | Expected |
+|---|------|----------|
+| 4.2.1 | Fail test **B** (score below bronze). Finish via dealer overlay. | Tests nav **failed highlight** (Phase 5); pending materials if configured. |
+| 4.2.2 | Reload PA (any page with Tests nav). | Popup **«Не сдан тест»** and/or bottom bar: study materials copy; **Материалы** link when `materialsAvailable` is true. |
+| 4.2.3 | Click **Понятно** on bottom bar (or **Закрыть** on popup). | `dismissKnowledgeTestNotification` with `notificationType: "failed_test"`. |
+| 4.2.4 | Open **/tests/** → **Materials** for B, complete **Изучено**. | Failed notification may clear after pass or policy change; retake rules per §3. |
+
+### 4.3 Prerequisites (baseline §6)
+
+| # | Step | Expected |
+|---|------|----------|
+| 4.3.1 | User with **no** attempt on test **A**, test **B** published. | **No** new-test popup for **B** (prior test A not completed). |
+| 4.3.2 | User completes **A**, still no attempt on **B**. | New-test notification for **B** appears on next `getKnowledgeTestNotifications` (page load / WS open). |
+
+### 4.4 Dismiss persistence (D10)
+
+| # | Step | Expected |
+|---|------|----------|
+| 4.4.1 | After 4.1.3, inspect `gi_new_test_notifications` for `(user_id, test_B_id, new_test)`. | Single row; `dismiss_count` matches UI dismisses; unique key per **D10**. |
+| 4.4.2 | After failed finish (4.2.1), row for `failed_test` on same test. | Row exists; passing attempt removes failed notification applicability (see `CompleteAttempt` side effects). |
+| 4.4.3 | DevTools → WS: send `getKnowledgeTestNotifications::: {}` | Response `ok: true`, `items[]` with `presentation` `popup` \| `bottom` \| `block`, `dismissCount`, `dismissLimit`, `accountBlocked` true when any item has `presentation: "block"`. |
+
+### 4.5 Retake block (notification policy)
+
+| # | Step | Expected |
+|---|------|----------|
+| 4.5.1 | With active **block** presentation for `new_test`, try **startTest** on WS before completing the test. | `startTest` may return `notification_blocked` when `NotificationRetakePolicy` applies (align with `run_notification_retake_tests.php`). |
 
 ---
 

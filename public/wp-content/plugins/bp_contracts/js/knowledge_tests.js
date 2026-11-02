@@ -8,9 +8,10 @@
 const where = "knowledge_tests";
 
 let knowledgeTestsPage = 1;
-let knowledgeTestsPerPage = 20;
+let knowledgeTestsPerPage = 10;
 let knowledgeTestsOverlayTestId = null;
 let knowledgeTestsOverlayTitle = "";
+let knowledgeTestsFinishPending = false;
 
 const KNOWLEDGE_TESTS_STATUS_LABELS = {
   not_started: "Не начат",
@@ -40,6 +41,7 @@ function sendKnowledgeTestsCommand(command, body) {
 }
 
 function initKnowledgeTestsPage() {
+  bindKnowledgeTestsPerPage();
   let closeBtn = document.getElementById("close_knowledge_tests_overlay");
   if (closeBtn) {
     closeBtn.addEventListener("click", closeKnowledgeTestsOverlay);
@@ -56,6 +58,11 @@ function initKnowledgeTestsPage() {
 }
 
 initKnowledgeTestsPage();
+
+/** WS reconnect on /tests/ — pathname maps to handlerTests, not handlerTestsOnPage */
+function handlerTests(user) {
+  setDefaultState(where);
+}
 
 function handlerTestsOnPage(data, user) {
   updateKnowledgeTestsNavFromList(data);
@@ -75,6 +82,8 @@ function handlerTestQuestionOnPage(data, user) {
 }
 
 function handlerTestFinishedOnPage(data, user) {
+  knowledgeTestsFinishPending = false;
+  clearKnowledgeTestsDisconnectBanner();
   if (!data || data.ok === false) {
     showKnowledgeTestsOverlayError(data);
     return;
@@ -134,11 +143,8 @@ function buildKnowledgeTestsListRow(row) {
   );
   let scoreText = formatKnowledgeTestsScore(row.score);
   let score = createTagHtml("div", "td_div_knowledge_tests kt-col-score", scoreText);
-  let medal = createTagHtml(
-    "div",
-    "td_div_knowledge_tests kt-col-medal",
-    formatKnowledgeTestsMedal(row.medalId),
-  );
+  let medal = createTagHtml("div", "td_div_knowledge_tests kt-col-medal");
+  fillKnowledgeTestsMedalCell(medal, row);
   let actions = createTagHtml("div", "td_div_knowledge_tests kt-col-actions");
   if (statusCode === "in_progress") {
     actions.appendChild(
@@ -190,46 +196,97 @@ function formatKnowledgeTestsScore(score) {
   return String(score) + "%";
 }
 
-function formatKnowledgeTestsMedal(medalId) {
-  if (medalId == null || medalId === "") {
-    return "—";
+function bindKnowledgeTestsPerPage() {
+  let selected = document.querySelector(".knowledge_tests_page .perpage-number-selected");
+  let list = document.querySelector(".knowledge_tests_page .perpage-number-list");
+  if (!selected || !list) {
+    return;
   }
-  return "★ " + medalId;
+  let initial = parseInt(selected.textContent, 10);
+  if (initial > 0) {
+    knowledgeTestsPerPage = initial;
+  }
+  list.addEventListener("click", function (event) {
+    let item = event.target.closest("div");
+    if (!item || item.parentElement !== list) {
+      return;
+    }
+    let value = parseInt(item.textContent, 10);
+    if (!value) {
+      return;
+    }
+    list.querySelectorAll("div").forEach(function (node) {
+      node.classList.remove("perpage-number-enable");
+      node.classList.add("perpage-number-disable");
+    });
+    item.classList.remove("perpage-number-disable");
+    item.classList.add("perpage-number-enable");
+    selected.textContent = String(value);
+    knowledgeTestsPerPage = value;
+    if (typeof socket !== "undefined" && socket.readyState === WebSocket.OPEN) {
+      sendShowTests(1, value);
+    }
+  });
 }
 
 function renderKnowledgeTestsPagination(pagination) {
-  let box = document.getElementById("pagination_knowledge_tests");
-  if (!box) {
+  let box = document.getElementById("pagination");
+  if (!box || typeof packegePagination !== "function") {
     return;
   }
   let page = pagination.page || 1;
   let perPage = pagination.perPage || knowledgeTestsPerPage;
   let total = pagination.total || 0;
-  let pages = Math.max(1, Math.ceil(total / perPage));
+  let pages = total > 0 ? Math.ceil(total / perPage) : 0;
   box.innerHTML = "";
-  if (total === 0) {
+  if (pages <= 1) {
     return;
   }
-  let info = createTagHtml(
-    "span",
-    "knowledge_tests_page_info",
-    "Страница " + page + " из " + pages + " (" + total + ")",
-  );
-  box.appendChild(info);
-  if (page > 1) {
-    box.appendChild(
-      createKnowledgeTestsActionButton("←", function () {
-        sendShowTests(page - 1, perPage);
-      }),
-    );
+  packegePagination(page, pages, box);
+  box.querySelectorAll(".pagination-page").forEach(function (span) {
+    if (span.id === "current-page") {
+      return;
+    }
+    span.addEventListener("click", function () {
+      let next = parseInt(span.getAttribute("data-page-admin"), 10);
+      if (next > 0) {
+        sendShowTests(next, perPage);
+      }
+    });
+  });
+}
+
+function knowledgeTestsReferenceHref(raw) {
+  let value = String(raw || "").trim();
+  if (/^https?:\/\//i.test(value) || value.charAt(0) === "/") {
+    return value;
   }
-  if (page < pages) {
-    box.appendChild(
-      createKnowledgeTestsActionButton("→", function () {
-        sendShowTests(page + 1, perPage);
-      }),
-    );
+  if (value.indexOf("www.") === 0) {
+    return "https://" + value;
   }
+  return "";
+}
+
+function appendKnowledgeTestsReference(parent, reference) {
+  let value = String(reference || "").trim();
+  if (!value) {
+    return;
+  }
+  let href = knowledgeTestsReferenceHref(value);
+  let paragraph = createTagHtml("p", "knowledge_tests_reference");
+  if (!href) {
+    paragraph.textContent = value;
+    parent.appendChild(paragraph);
+    return;
+  }
+  let link = document.createElement("a");
+  link.className = "knowledge_tests_reference_link";
+  link.href = href;
+  link.target = "_blank";
+  link.rel = "noopener noreferrer";
+  link.textContent = value;
+  paragraph.appendChild(link);
+  parent.appendChild(paragraph);
 }
 
 function renderKnowledgeTestsListError(data) {
@@ -257,8 +314,11 @@ function openKnowledgeTestsOverlay(testId, title, command) {
     closeBtn.focus();
   }
   content.innerHTML = "";
-  content.appendChild(createTagHtml("h2", "knowledge_tests_overlay_title", title || ""));
-  content.appendChild(createTagHtml("p", "knowledge_tests_loading", "Загрузка…"));
+  massAppendChild(
+    content,
+    createTagHtml("h2", "knowledge_tests_overlay_title", title || ""),
+    createTagHtml("p", "knowledge_tests_loading", "Загрузка…"),
+  );
   let body = { testId: testId };
   if (command === "startTest") {
     sendKnowledgeTestsCommand("startTest", body);
@@ -273,10 +333,26 @@ function closeKnowledgeTestsOverlay() {
     overlay.style.display = "none";
     overlay.setAttribute("aria-hidden", "true");
   }
+  knowledgeTestsFinishPending = false;
   knowledgeTestsOverlayTestId = null;
   knowledgeTestsOverlayTitle = "";
   clearKnowledgeTestsDisconnectBanner();
   sendShowTests(knowledgeTestsPage, knowledgeTestsPerPage);
+}
+
+function sendFinishKnowledgeTest(testId) {
+  knowledgeTestsFinishPending = true;
+  clearKnowledgeTestsDisconnectBanner();
+  let content = document.getElementById("knowledge_tests_overlay_content");
+  if (content) {
+    let existing = content.querySelector(".knowledge_tests_finish_saving");
+    if (!existing) {
+      content.appendChild(
+        createTagHtml("p", "knowledge_tests_finish_saving", "Сохранение результата…"),
+      );
+    }
+  }
+  sendKnowledgeTestsCommand("finishTest", { testId: testId });
 }
 
 function onKnowledgeTestsWebSocketClose() {
@@ -285,6 +361,10 @@ function onKnowledgeTestsWebSocketClose() {
   }
   let overlay = document.getElementById("knowledge_tests_overlay");
   if (!overlay || overlay.style.display === "none") {
+    return;
+  }
+  if (knowledgeTestsFinishPending) {
+    showKnowledgeTestsFinishWaitingBanner();
     return;
   }
   showKnowledgeTestsDisconnectBanner();
@@ -299,22 +379,38 @@ function onKnowledgeTestsWebSocketOpen() {
     return;
   }
   clearKnowledgeTestsDisconnectBanner();
+  if (knowledgeTestsFinishPending) {
+    sendKnowledgeTestsCommand("finishTest", { testId: knowledgeTestsOverlayTestId });
+    return;
+  }
   sendKnowledgeTestsCommand("startTest", { testId: knowledgeTestsOverlayTestId });
 }
 
 function showKnowledgeTestsDisconnectBanner() {
+  showKnowledgeTestsOverlayBanner(
+    "knowledge_tests_disconnect_banner",
+    "Соединение прервано. Не закрывайте окно — после восстановления связи тест продолжится с того же места (до перезапуска сервера в 03:00).",
+  );
+}
+
+function showKnowledgeTestsFinishWaitingBanner() {
+  showKnowledgeTestsOverlayBanner(
+    "knowledge_tests_disconnect_banner",
+    "Сохранение результата… Связь прервалась; после переподключения попытка завершится автоматически. Не закрывайте окно.",
+  );
+}
+
+function showKnowledgeTestsOverlayBanner(elementId, message) {
   let overlay = document.getElementById("knowledge_tests_overlay");
   if (!overlay) {
     return;
   }
-  if (document.getElementById("knowledge_tests_disconnect_banner")) {
+  let banner = document.getElementById(elementId);
+  if (banner) {
+    banner.textContent = message;
     return;
   }
-  let banner = createTagHtml(
-    "div",
-    "knowledge_tests_disconnect_banner",
-    "Соединение прервано. Не закрывайте окно — после восстановления связи тест продолжится с того же места (до перезапуска сервера в 03:00).",
-  );
+  banner = createTagHtml("div", elementId, message);
   overlay.insertBefore(banner, overlay.firstChild);
 }
 
@@ -326,6 +422,8 @@ function clearKnowledgeTestsDisconnectBanner() {
 }
 
 function showKnowledgeTestsOverlayError(data) {
+  knowledgeTestsFinishPending = false;
+  clearKnowledgeTestsDisconnectBanner();
   let content = document.getElementById("knowledge_tests_overlay_content");
   if (!content) {
     return;
@@ -357,6 +455,18 @@ function knowledgeTestsErrorMessage(data) {
     invalid_test: "Тест не найден",
     validation: "Некорректные данные",
   };
+  if (code === "invalid_test" && reasons.indexOf("test_not_scorable") !== -1) {
+    return "Тест не настроен для оценки (отметьте правильные ответы в админке)";
+  }
+  if (code === "validation" && reasons.indexOf("incomplete_session") !== -1) {
+    return "Ответьте на все вопросы перед завершением";
+  }
+  if (code === "server_error") {
+    if (reasons.indexOf("attempt_insert_failed") !== -1) {
+      return "Не удалось записать результат в базу. Проверьте, что таблицы gi_new_test_* созданы (активация плагина knowledge tests).";
+    }
+    return "Не удалось сохранить результат. Попробуйте «Завершить тест» ещё раз или обновите страницу.";
+  }
   let label = codeLabels[code] || code;
   return label + (reasons.length ? " (" + reasons.join(", ") + ")" : "");
 }
@@ -379,10 +489,11 @@ function renderKnowledgeTestsQuestion(data) {
   let inFeedback = Boolean(data.feedback);
   let questionNumber = formatKnowledgeTestsQuestionNumber(progress, inFeedback);
 
-  content.appendChild(
+  massAppendChild(
+    content,
     createTagHtml("p", "knowledge_tests_progress", questionNumber),
+    createTagHtml("p", "knowledge_tests_question_text", q.text || ""),
   );
-  content.appendChild(createTagHtml("p", "knowledge_tests_question_text", q.text || ""));
 
   let form = createTagHtml("div", "knowledge_tests_answers");
   let rightSet = knowledgeTestsIdSet(data.feedback ? data.feedback.rightAnswerIds : []);
@@ -407,8 +518,7 @@ function renderKnowledgeTestsQuestion(data) {
         input.checked = true;
       }
     }
-    row.appendChild(input);
-    row.appendChild(document.createTextNode(" " + (opt.text || "")));
+    massAppendChild(row, input, document.createTextNode(" " + (opt.text || "")));
     form.appendChild(row);
   });
   content.appendChild(form);
@@ -422,7 +532,7 @@ function renderKnowledgeTestsQuestion(data) {
     if (data.sessionComplete) {
       actions.appendChild(
         createKnowledgeTestsActionButton("Завершить тест", function () {
-          sendKnowledgeTestsCommand("finishTest", { testId: data.testId });
+          sendFinishKnowledgeTest(data.testId);
         }),
       );
     } else {
@@ -464,20 +574,19 @@ function knowledgeTestsIdSet(ids) {
 
 function renderKnowledgeTestsReadyToFinish(content, data) {
   let progress = data.progress || {};
-  content.appendChild(
+  massAppendChild(
+    content,
     createTagHtml(
       "p",
       "knowledge_tests_progress",
       "Отвечено " + (progress.total || "—") + " из " + (progress.total || "—"),
     ),
-  );
-  content.appendChild(
     createTagHtml("p", "", "Все вопросы пройдены. Нажмите «Завершить тест», чтобы сохранить результат."),
   );
   let actions = createTagHtml("div", "knowledge_tests_overlay_actions");
   actions.appendChild(
     createKnowledgeTestsActionButton("Завершить тест", function () {
-      sendKnowledgeTestsCommand("finishTest", { testId: data.testId });
+      sendFinishKnowledgeTest(data.testId);
     }),
   );
   content.appendChild(actions);
@@ -514,9 +623,7 @@ function renderKnowledgeTestsFeedback(content, feedback) {
   } else {
     block.appendChild(createTagHtml("p", "knowledge_tests_feedback_ok", "Ответ принят."));
   }
-  if (feedback.reference) {
-    block.appendChild(createTagHtml("p", "knowledge_tests_reference", feedback.reference));
-  }
+  appendKnowledgeTestsReference(block, feedback.reference);
   content.appendChild(block);
 }
 
@@ -526,6 +633,7 @@ function renderKnowledgeTestsFinished(data) {
     return;
   }
   content.innerHTML = "";
+  clearKnowledgeTestsDisconnectBanner();
   updateKnowledgeTestsNavFromList({ ok: true, navFailedHighlight: attemptStatusFailed(data) });
   let attempt = data.attempt || {};
   content.appendChild(
@@ -535,24 +643,54 @@ function renderKnowledgeTestsFinished(data) {
       "Результат: " + formatKnowledgeTestsStatus(attempt.status || "") + ", оценка: " + formatKnowledgeTestsScore(attempt.score),
     ),
   );
-  if (data.medalId != null && data.medalId !== "") {
+  if (attempt.validAnswers != null && attempt.invalidAnswers != null) {
     content.appendChild(
-      createTagHtml("p", "knowledge_tests_finish_medal", "Медаль: " + formatKnowledgeTestsMedal(data.medalId)),
+      createTagHtml(
+        "p",
+        "knowledge_tests_score_breakdown",
+        "Подсчёт: верных выборов " +
+          attempt.validAnswers +
+          ", ошибочных " +
+          attempt.invalidAnswers +
+          ". Оценка = (все правильные − ошибочные) / все правильные; для сдачи обычно нужно не менее 70%.",
+      ),
     );
   }
+  if (data.medalId != null || data.medalTier) {
+    let medalRow = createTagHtml("p", "knowledge_tests_finish_medal");
+    medalRow.appendChild(document.createTextNode("Медаль: "));
+    let badge =
+      typeof createKnowledgeTestsMedalBadge === "function"
+        ? createKnowledgeTestsMedalBadge({
+            tierValue: data.medalTier,
+            rankName: data.medalRankName || formatKnowledgeTestsMedalLabel(data.medalTier, data.medalId),
+            achievementArea: data.achievementArea || knowledgeTestsOverlayTitle || "",
+            size: "md",
+          })
+        : null;
+    if (badge) {
+      medalRow.appendChild(badge);
+    } else {
+      medalRow.appendChild(
+        document.createTextNode(formatKnowledgeTestsMedalLabel(data.medalTier, data.medalId)),
+      );
+    }
+    content.appendChild(medalRow);
+  }
   let actions = createTagHtml("div", "knowledge_tests_overlay_actions");
+  let materialsBtn = null;
   if (data.materialsRequired) {
     content.appendChild(
       createTagHtml("p", "", "Изучите материалы перед повторной попыткой."),
     );
     let materialsTestId = (attempt.testId || knowledgeTestsOverlayTestId);
-    actions.appendChild(
-      createKnowledgeTestsActionButton("Открыть материалы", function () {
-        sendKnowledgeTestsCommand("getTestMaterials", { testId: materialsTestId });
-      }),
-    );
+    materialsBtn = createKnowledgeTestsActionButton("Открыть материалы", function () {
+      sendKnowledgeTestsCommand("getTestMaterials", { testId: materialsTestId });
+    });
   }
-  actions.appendChild(
+  massAppendChild(
+    actions,
+    materialsBtn,
     createKnowledgeTestsActionButton("Закрыть", function () {
       closeKnowledgeTestsOverlay();
     }),
@@ -590,9 +728,12 @@ function renderKnowledgeTestsMaterials(data) {
 
   (data.items || []).forEach(function (item, index) {
     let block = createTagHtml("div", "knowledge_tests_material_block");
-    block.appendChild(createTagHtml("h3", "", item.questionText || ""));
-    block.appendChild(createTagHtml("p", "", item.explanation || ""));
-    block.appendChild(createTagHtml("p", "knowledge_tests_reference", item.reference || ""));
+    massAppendChild(
+      block,
+      createTagHtml("h3", "", item.questionText || ""),
+      createTagHtml("p", "", item.explanation || ""),
+    );
+    appendKnowledgeTestsReference(block, item.reference);
     let label = createTagHtml("label", "knowledge_tests_material_reviewed");
     let checkbox = document.createElement("input");
     checkbox.type = "checkbox";
@@ -605,14 +746,14 @@ function renderKnowledgeTestsMaterials(data) {
       }
       syncExaminedButton();
     });
-    label.appendChild(checkbox);
-    label.appendChild(document.createTextNode(" Просмотрено"));
+    massAppendChild(label, checkbox, document.createTextNode(" Просмотрено"));
     block.appendChild(label);
     content.appendChild(block);
   });
   let actions = createTagHtml("div", "knowledge_tests_overlay_actions");
-  actions.appendChild(examinedBtn);
-  actions.appendChild(
+  massAppendChild(
+    actions,
+    examinedBtn,
     createKnowledgeTestsActionButton("Закрыть", function () {
       closeKnowledgeTestsOverlay();
     }),

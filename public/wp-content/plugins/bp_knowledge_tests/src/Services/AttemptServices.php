@@ -31,6 +31,8 @@ final class AttemptServices
 {
     private AttemptRepository $attemptRepository;
     private UserAchievementRepository $userAchievementRepository;
+    private AchievementRepository $achievementCatalog;
+    private DomainServices $domain;
 
     public readonly MaterialsService $materials;
     public readonly AttemptAchievementService $achievements;
@@ -46,6 +48,7 @@ final class AttemptServices
         CatalogServices $catalog,
         DomainServices $domain,
     ) {
+        $this->domain = $domain;
         $db = $servicesContainer->get('DBWorker');
         $dbUtilities = $servicesContainer->get('DBUtilities');
         $mapper = new RecordMapper();
@@ -57,6 +60,7 @@ final class AttemptServices
         $questionRepository = new QuestionRepository($db, $dbUtilities, $clock, $mapper);
         $explanationRepository = new FinishedExplanationRepository($db, $dbUtilities, $mapper);
         $achievementRepository = new AchievementRepository($db);
+        $this->achievementCatalog = $achievementRepository;
         $userAchievementRepository = new UserAchievementRepository($db, $dbUtilities);
         $this->userAchievementRepository = $userAchievementRepository;
         $testRepository = new TestRepository($db, $dbUtilities, $clock, $mapper);
@@ -132,5 +136,25 @@ final class AttemptServices
     public function findMedalIdForUserAndTest(int $userId, int $testId): ?int
     {
         return $this->userAchievementRepository->findMedalIdForUserAndTest($userId, $testId);
+    }
+
+    public function findMedalTierValueForUserAndTest(int $userId, int $testId): ?string
+    {
+        $medalId = $this->findMedalIdForUserAndTest($userId, $testId);
+        if ($medalId === null) {
+            return null;
+        }
+        $medal = $this->achievementCatalog->findMedalById($medalId);
+
+        return $medal !== null ? $medal['value'] : null;
+    }
+
+    public function medalRankNameForTier(?string $tierValue): ?string
+    {
+        if ($tierValue === null || $tierValue === '') {
+            return null;
+        }
+
+        return $this->domain->config->rankLabel($tierValue);
     }
 }

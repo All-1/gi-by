@@ -34,7 +34,7 @@ trait CapsuleControlerObjectsRelationship
   // Геттеры и сеттеры для свойств $contractsForFactory
   private function getContractsForFactory()
   {
-    return $this->contractsForFactory;
+    return $this->getProperty('contractsForFactory');
   }
 
   // Геттеры и сеттеры для свойств $orderForFactory

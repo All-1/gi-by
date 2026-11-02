@@ -29,6 +29,13 @@ final class TestConfigReader
         return max(0, $this->intConfig('retake_delay_days', 1));
     }
 
+    public function rankLabel(string $tierValue): string
+    {
+        $raw = $this->stringConfig('rank_name_' . $tierValue, '');
+
+        return $raw !== '' ? $raw : $tierValue;
+    }
+
     public function notificationSettings(): NotificationSettings
     {
         return new NotificationSettings(

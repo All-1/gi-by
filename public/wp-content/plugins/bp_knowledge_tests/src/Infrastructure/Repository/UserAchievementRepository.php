@@ -69,7 +69,7 @@ final class UserAchievementRepository
             'values' => [$userId, $testId],
         ], 'medal_id');
 
-        return is_object($row) && isset($row->medal_id) ? (int) $row->medal_id : null;
+        return SelectScalar::intId($row, 'medal_id');
     }
 
     /** @return list<array{testId: int, medalId: int}> */
@@ -97,6 +97,6 @@ final class UserAchievementRepository
             'values' => [$userId, $testId],
         ], 'id');
 
-        return is_object($row) ? (int) $row->id : null;
+        return SelectScalar::intId($row);
     }
 }

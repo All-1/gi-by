@@ -2227,39 +2227,186 @@ body.admin-bar .table-points .points-header-wrapper.fixed-header-table {
   }
 }
 
-/* Knowledge tests (personal account) */
+/* Knowledge tests (personal account) — same table chrome as orders / contracts */
+.scrolling_div_knowledge_tests {
+  width: 100%;
+  overflow-x: auto;
+  background: #fff;
+  box-shadow: 0px 3px 12px #dedede;
+}
+
+.table_div_knowledge_tests,
+.main_container_knowledge_tests {
+  min-width: 860px;
+  width: 100%;
+}
+
 .tr_div_header_knowledge_tests,
 .tr_div_knowledge_tests {
-  display: flex;
-  flex-wrap: wrap;
+  display: grid;
+  grid-template-columns: 4fr 2fr 2fr 2fr 3fr;
   align-items: center;
-  border-bottom: 1px solid #e0e0e0;
-  padding: 8px 0;
+  border-bottom: 1px solid #b6b6b6;
+  color: #333;
+  padding: 0 15px;
+}
+
+.tr_div_header_knowledge_tests {
+  background: linear-gradient(180deg, #e8e8e8 0%, #dddddd 100%);
+  line-height: 17px;
 }
 
 .td_div_header_knowledge_tests,
 .td_div_knowledge_tests {
-  padding: 4px 8px;
+  padding: 20px 10px;
+  font-size: 15px;
 }
 
-.kt-col-title {
-  flex: 2 1 200px;
+.td_div_header_knowledge_tests {
+  font-weight: bold;
 }
 
 .kt-col-status,
 .kt-col-score,
+.kt-col-medal,
+.kt-col-actions {
+  text-align: center;
+}
+
+.kt-col-medal,
+.knowledge_tests_medal_cell {
+  overflow: visible;
+}
+
 .kt-col-medal {
-  flex: 1 1 100px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 36px;
+}
+
+.knowledge_tests_medal_icon {
+  display: block;
+  width: 32px;
+  height: 32px;
+  object-fit: contain;
+}
+
+.knowledge_tests_medal_badge {
+  position: relative;
+  display: inline-block;
+  vertical-align: middle;
+  line-height: 0;
+}
+
+.knowledge_tests_medal_badge--sm .knowledge_tests_medal_icon {
+  width: 18px;
+  height: 18px;
+}
+
+.knowledge_tests_medal_badge--md .knowledge_tests_medal_icon {
+  width: 32px;
+  height: 32px;
+}
+
+.knowledge_tests_medal_lock_label {
+  display: inline-block;
+  font-size: 11px;
+  font-weight: 600;
+  color: #22344f;
+  padding: 2px 4px;
+  line-height: 1.2;
+}
+
+.knowledge_tests_medal_hover {
+  visibility: hidden;
+  opacity: 0;
+  position: absolute;
+  left: 50%;
+  bottom: calc(100% + 6px);
+  transform: translateX(-50%);
+  z-index: 10050;
+  min-width: 120px;
+  max-width: 240px;
+  padding: 8px 10px;
+  border-radius: 6px;
+  background: #22344f;
+  color: #fff;
+  font-size: 12px;
+  line-height: 1.35;
+  text-align: center;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+  pointer-events: none;
+  transition: opacity 0.15s ease, visibility 0.15s ease;
+}
+
+.knowledge_tests_medal_hover::after {
+  content: "";
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  margin-left: -5px;
+  border: 5px solid transparent;
+  border-top-color: #22344f;
+}
+
+.knowledge_tests_medal_hover_rank {
+  display: block;
+  font-weight: 600;
+}
+
+.knowledge_tests_medal_hover_area {
+  display: block;
+  margin-top: 2px;
+  opacity: 0.92;
+}
+
+.knowledge_tests_medal_badge:hover .knowledge_tests_medal_hover,
+.knowledge_tests_medal_badge:focus-within .knowledge_tests_medal_hover {
+  visibility: visible;
+  opacity: 1;
+}
+
+.knowledge_tests_author_with_medals {
+  display: inline-flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 4px;
+  max-width: 100%;
+}
+
+.knowledge_tests_author_name {
+  flex: 0 1 auto;
+}
+
+.knowledge_test_chat_stars {
+  display: inline-flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 2px;
+  margin-left: 2px;
+}
+
+.knowledge_test_chat_stars .knowledge_tests_medal_icon {
+  width: 18px;
+  height: 18px;
+  margin-right: 0;
 }
 
 .kt-col-actions {
   flex: 1 1 140px;
 }
 
+.knowledge_tests_row_title {
+  font-weight: 500;
+  color: #333;
+}
+
 .knowledge_tests_row_area {
-  font-size: 12px;
+  font-size: 13px;
+  font-weight: 400;
   color: #666;
-  margin-top: 2px;
+  margin-top: 4px;
 }
 
 .knowledge_tests_status--failed {
@@ -2272,13 +2419,37 @@ body.admin-bar .table-points .points-header-wrapper.fixed-header-table {
 }
 
 .knowledge_tests_empty {
-  padding: 16px 8px;
-  color: #666;
+  padding: 20px 15px;
+  color: #333;
+  font-size: 16px;
+  font-weight: bold;
+  text-align: center;
+}
+
+.knowledge_tests_action_btn {
+  margin: 4px 6px 4px 0;
+  padding: 10px 18px;
+  border: none;
+  background: #22344f;
+  color: #fff;
+  font-family: inherit;
+  font-size: 15px;
+  cursor: pointer;
+}
+
+.knowledge_tests_action_btn:hover {
+  background: #dea993;
+  color: #22344f;
 }
 
 .knowledge_tests_action_btn:disabled {
   opacity: 0.45;
   cursor: not-allowed;
+}
+
+.knowledge_tests_action_btn:disabled:hover {
+  background: #22344f;
+  color: #fff;
 }
 
 .knowledge_tests_answer_row--right {
@@ -2294,45 +2465,77 @@ body.admin-bar .table-points .points-header-wrapper.fixed-header-table {
 }
 
 .knowledge_tests_overlay_actions {
-  margin-top: 16px;
+  margin-top: 24px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
 }
 
 .knowledge_tests_disconnect_banner {
-  background: #fff3e0;
-  color: #e65100;
-  padding: 10px 16px;
+  background: #22344f;
+  color: #fff;
+  padding: 14px 68px;
   margin: 0;
-  border-bottom: 1px solid #ffcc80;
-  font-size: 13px;
+  font-size: 15px;
   line-height: 1.4;
-}
-
-.knowledge_tests_action_btn {
-  margin-right: 8px;
-  cursor: pointer;
 }
 
 .knowledge_tests_error {
   color: #c62828;
   padding: 12px 0;
+  font-size: 15px;
 }
 
 .knowledge_tests_overlay_content {
-  padding: 32px 24px 48px;
-  max-width: 720px;
-  margin: 0 auto;
+  padding: 32px 40px 48px 68px;
+  max-width: 860px;
+  color: #333;
+}
+
+.knowledge_tests_overlay_title {
+  margin: 16px 0 12px;
+  font-size: 24px;
+  font-weight: 700;
+  color: #333;
+}
+
+.knowledge_tests_progress {
+  margin: 0 0 8px;
+  font-size: 14px;
+  color: #666;
+}
+
+.knowledge_tests_question_text {
+  margin: 0 0 20px;
+  font-size: 16px;
+  line-height: 1.45;
+  color: #333;
+}
+
+.knowledge_tests_answer_row {
+  display: flex;
+  align-items: center;
+  margin-bottom: 12px;
+  font-size: 16px;
+  line-height: 1.4;
+  cursor: pointer;
 }
 
 .knowledge_tests_overlay_close {
   position: fixed;
-  top: 72px;
-  right: 48px;
+  top: 16px;
+  right: 16px;
   z-index: 4;
+  padding: 16px;
   border: none;
   background: transparent;
-  font-size: 2rem;
-  line-height: 1;
   cursor: pointer;
+}
+
+.knowledge_tests_overlay_close img {
+  display: block;
+  width: 30px;
+  height: 30px;
 }
 
 .account_navigation a.bp-ktd-nav--failed {
@@ -2342,8 +2545,11 @@ body.admin-bar .table-points .points-header-wrapper.fixed-header-table {
 
 .knowledge_tests_material_block {
   margin-bottom: 20px;
-  padding-bottom: 12px;
-  border-bottom: 1px solid #eee;
+  padding-bottom: 16px;
+  border-bottom: 1px solid #e3e3e3;
+  font-size: 15px;
+  line-height: 1.45;
+  color: #333;
 }
 
 .knowledge_tests_material_reviewed {
@@ -2353,38 +2559,18 @@ body.admin-bar .table-points .points-header-wrapper.fixed-header-table {
   cursor: pointer;
 }
 
-.knowledge_test_chat_stars {
-  margin-left: 6px;
-  white-space: nowrap;
+.knowledge_tests_reference_link {
+  color: #22344f;
+  cursor: pointer;
+  pointer-events: auto;
+  text-decoration: underline;
 }
 
-.knowledge_test_chat_star {
-  font-size: 14px;
-  margin-left: 2px;
-  opacity: 0.35;
+.knowledge_tests_reference_link:hover {
+  color: #dea993;
 }
 
-.knowledge_test_chat_star--bronze {
-  color: #8d6e63;
-  opacity: 1;
-}
-
-.knowledge_test_chat_star--silver {
-  color: #757575;
-  opacity: 1;
-}
-
-.knowledge_test_chat_star--gold {
-  color: #f9a825;
-  opacity: 1;
-}
-
-.knowledge_test_chat_star--lock {
-  color: #5e35b1;
-  opacity: 1;
-}
-
-/* Knowledge test notifications (Phase 6) */
+/* Knowledge test notifications — layout only; colors come from .enable-notification and .close-denied-notification */
 .knowledge_test_notifications_host {
   pointer-events: none;
   position: relative;
@@ -2396,49 +2582,59 @@ body.admin-bar .table-points .points-header-wrapper.fixed-header-table {
 }
 
 .knowledge_test_notification_bottom {
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  background-color: #22344f;
-  color: #fff;
-  padding: 14px 20px;
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  justify-content: space-between;
-  gap: 12px;
   z-index: 12001;
 }
 
-.knowledge_test_notification_bottom_text {
-  flex: 1 1 240px;
-  max-width: 900px;
+.knowledge_test_notification_bottom .inner-enable-notification {
+  justify-content: space-between;
+  gap: 20px;
 }
 
 .knowledge_test_notification_bottom_actions {
   display: flex;
   flex-wrap: wrap;
-  gap: 10px;
+  gap: 12px;
   align-items: center;
-}
-
-.knowledge_test_notification_link,
-.knowledge_test_notification_understood {
-  background-color: #fff;
-  color: #333;
-  padding: 10px 14px;
-  border: none;
-  cursor: pointer;
-  text-decoration: none;
-  display: inline-block;
 }
 
 .knowledge_test_notification_actions {
   display: flex;
   flex-wrap: wrap;
-  gap: 10px;
-  margin-top: 16px;
+  justify-content: center;
+  gap: 12px;
+  margin-top: 24px;
+}
+
+.knowledge_test_notification_dialog .close-denied-notification,
+.knowledge_test_notification_dialog a.knowledge_test_notification_link {
+  margin: 0;
+  display: inline-block;
+  box-sizing: border-box;
+  box-shadow: none;
+  text-decoration: none;
+  cursor: pointer;
+  border: none;
+  background-color: #22344f;
+  color: #fff;
+  padding: 14px 30px;
+  min-width: 125px;
+  font-size: 14px;
+  line-height: 13px;
+  font-weight: 400;
+  font-family: inherit;
+  text-align: center;
+  vertical-align: middle;
+}
+
+.knowledge_test_notifications_host .button-accept:hover,
+.knowledge_test_notification_dialog .close-denied-notification:hover,
+.knowledge_test_notification_dialog a.knowledge_test_notification_link:hover,
+.knowledge_test_notification_dialog a.knowledge_test_notification_link:focus {
+  background-color: #dea993;
+  color: #22344f;
+  border: none;
+  box-shadow: none;
+  text-decoration: none;
 }
 
 .knowledge_test_notification_block {

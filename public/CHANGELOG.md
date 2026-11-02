@@ -6,6 +6,279 @@ This document tracks changes to the project. Entry format is defined in **Cursor
 
 ## Log
 
+### [2026-11-02] Knowledge tests: hide «Понятно» after the dismiss limit
+**Author**: AI Assistant
+**Logic**:
+- After the configured dismiss limit, the bottom bar and the block notice stay up and can no longer be closed.
+**Changes**:
+- `knowledge_test_notifications.js`: omit «Понятно» when `dismissCount` reaches `dismissLimit`; the tests link no longer dismisses in that state
+
+### [2026-11-02] Knowledge tests: «Понятно» on block notice and button hover
+**Author**: AI Assistant
+**Logic**:
+- The block overlay had only a tests link, so «Понятно» was missing.
+- Consent-bar buttons had no hover; account buttons turn sand `#dea993` with navy text.
+**Changes**:
+- `knowledge_test_notifications.js`: block overlay «Понятно» snoozes like the bottom bar
+- `style.css`: hover on notification buttons
+
+### [2026-11-02] Knowledge tests: block mode no longer uses the bottom bar
+**Author**: AI Assistant
+**Logic**:
+- «Block account» still rendered a bottom bar until dismiss count reached the limit. Failed tests never opened a popup, so they stayed on the bottom bar for the whole limit.
+- Block mode now opens the full-screen notice (a new test still opens once as a popup). Bottom mode stays a bottom bar. The bar reuses the account consent-bar markup.
+**Changes**:
+- `NotificationPresentation.php`, `run_notification_presentation_tests.php`
+- `knowledge_test_notifications.js`, `style.css`: consent bar and denied-dialog buttons
+- `SettingsPage.tsx`: hint for the two modes
+
+### [2026-11-02] Knowledge tests: notification close and block timing
+**Author**: AI Assistant
+**Logic**:
+- Spec points 6–7: popup «Закрыть» ends that visit; the bottom bar is the next entry (next day or WebSocket reconnect), not the same response.
+- Bottom and popup keep two actions. A failed test uses «Материалы» and «Понятно», not a third «Тесты» button.
+- Block mode is the state after the dismiss limit, shown on the next day or after the WebSocket reconnects, not in the visit that reached the limit.
+**Changes**:
+- `knowledge_test_notifications.js`: drop same-response bottom bypass; snooze block the same way; two buttons
+
+### [2026-11-02] Knowledge tests: clickable reference and list pagination
+**Author**: AI Assistant
+**Logic**:
+- Wrong-answer explanations printed the reference as text, so the link could not be opened.
+- The tests list had no account-style page numbers and no “Выводить по” control. Default page size 20 hid paging for 15 tests.
+**Changes**:
+- `knowledge_tests.js`: reference rendered as a link; pagination and per-page selector (default 10)
+- `index.php`: tests footer uses the same pagination and per-page markup as other account lists
+- `style.css`: reference link color
+
+### [2026-11-02] Knowledge tests: sample catalog seed
+**Author**: AI Assistant
+**Logic**:
+- Local dealer testing needs a full catalog: tests, questions, explanations, reference links, and marked answers.
+**Changes**:
+- `bp_knowledge_tests/tests/seed_sample_catalog.php`: [NEW] inserts 15 tests if titles `SEED-KT` are absent
+- Database: 15 tests, 225 questions, 1125 answers (correct rows contain the word `right`)
+
+### [2026-11-02] Knowledge tests: match account table and notification styles
+**Author**: AI Assistant
+**Logic**:
+- Tests list and in-test overlay used a separate flex layout and a text close control; notifications used tighter padding than the account consent bar and denied dialog.
+- Align both with the existing account chrome: orders/contracts table, navy/sand buttons, bottom consent bar, denied-dialog buttons, modal close image.
+**Changes**:
+- `bp_contracts/css/style.css`: tests table, overlay, action buttons, notification popup and bottom bar
+- `bp_contracts/index.php`: tests overlay close uses the theme close image
+
+### [2026-10-30] Knowledge tests: show notification again after WS drop or logout
+**Author**: AI Assistant
+**Logic**:
+- Calendar-day snooze in localStorage hid the bar after «Понятно»/«Закрыть» even when the WebSocket reconnected on the same page or the user logged out.
+- Browser reload and moving to another PA page must keep the snooze (previous bug: every navigation looked like a WS reload).
+**Changes**:
+- `knowledge_test_notifications.js`: clear snooze on same-document socket drop and on logout link click
+- `communication_server.js`: notify notification module on socket close
+
+### [2026-10-30] Knowledge tests: notification snooze survives reload (fix WS epoch)
+**Author**: AI Assistant
+**Logic**:
+- WS epoch bumped on every page load (race with `isPageReload`), clearing snooze so bottom bar reappeared on reload/navigation.
+- Snooze is calendar-day only in `localStorage`; popup «Закрыть» snoozes for the day but still allows one bottom render in the same response.
+**Changes**:
+- `knowledge_test_notifications.js`: remove WS epoch snooze; legacy snooze map migration
+- `communication_server.js`: remove reconnect pending hook
+
+### [2026-10-30] Knowledge tests: notification snooze until next day or WS reconnect
+**Author**: AI Assistant
+**Logic**:
+- Bottom «Понятно» should not reappear on every PA page the same day; only after calendar day change or WebSocket reconnect (not full page navigation).
+- Block overlay after dismiss limit has no dismiss buttons by spec; clarify in admin + block hint text.
+**Changes**:
+- `knowledge_test_notifications.js`: localStorage snooze (date + WS epoch); epoch bumps on reconnect after drop
+- `communication_server.js`: pending reconnect flag on WS close
+- `SettingsPage.tsx`: admin hint for block mode
+
+### [2026-10-30] Knowledge tests: notification re-show after dismiss (fix sessionStorage)
+**Author**: AI Assistant
+**Logic**:
+- `sessionStorage` kept dismissed ids for the whole browser tab, so notifications never returned after reload, WS reconnect, or re-login in the same tab.
+- Spec: bottom bar shows again on each account entry (new PA page load / WS fetch); popup «Закрыть» only moves to bottom, not permanent hide.
+**Changes**:
+- `knowledge_test_notifications.js`: in-memory hide for bottom «Понятно» only until next `getKnowledgeTestNotifications`; clear legacy sessionStorage key on fetch
+
+### [2026-10-30] Knowledge tests: notification UX (presentation + tests page)
+**Author**: AI Assistant
+**Logic**:
+- Spec §3.1: first view popup, then bottom until dismiss limit; at limit use admin `block`/`bottom`. Failed tests start as bottom.
+- Old rule `dismissCount < limit → popup` re-showed popup after every «Закрыть».
+- No notification chrome on `/tests/`; bottom «Понятно» hides until next fetch (not sessionStorage).
+**Changes**:
+- `NotificationPresentation.php`, `NotificationUiQuery.php`, `run_notification_presentation_tests.php`
+- `knowledge_test_notifications.js`
+
+### [2026-10-30] Knowledge tests: notifications on all PA pages + dismiss refresh
+**Author**: AI Assistant
+**Logic**:
+- Notifications were only requested from `knowledge_tests.js` (loaded on `/tests/` only), so other account pages never fetched or showed UX.
+- Dismiss cleared DOM before WS response; failed dismiss looked like dead buttons.
+**Changes**:
+- `communication_server.js`: `requestKnowledgeTestNotifications()` on WS ready (with nav highlight)
+- `knowledge_test_notifications.js`: dismiss waits for `KnowledgeTestNotificationsOnPage` to re-render; «Тесты» dismisses on all pages
+- `knowledge_tests.js`: overlay reconnect only in `onKnowledgeTestsWebSocketOpen`
+
+### [2026-10-30] Knowledge tests: medal hover + author name row (chat, list, finish)
+**Author**: AI Assistant
+**Logic**:
+- Spec §5.1: medals with hover `{rank} — {area}`; chat shows medals inline after dealer name.
+**Changes**:
+- `knowledge_tests_medals.js`: `createKnowledgeTestsMedalBadge`, hover block
+- `knowledge_test_chat_stars.js`, `modal_window.js`: `knowledge_tests_author_with_medals`
+- `knowledge_tests.js`: finish screen badge; `style.css`: hover + layout
+- `KnowledgeTestsWsWorker.php`, `AttemptServices.php`: `medalRankName` on list/finish
+
+### [2026-10-30] Knowledge tests: chat medal hover uses configured rank name
+**Author**: AI Assistant
+**Logic**:
+- Spec §5.1 hover is `{rank from config} — {area}`, not the achievement row name (`Bronze`).
+**Changes**:
+- `TestConfigReader.php`: `rankLabel`
+- `AttemptAchievementService.php`: chat star `rankName` from `rank_name_*`
+
+### [2026-10-29] Knowledge tests: list medal icons missing (findMedalById)
+**Author**: AI Assistant
+**Logic**:
+- `selectUni_2(..., 'name, value')` + `whatExist` dropped multi-column rows, so `medalTier` was always empty and the UI could not show Bronze/Silver/Gold pictures.
+**Changes**:
+- `AchievementRepository.php`: load medal row with `*` and map `name`/`value`
+- `tests/run_achievement_repository_tests.php`: regression check
+
+### [2026-10-29] Knowledge tests: medal icons from wp-diary theme
+**Author**: AI Assistant
+**Logic**:
+- Dealer list and finish screen showed numeric medal id; product uses Bronze/Silver/Gold SVGs in the theme.
+**Changes**:
+- `AttemptServices.php`: `findMedalTierValueForUserAndTest`
+- `KnowledgeTestsWsWorker.php`: `medalTier` on list and finish payloads
+- `knowledge_tests_medals.js`: tier → CSS class; SVG paths in `style.css` as `background-image`
+- `index.php`: enqueue medals.js before chat stars when plugin active
+- `knowledge_tests.js`: list + finish medal columns use shared helpers
+- `style.css`: `.knowledge_tests_medal_icon`
+
+### [2026-10-29] Knowledge tests: scoring formula (max − invalid) / max
+**Author**: AI Assistant
+**Logic**:
+- Product requested official score **not** use selected-correct minus invalid; use **(all correct options in attempt − wrong selections) / all correct options** so 4 right and 1 wrong on a 5-option test → 80%.
+**Changes**:
+- `ScoringService.php`: `calculateScore(invalid, maximumCorrect)`
+- `CompleteAttempt.php`: caller updated
+- `run_scoring_tests.php`, `run_complete_attempt_tests.php`: expectations
+- `knowledge_tests.js`: finish breakdown text
+
+### [2026-10-29] Knowledge tests: score denominator scoped to attempt questions
+**Author**: AI Assistant
+**Logic**:
+- Finish used `maximumCorrectForTest` (entire catalog). Extra/unanswered questions inflated the denominator so 4 correct and 1 wrong could show ~30% instead of ~60%, or fail when the user expected to pass.
+- Official score (spec §2.1) still uses `(valid − invalid) / maximumCorrect` for **questions in this attempt**.
+**Changes**:
+- `AnswerCatalog.php`: `maximumCorrectForQuestions`
+- `CompleteAttempt.php`: denominator from finish line question ids
+- `knowledge_tests.js`: score breakdown on finish screen
+- `tests/run_outcome_maximum_scope_tests.php`: [NEW] regression
+
+### [2026-10-28] Knowledge tests: notification dismiss stuck on /tests/
+**Author**: AI Assistant
+**Logic**:
+- `syncNewTestRowsForUser` called `resetDismissCount` on every list fetch, zeroing dismiss count after the user closed the popup.
+- On `/tests/`, popup blocked interaction; «Перейти к тестам» reloaded the same page without dismissing.
+**Changes**:
+- `NotificationRepository.php`: `ensureRowExists` (insert only)
+- `NotificationUiQuery.php`: sync uses ensure, not reset
+- `knowledge_test_notifications.js`: no popup on tests page; link dismisses when already there; optimistic UI clear
+
+### [2026-10-28] Knowledge tests: finish persist without reload + medal scalar reads
+**Author**: AI Assistant
+**Logic**:
+- After INSERT, `findById` could still fail on some DBWorker shapes; persist now returns an `AttemptRecord` built from the insert payload when reload misses.
+- `selectUni_2` with one column returns a bare scalar — achievement/medal lookups returned null or skipped tiers incorrectly.
+**Changes**:
+- `CompleteAttempt.php`: validate insert id; synthesize record on reload miss
+- `SelectScalar.php`: [NEW] parse single-column selects
+- `AchievementRepository.php`, `UserAchievementRepository.php`: use `SelectScalar`
+- `KnowledgeTestsWsWorker.php`: single try around finish + response; `attempt_insert_failed` reason
+- `knowledge_tests.js`: clearer message when DB insert fails
+
+### [2026-10-28] Knowledge tests: AttemptRepository findById after insert
+**Author**: AI Assistant
+**Logic**:
+- `selectUni_2` + `convertDataFromDB` returns a camelCase **array** for one row; `findById` only accepted `stdClass`, so reload after insert returned null → `Attempt was not persisted` → `server_error (finish_failed)`.
+**Changes**:
+- `AttemptRepository.php`, `NotificationRepository.php`: map reads through `RecordMapper::rows` like other repositories
+
+### [2026-10-28] Knowledge tests: finishTest WS drop and disconnect banner
+**Author**: AI Assistant
+**Logic**:
+- Uncaught errors during `finishTest` (e.g. missing achievement tier, JSON encode) could kill the WS handler; the overlay showed the generic disconnect banner instead of a result or error.
+- While finish was in flight, any socket close looked like mid-test disconnect.
+**Changes**:
+- `KnowledgeTestsWsWorker.php`, `Chat.php`: catch failures; always respond with `TestFinishedOnPage`
+- `AttemptAchievementService.php`: log missing tier instead of throwing
+- `knowledge_tests.js`: finish pending state, retry finish on reconnect, clearer banners
+- `knowledge_test_notifications.js`: drop duplicate `onKnowledgeTestsWebSocketOpen` (tests page owns hook)
+
+### [2026-10-28] Knowledge tests: fix maximumCorrect count from DBWorker
+**Author**: AI Assistant
+**Logic**:
+- `AnswerRepository::countCorrectForTest` expected an array row; `DBWorker::getRawSQL` unwraps a single COUNT row to an object, so `maximumCorrectForTest` was always 0 and finish failed with `test_not_scorable`.
+**Changes**:
+- `AnswerRepository.php`: parse count via `RecordMapper::rows`
+- `KnowledgeTestsWsWorker.php`: block `startTest` when test has no scorable correct options
+
+### [2026-10-28] Knowledge tests: finish attempt validation vs session snapshot
+**Author**: AI Assistant
+**Logic**:
+- `CompleteAttempt` required finish lines to match the **current** full catalog; if the catalog changed after `startTest`, `finishTest` failed with generic `validation`.
+- `/tests/` WS reconnect looked up `handlerTests` (pathname) but only `handlerTestsOnPage` existed.
+**Changes**:
+- `bp_knowledge_tests/src/Services/Attempt/CompleteAttempt.php`: validate question membership in test, not full catalog equality
+- `bp_contracts/src/Workers/KnowledgeTestsWsWorker.php`: require completed session; map scorable-test errors
+- `bp_contracts/js/knowledge_tests.js`: add `handlerTests` for page init
+- `bp_knowledge_tests/spec/WS_PROTOCOL.md`: finish payload = session questions
+
+### [2026-10-28] bp_contracts: createTagHtml multi-class strings
+**Author**: AI Assistant
+**Logic**:
+- `classList.add()` accepts one token; knowledge tests list cells pass `"td_div_knowledge_tests kt-col-title"`, which broke `renderKnowledgeTestsList` on `TestsOnPage`.
+**Changes**:
+- `bp_contracts/js/utility.js`: split `htmlClass` on whitespace before `classList.add`
+
+### [2026-10-23] Knowledge tests: fix CLI tests and selection grader iteration
+**Author**: AI Assistant
+**Logic**:
+- `QuestionSelectionGrader` iterated set values (`true`) instead of answer ids (keys), breaking §2.1.1 counts when wrong options were selected.
+- Two runners required `vendor/autoload.php`; fixture omitted `DealerTestsCapability` on `Plugin`.
+**Changes**:
+- `Domain/QuestionSelectionGrader.php`: foreach over id => value map
+- `tests/support/require_plugin_autoload.php`: [NEW] fallback autoload
+- `run_admin_config_validator_tests.php`, `run_attempt_validity_label_tests.php`: use fallback
+- `CompleteAttemptTestFixture.php`: fifth `Plugin` dependency
+
+### [2026-10-23] Knowledge tests: Phase 7 task breakdown
+**Author**: AI Assistant
+**Logic**:
+- Phase 7 work (WS hardening, regression runner, deploy checklist) needs the same wave/checklist structure as Phases 4–6 before implementation starts.
+**Changes**:
+- `bp_knowledge_tests/spec/PHASE_7_TASKS.md`: [NEW] waves A–F (auth, validation, `run_all_domain_tests`, `DEPLOY_V1.md`, close)
+- `IMPLEMENTATION_PLAN.md`, `spec/PROJECT_CONTEXT.md`, plugin + `bp_contracts` PROJECT_CONTEXT: link Phase 7 tasks
+
+### [2026-10-23] Knowledge tests: Phase 6 close — operator steps in MANUAL_QA only
+**Author**: AI Assistant
+**Logic**:
+- Phase 6 development exit: manual verification belongs in the consolidated QA doc, not open checkboxes on the phase task list.
+- Synced stale spec index (§3) with repo state (Phases 1–6 dev complete).
+**Changes**:
+- `bp_knowledge_tests/spec/MANUAL_QA_V1.md`: §4 expanded (setup, new/failed/prerequisite/D10/retake-block steps)
+- `PHASE_6_TASKS.md`: Wave D complete; status **development complete**
+- `spec/PROJECT_CONTEXT.md`, `IMPLEMENTATION_PLAN.md` §3 + delivery sequence
+- `bp_contracts/PROJECT_CONTEXT.md`, `bp_contracts/js/PROJECT_CONTEXT.md`: Phase 6 complete note + `knowledge_test_notifications.js`
+
 ### [2026-10-23] Knowledge tests: Phase 6 notifications UX (WS + PA client)
 **Author**: AI Assistant
 **Logic**:

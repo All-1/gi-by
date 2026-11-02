@@ -68,7 +68,7 @@ final class CompleteAttempt
     private function validatedLinesForTest(int $testId, array $rawLines): array
     {
         $lines = $this->parseQuestionLines($rawLines);
-        $this->assertQuestionLinesMatchCatalog($this->catalog->questions->listForTest($testId), $lines);
+        $this->assertQuestionLinesBelongToTest($this->catalog->questions->listForTest($testId), $lines);
 
         return $lines;
     }
@@ -86,10 +86,15 @@ final class CompleteAttempt
             $invalid += $line['failedAnswers'];
         }
 
+        $questionIds = array_values(array_unique(array_column($lines, 'questionId')));
+        $maximumCorrect = $this->catalog->answers->maximumCorrectForQuestions($questionIds);
+        if ($maximumCorrect <= 0) {
+            throw new \InvalidArgumentException('Maximum correct answers must be greater than zero.');
+        }
+
         $score = $this->domain->scoring->calculateScore(
-            $valid,
             $invalid,
-            $this->catalog->answers->maximumCorrectForTest($testId),
+            $maximumCorrect,
         );
         $passed = $this->domain->classifier->classify($score, $this->domain->config->read())->passed;
 
@@ -118,6 +123,9 @@ final class CompleteAttempt
             $outcome['status'],
             $attemptRow['dateFinished'],
         );
+        if ($attemptId <= 0) {
+            throw new \RuntimeException('Attempt insert failed.');
+        }
 
         foreach ($lines as $line) {
             $this->attemptQuestions->insert(
@@ -131,8 +139,21 @@ final class CompleteAttempt
         }
 
         $attempt = $this->attempts->findById($attemptId);
+        if ($attempt !== null) {
+            return $attempt;
+        }
 
-        return $attempt ?? throw new \RuntimeException('Attempt was not persisted.');
+        return new AttemptRecord(
+            $attemptId,
+            $attemptRow['userId'],
+            $attemptRow['testId'],
+            $attemptRow['testVersion'],
+            $outcome['validAnswers'],
+            $outcome['invalidAnswers'],
+            $outcome['score'],
+            $outcome['status'],
+            $attemptRow['dateFinished'],
+        );
     }
 
     /**
@@ -169,24 +190,28 @@ final class CompleteAttempt
      * @param list<QuestionRecord> $catalogQuestions
      * @param list<array{questionId: int, rightAnswers: int, failedAnswers: int}> $lines
      */
-    private function assertQuestionLinesMatchCatalog(array $catalogQuestions, array $lines): void
+    private function assertQuestionLinesBelongToTest(array $catalogQuestions, array $lines): void
     {
         if ($catalogQuestions === []) {
             throw new \InvalidArgumentException('Test has no questions.');
         }
 
-        $expectedIds = array_map(static fn (QuestionRecord $q): int => $q->id, $catalogQuestions);
-        sort($expectedIds);
+        $catalogIds = [];
+        foreach ($catalogQuestions as $question) {
+            $catalogIds[$question->id] = true;
+        }
 
         $providedIds = array_column($lines, 'questionId');
-        $uniqueProvided = array_values(array_unique($providedIds));
-        sort($uniqueProvided);
-
-        if (count($providedIds) !== count($uniqueProvided)) {
+        if (count($providedIds) !== count(array_unique($providedIds))) {
             throw new \InvalidArgumentException('Duplicate question in attempt payload.');
         }
-        if ($expectedIds !== $uniqueProvided) {
-            throw new \InvalidArgumentException('Question set does not match test catalog.');
+
+        foreach ($providedIds as $questionId) {
+            if (!isset($catalogIds[(int) $questionId])) {
+                throw new \InvalidArgumentException(
+                    "Question {$questionId} does not belong to this test."
+                );
+            }
         }
     }
 }
