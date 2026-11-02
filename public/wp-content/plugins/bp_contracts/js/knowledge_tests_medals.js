@@ -80,12 +80,7 @@
     let areaEl = document.createElement("span");
     areaEl.className = "knowledge_tests_medal_hover_area";
     areaEl.textContent = achievementArea || "";
-    if (rank) {
-      hover.appendChild(rankEl);
-    }
-    if (area) {
-      hover.appendChild(areaEl);
-    }
+    massAppendChild(hover, rank ? rankEl : null, area ? areaEl : null);
     badge.appendChild(hover);
   }
 

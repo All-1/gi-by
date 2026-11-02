@@ -314,8 +314,11 @@ function openKnowledgeTestsOverlay(testId, title, command) {
     closeBtn.focus();
   }
   content.innerHTML = "";
-  content.appendChild(createTagHtml("h2", "knowledge_tests_overlay_title", title || ""));
-  content.appendChild(createTagHtml("p", "knowledge_tests_loading", "Загрузка…"));
+  massAppendChild(
+    content,
+    createTagHtml("h2", "knowledge_tests_overlay_title", title || ""),
+    createTagHtml("p", "knowledge_tests_loading", "Загрузка…"),
+  );
   let body = { testId: testId };
   if (command === "startTest") {
     sendKnowledgeTestsCommand("startTest", body);
@@ -486,10 +489,11 @@ function renderKnowledgeTestsQuestion(data) {
   let inFeedback = Boolean(data.feedback);
   let questionNumber = formatKnowledgeTestsQuestionNumber(progress, inFeedback);
 
-  content.appendChild(
+  massAppendChild(
+    content,
     createTagHtml("p", "knowledge_tests_progress", questionNumber),
+    createTagHtml("p", "knowledge_tests_question_text", q.text || ""),
   );
-  content.appendChild(createTagHtml("p", "knowledge_tests_question_text", q.text || ""));
 
   let form = createTagHtml("div", "knowledge_tests_answers");
   let rightSet = knowledgeTestsIdSet(data.feedback ? data.feedback.rightAnswerIds : []);
@@ -514,8 +518,7 @@ function renderKnowledgeTestsQuestion(data) {
         input.checked = true;
       }
     }
-    row.appendChild(input);
-    row.appendChild(document.createTextNode(" " + (opt.text || "")));
+    massAppendChild(row, input, document.createTextNode(" " + (opt.text || "")));
     form.appendChild(row);
   });
   content.appendChild(form);
@@ -571,14 +574,13 @@ function knowledgeTestsIdSet(ids) {
 
 function renderKnowledgeTestsReadyToFinish(content, data) {
   let progress = data.progress || {};
-  content.appendChild(
+  massAppendChild(
+    content,
     createTagHtml(
       "p",
       "knowledge_tests_progress",
       "Отвечено " + (progress.total || "—") + " из " + (progress.total || "—"),
     ),
-  );
-  content.appendChild(
     createTagHtml("p", "", "Все вопросы пройдены. Нажмите «Завершить тест», чтобы сохранить результат."),
   );
   let actions = createTagHtml("div", "knowledge_tests_overlay_actions");
@@ -676,18 +678,19 @@ function renderKnowledgeTestsFinished(data) {
     content.appendChild(medalRow);
   }
   let actions = createTagHtml("div", "knowledge_tests_overlay_actions");
+  let materialsBtn = null;
   if (data.materialsRequired) {
     content.appendChild(
       createTagHtml("p", "", "Изучите материалы перед повторной попыткой."),
     );
     let materialsTestId = (attempt.testId || knowledgeTestsOverlayTestId);
-    actions.appendChild(
-      createKnowledgeTestsActionButton("Открыть материалы", function () {
-        sendKnowledgeTestsCommand("getTestMaterials", { testId: materialsTestId });
-      }),
-    );
+    materialsBtn = createKnowledgeTestsActionButton("Открыть материалы", function () {
+      sendKnowledgeTestsCommand("getTestMaterials", { testId: materialsTestId });
+    });
   }
-  actions.appendChild(
+  massAppendChild(
+    actions,
+    materialsBtn,
     createKnowledgeTestsActionButton("Закрыть", function () {
       closeKnowledgeTestsOverlay();
     }),
@@ -725,8 +728,11 @@ function renderKnowledgeTestsMaterials(data) {
 
   (data.items || []).forEach(function (item, index) {
     let block = createTagHtml("div", "knowledge_tests_material_block");
-    block.appendChild(createTagHtml("h3", "", item.questionText || ""));
-    block.appendChild(createTagHtml("p", "", item.explanation || ""));
+    massAppendChild(
+      block,
+      createTagHtml("h3", "", item.questionText || ""),
+      createTagHtml("p", "", item.explanation || ""),
+    );
     appendKnowledgeTestsReference(block, item.reference);
     let label = createTagHtml("label", "knowledge_tests_material_reviewed");
     let checkbox = document.createElement("input");
@@ -740,14 +746,14 @@ function renderKnowledgeTestsMaterials(data) {
       }
       syncExaminedButton();
     });
-    label.appendChild(checkbox);
-    label.appendChild(document.createTextNode(" Просмотрено"));
+    massAppendChild(label, checkbox, document.createTextNode(" Просмотрено"));
     block.appendChild(label);
     content.appendChild(block);
   });
   let actions = createTagHtml("div", "knowledge_tests_overlay_actions");
-  actions.appendChild(examinedBtn);
-  actions.appendChild(
+  massAppendChild(
+    actions,
+    examinedBtn,
     createKnowledgeTestsActionButton("Закрыть", function () {
       closeKnowledgeTestsOverlay();
     }),

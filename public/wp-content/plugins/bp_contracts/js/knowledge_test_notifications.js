@@ -180,24 +180,23 @@ function buildKnowledgeTestPopup(item) {
   let shade = createTagHtml("div", "shade-full-screen-box knowledge_test_notification_popup");
   let box = createTagHtml("div", "box-denied-notification knowledge_test_notification_dialog");
   let title = knowledgeTestNotificationTitle(item);
-  box.appendChild(createTagHtml("h4", "title-denied", title));
-  box.appendChild(
-    createTagHtml("p", "text-denied-notification", knowledgeTestNotificationBody(item)),
-  );
   let actions = createTagHtml("div", "knowledge_test_notification_actions");
-  actions.appendChild(
-    createKnowledgeTestNotificationLinkButton(
-      "Перейти к тестам",
-      KNOWLEDGE_TEST_NOTIFICATIONS_TESTS_PATH,
-      "close-denied-notification",
-      item,
-    ),
+  let testsLink = createKnowledgeTestNotificationLinkButton(
+    "Перейти к тестам",
+    KNOWLEDGE_TEST_NOTIFICATIONS_TESTS_PATH,
+    "close-denied-notification",
+    item,
   );
   let dismissBtn = createTagHtml("button", "close-denied-notification", "Закрыть");
   dismissBtn.addEventListener("click", function () {
     dismissKnowledgeTestNotification(item);
   });
-  actions.appendChild(dismissBtn);
+  massAppendChild(
+    box,
+    createTagHtml("h4", "title-denied", title),
+    createTagHtml("p", "text-denied-notification", knowledgeTestNotificationBody(item)),
+  );
+  massAppendChild(actions, testsLink, dismissBtn);
   box.appendChild(actions);
   shade.appendChild(box);
   return shade;
@@ -206,8 +205,9 @@ function buildKnowledgeTestPopup(item) {
 function buildKnowledgeTestBlockOverlay(item) {
   let shade = createTagHtml("div", "shade-full-screen-box knowledge_test_notification_block");
   let box = createTagHtml("div", "box-denied-notification knowledge_test_notification_dialog");
-  box.appendChild(createTagHtml("h4", "title-denied", "Требуется пройти тест"));
-  box.appendChild(
+  massAppendChild(
+    box,
+    createTagHtml("h4", "title-denied", "Требуется пройти тест"),
     createTagHtml(
       "p",
       "text-denied-notification",
@@ -215,21 +215,20 @@ function buildKnowledgeTestBlockOverlay(item) {
     ),
   );
   let actions = createTagHtml("div", "knowledge_test_notification_actions");
-  actions.appendChild(
-    createKnowledgeTestNotificationLinkButton(
-      knowledgeTestNotificationLinkLabel(item),
-      KNOWLEDGE_TEST_NOTIFICATIONS_TESTS_PATH,
-      "close-denied-notification",
-      null,
-    ),
+  let testsLink = createKnowledgeTestNotificationLinkButton(
+    knowledgeTestNotificationLinkLabel(item),
+    KNOWLEDGE_TEST_NOTIFICATIONS_TESTS_PATH,
+    "close-denied-notification",
+    null,
   );
+  let understood = null;
   if (!knowledgeTestNotificationDismissLocked(item)) {
-    let understood = createTagHtml("button", "close-denied-notification", "Понятно");
+    understood = createTagHtml("button", "close-denied-notification", "Понятно");
     understood.addEventListener("click", function () {
       dismissKnowledgeTestNotification(item);
     });
-    actions.appendChild(understood);
   }
+  massAppendChild(actions, testsLink, understood);
   box.appendChild(actions);
   shade.appendChild(box);
   return shade;
@@ -241,23 +240,21 @@ function buildKnowledgeTestBottomBar(item) {
   let text = createTagHtml("div", "text-enable-notification", knowledgeTestNotificationBody(item));
   let actions = createTagHtml("div", "knowledge_test_notification_bottom_actions");
   let dismissLocked = knowledgeTestNotificationDismissLocked(item);
-  actions.appendChild(
-    createKnowledgeTestNotificationLinkButton(
-      knowledgeTestNotificationLinkLabel(item),
-      KNOWLEDGE_TEST_NOTIFICATIONS_TESTS_PATH,
-      "button-accept",
-      dismissLocked ? null : item,
-    ),
+  let testsLink = createKnowledgeTestNotificationLinkButton(
+    knowledgeTestNotificationLinkLabel(item),
+    KNOWLEDGE_TEST_NOTIFICATIONS_TESTS_PATH,
+    "button-accept",
+    dismissLocked ? null : item,
   );
+  let understood = null;
   if (!dismissLocked) {
-    let understood = createTagHtml("div", "button-accept", "Понятно");
+    understood = createTagHtml("div", "button-accept", "Понятно");
     understood.addEventListener("click", function () {
       dismissKnowledgeTestNotification(item);
     });
-    actions.appendChild(understood);
   }
-  inner.appendChild(text);
-  inner.appendChild(actions);
+  massAppendChild(actions, testsLink, understood);
+  massAppendChild(inner, text, actions);
   bar.appendChild(inner);
   return bar;
 }
