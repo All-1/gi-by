@@ -145,8 +145,7 @@ class KnowledgeTestsWsWorker
         'achievementArea' => $test !== null && $test->achievementArea !== ''
           ? $test->achievementArea
           : ($test?->title ?? ''),
-        'materialsRequired' => $attempt->isFailed()
-          && $this->plugin()->attempts()->materials->hasPendingMaterials($userId, $testId),
+        'materialsRequired' => $this->plugin()->attempts()->materials->hasPendingMaterials($userId, $testId),
       ];
     } catch (\InvalidArgumentException $e) {
       return $this->finishValidationError($e);
@@ -341,6 +340,7 @@ class KnowledgeTestsWsWorker
       'medalTier' => $medalTier,
       'medalRankName' => $this->plugin()->attempts()->medalRankNameForTier($medalTier),
       'canStart' => $this->canStartTest($userId, $testId, $retake),
+      'retakeReasons' => $retake->reasons,
       'canOpenMaterials' => $this->plugin()->attempts()->materials->hasPendingMaterials($userId, $testId),
       'achievementArea' => $test->achievementArea,
     ];

@@ -44,7 +44,7 @@ final class RetakeEligibilityPolicy
         if (!$this->retakeDelayElapsed($attempt->dateFinished, $context->retakeDelayDays, $context->now)) {
             $reasons[] = RetakeEligibility::REASON_RETAKE_DELAY;
         }
-        if ($attempt->isFailed() && $context->hasPendingMaterials) {
+        if ($context->hasPendingMaterials) {
             $reasons[] = RetakeEligibility::REASON_PENDING_MATERIALS;
         }
         if ($context->notificationBlocksRetake) {

@@ -48,8 +48,10 @@ final class CompleteAttempt
         ];
         $attempt = $this->persist($attemptRow, $lines, $outcome);
 
-        if ($outcome['status'] === 'failed') {
+        if ($outcome['status'] === 'failed' || !$outcome['locked']) {
             $this->materials->populateFromFailedAttempt($attempt->id);
+        }
+        if ($outcome['status'] === 'failed') {
             $this->notifications->resetDismissCount($userId, $testId, NotificationRecord::TYPE_FAILED_TEST);
         } else {
             $this->notifications->deleteByUserTestAndType($userId, $testId, NotificationRecord::TYPE_FAILED_TEST);
@@ -75,7 +77,7 @@ final class CompleteAttempt
 
     /**
      * @param list<array{questionId: int, rightAnswers: int, failedAnswers: int}> $lines
-     * @return array{validAnswers: int, invalidAnswers: int, score: float, status: string}
+     * @return array{validAnswers: int, invalidAnswers: int, score: float, status: string, locked: bool}
      */
     private function outcomeForLines(int $testId, array $lines): array
     {
@@ -96,13 +98,14 @@ final class CompleteAttempt
             $invalid,
             $maximumCorrect,
         );
-        $passed = $this->domain->classifier->classify($score, $this->domain->config->read())->passed;
+        $classification = $this->domain->classifier->classify($score, $this->domain->config->read());
 
         return [
             'validAnswers' => $valid,
             'invalidAnswers' => $invalid,
             'score' => $score,
-            'status' => $passed ? 'passed' : 'failed',
+            'status' => $classification->passed ? 'passed' : 'failed',
+            'locked' => $classification->locked,
         ];
     }
 

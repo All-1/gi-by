@@ -6,6 +6,36 @@ This document tracks changes to the project. Entry format is defined in **Cursor
 
 ## Log
 
+### [2026-11-02] Knowledge tests: retake waits for materials and retake_delay_days
+**Author**: AI Assistant
+**Logic**:
+- Spec §2.6 and §3.3–§3.4: another attempt needs the materials marked examined and the configured retake delay. A pass below lock was skipping both, so Начать stayed clickable.
+- Pending materials now block every completed attempt. The delay applies again. Начать is shown disabled until both are clear. A locked score still has no start button.
+**Changes**:
+- `RetakeEligibilityPolicy.php`, `run_retake_eligibility_tests.php`
+- `KnowledgeTestsWsWorker.php`: list rows include `retakeReasons`
+- `knowledge_tests.js`: disabled Начать while waiting
+
+### [2026-11-02] Knowledge tests: retake a pass below the lock score the same day
+**Author**: AI Assistant
+**Logic**:
+- A pass below the lock score stayed blocked by the next-day retake delay, so Начать never appeared after the materials were reviewed.
+- That pass can be started again the same day. A failed attempt still waits. A locked score still cannot be retaken.
+**Changes**:
+- `RetakeEligibilityPolicy.php`
+- `run_retake_eligibility_tests.php`
+
+### [2026-11-02] Knowledge tests: materials below lock, gold at lock
+**Author**: AI Assistant
+**Logic**:
+- A pass below the lock score still has mistakes to study. Those questions get the same temporary materials page as a failed attempt, and the test can be retaken.
+- A score at or above the lock threshold cannot be retaken and stores the gold medal.
+**Changes**:
+- `CompleteAttempt.php`, `MaterialsService.php`: write mistake materials unless the score is locked
+- `AttemptResultClassifier.php`: locked pass tier is `gold`
+- `KnowledgeTestsWsWorker.php`: finish payload `materialsRequired` follows pending materials
+- `run_achievement_tier_tests.php`
+
 ### [2026-11-02] Knowledge tests: hide «Понятно» after the dismiss limit
 **Author**: AI Assistant
 **Logic**:

@@ -85,7 +85,15 @@ $passLines = [['questionId' => $questionId, 'rightAnswers' => 7, 'failedAnswers'
 $passed = $complete->finish($userId, $testId, $passLines);
 $assert($passed->status === 'passed', 'bronze pass status');
 $assert(abs($passed->score - 100.0) < 0.01, 'score 100% with no wrong selections (10 max options)');
-$assert($materials->listForAttempt($userId, $passed->id) === [], 'passed attempt has no materials');
+$assert($materials->listForAttempt($userId, $passed->id) === [], 'locked pass stores no materials');
+$lockedMedalId = (int) $db->allRows('KnowledgeTestUserAchievements')[0]->medal_id;
+$lockedTier = '';
+foreach ($db->allRows('KnowledgeTestAchievements') as $medal) {
+    if ((int) $medal->id === $lockedMedalId) {
+        $lockedTier = (string) $medal->value;
+    }
+}
+$assert($lockedTier === 'gold', 'locked pass stores the gold medal');
 $assert(count($db->allRows('KnowledgeTestUserAchievements')) === 1, 'achievement row after pass');
 $notif = $notifications->findByUserTestAndType($userId, $testId, NotificationRecord::TYPE_FAILED_TEST);
 $assert($notif === null, 'no failed-test notification after pass');
@@ -103,10 +111,19 @@ $recovery = $complete->finish($userId, $testId, $passLines);
 $assert($recovery->status === 'passed', 'can pass again after fail');
 $assert(count($db->allRows('KnowledgeTestUserAchievements')) === 1, 'achievement restored after pass');
 
+$belowLock = $complete->finish(9002, $testId, [
+    ['questionId' => $questionId, 'rightAnswers' => 9, 'failedAnswers' => 1],
+]);
+$assert($belowLock->status === 'passed', 'score below lock still passes');
+$assert(
+    $materials->listForAttempt(9002, $belowLock->id) !== [],
+    'mistakes below the lock score create materials',
+);
+
 $attemptRows = $db->allRows('KnowledgeTestAttempts');
-$assert(count($attemptRows) === 3, 'three attempts persisted');
+$assert(count($attemptRows) === 4, 'four attempts persisted');
 $questionRows = $db->allRows('KnowledgeTestAttemptQuestions');
-$assert(count($questionRows) === 3, 'three attempt_question rows');
+$assert(count($questionRows) === 4, 'four attempt_question rows');
 
 if ($failures > 0) {
     fwrite(STDERR, "{$failures} test(s) failed.\n");

@@ -67,14 +67,35 @@ $attempt = static function (
     return new AttemptRecord(1, 10, 2, 1, 5, 0, $score, $status, $finished);
 };
 
-$delayBlocked = $policy->evaluate(
+$passedSameDay = $policy->evaluate(
     $attempt(80.0, 'passed', '2026-10-07 23:59:59'),
     $context(false, 1, '2026-10-07 10:00:00'),
     $config,
 );
 $assert(
+    !$passedSameDay->canStart && in_array(RetakeEligibility::REASON_RETAKE_DELAY, $passedSameDay->reasons, true),
+    'passed below lock still waits for retake_delay_days',
+);
+
+$passedMaterials = $policy->evaluate(
+    $attempt(80.0, 'passed', '2026-10-01 12:00:00'),
+    $context(true, 1, '2026-10-10 12:00:00'),
+    $config,
+);
+$assert(
+    !$passedMaterials->canStart
+        && in_array(RetakeEligibility::REASON_PENDING_MATERIALS, $passedMaterials->reasons, true),
+    'unread materials block a pass below lock',
+);
+
+$delayBlocked = $policy->evaluate(
+    $attempt(50.0, 'failed', '2026-10-07 23:59:59'),
+    $context(false, 1, '2026-10-07 10:00:00'),
+    $config,
+);
+$assert(
     !$delayBlocked->canStart && in_array(RetakeEligibility::REASON_RETAKE_DELAY, $delayBlocked->reasons, true),
-    'same calendar day blocks retake when delay is 1',
+    'failed attempt still waits until the next day',
 );
 
 $delayOk = $policy->evaluate(

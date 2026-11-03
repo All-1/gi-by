@@ -15,8 +15,10 @@ finish(userId, testId, questionLines)
   3. domain()->scoring->calculateScore(...)
   4. domain()->classifier->classify(...) → status passed|failed
   5. INSERT gi_new_test_attempts + gi_new_test_attempt_questions
-  6. If failed → materials->populateFromFailedAttempt; reset failed_test notification
-     Else → delete failed_test notification row
+  6. If failed, or passed below the lock score → materials for questions with mistakes
+     If failed → reset failed_test notification; else delete that row
+     A locked pass stores the gold medal and skips materials
+     Retake needs both: materials examined, and retake_delay_days elapsed (§2.6, §3.3–§3.4)
   7. achievements->applyAfterComplete (latest result §2.11)
   8. Return AttemptRecord
 ```
