@@ -47,7 +47,7 @@ final class AttemptResultClassifier
             return null;
         }
         if ($classification->locked) {
-            return 'lock';
+            return self::MEDAL_GOLD;
         }
 
         return $classification->medal;

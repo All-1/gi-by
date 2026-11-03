@@ -48,7 +48,7 @@ $assert($classifier->achievementTierValue($bronze) === 'bronze', 'bronze tier');
 
 $locked = $classifier->classify(96.0, $config);
 $assert($locked->locked === true, 'score at lock threshold');
-$assert($classifier->achievementTierValue($locked) === 'lock', 'locked uses lock tier not gold');
+$assert($classifier->achievementTierValue($locked) === 'gold', 'locked score awards gold');
 
 if ($failures > 0) {
     fwrite(STDERR, "{$failures} test(s) failed.\n");

@@ -158,7 +158,7 @@ function buildKnowledgeTestsListRow(row) {
         openKnowledgeTestsOverlay(row.testId, row.title, "startTest");
       }),
     );
-  } else if (statusCode === "not_started" || statusCode === "failed" || statusCode === "outdated") {
+  } else if (knowledgeTestsShowDisabledStart(row)) {
     actions.appendChild(createKnowledgeTestsActionButton("Начать", null, true));
   }
   if (row.canOpenMaterials) {
@@ -172,6 +172,18 @@ function buildKnowledgeTestsListRow(row) {
   }
   massAppendChild(line, titleCell, status, score, medal, actions);
   return line;
+}
+
+function knowledgeTestsShowDisabledStart(row) {
+  let reasons = row.retakeReasons || [];
+  if (reasons.indexOf("test_locked") !== -1) {
+    return false;
+  }
+  let statusCode = row.displayStatus || "";
+  return statusCode === "not_started"
+    || statusCode === "failed"
+    || statusCode === "passed"
+    || statusCode === "outdated";
 }
 
 function createKnowledgeTestsActionButton(label, onClick, disabled) {

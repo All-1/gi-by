@@ -48,11 +48,12 @@ final class MaterialsService
 
     /**
      * Copy mistake explanations into temporary materials (spec §10.1). Idempotent per attempt.
+     * Used for a failed attempt and for a pass below the lock score.
      */
     public function populateFromFailedAttempt(int $attemptId): int
     {
         $attempt = $this->attempts->findById($attemptId);
-        if ($attempt === null || !$attempt->isFailed()) {
+        if ($attempt === null) {
             return 0;
         }
 
