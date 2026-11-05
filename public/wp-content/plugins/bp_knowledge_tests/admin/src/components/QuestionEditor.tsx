@@ -34,7 +34,7 @@ export function QuestionEditor({ question, onRemoved, onUpdated }: Props) {
 
   useEffect(() => {
     loadAnswers().catch((err: unknown) => {
-      setError(err instanceof Error ? err.message : 'Failed to load answers.');
+      setError(err instanceof Error ? err.message : 'Не удалось загрузить ответы.');
     });
   }, [loadAnswers]);
 
@@ -49,14 +49,14 @@ export function QuestionEditor({ question, onRemoved, onUpdated }: Props) {
       });
       onUpdated(updated);
     } catch (err: unknown) {
-      setError(err instanceof Error ? err.message : 'Save failed.');
+      setError(err instanceof Error ? err.message : 'Не удалось сохранить.');
     } finally {
       setBusy(false);
     }
   };
 
   const removeQuestion = async () => {
-    if (!window.confirm('Delete this question and all its answers?')) {
+    if (!window.confirm('Удалить этот вопрос и все его ответы?')) {
       return;
     }
     setBusy(true);
@@ -64,7 +64,7 @@ export function QuestionEditor({ question, onRemoved, onUpdated }: Props) {
       await deleteQuestion(question.id);
       onRemoved();
     } catch (err: unknown) {
-      setError(err instanceof Error ? err.message : 'Delete failed.');
+      setError(err instanceof Error ? err.message : 'Не удалось удалить.');
       setBusy(false);
     }
   };
@@ -81,7 +81,7 @@ export function QuestionEditor({ question, onRemoved, onUpdated }: Props) {
       setNewAnswer('');
       await loadAnswers();
     } catch (err: unknown) {
-      setError(err instanceof Error ? err.message : 'Could not add answer.');
+      setError(err instanceof Error ? err.message : 'Не удалось добавить ответ.');
     } finally {
       setBusy(false);
     }
@@ -96,7 +96,7 @@ export function QuestionEditor({ question, onRemoved, onUpdated }: Props) {
       await setCorrectAnswerIds(question.id, nextIds);
       await loadAnswers();
     } catch (err: unknown) {
-      setError(err instanceof Error ? err.message : 'Could not update correct answers.');
+      setError(err instanceof Error ? err.message : 'Не удалось обновить верные ответы.');
       await loadAnswers();
     }
   };
@@ -106,19 +106,19 @@ export function QuestionEditor({ question, onRemoved, onUpdated }: Props) {
       await updateAnswer(answer.id, value, answer.isCorrect);
       await loadAnswers();
     } catch (err: unknown) {
-      setError(err instanceof Error ? err.message : 'Could not save answer.');
+      setError(err instanceof Error ? err.message : 'Не удалось сохранить ответ.');
     }
   };
 
   const removeAnswer = async (answerId: number) => {
-    if (!window.confirm('Delete this answer option?')) {
+    if (!window.confirm('Удалить этот вариант ответа?')) {
       return;
     }
     try {
       await deleteAnswer(answerId);
       await loadAnswers();
     } catch (err: unknown) {
-      setError(err instanceof Error ? err.message : 'Could not delete answer.');
+      setError(err instanceof Error ? err.message : 'Не удалось удалить ответ.');
     }
   };
 
@@ -126,11 +126,11 @@ export function QuestionEditor({ question, onRemoved, onUpdated }: Props) {
     <div className="bp-kt-question">
       <div className="bp-kt-question__fields">
         <label>
-          Question
+          Вопрос
           <textarea value={text} onChange={(e) => setText(e.target.value)} rows={3} />
         </label>
         <label>
-          Explanation
+          Пояснение
           <textarea
             value={explanation}
             onChange={(e) => setExplanation(e.target.value)}
@@ -138,19 +138,19 @@ export function QuestionEditor({ question, onRemoved, onUpdated }: Props) {
           />
         </label>
         <label>
-          Reference
+          Ссылка на материал
           <textarea value={reference} onChange={(e) => setReference(e.target.value)} rows={2} />
         </label>
         <button type="button" className="button button-primary" onClick={saveQuestion} disabled={busy}>
-          Save question
+          Сохранить вопрос
         </button>
         <button type="button" className="button button-link-delete" onClick={removeQuestion} disabled={busy}>
-          Delete question
+          Удалить вопрос
         </button>
       </div>
 
       <div className="bp-kt-answers">
-        <h4>Answers</h4>
+        <h4>Ответы</h4>
         <ul className="bp-kt-answers__list">
           {answers.map((answer) => (
             <li key={answer.id}>
@@ -160,7 +160,7 @@ export function QuestionEditor({ question, onRemoved, onUpdated }: Props) {
                   checked={correctIds.includes(answer.id)}
                   onChange={(e) => toggleCorrect(answer.id, e.target.checked)}
                 />
-                Correct
+                Верный
               </label>
               <input
                 type="text"
@@ -175,7 +175,7 @@ export function QuestionEditor({ question, onRemoved, onUpdated }: Props) {
                 onBlur={(e) => saveAnswerText(answer, e.target.value)}
               />
               <button type="button" className="button button-small" onClick={() => removeAnswer(answer.id)}>
-                Remove
+                Удалить
               </button>
             </li>
           ))}
@@ -184,12 +184,12 @@ export function QuestionEditor({ question, onRemoved, onUpdated }: Props) {
           <input
             type="text"
             className="regular-text"
-            placeholder="New answer option"
+            placeholder="Новый вариант ответа"
             value={newAnswer}
             onChange={(e) => setNewAnswer(e.target.value)}
           />
           <button type="button" className="button" onClick={addAnswer} disabled={busy}>
-            Add answer
+            Добавить ответ
           </button>
         </div>
       </div>

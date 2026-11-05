@@ -15,10 +15,10 @@ type Props = {
 
 function DistributionList({ distribution }: { distribution: TestAnalyticsSummary['scoreDistribution'] }) {
   const items = [
-    ['Under 70%', distribution.under70],
+    ['Ниже 70%', distribution.under70],
     ['70–79%', distribution.from70To79],
     ['80–89%', distribution.from80To89],
-    ['90%+', distribution.from90Plus],
+    ['90% и выше', distribution.from90Plus],
   ];
 
   return (
@@ -46,7 +46,7 @@ export function AnalyticsPage({ onNavigateTests, onNavigateSettings, onNavigateR
       setSummaries(list);
       setSelectedId((current) => current ?? (list[0]?.testId ?? null));
     } catch (err: unknown) {
-      setError(err instanceof Error ? err.message : 'Failed to load analytics.');
+      setError(err instanceof Error ? err.message : 'Не удалось загрузить аналитику.');
     } finally {
       setLoading(false);
     }
@@ -71,7 +71,7 @@ export function AnalyticsPage({ onNavigateTests, onNavigateSettings, onNavigateR
       })
       .catch((err: unknown) => {
         if (!cancelled) {
-          setError(err instanceof Error ? err.message : 'Failed to load test analytics.');
+          setError(err instanceof Error ? err.message : 'Не удалось загрузить аналитику теста.');
         }
       })
       .finally(() => {
@@ -95,16 +95,16 @@ export function AnalyticsPage({ onNavigateTests, onNavigateSettings, onNavigateR
         onNavigateAnalytics={() => undefined}
       />
       <header className="bp-kt-page__header">
-        <h1>Analytics</h1>
+        <h1>Аналитика</h1>
       </header>
       {error && <p className="bp-kt-error">{error}</p>}
       {loading ? (
-        <p className="bp-kt-muted">Loading analytics…</p>
+        <p className="bp-kt-muted">Загрузка аналитики…</p>
       ) : (
         <>
           <div className="bp-kt-card">
             <label>
-              Test
+              Тест
               <select
                 value={selectedId ?? ''}
                 onChange={(e) => setSelectedId(Number.parseInt(e.target.value, 10))}
@@ -116,47 +116,47 @@ export function AnalyticsPage({ onNavigateTests, onNavigateSettings, onNavigateR
             </label>
           </div>
           {detailLoading || !detail ? (
-            <p className="bp-kt-muted">Loading test detail…</p>
+            <p className="bp-kt-muted">Загрузка данных теста…</p>
           ) : (
             <>
               <div className="bp-kt-card bp-kt-analytics-summary">
                 <h2>{detail.title}</h2>
                 <p className="bp-kt-muted">
-                  Version {detail.currentVersion} · {detail.questionCount} questions
+                  Версия {detail.currentVersion} · вопросов: {detail.questionCount}
                 </p>
                 <div className="bp-kt-analytics-grid">
                   <div>
-                    <h3>Attempts</h3>
+                    <h3>Попытки</h3>
                     <ul className="bp-kt-stats-list">
-                      <li>Completed: <strong>{detail.attempts.completed}</strong></li>
-                      <li>Passed: <strong>{detail.attempts.passed}</strong></li>
-                      <li>Failed: <strong>{detail.attempts.failed}</strong></li>
-                      <li>Outdated: <strong>{detail.attempts.outdated}</strong></li>
-                      <li>Average score: <strong>{detail.attempts.averageScore.toFixed(2)}%</strong></li>
+                      <li>Завершено: <strong>{detail.attempts.completed}</strong></li>
+                      <li>Сдано: <strong>{detail.attempts.passed}</strong></li>
+                      <li>Не сдано: <strong>{detail.attempts.failed}</strong></li>
+                      <li>Устарело: <strong>{detail.attempts.outdated}</strong></li>
+                      <li>Средний балл: <strong>{detail.attempts.averageScore.toFixed(2)}%</strong></li>
                     </ul>
                   </div>
                   <div>
-                    <h3>Score distribution</h3>
+                    <h3>Распределение баллов</h3>
                     <DistributionList distribution={detail.scoreDistribution} />
                   </div>
                 </div>
               </div>
-              <h2>Question level</h2>
+              <h2>По вопросам</h2>
               <table className="widefat striped bp-kt-table">
                 <thead>
                   <tr>
-                    <th>Question</th>
-                    <th>Presented</th>
-                    <th>Right sel.</th>
-                    <th>Wrong sel.</th>
-                    <th>Missed correct</th>
-                    <th>Avg. question %</th>
+                    <th>Вопрос</th>
+                    <th>Показан</th>
+                    <th>Верных</th>
+                    <th>Неверных</th>
+                    <th>Пропущено верных</th>
+                    <th>Средний % вопроса</th>
                   </tr>
                 </thead>
                 <tbody>
                   {detail.questions.length === 0 ? (
                     <tr>
-                      <td colSpan={6}>No questions in this test.</td>
+                      <td colSpan={6}>В этом тесте нет вопросов.</td>
                     </tr>
                   ) : (
                     detail.questions.map((q) => (

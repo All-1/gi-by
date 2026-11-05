@@ -60,8 +60,10 @@ Dealer test-taking UI is **not** this package — it lives in `bp_contracts` (`k
 
 ```bash
 cd admin
-npm install
+npm ci --prefix ../../../../vendor
 npm run build    # required after TS/TSX changes
 ```
+
+Dependencies install into `public/vendor/node_modules`. The Vite build loads them from there.
 
 Capability: `bp_manage_knowledge_tests_catalog` (see [Security](../src/Infrastructure/Security/PROJECT_CONTEXT.md)).

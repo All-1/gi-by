@@ -19,7 +19,7 @@ export class AdminErrorBoundary extends Component<Props, State> {
     if (this.state.error !== null) {
       return (
         <p className="bp-kt-error">
-          Admin UI error: {this.state.error.message}
+          Ошибка админки: {this.state.error.message}
         </p>
       );
     }

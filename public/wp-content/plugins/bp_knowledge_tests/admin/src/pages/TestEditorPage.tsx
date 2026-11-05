@@ -45,7 +45,7 @@ export function TestEditorPage({ testId, onBack, onCreated }: Props) {
       setAchievementArea(loaded.achievementArea ?? '');
       setQuestions(await listQuestions(testId));
     } catch (err: unknown) {
-      setError(err instanceof Error ? err.message : 'Failed to load test.');
+      setError(err instanceof Error ? err.message : 'Не удалось загрузить тест.');
     } finally {
       setBusy(false);
     }
@@ -58,7 +58,7 @@ export function TestEditorPage({ testId, onBack, onCreated }: Props) {
   const saveTest = async () => {
     const trimmed = title.trim();
     if (trimmed === '') {
-      setError('Title is required.');
+      setError('Укажите название.');
       return;
     }
     setBusy(true);
@@ -73,7 +73,7 @@ export function TestEditorPage({ testId, onBack, onCreated }: Props) {
         setTest(updated);
       }
     } catch (err: unknown) {
-      setError(err instanceof Error ? err.message : 'Save failed.');
+      setError(err instanceof Error ? err.message : 'Не удалось сохранить.');
     } finally {
       setBusy(false);
     }
@@ -81,19 +81,19 @@ export function TestEditorPage({ testId, onBack, onCreated }: Props) {
 
   const addQuestion = async () => {
     if (testId === null) {
-      setError('Save the test before adding questions.');
+      setError('Сначала сохраните тест, затем добавляйте вопросы.');
       return;
     }
     setBusy(true);
     try {
       const question = await createQuestion(testId, {
-        question: 'New question',
+        question: 'Новый вопрос',
         explanation: '',
         reference: '',
       });
       setQuestions((prev) => [...prev, question]);
     } catch (err: unknown) {
-      setError(err instanceof Error ? err.message : 'Could not add question.');
+      setError(err instanceof Error ? err.message : 'Не удалось добавить вопрос.');
     } finally {
       setBusy(false);
     }
@@ -104,7 +104,7 @@ export function TestEditorPage({ testId, onBack, onCreated }: Props) {
       onBack();
       return;
     }
-    if (!window.confirm('Delete this test and all related content?')) {
+    if (!window.confirm('Удалить этот тест и всё связанное содержимое?')) {
       return;
     }
     setBusy(true);
@@ -112,7 +112,7 @@ export function TestEditorPage({ testId, onBack, onCreated }: Props) {
       await deleteTest(testId);
       onBack();
     } catch (err: unknown) {
-      setError(err instanceof Error ? err.message : 'Delete failed.');
+      setError(err instanceof Error ? err.message : 'Не удалось удалить.');
       setBusy(false);
     }
   };
@@ -128,7 +128,7 @@ export function TestEditorPage({ testId, onBack, onCreated }: Props) {
       setTest(updated);
       setCriticalStep(0);
     } catch (err: unknown) {
-      setError(err instanceof Error ? err.message : 'Critical update failed.');
+      setError(err instanceof Error ? err.message : 'Не удалось выполнить критическое обновление.');
     } finally {
       setBusy(false);
     }
@@ -138,17 +138,17 @@ export function TestEditorPage({ testId, onBack, onCreated }: Props) {
     <div className="bp-kt-page">
       <header className="bp-kt-page__header">
         <button type="button" className="button" onClick={onBack}>
-          ← All tests
+          ← Все тесты
         </button>
-        <h1>{isNew ? 'Add test' : 'Edit test'}</h1>
+        <h1>{isNew ? 'Добавить тест' : 'Редактировать тест'}</h1>
         {!isNew && test !== null && (
-          <span className="bp-kt-muted">Version {test.version}</span>
+          <span className="bp-kt-muted">Версия {test.version}</span>
         )}
       </header>
 
       <section className="bp-kt-card">
         <label>
-          Title
+          Название
           <input
             type="text"
             className="regular-text"
@@ -157,23 +157,23 @@ export function TestEditorPage({ testId, onBack, onCreated }: Props) {
           />
         </label>
         <label>
-          Achievement for (area)
+          Достижение за (область)
           <input
             type="text"
             className="regular-text"
-            placeholder="e.g. PostgreSQL"
+            placeholder="например, PostgreSQL"
             value={achievementArea}
             onChange={(e) => setAchievementArea(e.target.value)}
           />
         </label>
         {isNew && (
           <p className="bp-kt-muted">
-            Enter a title and click Save test. You can add questions after the test is created.
+            Введите название и нажмите «Сохранить тест». Вопросы можно добавить после создания теста.
           </p>
         )}
         <div className="bp-kt-actions">
           <button type="button" className="button button-primary" onClick={saveTest} disabled={busy}>
-            {isNew ? 'Create test' : 'Save test'}
+            {isNew ? 'Создать тест' : 'Сохранить тест'}
           </button>
           {!isNew && (
             <>
@@ -183,10 +183,10 @@ export function TestEditorPage({ testId, onBack, onCreated }: Props) {
                 onClick={() => setCriticalStep(1)}
                 disabled={busy}
               >
-                Critical update
+                Критическое обновление
               </button>
               <button type="button" className="button button-link-delete" onClick={removeTest} disabled={busy}>
-                Delete test
+                Удалить тест
               </button>
             </>
           )}
@@ -196,15 +196,15 @@ export function TestEditorPage({ testId, onBack, onCreated }: Props) {
       {!isNew && testId !== null && (
         <section className="bp-kt-card">
           <header className="bp-kt-page__header">
-            <h2>Questions</h2>
+            <h2>Вопросы</h2>
             <button type="button" className="button" onClick={addQuestion} disabled={busy}>
-              Add question
+              Добавить вопрос
             </button>
           </header>
-          {questions.length === 0 && <p className="bp-kt-muted">No questions yet.</p>}
+          {questions.length === 0 && <p className="bp-kt-muted">Вопросов пока нет.</p>}
           {questions.map((question, index) => (
             <details key={question.id} className="bp-kt-question-panel" open={index === 0}>
-              <summary>Question {index + 1}</summary>
+              <summary>Вопрос {index + 1}</summary>
               <QuestionEditor
                 question={question}
                 onRemoved={() => setQuestions((prev) => prev.filter((q) => q.id !== question.id))}

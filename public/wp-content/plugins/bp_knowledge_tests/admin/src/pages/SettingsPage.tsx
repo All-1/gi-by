@@ -28,7 +28,7 @@ export function SettingsPage({ onNavigateTests, onNavigateResults, onNavigateAna
     try {
       setForm(settingsFromApi(await fetchSettings()));
     } catch (err: unknown) {
-      setError(err instanceof Error ? err.message : 'Failed to load settings.');
+      setError(err instanceof Error ? err.message : 'Не удалось загрузить настройки.');
     } finally {
       setLoading(false);
     }
@@ -51,12 +51,12 @@ export function SettingsPage({ onNavigateTests, onNavigateResults, onNavigateAna
       const result = await saveSettings(settingsToApi(form));
       setForm(settingsFromApi(result.settings));
       if (result.achievementsRecalculated) {
-        setNotice('Settings saved. User medals were recalculated for the new thresholds.');
+        setNotice('Настройки сохранены. Медали пользователей пересчитаны по новым порогам.');
       } else {
-        setNotice('Settings saved.');
+        setNotice('Настройки сохранены.');
       }
     } catch (err: unknown) {
-      setError(err instanceof Error ? err.message : 'Save failed.');
+      setError(err instanceof Error ? err.message : 'Не удалось сохранить.');
     } finally {
       setBusy(false);
     }
@@ -65,7 +65,7 @@ export function SettingsPage({ onNavigateTests, onNavigateResults, onNavigateAna
   return (
     <div className="bp-kt-page">
       <header className="bp-kt-page__header">
-        <h1>Settings</h1>
+        <h1>Настройки</h1>
       </header>
 
       <AdminSubnav
@@ -75,17 +75,17 @@ export function SettingsPage({ onNavigateTests, onNavigateResults, onNavigateAna
         onNavigateAnalytics={onNavigateAnalytics}
       />
 
-      {loading && <p>Loading…</p>}
+      {loading && <p>Загрузка…</p>}
       {error !== null && <p className="bp-kt-error">{error}</p>}
       {notice !== null && <p className="bp-kt-notice">{notice}</p>}
 
       {!loading && (
         <form className="bp-kt-settings" onSubmit={onSubmit}>
           <section className="bp-kt-card">
-            <h2>Achievement thresholds (%)</h2>
-            <p className="bp-kt-muted">Passed = at least Bronze. Lock disables retakes at this score or higher.</p>
+            <h2>Пороги достижений (%)</h2>
+            <p className="bp-kt-muted">Сдан — не ниже бронзы. Блокировка запрещает пересдачу при этом результате и выше.</p>
             <label>
-              Bronze
+              Бронза
               <input
                 className="regular-text"
                 type="number"
@@ -98,7 +98,7 @@ export function SettingsPage({ onNavigateTests, onNavigateResults, onNavigateAna
               />
             </label>
             <label>
-              Silver
+              Серебро
               <input
                 className="regular-text"
                 type="number"
@@ -111,7 +111,7 @@ export function SettingsPage({ onNavigateTests, onNavigateResults, onNavigateAna
               />
             </label>
             <label>
-              Gold
+              Золото
               <input
                 className="regular-text"
                 type="number"
@@ -124,7 +124,7 @@ export function SettingsPage({ onNavigateTests, onNavigateResults, onNavigateAna
               />
             </label>
             <label>
-              Lock
+              Блокировка
               <input
                 className="regular-text"
                 type="number"
@@ -139,9 +139,9 @@ export function SettingsPage({ onNavigateTests, onNavigateResults, onNavigateAna
           </section>
 
           <section className="bp-kt-card">
-            <h2>Retake</h2>
+            <h2>Пересдача</h2>
             <label>
-              Delay (days)
+              Задержка (дней)
               <input
                 className="regular-text"
                 type="number"
@@ -152,13 +152,13 @@ export function SettingsPage({ onNavigateTests, onNavigateResults, onNavigateAna
                 onChange={(e) => updateField('retakeDelayDays', e.target.value)}
               />
             </label>
-            <p className="bp-kt-muted">1 means the user can retake on the following calendar day.</p>
+            <p className="bp-kt-muted">1 — пересдача доступна на следующий календарный день.</p>
           </section>
 
           <section className="bp-kt-card">
-            <h2>Notifications</h2>
+            <h2>Уведомления</h2>
             <label>
-              New test — max dismissals
+              Новый тест — максимум закрытий
               <input
                 className="regular-text"
                 type="number"
@@ -170,24 +170,24 @@ export function SettingsPage({ onNavigateTests, onNavigateResults, onNavigateAna
               />
             </label>
             <p className="bp-kt-muted">
-              «Block account» is a full-screen overlay with «Понятно». A new test still
-              opens once as a popup. «Bottom bar» stays a bar you can close. The choice applies on the
-              next account entry after you save.
+              «Блокировка аккаунта» — полноэкранное окно с кнопкой «Понятно». Новый тест всё равно
+              один раз открывается как всплывающее окно. «Нижняя панель» остаётся полосой, которую можно
+              закрыть. Выбор применяется при следующем входе в аккаунт после сохранения.
             </p>
             <label>
-              New test — after limit
+              Новый тест — после лимита
               <select
                 value={form.newTestNotificationMode}
                 onChange={(e) =>
                   updateField('newTestNotificationMode', e.target.value as NotificationMode)
                 }
               >
-                <option value="bottom">Bottom bar</option>
-                <option value="block">Block account</option>
+                <option value="bottom">Нижняя панель</option>
+                <option value="block">Блокировка аккаунта</option>
               </select>
             </label>
             <label>
-              Failed test — max dismissals
+              Несданный тест — максимум закрытий
               <input
                 className="regular-text"
                 type="number"
@@ -199,24 +199,24 @@ export function SettingsPage({ onNavigateTests, onNavigateResults, onNavigateAna
               />
             </label>
             <label>
-              Failed test — after limit
+              Несданный тест — после лимита
               <select
                 value={form.failedTestNotificationMode}
                 onChange={(e) =>
                   updateField('failedTestNotificationMode', e.target.value as NotificationMode)
                 }
               >
-                <option value="bottom">Bottom bar</option>
-                <option value="block">Block account</option>
+                <option value="bottom">Нижняя панель</option>
+                <option value="block">Блокировка аккаунта</option>
               </select>
             </label>
           </section>
 
           <section className="bp-kt-card">
-            <h2>Rank display names</h2>
-            <p className="bp-kt-muted">Shown in hover text as Rank — Area (area is set per test).</p>
+            <h2>Названия званий</h2>
+            <p className="bp-kt-muted">Показываются во всплывающей подсказке как «Звание — область» (область задаётся у теста).</p>
             <label>
-              Gold rank
+              Звание за золото
               <input
                 className="regular-text"
                 type="text"
@@ -226,7 +226,7 @@ export function SettingsPage({ onNavigateTests, onNavigateResults, onNavigateAna
               />
             </label>
             <label>
-              Silver rank
+              Звание за серебро
               <input
                 className="regular-text"
                 type="text"
@@ -236,7 +236,7 @@ export function SettingsPage({ onNavigateTests, onNavigateResults, onNavigateAna
               />
             </label>
             <label>
-              Bronze rank
+              Звание за бронзу
               <input
                 className="regular-text"
                 type="text"
@@ -246,7 +246,7 @@ export function SettingsPage({ onNavigateTests, onNavigateResults, onNavigateAna
               />
             </label>
             <label>
-              Failed rank
+              Звание при несданном тесте
               <input
                 className="regular-text"
                 type="text"
@@ -259,7 +259,7 @@ export function SettingsPage({ onNavigateTests, onNavigateResults, onNavigateAna
 
           <div className="bp-kt-actions">
             <button type="submit" className="button button-primary" disabled={busy}>
-              {busy ? 'Saving…' : 'Save settings'}
+              {busy ? 'Сохранение…' : 'Сохранить настройки'}
             </button>
           </div>
         </form>

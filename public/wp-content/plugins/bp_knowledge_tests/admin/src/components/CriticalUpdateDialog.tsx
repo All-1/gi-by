@@ -13,18 +13,18 @@ export function CriticalUpdateDialog({ open, testTitle, onCancel, onConfirm }: P
   return (
     <div className="bp-kt-modal-backdrop" role="presentation">
       <div className="bp-kt-modal" role="dialog" aria-labelledby="bp-kt-critical-title">
-        <h2 id="bp-kt-critical-title">Critical update</h2>
+        <h2 id="bp-kt-critical-title">Критическое обновление</h2>
         <p>
-          This will invalidate passed results for <strong>{testTitle}</strong>, remove
-          achievements, and bump the test version. Historical attempts remain but become outdated.
+          Сданные результаты теста <strong>{testTitle}</strong> станут недействительными, медали
+          будут сняты, версия теста увеличится. Прошлые попытки останутся, но получат статус «Устарел».
         </p>
-        <p className="bp-kt-modal__warn">This action cannot be undone.</p>
+        <p className="bp-kt-modal__warn">Это действие нельзя отменить.</p>
         <div className="bp-kt-modal__actions">
           <button type="button" className="button" onClick={onCancel}>
-            Cancel
+            Отмена
           </button>
           <button type="button" className="button button-primary" onClick={onConfirm}>
-            Continue
+            Продолжить
           </button>
         </div>
       </div>
@@ -52,11 +52,11 @@ export function CriticalUpdateConfirmDialog({
   return (
     <div className="bp-kt-modal-backdrop" role="presentation">
       <div className="bp-kt-modal" role="dialog" aria-labelledby="bp-kt-critical-confirm-title">
-        <h2 id="bp-kt-critical-confirm-title">Confirm critical update</h2>
-        <p>Run the critical update now?</p>
+        <h2 id="bp-kt-critical-confirm-title">Подтвердите критическое обновление</h2>
+        <p>Выполнить критическое обновление сейчас?</p>
         <div className="bp-kt-modal__actions">
           <button type="button" className="button" onClick={onCancel} disabled={busy}>
-            Go back
+            Назад
           </button>
           <button
             type="button"
@@ -64,7 +64,7 @@ export function CriticalUpdateConfirmDialog({
             onClick={onConfirm}
             disabled={busy}
           >
-            {busy ? 'Updating…' : 'Execute critical update'}
+            {busy ? 'Обновление…' : 'Выполнить критическое обновление'}
           </button>
         </div>
       </div>

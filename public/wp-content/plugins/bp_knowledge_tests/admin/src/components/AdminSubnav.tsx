@@ -39,11 +39,11 @@ export function AdminSubnav({
   };
 
   return (
-    <nav className="bp-kt-subnav" aria-label="Knowledge tests admin">
-      {linkOrButton('tests', 'All tests', urls?.list, onNavigateTests)}
-      {linkOrButton('results', 'Results', urls?.results, onNavigateResults)}
-      {linkOrButton('analytics', 'Analytics', urls?.analytics, onNavigateAnalytics)}
-      {linkOrButton('settings', 'Settings', urls?.settings, onNavigateSettings)}
+    <nav className="bp-kt-subnav" aria-label="Админка тестов знаний">
+      {linkOrButton('tests', 'Все тесты', urls?.list, onNavigateTests)}
+      {linkOrButton('results', 'Результаты', urls?.results, onNavigateResults)}
+      {linkOrButton('analytics', 'Аналитика', urls?.analytics, onNavigateAnalytics)}
+      {linkOrButton('settings', 'Настройки', urls?.settings, onNavigateSettings)}
     </nav>
   );
 }

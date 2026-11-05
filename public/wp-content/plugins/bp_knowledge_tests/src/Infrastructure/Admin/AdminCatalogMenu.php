@@ -54,8 +54,8 @@ final class AdminCatalogMenu
 
         $cap = CatalogCapability::CAP_MANAGE_CATALOG;
         add_menu_page(
-            __('Knowledge Tests', 'bp_knowledge_tests'),
-            __('Knowledge Tests', 'bp_knowledge_tests'),
+            __('Тесты знаний', 'bp_knowledge_tests'),
+            __('Тесты знаний', 'bp_knowledge_tests'),
             $cap,
             self::MENU_SLUG,
             fn () => $this->renderMount('list'),
@@ -64,40 +64,40 @@ final class AdminCatalogMenu
         );
         add_submenu_page(
             self::MENU_SLUG,
-            __('All Tests', 'bp_knowledge_tests'),
-            __('All Tests', 'bp_knowledge_tests'),
+            __('Все тесты', 'bp_knowledge_tests'),
+            __('Все тесты', 'bp_knowledge_tests'),
             $cap,
             self::MENU_SLUG,
             fn () => $this->renderMount('list'),
         );
         add_submenu_page(
             self::MENU_SLUG,
-            __('Add Test', 'bp_knowledge_tests'),
-            __('Add Test', 'bp_knowledge_tests'),
+            __('Добавить тест', 'bp_knowledge_tests'),
+            __('Добавить тест', 'bp_knowledge_tests'),
             $cap,
             self::SLUG_ADD,
             fn () => $this->renderMount($this->addScreenView()),
         );
         add_submenu_page(
             self::MENU_SLUG,
-            __('Settings', 'bp_knowledge_tests'),
-            __('Settings', 'bp_knowledge_tests'),
+            __('Настройки', 'bp_knowledge_tests'),
+            __('Настройки', 'bp_knowledge_tests'),
             $cap,
             self::SLUG_SETTINGS,
             fn () => $this->renderMount('settings'),
         );
         add_submenu_page(
             self::MENU_SLUG,
-            __('Results', 'bp_knowledge_tests'),
-            __('Results', 'bp_knowledge_tests'),
+            __('Результаты', 'bp_knowledge_tests'),
+            __('Результаты', 'bp_knowledge_tests'),
             $cap,
             self::SLUG_RESULTS,
             fn () => $this->renderMount('results'),
         );
         add_submenu_page(
             self::MENU_SLUG,
-            __('Analytics', 'bp_knowledge_tests'),
-            __('Analytics', 'bp_knowledge_tests'),
+            __('Аналитика', 'bp_knowledge_tests'),
+            __('Аналитика', 'bp_knowledge_tests'),
             $cap,
             self::SLUG_ANALYTICS,
             fn () => $this->renderMount('analytics'),
@@ -107,24 +107,22 @@ final class AdminCatalogMenu
     private function renderMount(string $initialView): void
     {
         if (!CatalogCapability::canManageCatalog()) {
-            wp_die(esc_html__('You do not have permission to manage knowledge tests.', 'bp_knowledge_tests'));
+            wp_die(esc_html__('Недостаточно прав для управления тестами знаний.', 'bp_knowledge_tests'));
         }
 
         $bundle = plugin_dir_path(BP_KNOWLEDGE_TESTS_FILE) . 'assets/admin/app.js';
         echo '<div class="wrap">';
-        echo '<h1>' . esc_html__('Knowledge Tests', 'bp_knowledge_tests') . '</h1>';
         if (!is_readable($bundle)) {
             echo '<div class="notice notice-error"><p>';
-            echo esc_html__('Admin bundle is missing. From the plugin admin folder run npm install and npm run build.', 'bp_knowledge_tests');
+            echo esc_html__('Не найден файл сборки админки. В папке admin плагина выполните npm run build.', 'bp_knowledge_tests');
             echo '</p></div></div>';
 
             return;
         }
 
         printf(
-            '<div id="bp-knowledge-tests-admin-root" data-initial-view="%s"><p id="bp-knowledge-tests-admin-fallback">%s</p></div>',
+            '<div id="bp-knowledge-tests-admin-root" data-initial-view="%s"></div>',
             esc_attr($initialView),
-            esc_html__('Loading test factory…', 'bp_knowledge_tests'),
         );
         echo '</div>';
     }
