@@ -73,6 +73,6 @@ PluginBootstrap::compose()
 | Finish test | `attempts()->complete->finish($userId, $testId, $questionLines)` |
 | Can start? | `attempts()->retake->evaluate($userId, $testId)` |
 | Materials | `attempts()->materials` |
-| List tests + state | New query or catalog + attempt repos (to be added with WS) |
+| List tests + state | `attempts()->standing->forUserAndTest($userId, $testId)` |
 
 Do not add scoring in `bp_contracts` — pass selected ids and let the plugin grade.

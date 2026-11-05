@@ -38,7 +38,7 @@ final class AdminAppMount
     public function renderShortcode(): string
     {
         if (!CatalogCapability::canManageCatalog()) {
-            return '<p>' . esc_html__('You do not have permission to manage knowledge tests.', 'bp_knowledge_tests') . '</p>';
+            return '<p>' . esc_html__('Недостаточно прав для управления тестами знаний.', 'bp_knowledge_tests') . '</p>';
         }
 
         AdminAppAssets::enqueue($this->plugin);

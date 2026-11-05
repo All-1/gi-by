@@ -75,7 +75,7 @@ function bp_knowledge_tests_missing_framework_notice(): void
 
     echo '<div class="notice notice-error"><p>';
     echo esc_html__(
-        'bp_knowledge_tests is inactive: activate the wordpress_framework plugin.',
+        'bp_knowledge_tests не активен: включите плагин wordpress_framework.',
         'bp_knowledge_tests',
     );
     echo '</p></div>';
@@ -90,7 +90,7 @@ function bp_knowledge_tests_activate(): void
         deactivate_plugins(plugin_basename(__FILE__));
         wp_die(
             esc_html__(
-                'bp_knowledge_tests requires the wordpress_framework plugin to be active.',
+                'Для bp_knowledge_tests нужен активный плагин wordpress_framework.',
                 'bp_knowledge_tests',
             ),
         );

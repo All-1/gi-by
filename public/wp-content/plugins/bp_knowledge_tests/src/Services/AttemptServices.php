@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace BpKnowledgeTests\Services;
 
+use BpKnowledgeTests\Infrastructure\ClockInterface;
 use BpKnowledgeTests\Infrastructure\DatabaseClock;
 use BpKnowledgeTests\Infrastructure\Mapping\RecordMapper;
 use BpKnowledgeTests\Infrastructure\Repository\AchievementRepository;
 use BpKnowledgeTests\Infrastructure\Repository\AttemptQuestionRepository;
-use BpKnowledgeTests\Domain\Record\AttemptRecord;
 use BpKnowledgeTests\Infrastructure\Repository\AttemptRepository;
 use BpKnowledgeTests\Infrastructure\Repository\FinishedExplanationRepository;
 use BpKnowledgeTests\Infrastructure\Repository\NotificationRepository;
@@ -19,142 +19,122 @@ use BpKnowledgeTests\Services\Attempt\AttemptAchievementService;
 use BpKnowledgeTests\Services\Attempt\AttemptValidityPolicy;
 use BpKnowledgeTests\Services\Attempt\CompleteAttempt;
 use BpKnowledgeTests\Services\Attempt\CriticalUpdateTest;
-use BpKnowledgeTests\Services\Attempt\NotificationRetakePolicy;
-use BpKnowledgeTests\Services\Attempt\ValidityMaintenance;
 use BpKnowledgeTests\Services\Attempt\MaterialsService;
+use BpKnowledgeTests\Services\Attempt\NotificationRetakePolicy;
 use BpKnowledgeTests\Services\Attempt\NotificationUiQuery;
 use BpKnowledgeTests\Services\Attempt\RetakeEligibilityPolicy;
 use BpKnowledgeTests\Services\Attempt\RetakeEligibilityQuery;
+use BpKnowledgeTests\Services\Attempt\UserTestStandingQuery;
+use BpKnowledgeTests\Services\Attempt\ValidityMaintenance;
 use PersonalAccount\Core\Container;
 
 final class AttemptServices
 {
-    private AttemptRepository $attemptRepository;
-    private UserAchievementRepository $userAchievementRepository;
-    private AchievementRepository $achievementCatalog;
-    private DomainServices $domain;
-
     public readonly MaterialsService $materials;
     public readonly AttemptAchievementService $achievements;
     public readonly CompleteAttempt $complete;
     public readonly RetakeEligibilityQuery $retake;
     public readonly ValidityMaintenance $validity;
     public readonly CriticalUpdateTest $criticalUpdate;
-    public readonly NotificationRepository $notifications;
     public readonly NotificationUiQuery $notificationUi;
+    public readonly UserTestStandingQuery $standing;
 
     public function __construct(
         Container $servicesContainer,
         CatalogServices $catalog,
         DomainServices $domain,
     ) {
-        $this->domain = $domain;
-        $db = $servicesContainer->get('DBWorker');
-        $dbUtilities = $servicesContainer->get('DBUtilities');
-        $mapper = new RecordMapper();
-        $clock = new DatabaseClock();
+        $shared = $this->sharedInfrastructure($servicesContainer);
+        $stores = $this->repositories($shared);
+        $this->assignUseCases($stores, $catalog, $domain, $shared['clock']);
+    }
 
-        $this->attemptRepository = new AttemptRepository($db, $dbUtilities, $mapper);
-        $attemptRepository = $this->attemptRepository;
-        $attemptQuestionRepository = new AttemptQuestionRepository($db, $dbUtilities, $mapper);
-        $questionRepository = new QuestionRepository($db, $dbUtilities, $clock, $mapper);
-        $explanationRepository = new FinishedExplanationRepository($db, $dbUtilities, $mapper);
-        $achievementRepository = new AchievementRepository($db);
-        $this->achievementCatalog = $achievementRepository;
-        $userAchievementRepository = new UserAchievementRepository($db, $dbUtilities);
-        $this->userAchievementRepository = $userAchievementRepository;
-        $testRepository = new TestRepository($db, $dbUtilities, $clock, $mapper);
+    private function sharedInfrastructure(Container $servicesContainer): array
+    {
+        return [
+            'db' => $servicesContainer->get('DBWorker'),
+            'dbUtilities' => $servicesContainer->get('DBUtilities'),
+            'mapper' => new RecordMapper(),
+            'clock' => new DatabaseClock(),
+        ];
+    }
 
+    private function repositories(array $shared): array
+    {
+        return [
+            'attempts' => new AttemptRepository($shared['db'], $shared['dbUtilities'], $shared['mapper']),
+            'attemptQuestions' => new AttemptQuestionRepository($shared['db'], $shared['dbUtilities'], $shared['mapper']),
+            'questions' => new QuestionRepository($shared['db'], $shared['dbUtilities'], $shared['clock'], $shared['mapper']),
+            'explanations' => new FinishedExplanationRepository($shared['db'], $shared['dbUtilities'], $shared['mapper']),
+            'achievementCatalog' => new AchievementRepository($shared['db']),
+            'userAchievements' => new UserAchievementRepository($shared['db'], $shared['dbUtilities']),
+            'tests' => new TestRepository($shared['db'], $shared['dbUtilities'], $shared['clock'], $shared['mapper']),
+            'notifications' => new NotificationRepository($shared['db'], $shared['dbUtilities'], $shared['mapper']),
+        ];
+    }
+
+    private function assignUseCases(
+        array $stores,
+        CatalogServices $catalog,
+        DomainServices $domain,
+        ClockInterface $clock,
+    ): void {
         $this->materials = new MaterialsService(
-            $attemptRepository,
-            $attemptQuestionRepository,
-            $questionRepository,
-            $explanationRepository,
+            $stores['attempts'],
+            $stores['attemptQuestions'],
+            $stores['questions'],
+            $stores['explanations'],
         );
-
         $this->achievements = new AttemptAchievementService(
             $domain,
-            $achievementRepository,
-            $userAchievementRepository,
-            $attemptRepository,
+            $stores['achievementCatalog'],
+            $stores['userAchievements'],
+            $stores['attempts'],
             $catalog,
         );
-
-        $this->notifications = new NotificationRepository($db, $dbUtilities, $mapper);
-        $notificationRetakePolicy = new NotificationRetakePolicy();
-
         $this->complete = new CompleteAttempt(
             $catalog,
             $domain,
-            $attemptRepository,
-            $attemptQuestionRepository,
+            $stores['attempts'],
+            $stores['attemptQuestions'],
             $this->materials,
             $this->achievements,
-            $this->notifications,
+            $stores['notifications'],
             $clock,
         );
-
         $this->retake = new RetakeEligibilityQuery(
-            $attemptRepository,
+            $stores['attempts'],
             $this->materials,
-            $this->notifications,
-            $notificationRetakePolicy,
+            $stores['notifications'],
+            new NotificationRetakePolicy(),
             $domain,
             new RetakeEligibilityPolicy($domain->classifier),
             $clock,
         );
-
-        $validityPolicy = new AttemptValidityPolicy();
         $this->validity = new ValidityMaintenance(
-            $attemptRepository,
-            $testRepository,
-            $userAchievementRepository,
-            $validityPolicy,
+            $stores['attempts'],
+            $stores['tests'],
+            $stores['userAchievements'],
+            new AttemptValidityPolicy(),
             $clock,
         );
-
         $this->criticalUpdate = new CriticalUpdateTest(
-            $testRepository,
-            $attemptRepository,
-            $userAchievementRepository,
+            $stores['tests'],
+            $stores['attempts'],
+            $stores['userAchievements'],
         );
-
         $this->notificationUi = new NotificationUiQuery(
             $catalog,
-            $attemptRepository,
-            $this->notifications,
+            $stores['attempts'],
+            $stores['notifications'],
             $domain,
             $this->materials,
         );
-    }
-
-    public function findLatestAttempt(int $userId, int $testId): ?AttemptRecord
-    {
-        return $this->attemptRepository->findLatestByUserAndTest($userId, $testId);
-    }
-
-    public function findMedalIdForUserAndTest(int $userId, int $testId): ?int
-    {
-        return $this->userAchievementRepository->findMedalIdForUserAndTest($userId, $testId);
-    }
-
-    public function findMedalTierValueForUserAndTest(int $userId, int $testId): ?string
-    {
-        $medalId = $this->findMedalIdForUserAndTest($userId, $testId);
-        if ($medalId === null) {
-            return null;
-        }
-        $medal = $this->achievementCatalog->findMedalById($medalId);
-
-        return $medal !== null ? $medal['value'] : null;
-    }
-
-    public function medalRankNameForTier(?string $tierValue): ?string
-    {
-        if ($tierValue === null || $tierValue === '') {
-            return null;
-        }
-
-        return $this->domain->config->rankLabel($tierValue);
+        $this->standing = new UserTestStandingQuery(
+            $stores['attempts'],
+            $stores['userAchievements'],
+            $stores['achievementCatalog'],
+            $domain->config,
+        );
     }
 }

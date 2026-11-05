@@ -22,7 +22,12 @@ if ($plugin === null) {
     exit(0);
 }
 
-echo 'medalId=' . var_export($plugin->attempts()->findMedalIdForUserAndTest(133, 1), true) . PHP_EOL;
-echo 'medalTier=' . var_export($plugin->attempts()->findMedalTierValueForUserAndTest(133, 1), true) . PHP_EOL;
-$medal = $plugin->catalog()->achievements->findMedalById(1);
+$standing = $plugin->attempts()->standing->forUserAndTest(133, 1);
+echo 'medalId=' . var_export($standing->medalId, true) . PHP_EOL;
+echo 'medalTier=' . var_export($standing->medalTier, true) . PHP_EOL;
+$container = bp_knowledge_tests_resolve_container();
+$db = $container !== null ? $container->get('DBWorker') : null;
+$medal = $db instanceof PersonalAccount\Workers\DBWorker
+    ? (new BpKnowledgeTests\Infrastructure\Repository\AchievementRepository($db))->findMedalById(1)
+    : null;
 echo 'findMedalById=' . var_export($medal, true) . PHP_EOL;

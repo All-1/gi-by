@@ -6,6 +6,37 @@ This document tracks changes to the project. Entry format is defined in **Cursor
 
 ## Log
 
+### [2026-11-05] Knowledge tests: Russian admin and no loading placeholder
+**Author**: AI Assistant
+**Logic**:
+- The test-factory admin screens and WordPress menu were in English. Factory users work in Russian.
+- The All Tests page showed «Loading test factory…» inside the Knowledge Tests block before and beside the React app. That placeholder is removed. An error line appears only if the bundle does not start.
+**Changes**:
+- `admin/src`: screen labels, errors, and dialogs in Russian
+- `AdminCatalogMenu.php`, `AdminAppMount.php`: menu and page title in Russian; loading paragraph removed
+- `assets/admin/app.js`: rebuilt bundle
+
+### [2026-11-05] Knowledge tests: admin npm packages install into vendor
+**Author**: AI Assistant
+**Logic**:
+- The test-factory build dependencies install in `public/vendor/node_modules`, outside the plugin. The Vite build loads React and Vite from there.
+**Changes**:
+- `admin/package.json`, `admin/vite.config.ts`: build uses `public/vendor/node_modules`
+- `public/vendor/.gitignore`: ignore that install
+- `admin/PROJECT_CONTEXT.md`, `admin/README.md`
+
+### [2026-11-03] Knowledge tests: one standing read for attempt and medal
+**Author**: AI Assistant
+**Logic**:
+- `AttemptServices` both wired the attempt use cases and answered latest-attempt and medal lookups. The websocket list and finish payloads called those lookups separately, including the medal id twice.
+- The facade now only wires use cases. `UserTestStandingQuery` returns the latest attempt, medal id, tier, and rank name in one call. `NotificationRepository` is no longer a public property. `CompleteAttempt` takes `ClockInterface`, same as retake and validity.
+**Changes**:
+- `AttemptServices.php`: wiring only; public `standing`
+- `UserTestStanding.php`, `UserTestStandingQuery.php`: [NEW] list and finish read model
+- `CompleteAttempt.php`: `ClockInterface`
+- `KnowledgeTestsWsWorker.php`: finish and test-list rows use `standing`
+- `run_complete_attempt_tests.php`: standing cases; notifications read from the memory rows
+
 ### [2026-11-02] Knowledge tests: retake waits for materials and retake_delay_days
 **Author**: AI Assistant
 **Logic**:

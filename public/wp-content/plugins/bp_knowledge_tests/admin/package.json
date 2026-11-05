@@ -4,8 +4,8 @@
   "version": "0.1.0",
   "type": "module",
   "scripts": {
-    "build": "vite build",
-    "dev": "vite build --watch"
+    "build": "node ../../../../vendor/node_modules/vite/bin/vite.js build",
+    "dev": "node ../../../../vendor/node_modules/vite/bin/vite.js build --watch"
   },
   "dependencies": {
     "react": "^19.0.0",
