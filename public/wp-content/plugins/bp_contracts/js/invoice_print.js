@@ -25,9 +25,7 @@ function printInvoicePDF(data) {
     const accountDetails = chooseAccountDetails(firmDetails, currId);
     
     const manager = geosDetails.manager;
-    const managerPositionParts = geosDetails.managerPosition.split(' по ');
-    const managerPositionFirst = managerPositionParts[0];
-    const managerPositionSecond = managerPositionParts[1];
+    const managerPositionFirst = geosDetails.managerPosition;
     const fullFirmNameGeos = geosDetails.fullFirmName;
     const accountDetailsGeos = chooseAccountDetails(geosDetails, currId);
 
@@ -46,7 +44,6 @@ function printInvoicePDF(data) {
       accountDetails,
       manager,
       managerPositionFirst,
-      managerPositionSecond,
       fullFirmNameGeos,
       accountDetailsGeos,
       ordersData,
@@ -264,7 +261,6 @@ function generatePDFWithBase64Image(data) {
           {
             text: [
               { text: data.managerPositionFirst + '   ________________________   ' + data.manager + '\n' },
-              { text: 'по ' + data.managerPositionSecond + '\n' },
               { text: ' ' + '\n' },
             ]
           },
