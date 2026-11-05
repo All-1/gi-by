@@ -98,7 +98,7 @@ final class TestRepository
     public function bumpVersionAfterContentChange(int $id): void
     {
         $this->db->updateDB(
-            self::TABLE,
+            $this->db->getPathTable(self::TABLE),
             'id = %d',
             'version = version + 1, date_modified = %s',
             [$this->clock->now(), $id]

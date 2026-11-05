@@ -6,6 +6,16 @@ This document tracks changes to the project. Entry format is defined in **Cursor
 
 ## Log
 
+### [2026-11-05] Knowledge tests: saving a test and critical update bump version
+**Author**: AI Assistant
+**Logic**:
+- «Сохранить тест» wrote the title and area and left `version` unchanged.
+- «Критическое обновление» incremented `version` on a table named `KnowledgeTests`. The row lives in `gi_new_tests`, so the number on screen never changed.
+- A successful test save now bumps the version. The bump writes to the physical table name.
+**Changes**:
+- `TestCatalog.php`: bump version after a saved test
+- `TestRepository.php`: resolve `gi_new_tests` before the version update
+
 ### [2026-11-05] Knowledge tests: Russian admin and no loading placeholder
 **Author**: AI Assistant
 **Logic**:
