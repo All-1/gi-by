@@ -138,7 +138,7 @@ function generateInvoicePDF(data) {
 function generatePDFWithBase64Image(data) {
   // Create images object for pdfmake
   const images = {
-    'signature': 'https://dev.gi.by/wp-content/themes/wp-diary/images/signandseal.png'
+    'signature': 'https://geosideal.ru/wp-content/themes/wp-diary/images/signandseal.png'
   };
 
   // Define document definition

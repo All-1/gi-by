@@ -6,6 +6,18 @@ This document tracks changes to the project. Entry format is defined in **Cursor
 
 ## Log
 
+### [2026-11-03] Knowledge tests: one standing read for attempt and medal
+**Author**: AI Assistant
+**Logic**:
+- `AttemptServices` both wired the attempt use cases and answered latest-attempt and medal lookups. The websocket list and finish payloads called those lookups separately, including the medal id twice.
+- The facade now only wires use cases. `UserTestStandingQuery` returns the latest attempt, medal id, tier, and rank name in one call. `NotificationRepository` is no longer a public property. `CompleteAttempt` takes `ClockInterface`, same as retake and validity.
+**Changes**:
+- `AttemptServices.php`: wiring only; public `standing`
+- `UserTestStanding.php`, `UserTestStandingQuery.php`: [NEW] list and finish read model
+- `CompleteAttempt.php`: `ClockInterface`
+- `KnowledgeTestsWsWorker.php`: finish and test-list rows use `standing`
+- `run_complete_attempt_tests.php`: standing cases; notifications read from the memory rows
+
 ### [2026-11-02] Knowledge tests: retake waits for materials and retake_delay_days
 **Author**: AI Assistant
 **Logic**:

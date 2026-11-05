@@ -133,15 +133,15 @@ class KnowledgeTestsWsWorker
     try {
       $attempt = $this->plugin()->attempts()->complete->finish($userId, $testId, $lines);
       $this->testController()->clear($userId, $testId);
-      $medalTier = $this->plugin()->attempts()->findMedalTierValueForUserAndTest($userId, $testId);
+      $standing = $this->plugin()->attempts()->standing->forUserAndTest($userId, $testId);
       $test = $this->plugin()->catalog()->tests->find($testId);
 
       return [
         'ok' => true,
         'attempt' => $this->attemptPayload($attempt),
-        'medalId' => $this->plugin()->attempts()->findMedalIdForUserAndTest($userId, $testId),
-        'medalTier' => $medalTier,
-        'medalRankName' => $this->plugin()->attempts()->medalRankNameForTier($medalTier),
+        'medalId' => $standing->medalId,
+        'medalTier' => $standing->medalTier,
+        'medalRankName' => $standing->medalRankName,
         'achievementArea' => $test !== null && $test->achievementArea !== ''
           ? $test->achievementArea
           : ($test?->title ?? ''),
@@ -320,7 +320,8 @@ class KnowledgeTestsWsWorker
   {
     $testId = $test->id;
     $controller = $this->testController();
-    $latest = $this->plugin()->attempts()->findLatestAttempt($userId, $testId);
+    $standing = $this->plugin()->attempts()->standing->forUserAndTest($userId, $testId);
+    $latest = $standing->latest;
     $displayStatus = 'not_started';
     if ($controller->hasSession($userId, $testId)) {
       $displayStatus = 'in_progress';
@@ -329,16 +330,15 @@ class KnowledgeTestsWsWorker
     }
 
     $retake = $this->plugin()->attempts()->retake->evaluate($userId, $testId);
-    $medalTier = $this->plugin()->attempts()->findMedalTierValueForUserAndTest($userId, $testId);
 
     return [
       'testId' => $testId,
       'title' => $test->title,
       'displayStatus' => $displayStatus,
       'score' => $latest?->score,
-      'medalId' => $this->plugin()->attempts()->findMedalIdForUserAndTest($userId, $testId),
-      'medalTier' => $medalTier,
-      'medalRankName' => $this->plugin()->attempts()->medalRankNameForTier($medalTier),
+      'medalId' => $standing->medalId,
+      'medalTier' => $standing->medalTier,
+      'medalRankName' => $standing->medalRankName,
       'canStart' => $this->canStartTest($userId, $testId, $retake),
       'retakeReasons' => $retake->reasons,
       'canOpenMaterials' => $this->plugin()->attempts()->materials->hasPendingMaterials($userId, $testId),

@@ -7,7 +7,7 @@ namespace BpKnowledgeTests\Services\Attempt;
 use BpKnowledgeTests\Domain\Record\AttemptRecord;
 use BpKnowledgeTests\Domain\Record\NotificationRecord;
 use BpKnowledgeTests\Domain\Record\QuestionRecord;
-use BpKnowledgeTests\Infrastructure\DatabaseClock;
+use BpKnowledgeTests\Infrastructure\ClockInterface;
 use BpKnowledgeTests\Infrastructure\Repository\AttemptQuestionRepository;
 use BpKnowledgeTests\Infrastructure\Repository\AttemptRepository;
 use BpKnowledgeTests\Infrastructure\Repository\NotificationRepository;
@@ -24,7 +24,7 @@ final class CompleteAttempt
         private MaterialsService $materials,
         private AttemptAchievementService $achievements,
         private NotificationRepository $notifications,
-        private DatabaseClock $clock,
+        private ClockInterface $clock,
     ) {
     }
 

@@ -48,6 +48,7 @@ Counts come from `QuestionSelectionGrader` per question when the user submits se
 | `CriticalUpdateTest` | Admin critical update — all `passed` → `outdated`, strip medals, bump `version` |
 | `NotificationRetakePolicy` | Blocks retake when notification config requires action |
 | `NotificationUiQuery` | PA list/dismiss; lazy `new_test` rows when prior tests completed (catalog order) |
+| `UserTestStandingQuery` | Latest attempt, medal id, tier, and rank name for one user and test (`standing`) |
 
 Policies: `RetakeEligibilityPolicy`, `AttemptValidityPolicy` — keep rules testable in isolation.
 
@@ -69,7 +70,7 @@ Policies: `RetakeEligibilityPolicy`, `AttemptValidityPolicy` — keep rules test
 
 | Script | Coverage |
 |--------|----------|
-| `run_complete_attempt_tests.php` | End-to-end finish + side effects |
+| `run_complete_attempt_tests.php` | End-to-end finish, standing, and side effects |
 | `run_retake_eligibility_tests.php` | Gates |
 | `run_validity_tests.php` | Outdated |
 | `run_notification_retake_tests.php` | Notification block |
