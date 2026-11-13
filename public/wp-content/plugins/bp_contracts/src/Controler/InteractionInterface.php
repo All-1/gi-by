@@ -821,6 +821,14 @@ class InteractionInterface
     );
   }
 
+  public function getTopicMaterialsWS($idWebsocket, $bodyJson)
+  {
+    return $this->knowledgeTestsWsWorker->getTopicMaterials(
+      $this->knowledgeTestsUserId($idWebsocket),
+      $this->knowledgeTestsBody($bodyJson),
+    );
+  }
+
   public function confirmTestMaterialsExaminedWS($idWebsocket, $bodyJson)
   {
     return $this->knowledgeTestsWsWorker->confirmTestMaterialsExamined(

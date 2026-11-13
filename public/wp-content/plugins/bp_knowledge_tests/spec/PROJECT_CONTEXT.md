@@ -37,7 +37,7 @@ No subdirectories — product and phase markdown files live in this folder (see 
 | §2.15 outdated | `ValidityMaintenance`, `CriticalUpdateTest` |
 | §6 critical update | `CriticalUpdateTest`, REST `POST .../critical-update` |
 | §15–18 admin UI | `admin/src/pages/*`, REST under `Infrastructure/Http` |
-| §19–21 dealer UI | `bp_contracts/js/knowledge_tests.js`, overlay, chat stars |
+| §19–21 dealer UI | `bp_contracts/js/knowledge_tests.js`, overlay, chat stars. **Подсказки** = pending hints; **Материалы** = catalog explanations (`getTopicMaterials`) |
 | §3.1–3.4 notifications UI | `knowledge_test_notifications.js` + `NotificationUiQuery` / WS ([MANUAL_QA §4](./MANUAL_QA_V1.md#4-notifications-ux-phase-6)) |
 | §23 RAM session | **`bp_contracts`** `TestController` + WS ([WS_PROTOCOL.md](./WS_PROTOCOL.md)) |
 

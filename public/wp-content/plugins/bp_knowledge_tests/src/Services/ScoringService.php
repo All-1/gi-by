@@ -7,18 +7,17 @@ namespace BpKnowledgeTests\Services;
 final class ScoringService
 {
     /**
-     * Spec §2.1 (project): score from wrong selections only — full correct-option pool minus penalties.
+     * Spec §2.1: share of questions answered exactly (full correct set, no incorrect option).
      *
-     * Score = 100 × (maximumCorrect − invalidSelections) / maximumCorrect
+     * Score = 100 × correctlyAnsweredQuestions / questionCount
      */
-    public function calculateScore(int $invalidSelections, int $maximumCorrect): float
+    public function calculateScore(int $correctlyAnsweredQuestions, int $questionCount): float
     {
-        if ($maximumCorrect <= 0) {
-            throw new \InvalidArgumentException('Maximum correct answers must be greater than zero.');
+        if ($questionCount <= 0) {
+            throw new \InvalidArgumentException('Question count must be greater than zero.');
         }
 
-        $net = $maximumCorrect - $invalidSelections;
-        $percent = 100.0 * $net / $maximumCorrect;
+        $percent = 100.0 * $correctlyAnsweredQuestions / $questionCount;
 
         return round(min(100.0, max(0.0, $percent)), 2);
     }

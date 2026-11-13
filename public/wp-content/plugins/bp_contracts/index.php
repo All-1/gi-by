@@ -858,6 +858,7 @@ function knowledge_tests()
 					<div class="td_div_header_knowledge_tests kt-col-status">Статус</div>
 					<div class="td_div_header_knowledge_tests kt-col-score">Оценка</div>
 					<div class="td_div_header_knowledge_tests kt-col-medal">Медаль</div>
+					<div class="td_div_header_knowledge_tests kt-col-materials">Материалы</div>
 					<div class="td_div_header_knowledge_tests kt-col-actions">Действия</div>
 					<div class="clear-fix"></div>
 				</div>

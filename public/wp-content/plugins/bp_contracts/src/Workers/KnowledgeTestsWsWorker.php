@@ -228,6 +228,26 @@ class KnowledgeTestsWsWorker
   }
 
   /** @param array<string, mixed> $body */
+  public function getTopicMaterials(int $userId, array $body): array
+  {
+    $testId = $this->requiredTestId($body);
+    if ($testId === null || !$this->sessionWorker->isPluginAvailable()) {
+      return $this->error('validation', ['validation']);
+    }
+    $test = $this->plugin()->catalog()->tests->find($testId);
+    if ($test === null) {
+      return $this->error('invalid_test', ['invalid_test']);
+    }
+
+    return [
+      'ok' => true,
+      'testId' => $testId,
+      'title' => $test->title,
+      'items' => $this->topicMaterialItems($testId),
+    ];
+  }
+
+  /** @param array<string, mixed> $body */
   public function getKnowledgeTestNotifications(int $userId, array $body): array
   {
     if (!$this->sessionWorker->isPluginAvailable()) {
@@ -358,7 +378,7 @@ class KnowledgeTestsWsWorker
       return [
         'ok' => true,
         'testId' => $testId,
-        'progress' => $session->progress(),
+        'progress' => $session->shownIndex(null),
         'sessionComplete' => true,
       ];
     }
@@ -371,7 +391,7 @@ class KnowledgeTestsWsWorker
     $payload = [
       'ok' => true,
       'testId' => $testId,
-      'progress' => $session->progress(),
+      'progress' => $session->shownIndex($questionId),
       'question' => $this->questionPayload($question, $session->shuffledAnswerIds($questionId)),
       'sessionComplete' => $submit !== null ? $submit->sessionComplete : $session->isSessionComplete(),
     ];
@@ -431,6 +451,22 @@ class KnowledgeTestsWsWorker
       'explanation' => $show ? $question->explanation : '',
       'reference' => $show ? $question->reference : '',
     ];
+  }
+
+  /** @return list<array{questionId: int, questionText: string, explanation: string, reference: string}> */
+  private function topicMaterialItems(int $testId): array
+  {
+    $items = [];
+    foreach ($this->plugin()->catalog()->questions->listForTest($testId) as $question) {
+      $items[] = [
+        'questionId' => $question->id,
+        'questionText' => $question->question,
+        'explanation' => $question->explanation,
+        'reference' => $question->reference,
+      ];
+    }
+
+    return $items;
   }
 
   private function materialItem(FinishedExplanationRecord $row, Plugin $plugin): array

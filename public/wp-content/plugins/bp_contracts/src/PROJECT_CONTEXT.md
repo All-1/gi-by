@@ -130,8 +130,9 @@ Commands: `Chat.php` → `InteractionInterface` → `KnowledgeTestsWsWorker`.
 | `submitTestQuestion` | `{ "testId", "selectedAnswerIds" }` | Answer current question + feedback |
 | `finishTest` | `{ "testId" }` | Persist attempt via plugin |
 | `abandonTest` | `{ "testId" }` | Clear RAM session |
-| `getTestMaterials` | `{ "testId" }` | Pending materials for user/test |
+| `getTestMaterials` | `{ "testId" }` | Pending hints (**Подсказки**) for user/test |
 | `confirmTestMaterialsExamined` | `{ "testId", "attemptId" }` | Delete temp explanation rows |
+| `getTopicMaterials` | `{ "testId" }` | Catalog explanation and reference for every question (**Материалы**) |
 | `getKnowledgeTestChatStars` | `{ "userIds": number[] }` | Chat stars batch (plugin read) |
 | `getKnowledgeTestNotifications` | `{}` | Notification UX payload (Phase 6) |
 | `dismissKnowledgeTestNotification` | `{ "testId", "notificationType" }` | Dismiss popup / bottom bar |
@@ -144,6 +145,7 @@ Commands: `Chat.php` → `InteractionInterface` → `KnowledgeTestsWsWorker`.
 | `TestQuestionOnPage` | `handlerTestQuestionOnPage` |
 | `TestFinishedOnPage` | `handlerTestFinishedOnPage` |
 | `TestMaterialsOnPage` | `handlerTestMaterialsOnPage` |
+| `TopicMaterialsOnPage` | `handlerTopicMaterialsOnPage` |
 | `KnowledgeTestChatStarsOnPage` | `handlerKnowledgeTestChatStarsOnPage` |
 | `KnowledgeTestNotificationsOnPage` | `handlerKnowledgeTestNotificationsOnPage` |
 

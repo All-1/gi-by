@@ -23,8 +23,8 @@ Per question (during attempt):
 At finish (whole test):
   sum right → valid_answers
   sum failed → invalid_answers
-  maximumCorrect = catalog count of is_correct options
-      → ScoringService::calculateScore(invalid, maximum)
+  a question counts when failed = 0 and right = that question's correct-option count
+      → ScoringService::calculateScore(correctQuestions, questionCount)
       → float 0..100
 
 Pass / medal / lock:
@@ -33,7 +33,7 @@ Pass / medal / lock:
       → AttemptClassification (passed, medal tier, locked)
 ```
 
-**Important:** Official score applies **one** global floor at 0% and cap at 100% — not per-question clamp then sum (§2.1.1).
+**Important:** Official score is the share of exactly answered questions (§2.1, 2026-11-12). Selection counts remain for analytics.
 
 ---
 
@@ -43,7 +43,7 @@ Pass / medal / lock:
 |-------|------|
 | `QuestionSelectionGrader` | Checkbox-level counting |
 | `QuestionSelectionCounts` | `rightAnswers`, `failedAnswers` for one question |
-| `ScoringService` | Net formula on totals (in `Services/` but algorithm is spec §2.1) |
+| `ScoringService` | Question-percentage formula (in `Services/` but algorithm is spec §2.1) |
 | `AttemptResultClassifier` | Bronze pass, silver/gold tiers, lock at threshold |
 | `AttemptClassification` | Result DTO from classifier |
 | `TestConfig` | Thresholds + notification settings snapshot |
@@ -59,7 +59,7 @@ Records: [Record/PROJECT_CONTEXT.md](./Record/PROJECT_CONTEXT.md).
 
 | Script | Focus |
 |--------|--------|
-| `tests/run_scoring_tests.php` | `ScoringService` edge cases |
+| `tests/run_scoring_tests.php` | `ScoringService` question-percentage cases |
 | `tests/run_selection_grader_tests.php` | Multi-select counting |
 | `tests/run_achievement_tier_tests.php` | Medal mapping |
 

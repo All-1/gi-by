@@ -106,6 +106,14 @@ function handlerTestMaterialsOnPage(data, user) {
   renderKnowledgeTestsMaterials(data);
 }
 
+function handlerTopicMaterialsOnPage(data, user) {
+  if (!data || data.ok === false) {
+    showKnowledgeTestsOverlayError(data);
+    return;
+  }
+  renderKnowledgeTestsTopicMaterials(data);
+}
+
 function renderKnowledgeTestsList(data) {
   let container = document.getElementById("main_container_knowledge_tests");
   if (!container) {
@@ -163,14 +171,16 @@ function buildKnowledgeTestsListRow(row) {
   }
   if (row.canOpenMaterials) {
     actions.appendChild(
-      createKnowledgeTestsActionButton("Материалы", function () {
+      createKnowledgeTestsActionButton("Подсказки", function () {
         openKnowledgeTestsOverlay(row.testId, row.title, "getTestMaterials");
       }),
     );
   } else if (statusCode === "failed") {
-    actions.appendChild(createKnowledgeTestsActionButton("Материалы", null, true));
+    actions.appendChild(createKnowledgeTestsActionButton("Подсказки", null, true));
   }
-  massAppendChild(line, titleCell, status, score, medal, actions);
+  let materials = createTagHtml("div", "td_div_knowledge_tests kt-col-materials");
+  materials.appendChild(createKnowledgeTestsMaterialsLink(row));
+  massAppendChild(line, titleCell, status, score, medal, materials, actions);
   return line;
 }
 
@@ -184,6 +194,22 @@ function knowledgeTestsShowDisabledStart(row) {
     || statusCode === "failed"
     || statusCode === "passed"
     || statusCode === "outdated";
+}
+
+function createKnowledgeTestsMaterialsLink(row) {
+  let link = createTagHtml("a", "knowledge_tests_materials_link", "");
+  link.href = "#";
+  link.appendChild(createTagHtml("span", "knowledge_tests_materials_label", "Материалы"));
+  if (row.achievementArea) {
+    link.appendChild(
+      createTagHtml("span", "knowledge_tests_materials_area", row.achievementArea),
+    );
+  }
+  link.addEventListener("click", function (event) {
+    event.preventDefault();
+    openKnowledgeTestsOverlay(row.testId, row.title, "getTopicMaterials");
+  });
+  return link;
 }
 
 function createKnowledgeTestsActionButton(label, onClick, disabled) {
@@ -336,6 +362,8 @@ function openKnowledgeTestsOverlay(testId, title, command) {
     sendKnowledgeTestsCommand("startTest", body);
   } else if (command === "getTestMaterials") {
     sendKnowledgeTestsCommand("getTestMaterials", body);
+  } else if (command === "getTopicMaterials") {
+    sendKnowledgeTestsCommand("getTopicMaterials", body);
   }
 }
 
@@ -459,7 +487,7 @@ function knowledgeTestsErrorMessage(data) {
   let reasons = data.error.reasons || [];
   let codeLabels = {
     retake_delay: "Повторная попытка пока недоступна",
-    pending_materials: "Сначала изучите материалы",
+    pending_materials: "Сначала изучите подсказки",
     test_locked: "Тест заблокирован",
     notification_blocked: "Тест недоступен (уведомление)",
     test_in_progress: "Уже открыт другой тест",
@@ -499,7 +527,7 @@ function renderKnowledgeTestsQuestion(data) {
   let progress = data.progress || {};
   let q = data.question || {};
   let inFeedback = Boolean(data.feedback);
-  let questionNumber = formatKnowledgeTestsQuestionNumber(progress, inFeedback);
+  let questionNumber = formatKnowledgeTestsQuestionNumber(progress);
 
   massAppendChild(
     content,
@@ -564,16 +592,18 @@ function renderKnowledgeTestsQuestion(data) {
   content.appendChild(actions);
 }
 
-function formatKnowledgeTestsQuestionNumber(progress, inFeedback) {
-  let total = progress.total || "—";
-  let index = progress.index || 0;
-  if (inFeedback && index > 0) {
-    index -= 1;
-  }
-  if (index < 1 && progress.total) {
+function formatKnowledgeTestsQuestionNumber(progress) {
+  let total = Number(progress.total) || 0;
+  let index = Number(progress.index) || 0;
+  if (total > 0 && index < 1) {
     index = 1;
   }
-  return "Вопрос " + index + " из " + total;
+  if (total > 0 && index > total) {
+    index = total;
+  }
+  let shownIndex = total > 0 ? index : "—";
+  let shownTotal = total > 0 ? total : "—";
+  return "Вопрос " + shownIndex + " из " + shownTotal;
 }
 
 function knowledgeTestsIdSet(ids) {
@@ -664,7 +694,7 @@ function renderKnowledgeTestsFinished(data) {
           attempt.validAnswers +
           ", ошибочных " +
           attempt.invalidAnswers +
-          ". Оценка = (все правильные − ошибочные) / все правильные; для сдачи обычно нужно не менее 70%.",
+          ". Оценка — доля вопросов, в которых выбраны все верные ответы и нет неверных.",
       ),
     );
   }
@@ -693,10 +723,10 @@ function renderKnowledgeTestsFinished(data) {
   let materialsBtn = null;
   if (data.materialsRequired) {
     content.appendChild(
-      createTagHtml("p", "", "Изучите материалы перед повторной попыткой."),
+      createTagHtml("p", "", "Изучите подсказки перед повторной попыткой."),
     );
     let materialsTestId = (attempt.testId || knowledgeTestsOverlayTestId);
-    materialsBtn = createKnowledgeTestsActionButton("Открыть материалы", function () {
+    materialsBtn = createKnowledgeTestsActionButton("Открыть подсказки", function () {
       sendKnowledgeTestsCommand("getTestMaterials", { testId: materialsTestId });
     });
   }
@@ -722,8 +752,11 @@ function renderKnowledgeTestsMaterials(data) {
   }
   content.innerHTML = "";
   content.appendChild(
-    createTagHtml("h2", "knowledge_tests_overlay_title", knowledgeTestsOverlayTitle || "Материалы"),
+    createTagHtml("h2", "knowledge_tests_overlay_title", "Подсказки"),
   );
+  if (knowledgeTestsOverlayTitle) {
+    content.appendChild(createTagHtml("p", "", knowledgeTestsOverlayTitle));
+  }
   let reviewedCount = 0;
   let totalItems = (data.items || []).length;
   let examinedBtn = createKnowledgeTestsActionButton("Изучено", function () {
@@ -766,6 +799,46 @@ function renderKnowledgeTestsMaterials(data) {
   massAppendChild(
     actions,
     examinedBtn,
+    createKnowledgeTestsActionButton("Закрыть", function () {
+      closeKnowledgeTestsOverlay();
+    }),
+  );
+  content.appendChild(actions);
+}
+
+function renderKnowledgeTestsTopicMaterials(data) {
+  let content = document.getElementById("knowledge_tests_overlay_content");
+  if (!content) {
+    return;
+  }
+  content.innerHTML = "";
+  content.appendChild(createTagHtml("h2", "knowledge_tests_overlay_title", "Материалы"));
+  let topicTitle = (data && data.title) || knowledgeTestsOverlayTitle || "";
+  if (topicTitle) {
+    content.appendChild(createTagHtml("p", "", topicTitle));
+  }
+  let items = (data && data.items) || [];
+  if (items.length === 0) {
+    content.appendChild(createTagHtml("p", "", "В этом тесте пока нет вопросов."));
+  }
+  items.forEach(function (item) {
+    let block = createTagHtml("div", "knowledge_tests_material_block");
+    massAppendChild(
+      block,
+      createTagHtml("h3", "", item.questionText || ""),
+      createTagHtml("p", "", "Пояснения"),
+      createTagHtml("p", "", item.explanation || "—"),
+      createTagHtml("p", "", "Ссылка на материалы"),
+    );
+    if (String(item.reference || "").trim()) {
+      appendKnowledgeTestsReference(block, item.reference);
+    } else {
+      block.appendChild(createTagHtml("p", "knowledge_tests_reference", "—"));
+    }
+    content.appendChild(block);
+  });
+  let actions = createTagHtml("div", "knowledge_tests_overlay_actions");
+  actions.appendChild(
     createKnowledgeTestsActionButton("Закрыть", function () {
       closeKnowledgeTestsOverlay();
     }),

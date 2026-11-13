@@ -2237,14 +2237,14 @@ body.admin-bar .table-points .points-header-wrapper.fixed-header-table {
 
 .table_div_knowledge_tests,
 .main_container_knowledge_tests {
-  min-width: 860px;
+  min-width: 1020px;
   width: 100%;
 }
 
 .tr_div_header_knowledge_tests,
 .tr_div_knowledge_tests {
   display: grid;
-  grid-template-columns: 4fr 2fr 2fr 2fr 3fr;
+  grid-template-columns: 4fr 2fr 2fr 2fr 2fr 3fr;
   align-items: center;
   border-bottom: 1px solid #b6b6b6;
   color: #333;
@@ -2269,6 +2269,7 @@ body.admin-bar .table-points .points-header-wrapper.fixed-header-table {
 .kt-col-status,
 .kt-col-score,
 .kt-col-medal,
+.kt-col-materials,
 .kt-col-actions {
   text-align: center;
 }
@@ -2395,6 +2396,27 @@ body.admin-bar .table-points .points-header-wrapper.fixed-header-table {
 
 .kt-col-actions {
   flex: 1 1 140px;
+}
+
+a.knowledge_tests_materials_link {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  color: #336DDD;
+  font-weight: bold;
+  text-decoration: underline;
+  line-height: 1.5;
+}
+
+a.knowledge_tests_materials_link:hover {
+  color: #DEA993;
+  cursor: pointer;
+}
+
+.knowledge_tests_materials_area {
+  font-size: 13px;
+  font-weight: 400;
 }
 
 .knowledge_tests_row_title {

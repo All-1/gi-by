@@ -12,7 +12,8 @@ Completed-attempt lifecycle, materials, retake gates, validity, critical invalid
 finish(userId, testId, questionLines)
   1. Load test; validate questionLines match full catalog question set
   2. Sum rightAnswers / failedAnswers → valid_answers, invalid_answers
-  3. domain()->scoring->calculateScore(...)
+  3. Count questions where failedAnswers is 0 and rightAnswers equals the catalog correct-option count
+     domain()->scoring->calculateScore(correctQuestions, questionCount)
   4. domain()->classifier->classify(...) → status passed|failed
   5. INSERT gi_new_test_attempts + gi_new_test_attempt_questions
   6. If failed, or passed below the lock score → materials for questions with mistakes
