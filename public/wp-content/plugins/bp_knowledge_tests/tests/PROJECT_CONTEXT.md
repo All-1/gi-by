@@ -29,7 +29,7 @@ Run all critical scripts before merging changes to `Domain/` or `Services/Attemp
 
 | Script | Validates |
 |--------|-----------|
-| `run_scoring_tests.php` | Global net formula, 0% floor, 100% cap |
+| `run_scoring_tests.php` | Question-percentage score, 0% floor, 100% cap |
 | `run_selection_grader_tests.php` | Per-checkbox counting §2.1.1 |
 | `run_achievement_tier_tests.php` | Medal / lock from score + config |
 | `run_retake_eligibility_tests.php` | Delay, materials, lock, notification |

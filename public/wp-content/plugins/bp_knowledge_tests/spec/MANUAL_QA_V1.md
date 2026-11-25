@@ -43,7 +43,8 @@ Run in browser on personal account (Tests page or console if needed).
 | 3.1 | Nav **Tests**, pagination | §19 list; failed nav highlight when applicable (§3.2) |
 | 3.2 | Start / resume in overlay (§19.2) | Open-in-place; two-step feedback (§20) |
 | 3.3 | Finish pass and fail paths | Medals on list/finish; score matches spec |
-| 3.4 | Fail → Materials | Checkboxes per reference; **Изучено**; retake blocked until examined |
+| 3.4 | Fail → **Подсказки** | Checkboxes per reference; **Изучено**; retake blocked until examined |
+| 3.4a | **Материалы** on any Tests row | Every question shows **Пояснения** and **Ссылка на материалы**; no checkbox; retake unchanged |
 | 3.5 | Retake after configured delay | Calendar day vs N days (§2.6) |
 | 3.6 | Chat author line | Latest-result stars (§2.11), not historical best |
 | 3.7 | Overlay a11y | Focus trap; Escape; keyboard **Continue** / **Далее** |
@@ -83,9 +84,9 @@ Run in browser on personal account (Tests page or console if needed).
 | # | Step | Expected |
 |---|------|----------|
 | 4.2.1 | Fail test **B** (score below bronze). Finish via dealer overlay. | Tests nav **failed highlight** (Phase 5); pending materials if configured. |
-| 4.2.2 | Reload PA (any page with Tests nav). | Popup **«Не сдан тест»** and/or bottom bar: study materials copy; **Материалы** link when `materialsAvailable` is true. |
+| 4.2.2 | Reload PA (any page with Tests nav). | Popup **«Не сдан тест»** and/or bottom bar: study-hints copy; **Подсказки** link when `materialsAvailable` is true. |
 | 4.2.3 | Click **Понятно** on bottom bar (or **Закрыть** on popup). | `dismissKnowledgeTestNotification` with `notificationType: "failed_test"`. |
-| 4.2.4 | Open **/tests/** → **Materials** for B, complete **Изучено**. | Failed notification may clear after pass or policy change; retake rules per §3. |
+| 4.2.4 | Open **/tests/** → **Подсказки** for B, complete **Изучено**. | Failed notification may clear after pass or policy change; retake rules per §3. |
 
 ### 4.3 Prerequisites (baseline §6)
 

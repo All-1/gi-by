@@ -98,10 +98,10 @@ $assert($emptyStanding->latest === null, 'standing has no attempt before finish'
 $assert($emptyStanding->medalId === null && $emptyStanding->medalTier === null, 'standing has no medal before finish');
 $assert($emptyStanding->medalRankName === null, 'standing has no rank before finish');
 
-$passLines = [['questionId' => $questionId, 'rightAnswers' => 7, 'failedAnswers' => 0]];
+$passLines = [['questionId' => $questionId, 'rightAnswers' => 10, 'failedAnswers' => 0]];
 $passed = $complete->finish($userId, $testId, $passLines);
 $assert($passed->status === 'passed', 'bronze pass status');
-$assert(abs($passed->score - 100.0) < 0.01, 'score 100% with no wrong selections (10 max options)');
+$assert(abs($passed->score - 100.0) < 0.01, 'score 100% when the only question is answered exactly');
 $assert($materials->listForAttempt($userId, $passed->id) === [], 'locked pass stores no materials');
 $lockedMedalId = (int) $db->allRows('KnowledgeTestUserAchievements')[0]->medal_id;
 $lockedTier = '';
@@ -122,7 +122,7 @@ $assert($failedNotification($userId, $testId) === null, 'no failed-test notifica
 $failLines = [['questionId' => $questionId, 'rightAnswers' => 0, 'failedAnswers' => 4]];
 $failed = $complete->finish($userId, $testId, $failLines);
 $assert($failed->status === 'failed', 'failed status');
-$assert(abs($failed->score - 60.0) < 0.01, 'score 60% with 4 wrong of 10 max');
+$assert(abs($failed->score - 0.0) < 0.01, 'one incorrect question is 0%');
 $assert($materials->listForAttempt($userId, $failed->id) !== [], 'materials created on fail');
 $assert(count($db->allRows('KnowledgeTestUserAchievements')) === 0, 'achievement removed after fail');
 $failedStanding = $standing->forUserAndTest($userId, $testId);
@@ -135,9 +135,20 @@ $recovery = $complete->finish($userId, $testId, $passLines);
 $assert($recovery->status === 'passed', 'can pass again after fail');
 $assert(count($db->allRows('KnowledgeTestUserAchievements')) === 1, 'achievement restored after pass');
 
-$belowLock = $complete->finish(9002, $testId, [
-    ['questionId' => $questionId, 'rightAnswers' => 9, 'failedAnswers' => 1],
-]);
+$extraQuestionIds = [];
+for ($i = 0; $i < 3; ++$i) {
+    $extraId = $plugin->catalog()->questions->create($testId, 'Extra ' . $i, 'note', 'https://example.test/' . $i);
+    $plugin->catalog()->answers->create($extraId, 'OK', true);
+    $extraQuestionIds[] = $extraId;
+}
+$belowLockLines = [
+    ['questionId' => $questionId, 'rightAnswers' => 0, 'failedAnswers' => 1],
+];
+foreach ($extraQuestionIds as $extraId) {
+    $belowLockLines[] = ['questionId' => $extraId, 'rightAnswers' => 1, 'failedAnswers' => 0];
+}
+$belowLock = $complete->finish(9002, $testId, $belowLockLines);
+$assert(abs($belowLock->score - 75.0) < 0.01, '3 of 4 exact questions is 75%');
 $assert($belowLock->status === 'passed', 'score below lock still passes');
 $assert(
     $materials->listForAttempt(9002, $belowLock->id) !== [],
@@ -147,7 +158,7 @@ $assert(
 $attemptRows = $db->allRows('KnowledgeTestAttempts');
 $assert(count($attemptRows) === 4, 'four attempts persisted');
 $questionRows = $db->allRows('KnowledgeTestAttemptQuestions');
-$assert(count($questionRows) === 4, 'four attempt_question rows');
+$assert(count($questionRows) === 7, 'three single-question attempts plus one four-question attempt');
 
 if ($failures > 0) {
     fwrite(STDERR, "{$failures} test(s) failed.\n");

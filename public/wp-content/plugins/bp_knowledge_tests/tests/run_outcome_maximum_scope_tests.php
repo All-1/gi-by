@@ -3,7 +3,7 @@
 declare(strict_types=1);
 
 /**
- * Attempt score uses maximum correct options for questions in the finish payload only.
+ * Attempt score counts only questions in the finish payload, not extra catalog questions.
  *
  * Run: php tests/run_outcome_maximum_scope_tests.php
  */
@@ -90,7 +90,7 @@ $lines = [
 ];
 
 $attempt = $complete->finish($userId, $testId, $lines);
-$assert(abs($attempt->score - 100.0) < 0.01, 'Score 100% when max is attempt questions only, not extra catalog question');
+$assert(abs($attempt->score - 100.0) < 0.01, 'Score 100% for the two exact questions; extra catalog question is outside the attempt');
 $assert($plugin->catalog()->answers->maximumCorrectForTest($testId) > 2, 'Catalog max includes extra question');
 
 if ($failures > 0) {

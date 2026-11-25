@@ -83,21 +83,16 @@ final class CompleteAttempt
     {
         $valid = 0;
         $invalid = 0;
+        $correctQuestions = 0;
         foreach ($lines as $line) {
             $valid += $line['rightAnswers'];
             $invalid += $line['failedAnswers'];
+            if ($this->lineIsCorrectlyAnswered($line)) {
+                ++$correctQuestions;
+            }
         }
 
-        $questionIds = array_values(array_unique(array_column($lines, 'questionId')));
-        $maximumCorrect = $this->catalog->answers->maximumCorrectForQuestions($questionIds);
-        if ($maximumCorrect <= 0) {
-            throw new \InvalidArgumentException('Maximum correct answers must be greater than zero.');
-        }
-
-        $score = $this->domain->scoring->calculateScore(
-            $invalid,
-            $maximumCorrect,
-        );
+        $score = $this->domain->scoring->calculateScore($correctQuestions, count($lines));
         $classification = $this->domain->classifier->classify($score, $this->domain->config->read());
 
         return [
@@ -107,6 +102,20 @@ final class CompleteAttempt
             'status' => $classification->passed ? 'passed' : 'failed',
             'locked' => $classification->locked,
         ];
+    }
+
+    /**
+     * @param array{questionId: int, rightAnswers: int, failedAnswers: int} $line
+     */
+    private function lineIsCorrectlyAnswered(array $line): bool
+    {
+        $correctOptionCount = count(
+            $this->catalog->answers->listCorrectAnswerIdsForQuestion($line['questionId'])
+        );
+
+        return $correctOptionCount > 0
+            && $line['failedAnswers'] === 0
+            && $line['rightAnswers'] === $correctOptionCount;
     }
 
     /**

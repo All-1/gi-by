@@ -68,13 +68,23 @@ final class AttemptSession
         return $this->correctAnswerIdsByQuestion[$questionId] ?? [];
     }
 
-    /** @return array{index: int, total: int} */
-    public function progress(): array
+    /**
+     * 1-based place of the question on screen. Null means the attempt is finished.
+     *
+     * @return array{index: int, total: int}
+     */
+    public function shownIndex(?int $questionId): array
     {
         $total = count($this->questionIds);
-        $index = min($this->currentIndex + 1, $total > 0 ? $total : 1);
+        if ($questionId === null || $total === 0) {
+            return ['index' => $total, 'total' => $total];
+        }
+        $position = array_search($questionId, $this->questionIds, true);
 
-        return ['index' => $index, 'total' => $total];
+        return [
+            'index' => $position === false ? 1 : $position + 1,
+            'total' => $total,
+        ];
     }
 
     public function isSessionComplete(): bool

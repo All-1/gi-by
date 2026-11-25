@@ -2,7 +2,7 @@
 
 ## 1. Purpose
 
-Dealers take **knowledge tests** in the personal account: multi-select questions, weighted scoring, bronze/silver/gold medals, temporary study materials after failures, retake rules, and admin-managed test content.
+Dealers take **knowledge tests** in the personal account: multi-select questions, a score equal to the share of exactly answered questions, bronze/silver/gold medals, temporary hints after mistakes (**Подсказки**), a catalog materials page per test (**Материалы**), retake rules, and admin-managed test content.
 
 This WordPress plugin owns **business rules and persistence** (`gi_new_test_*`). The personal account shell, WebSocket transport, in-memory sessions, and dealer Tests UI (`knowledge_tests.js`) live in **`bp_contracts`**.
 
@@ -123,27 +123,25 @@ All SQL goes through **`DBWorker`** from `wordpress_framework` / `bp_contracts` 
 | Not started | Derived | No completed attempt, no RAM session |
 | In progress | **RAM** (`TestController`, Phase 4) | Lost at **03:00** server restart |
 | Failed / Passed / Outdated | **`gi_new_test_attempts`** | Only **completed** attempts |
-| Pending materials | **`gi_new_test_finished_attempts_explanations`** | Until user confirms “Examined” |
+| Pending hints | **`gi_new_test_finished_attempts_explanations`** | Until user confirms “Изучено” (**Подсказки**) |
+| Topic materials | Catalog question rows | **Материалы**: explanation and reference for every question; no extra table |
 | Current medal | **`gi_new_test_user_achievements`** | **Latest** result, not historical best (§2.11) |
 
-Retake requires configured delay **and** (if failed) materials examined **and** not locked at lock threshold **and** notification policy ([Attempt services](./src/Services/Attempt/PROJECT_CONTEXT.md)).
+Retake requires configured delay **and** (if failed) hints examined (**Подсказки** / **Изучено**) **and** not locked at lock threshold **and** notification policy ([Attempt services](./src/Services/Attempt/PROJECT_CONTEXT.md)).
 
 ---
 
 ## 7. Scoring (summary)
 
-Canonical spec: [§2.1 / §2.1.1](./spec/Testing%20System%20%E2%80%94%20Project%20Documentation.md#21-scoring).
+Canonical spec: [§2.1](./spec/Testing%20System%20%E2%80%94%20Project%20Documentation.md#21-scoring) (2026-11-12).
 
 ```text
-Maximum Correct Answers = sum of correct options (gi_new_test_answers.is_correct) per test
+A question counts when every is_correct option is selected and no incorrect option is selected.
 
-Net = valid_answers − invalid_answers   (counts of selected options, whole test)
-
-Score = max(0, min(100, 100 × Net / Maximum Correct Answers))
+Score = 100 × correctly answered questions / questions in the attempt
 ```
 
-- Unselected correct options do **not** add to `invalid_answers`.
-- Per-question UI % may differ; **official** score is one calculation at finish.
+- `valid_answers` / `invalid_answers` stay as selected-option counts. They do not enter the percentage.
 - Implementation: [Domain](./src/Domain/PROJECT_CONTEXT.md) + `CompleteAttempt::finish`.
 
 ---

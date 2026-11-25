@@ -285,7 +285,7 @@ function knowledgeTestNotificationDismissLocked(item) {
 
 function knowledgeTestNotificationLinkLabel(item) {
   if (item.notificationType === "failed_test") {
-    return "Материалы";
+    return "Подсказки";
   }
   return "Тесты";
 }
@@ -300,7 +300,7 @@ function knowledgeTestNotificationTitle(item) {
 function knowledgeTestNotificationBody(item) {
   let title = item.testTitle || "тест";
   if (item.notificationType === "failed_test") {
-    return "Изучите материалы по тесту «" + title + "» перед следующей попыткой.";
+    return "Изучите подсказки по тесту «" + title + "» перед следующей попыткой.";
   }
   return "Доступен тест «" + title + "». Перейдите в раздел «Тесты».";
 }

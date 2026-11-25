@@ -33,7 +33,12 @@ final class TestCatalog
 
     public function update(int $id, string $title, ?string $achievementArea = null): bool
     {
-        return $this->tests->update($id, $title, $achievementArea);
+        $updated = $this->tests->update($id, $title, $achievementArea);
+        if ($updated) {
+            $this->tests->bumpVersionAfterContentChange($id);
+        }
+
+        return $updated;
     }
 
     public function delete(int $id): bool

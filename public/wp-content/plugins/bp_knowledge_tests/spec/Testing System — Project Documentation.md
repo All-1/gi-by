@@ -111,78 +111,60 @@ This section records decisions made during project discussion. These decisions c
 
 ## 2.1 Scoring
 
-The final test score is calculated from the total number of correct answers and incorrect answers selected by the user across the entire test.
+*Decision 2026-11-12. This section replaces the option-net formula recorded here on 2026-10-05 and the “(maximum correct − invalid selections) / maximum correct” formula applied on 2026-10-29. Baseline §1 stays unchanged. This agreed rule is the official result.*
 
-The total number of correct answers available in the complete test is the **Maximum Correct Answers**.
+The final test result is the percentage of questions in the attempt that were answered correctly. Each question has the same weight. How many correct options a question has does not change that weight.
+
+A question is **correctly answered** only when both are true:
+
+- the user selected every answer option marked correct for that question;
+- the user selected no incorrect answer option.
+
+A question does not count when any correct option was left unselected, or when any incorrect option was selected.
 
 ### Formula
 
-**Score = 100 × (Correct Answers − Incorrect Answers) / Maximum Correct Answers**
-
-The minimum score is **0%**.
-
-The score must never become negative.
-
-Conceptually:
-
 ```text
-Net Correct = Correct Answers − Incorrect Answers
+Correctly answered questions
+  = questions whose selected options are exactly the correct set
 
-Score = 100 × Net Correct / Maximum Correct Answers
-
-Minimum Score = 0%
+Score = 100 × Correctly answered questions / Questions in the attempt
 ```
+
+The stored score is from **0%** to **100%**, rounded to two decimal places (`gi_new_test_attempts.score`).
 
 Example:
 
 ```text
-Test:
-20 questions
+Attempt: 4 questions
 
-Maximum Correct Answers:
-62
-
-User:
-60 correct answers
-3 incorrect answers
-
-Net Correct:
-60 − 3 = 57
+Q1: every correct option selected, no incorrect option → counts
+Q2: one correct option left unselected, no incorrect option → does not count
+Q3: every correct option selected, plus one incorrect option → does not count
+Q4: every correct option selected, no incorrect option → counts
 
 Score:
-100 × 57 / 62 = 91.94%
+100 × 2 / 4 = 50%
 ```
 
-Therefore, the maximum possible result is 100%.
-
-An incorrect selected answer is a penalty and reduces the user's score.
+`valid_answers` and `invalid_answers` still store how many correct and incorrect options were selected. Those counts are for history and analytics. They do not enter the official percentage.
 
 ---
 
 ## 2.1.1 Multi-select selection counting
 
-*Agreed clarification (2026-10-05). Takes precedence over informal interpretations where they conflict with §2.1.*
+*Agreed clarification (2026-10-05), updated 2026-11-12. Selection counts stay as defined here. The official percentage is §2.1.*
 
-Scoring uses **per-option (checkbox) selections** across the whole test:
+While the user answers, the system still counts checkbox selections:
 
-- **Maximum Correct Answers** = sum over all questions of how many answer options are marked correct in the catalog.
 - **`valid_answers`** = number of **correct** options the user **selected** (entire test).
 - **`invalid_answers`** = number of **incorrect** options the user **selected** (entire test).
+- Per question, **`right_answers`** and **`failed_answers`** use the same rules (spec §9.2).
+- **Missed** correct options (correct options left unselected) are not added to `invalid_answers`. Analytics may still count them (see §4).
 
-**Unselected** correct options do **not** increase `invalid_answers` (no extra penalty). They only reduce how much the user can add to `valid_answers`. Analytics may still count “missed” correct options (see §4).
+A question is correctly answered for §2.1 when `failed_answers` is 0 and `right_answers` equals the number of catalog options marked correct for that question. That comparison uses the catalog `is_correct` flags for the questions in the attempt.
 
-The **official** test percentage uses **one** calculation at the end:
-
-```text
-Net = valid_answers − invalid_answers
-Score = max(0, 100 × Net / Maximum Correct Answers)
-```
-
-Apply the minimum score (0%) **once** on the whole test. Do **not** clamp each question to 0% and then aggregate those clamped values into the final score.
-
-For each completed question, persist **`right_answers`** and **`failed_answers`** using the same selection rules at question scope (spec §9.2).
-
-Optional per-question completion % for UI or analytics may use question-level net with a local floor; that display is **not** the official test score unless explicitly changed by project decision.
+The official score divides that question count by the number of questions in the attempt. It does not divide by the pool of correct options.
 
 ---
 
@@ -458,7 +440,9 @@ Question
 
 If the user makes any mistake in a question, the explanation and reference associated with that question are shown.
 
-At the end of the test, the user can see the questions where mistakes were made together with their explanations and references.
+At the end of the test, the user can open **Подсказки** for the questions where no correct option was selected or an incorrect option was selected, together with their explanations and references.
+
+Every test row also opens **Материалы**, which lists the explanation and the material link for every question in that test (§21.1).
 
 The system does not need to preserve the user's exact selected answer after the user moves to the next question.
 
@@ -468,7 +452,7 @@ The system does not need to preserve the user's exact selected answer after the 
 
 V1 does not introduce a permanent materials-management system.
 
-The system creates a temporary learning page containing the references required after a user makes mistakes.
+The system creates a temporary learning page (dealer label **Подсказки**) containing the references required after a user makes mistakes.
 
 For each problematic question, the page displays:
 
@@ -494,7 +478,7 @@ A future separate materials system/plugin will provide permanent materials manag
 
 The references required after mistakes are temporarily available in the user's Tests section.
 
-The user can open the temporary materials page from the Tests interface.
+The user can open the temporary hints page (**Подсказки**) from the Tests interface. The **Материалы** button on the same row is a separate catalog page (§21.1).
 
 The references are intended only for this temporary learning workflow.
 
@@ -686,7 +670,7 @@ The user must review the required references before another attempt becomes avai
 
 If the user has made any mistakes in the completed test, the system provides the relevant explanations and references.
 
-The user can open the temporary materials page and review the references.
+The user can open **Подсказки** and review the references.
 
 The user marks each required reference and presses:
 
@@ -1001,7 +985,8 @@ V1 uses only:
 
 - references;
 - explanations;
-- temporary learning pages.
+- temporary learning pages (**Подсказки**);
+- a topic materials view (**Материалы**) that reads those same question fields for every question in the test.
 
 The system does not create a permanent learning-material database.
 
@@ -1171,13 +1156,13 @@ outdated
 
 `invalid_answers` contains the total number of incorrect answers selected.
 
-The score is calculated using:
+The score is the percentage of correctly answered questions in the attempt ([§2.1](#21-scoring)):
 
 ```text
-Score = 100 × (valid_answers − invalid_answers) / Maximum Correct Answers
+Score = 100 × Correctly answered questions / Questions in the attempt
 ```
 
-with a minimum score of 0%.
+with a minimum of 0% and a maximum of 100%.
 
 The record should also contain the information required to determine the one-year validity period.
 
@@ -1637,7 +1622,8 @@ Each test contains:
 - title;
 - current status/result;
 - **Start** button if the user can take the test;
-- **Materials** button if the user needs to review references;
+- **Подсказки** button if the user still has to review mistake explanations (temporary hints, §21);
+- **Материалы** column on every row — a contracts-style link (not a filled button) opens topic materials for that test and shows that test's achievement area under the label (§21.1);
 - score/estimation if the test has already been completed;
 - corresponding medal/star.
 
@@ -1683,10 +1669,13 @@ Question 4 / 20
 [Continue]
 ```
 
-The counter shows:
+The counter shows the question currently on screen:
 
-- total number of questions;
-- how many questions have already been completed.
+```text
+Вопрос N из M
+```
+
+`N` is that question's place in this attempt (1 … M). It stays on the same question while its feedback is open, including the last question. It advances only when the next question is shown.
 
 Questions and answers are randomized at runtime.
 
@@ -1704,11 +1693,13 @@ If the user made a mistake, the question's explanation and reference are shown.
 
 ---
 
-# 21. Materials Interface — V1
+# 21. Hints Interface — V1 (Подсказки)
 
-The temporary Materials page displays all questions where the user made mistakes.
+The dealer label for this temporary review is **Подсказки**.
 
-For each problematic question, the user sees:
+The hints page displays questions from the finished attempt where the user selected no correct option, or selected at least one incorrect option.
+
+For each such question, the user sees:
 
 - the question;
 - the explanation;
@@ -1726,13 +1717,29 @@ For every required reference:
 
 The user then presses:
 
-**"Examined"**
+**"Examined"** (dealer label **Изучено**)
 
 After confirmation:
 
-- the temporary materials page is deleted;
+- the temporary hints page is deleted;
 - its temporary database records are deleted;
 - the user can become eligible for a new test attempt after the configured retake period.
+
+A question that left some correct options unselected, and selected no incorrect option, does not count toward the score (§2.1) and does not open a hint row. Its explanation is still on the topic materials page (§21.1).
+
+---
+
+## 21.1 Topic materials page (Материалы)
+
+The Tests table has a **Материалы** column. The control is a text link in the same style as a name link on the Contracts page (blue, underlined, bold; warm color on hover). Under the word **Материалы** the link shows that test's achievement area. It opens in the same in-place window as the test and the hints page (§19.2).
+
+The page lists **every question** of that test. For each question it shows:
+
+- the question text;
+- **Пояснения** — the question's explanation;
+- **Ссылка на материалы** — the question's reference, as a link when the stored value is a URL.
+
+The list is read from the catalog (`gi_new_test_questions.explanation` and `reference`). It is available before the first attempt. It does not use the temporary hint rows, it has no review checkboxes, and confirming it does not change retake eligibility.
 
 ---
 

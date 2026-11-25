@@ -25,8 +25,9 @@ Names match [IMPLEMENTATION_PLAN §4.5](./IMPLEMENTATION_PLAN.md#45-websocket-sp
 | `submitTestQuestion` | `{ "testId": number, "selectedAnswerIds": number[] }` | Submit selections for **current** question; advance session |
 | `finishTest` | `{ "testId": number }` | End session → persist via `CompleteAttempt::finish` |
 | `abandonTest` | `{ "testId": number }` | Drop in-memory session without persisting |
-| `getTestMaterials` | `{ "testId": number }` | Load pending temporary materials for user/test |
-| `confirmTestMaterialsExamined` | `{ "testId": number, "attemptId": number }` | User pressed **Examined** — delete temp explanation rows |
+| `getTestMaterials` | `{ "testId": number }` | Load pending temporary hints (**Подсказки**) for user/test |
+| `confirmTestMaterialsExamined` | `{ "testId": number, "attemptId": number }` | User pressed **Изучено** — delete temp explanation rows |
+| `getTopicMaterials` | `{ "testId": number }` | Catalog explanation and reference for every question (**Материалы**) |
 | `getKnowledgeTestChatStars` | `{ "userIds": number[] }` | Batch read latest-result stars per user for chat (§2.11) |
 | `getKnowledgeTestNotifications` | `{}` | Active notification UX items (Phase 6, §3.1–§3.2) |
 | `dismissKnowledgeTestNotification` | `{ "testId": number, "notificationType": "new_test" \| "failed_test" }` | Increment dismiss count; returns refreshed list |
@@ -41,6 +42,7 @@ Empty body is allowed where all fields are optional (`showTests` with `{}`).
 | `TestQuestionOnPage` | `handlerTestQuestionOnPage` |
 | `TestFinishedOnPage` | `handlerTestFinishedOnPage` |
 | `TestMaterialsOnPage` | `handlerTestMaterialsOnPage` |
+| `TopicMaterialsOnPage` | `handlerTopicMaterialsOnPage` |
 | `KnowledgeTestChatStarsOnPage` | `handlerKnowledgeTestChatStarsOnPage` |
 
 Convention: `communication_server.js` → `handler` + PascalCase(title).
@@ -56,8 +58,9 @@ Convention: `communication_server.js` → `handler` + PascalCase(title).
 | `submitTestQuestion` | `TestQuestionOnPage` | Last question: may include `sessionComplete: true` (still must call `finishTest`) |
 | `finishTest` | `TestFinishedOnPage` | Clears RAM session after success |
 | `abandonTest` | `TestsOnPage` | Refreshed list; session cleared |
-| `getTestMaterials` | `TestMaterialsOnPage` | |
+| `getTestMaterials` | `TestMaterialsOnPage` | Hints overlay |
 | `confirmTestMaterialsExamined` | `TestMaterialsOnPage` | Empty `items` after success |
+| `getTopicMaterials` | `TopicMaterialsOnPage` | Every catalog question; no retake side effect |
 | `getKnowledgeTestChatStars` | `KnowledgeTestChatStarsOnPage` | `starsByUserId` map keyed by user id |
 | `getKnowledgeTestNotifications` | `KnowledgeTestNotificationsOnPage` | `items`, `accountBlocked` |
 | `dismissKnowledgeTestNotification` | `KnowledgeTestNotificationsOnPage` | Same shape as get |
@@ -123,7 +126,7 @@ Plugin retake reasons use constants in `BpKnowledgeTests\Domain\RetakeEligibilit
 
 **`displayStatus`** (spec §2.14): `not_started` | `in_progress` | `failed` | `passed` | `outdated`.
 
-**`canStart` / `canOpenMaterials`:** Derived in plugin + RAM (Phase 4 gateway); UI enables **Start** / **Materials** per spec §19.1.
+**`canStart` / `canOpenMaterials`:** Derived in plugin + RAM (Phase 4 gateway). UI enables **Start** / **Подсказки** from these flags. **Материалы** is on every row and uses `getTopicMaterials` (spec §19.1, §21.1).
 
 ### 3.2 `TestQuestionOnPage`
 
@@ -154,6 +157,7 @@ Plugin retake reasons use constants in `BpKnowledgeTests\Domain\RetakeEligibilit
 ```
 
 - **`answerOptions`:** Shuffled order from RAM (§2.7); **never** include `is_correct` on the wire.
+- **`progress.index`:** 1-based place of the question **on screen**, including while `feedback` is shown for that question. It does not jump to the next question until the client loads it. On the last question, `index` stays equal to `total` after the answer.
 - **`feedback`:** Present after `submitTestQuestion` when the user may proceed (§20.1). Omitted on cold `startTest` until first submit.
 - **`sessionComplete`:** `true` when all questions have submitted counts; client still calls `finishTest` to persist.
 
@@ -168,7 +172,7 @@ Plugin retake reasons use constants in `BpKnowledgeTests\Domain\RetakeEligibilit
     "attemptId": 99,
     "testId": 1,
     "testVersion": 2,
-    "score": 91.94,
+    "score": 75.00,
     "status": "passed",
     "validAnswers": 60,
     "invalidAnswers": 3,
@@ -179,7 +183,7 @@ Plugin retake reasons use constants in `BpKnowledgeTests\Domain\RetakeEligibilit
 }
 ```
 
-Maps to `AttemptRecord` + achievement side effects from `CompleteAttempt::finish`. **`materialsRequired`:** `true` when failed and temp explanation rows exist (user should open materials).
+Maps to `AttemptRecord` + achievement side effects from `CompleteAttempt::finish`. **`score`** is the §2.1 question percentage. **`materialsRequired`:** `true` when failed and temp explanation rows exist (user should open **Подсказки**).
 
 ### 3.4 `TestMaterialsOnPage`
 
@@ -200,9 +204,29 @@ Maps to `AttemptRecord` + achievement side effects from `CompleteAttempt::finish
 }
 ```
 
-After **`confirmTestMaterialsExamined`**, success returns `"items": []` (rows deleted per spec §10.2).
+After **`confirmTestMaterialsExamined`**, success returns `"items": []` (rows deleted per spec §10.2). This payload is the **Подсказки** overlay.
 
-### 3.3 `KnowledgeTestChatStarsOnPage` (chat §2.11)
+### 3.5 `TopicMaterialsOnPage`
+
+```json
+{
+  "ok": true,
+  "testId": 1,
+  "title": "PostgreSQL Fundamentals",
+  "items": [
+    {
+      "questionId": 42,
+      "questionText": "…",
+      "explanation": "…",
+      "reference": "https://example.test/doc"
+    }
+  ]
+}
+```
+
+One item per catalog question, in catalog order. `explanation` is **Пояснения**. `reference` is **Ссылка на материалы**. Empty strings are allowed when the question has no text stored.
+
+### 3.6 `KnowledgeTestChatStarsOnPage` (chat §2.11)
 
 ```json
 {

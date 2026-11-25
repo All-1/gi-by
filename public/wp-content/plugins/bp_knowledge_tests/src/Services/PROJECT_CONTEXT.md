@@ -38,7 +38,7 @@ Application **use cases** — the only layer Phase 4 WS and REST should call for
 
 ## Design notes
 
-- **Catalog writes** bump `gi_new_tests.version` when question/answer content changes — attempts store `test_version` at finish time.
+- **Catalog writes** bump `gi_new_tests.version` when the test, a question, or an answer changes. Critical update bumps it too. Attempts store `test_version` at finish time.
 - **Config changes** to bronze/silver/gold/lock may trigger achievement recalculation via `ConfigSaveService` (REST PATCH `/config`).
 - Repositories are constructed inside aggregates (`AttemptServices`, `CatalogServices`) rather than a global service locator.
 - `AttemptServices` only wires use cases. Latest attempt, medal, and rank name are `standing->forUserAndTest`. `NotificationRepository` stays inside that wiring.

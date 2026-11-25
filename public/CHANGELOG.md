@@ -6,6 +6,43 @@ This document tracks changes to the project. Entry format is defined in **Cursor
 
 ## Log
 
+### [2026-11-13] Knowledge tests: materials link and question counter
+**Author**: AI Assistant
+**Logic**:
+- «Материалы» was a filled action button. It is now a text link in the Contracts table style, with the test's achievement area under the label.
+- After an answer the counter used the next question's number, then the page subtracted one. On the last question the number was already capped, so the subtraction showed the previous question. The counter now stays on the question that is on screen.
+- Restart the WebSocket server so the progress payload is loaded.
+**Changes**:
+- `knowledge_tests.js`, `bp_contracts/css/style.css`: materials link and area
+- `KnowledgeTestsWsWorker.php`: progress index is the shown question
+- `Testing System — Project Documentation.md` §19.1, §20, §21.1; `WS_PROTOCOL.md`
+
+### [2026-11-12] Knowledge tests: question percentage, hints, and topic materials
+**Author**: AI Assistant
+**Logic**:
+- The official result was a penalty against the pool of correct options. A finished test is now the percentage of questions answered exactly: every correct option selected, and no incorrect option selected.
+- The temporary mistake review was labeled «Материалы». That review is «Подсказки». A **Материалы** column on the Tests table lists «Пояснения» and «Ссылка на материалы» for each question in the test.
+- `getTopicMaterials` is a thin command on the existing WebSocket worker, the same shape as `getTestMaterials`. The worker stays the transport boundary. Restart the WebSocket server so `Chat.php` loads the new title.
+**Changes**:
+- `bp_knowledge_tests/spec/Testing System — Project Documentation.md`: §2.1 score, §21 hints, §21.1 topic materials
+- `bp_knowledge_tests/spec/IMPLEMENTATION_PLAN.md`, `WS_PROTOCOL.md`, `MANUAL_QA_V1.md`: formula, labels, `getTopicMaterials`
+- `bp_knowledge_tests/PROJECT_CONTEXT.md` and nested context files: score and the two dealer pages
+- `bp_contracts/src/PROJECT_CONTEXT.md`, `js/PROJECT_CONTEXT.md`: new WS title
+- `ScoringService.php`, `CompleteAttempt.php`: question-percentage score
+- `KnowledgeTestsWsWorker.php`, `Chat.php`, `InteractionInterface.php`: `getTopicMaterials`
+- `knowledge_tests.js`, `knowledge_test_notifications.js`, `bp_contracts/index.php`, `bp_contracts/css/style.css`: «Подсказки» in Действия; «Материалы» in its own column
+- `tests/run_scoring_tests.php`, `run_complete_attempt_tests.php`, `run_outcome_maximum_scope_tests.php`
+
+### [2026-11-05] Knowledge tests: saving a test and critical update bump version
+**Author**: AI Assistant
+**Logic**:
+- «Сохранить тест» wrote the title and area and left `version` unchanged.
+- «Критическое обновление» incremented `version` on a table named `KnowledgeTests`. The row lives in `gi_new_tests`, so the number on screen never changed.
+- A successful test save now bumps the version. The bump writes to the physical table name.
+**Changes**:
+- `TestCatalog.php`: bump version after a saved test
+- `TestRepository.php`: resolve `gi_new_tests` before the version update
+
 ### [2026-11-05] Knowledge tests: Russian admin and no loading placeholder
 **Author**: AI Assistant
 **Logic**:

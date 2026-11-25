@@ -16,7 +16,7 @@
 **Phase 6 tasks:** [PHASE_6_TASKS.md](./PHASE_6_TASKS.md) (notifications)  
 **Phase 7 tasks:** [PHASE_7_TASKS.md](./PHASE_7_TASKS.md) (hardening)  
 **Manual QA (post-dev):** [MANUAL_QA_V1.md](./MANUAL_QA_V1.md)  
-**Last updated**: 2026-10-23
+**Last updated**: 2026-11-12
 
 ---
 
@@ -167,8 +167,9 @@ Follow User Rules and DEVELOPMENT_RULES §2 — summary for this plugin only:
 | `submitTestQuestion` | Answer current question; return immediate feedback |
 | `finishTest` | Finalize attempt → persist via plugin |
 | `abandonTest` | Drop in-memory session (optional) |
-| `getTestMaterials` | Load temporary learning payload |
+| `getTestMaterials` | Load temporary hints payload (**Подсказки**) |
 | `confirmTestMaterialsExamined` | Delete temp rows; enable retake path |
+| `getTopicMaterials` | Load catalog explanation and reference for every question (**Материалы**) |
 
 **Proposed server → client responses:**
 
@@ -178,6 +179,7 @@ Follow User Rules and DEVELOPMENT_RULES §2 — summary for this plugin only:
 | `TestQuestionOnPage` | `handlerTestQuestionOnPage` |
 | `TestFinishedOnPage` | `handlerTestFinishedOnPage` |
 | `TestMaterialsOnPage` | `handlerTestMaterialsOnPage` |
+| `TopicMaterialsOnPage` | `handlerTopicMaterialsOnPage` |
 
 (Adjust names to match existing naming conventions when implementing.)
 
@@ -419,15 +421,19 @@ gi_new_test_config
 
 ### 5.1 Scoring (spec §2.1)
 
+*Decision 2026-11-12. Replaces the 2026-10-29 “(maximum correct − invalid selections) / maximum correct” formula.*
+
 ```text
-Maximum Correct Answers = sum over attempt questions of (count of correct answer options)
+A question counts only when every correct option is selected and no incorrect option is selected.
 
-Score = max(0, 100 × (Maximum Correct Answers − invalid_answers) / Maximum Correct Answers)
-
-`valid_answers` is still stored (count of correct options selected) for analytics; official % uses wrong selections only (2026-10-29).
+Score = 100 × (correctly answered questions) / (questions in the attempt)
 ```
 
-Implement in `ScoringService` (Information Expert); **automated** unit tests for edge cases (all wrong → 0%, penalties, 100% cap) — not optional for V1.
+Round to two decimal places. Floor 0%, cap 100%.
+
+`valid_answers` and `invalid_answers` are still stored (selected-option counts) for analytics. They do not enter the official percentage.
+
+Implement in `ScoringService` (Information Expert); **automated** unit tests for 0%, partial question sets, rounding, and the 100% cap — not optional for V1.
 
 #### 5.1.1 Multi-select selection counting (**D4 — resolved**)
 
@@ -439,9 +445,7 @@ Agreed clarification: [product spec §2.1.1](./Testing%20System%20%E2%80%94%20Pr
 | User **selects** an incorrect option | +1 `invalid_answers` (test); +1 `failed_answers` (that question) |
 | Correct option **not** selected | No change to `invalid_answers` (not a penalty); analytics may track “missed” separately (spec §4) |
 
-**Official test score:** sum **raw** `valid_answers` and `invalid_answers` across all questions, then apply the formula **once** (global floor at 0%, cap 100%). Do **not** clamp per-question net before summing — that would under-apply penalties.
-
-Per-question % for UI/analytics may use `max(0, right − failed) / correct_options_on_question` for display only unless product changes §2.1.
+**Official test score (2026-11-12):** count questions where `failed_answers` is 0 and `right_answers` equals that question's correct-option count, then divide by the number of questions in the attempt (§5.1). Selection totals stay on the attempt row for analytics.
 
 #### 5.1.2 Correct options: catalog (DB) vs session (RAM) (**D6**)
 
@@ -549,10 +553,11 @@ Menus (spec §15):
 **Implementation:** Vanilla JS in the personal account (`bp_contracts`, dealer Tests area).
 
 - Single **Tests** page with pagination (§19).
-- Per row: title, status, Start / Materials, score, medal.
+- Per row: title, status, score, medal, a **Материалы** column, then Start and **Подсказки** in **Действия**.
 - Test flow: one question per view, counter, Continue (§20).
 - Immediate feedback per question; explanations on mistakes (§20.1).
-- Materials: checkboxes + **Examined** (§21).
+- Hints: checkboxes + **Изучено** (§21).
+- Topic materials: **Пояснения** and **Ссылка на материалы** for every question (§21.1).
 
 ---
 
@@ -729,6 +734,7 @@ MANUAL_QA   →  [MANUAL_QA_V1.md](./MANUAL_QA_V1.md) on staging (single gate be
 | D8 | `is_correct` on `gi_new_test_answers` | **Superseded** — adopted 2026-10-05 (explicit project decision); replaces junction-table experiment |
 | D9 | `gi_new_test_achievements` seed model vs rank **display** names | **Resolved** — medal rows Bronze/Silver/Gold/Lock in achievements; `rank_name_*` in `gi_new_test_config` (Seeder v3) |
 | D10 | `gi_new_test_notifications` row shape | **Resolved** — `UNIQUE (user_id, test_id, notification_type)`; types `new_test` \| `failed_test` |
+| D11 | Official score and dealer labels | **Resolved** (2026-11-12) — score is the share of exactly answered questions (§5.1). Temporary review is **Подсказки**. Catalog explanations for every question are **Материалы** (`getTopicMaterials`) |
 
 ### 14.1 Current gates
 

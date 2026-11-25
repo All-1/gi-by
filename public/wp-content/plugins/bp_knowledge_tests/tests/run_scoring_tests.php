@@ -42,25 +42,19 @@ $scoring = new ScoringService();
 $classifier = new AttemptResultClassifier();
 $config = new TestConfig(70.0, 80.0, 90.0, 95.0);
 
-$assert(
-    $scoring->calculateScore(1, 5) === 80.0,
-    '4 correct + 1 wrong on 5-option test → 80% (max − invalid) / max'
-);
-
-$assert(
-    abs($scoring->calculateScore(3, 62) - 95.16) < 0.01,
-    '62 max, 3 invalid → 95.16%'
-);
-
-$assert($scoring->calculateScore(20, 20) === 0.0, 'All slots penalized → 0%');
-$assert($scoring->calculateScore(25, 20) === 0.0, 'Over penalty clamps to 0%');
-$assert($scoring->calculateScore(0, 50) === 100.0, 'No wrong selections → 100%');
+$assert($scoring->calculateScore(4, 5) === 80.0, '4 of 5 questions correct → 80%');
+$assert($scoring->calculateScore(2, 4) === 50.0, '2 of 4 questions correct → 50%');
+$assert($scoring->calculateScore(1, 3) === 33.33, '1 of 3 rounds to 33.33%');
+$assert($scoring->calculateScore(0, 20) === 0.0, 'No question fully correct → 0%');
+$assert($scoring->calculateScore(20, 20) === 100.0, 'Every question correct → 100%');
+$assert($scoring->calculateScore(25, 20) === 100.0, 'Over-count clamps to 100%');
+$assert($scoring->calculateScore(-1, 4) === 0.0, 'Negative count clamps to 0%');
 
 try {
     $scoring->calculateScore(1, 0);
-    $assert(false, 'Zero maximum should throw');
+    $assert(false, 'Zero question count should throw');
 } catch (\InvalidArgumentException $e) {
-    $assert(true, 'Zero maximum throws InvalidArgumentException');
+    $assert(true, 'Zero question count throws InvalidArgumentException');
 }
 
 $passed = $classifier->classify(70.0, $config);

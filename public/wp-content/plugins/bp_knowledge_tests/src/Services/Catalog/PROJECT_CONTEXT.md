@@ -1,6 +1,6 @@
 # Component Context: bp_knowledge_tests/src/Services/Catalog
 
-Test-factory CRUD — bumps `gi_new_tests.version` on content changes.
+Test-factory CRUD — bumps `gi_new_tests.version` when the test record, a question, or an answer changes, and on critical update.
 
 **Parent:** [../PROJECT_CONTEXT.md](../PROJECT_CONTEXT.md)
 
